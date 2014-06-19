@@ -1,0 +1,1077 @@
+<?php
+// SARK Helper class
+// Developed by CoCo
+// Copyright (C) 2012 CoCoSoFt
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+ 
+Class helper {
+	
+public function sysCommit() {
+
+# ask the helper to run a regen/reload for us.
+    
+    $rc = $this->request_syscmd ("/bin/sh /opt/sark/scripts/srkgenAst >/dev/null 2>&1");   
+    $rc = $this->request_syscmd ("/bin/sh /opt/sark/scripts/srkreload >/dev/null 2>&1");
+	
+# turn off commit
+
+	$dbh = DB::getInstance();
+#	$dbh->exec("UPDATE globals SET MYCOMMIT='NO' WHERE pkey='global'" );
+	$res = $dbh->query("SELECT RUNFOP FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$runfop = $res['RUNFOP'];
+	$dbh = NULL;
+
+/*	
+	$rc = $this->request_syscmd ("/bin/cp /opt/sark/db/sark.db /opt/sark/db/sark.copy.db");
+	$rc = $this->request_syscmd ("/bin/mv /opt/sark/db/sark.copy.db /opt/sark/db/sark.rdonly.db");
+//	$rc = $this->request_syscmd ("/bin/chown www:www /opt/sark/db/sark.rdonly.db");  
+*/	
+	if ($runfop == 'enabled') {
+		$rc = $this->request_syscmd ("perl /opt/sark/scripts/op_buttons.pl >/dev/null 2>&1");
+		$rc = $this->request_syscmd ("perl /opt/sark/scripts/name_op_buttons.pl >/dev/null 2>&1");	
+	}
+
+/*
+ * take a snapshot
+ */ 
+	$rc = $this->request_syscmd ("/bin/sh /opt/sark/scripts/snap.sh");
+	return;
+}
+
+public function commitOn () {
+//turn the commit lamp on
+	$dbh = DB::getInstance();
+	$res=$dbh->exec("UPDATE globals SET MYCOMMIT='YES' WHERE pkey='global'");
+	return;
+}
+
+
+	
+public function request_syscmd ($data) {
+
+//establish connection to the daemon
+ 
+	$fp = fsockopen( "127.0.0.1", 7601, $errno, $errdesc, 1)
+		or die("Connection to 127.0.0.1:7601 failed"); 
+	$ret = null;
+// read the ack sent by server.
+	$ack[] = fgets($fp, 8192);
+    $this->logit(" request_syscmd sending -> $data", 5 );
+	fputs($fp, "$data\n"); 
+//	while( ! preg_match(' /EOT/ ',$ret)) { 
+	while (1) {
+		$ret .= fgets($fp, 8192);
+		if ( ! preg_match(' /EOT/ ',$ret)) { 
+			break;
+		} 
+	} 
+	fclose($fp);
+	return ($ret);
+
+}
+
+public function validEmail($email)
+{
+   $isValid = true;
+   $atIndex = strrpos($email, "@");
+   if (is_bool($atIndex) && !$atIndex)
+   {
+      $isValid = false;
+   }
+   else
+   {
+      $domain = substr($email, $atIndex+1);
+      $local = substr($email, 0, $atIndex);
+      $localLen = strlen($local);
+      $domainLen = strlen($domain);
+      if ($localLen < 1 || $localLen > 64)
+      {
+         // local part length exceeded
+         $isValid = false;
+      }
+      else if ($domainLen < 1 || $domainLen > 255)
+      {
+         // domain part length exceeded
+         $isValid = false;
+      }
+      else if ($local[0] == '.' || $local[$localLen-1] == '.')
+      {
+         // local part starts or ends with '.'
+         $isValid = false;
+      }
+      else if (preg_match('/\\.\\./', $local))
+      {
+         // local part has two consecutive dots
+         $isValid = false;
+      }
+      else if (!preg_match('/^[A-Za-z0-9\\-\\.]+$/', $domain))
+      {
+         // character not valid in domain part
+         $isValid = false;
+      }
+      else if (preg_match('/\\.\\./', $domain))
+      {
+         // domain part has two consecutive dots
+         $isValid = false;
+      }
+      else if (!preg_match('/^(\\\\.|[A-Za-z0-9!#%&`_=\\/$\'*+?^{}|~.-])+$/', str_replace("\\\\","",$local)))
+      {
+         // character not valid in local part unless 
+         // local part is quoted
+         if (!preg_match('/^"(\\\\"|[^"])+"$/',
+             str_replace("\\\\","",$local)))
+         {
+            $isValid = false;
+         }
+      }
+/*
+      if ($isValid && !(checkdnsrr($domain,"MX") || checkdnsrr($domain,"A")))
+      {
+         // domain not found in DNS
+         $isValid = false;
+      }
+*/
+   }
+   return $isValid;
+}
+
+public function setRouteClass($var) {
+
+#
+# This little sub returns a "routeclass" for the open/closed/outcome value you input
+# The routeclass makes life a lot easier for the AGI when it has
+# to route a call through the open/closed/outcome vectors
+#
+# 0  => value is "None" for an IVR menu selection
+# 1  => value is a dialable internal number (extension or callgroup)
+# 2  => value is an IVR name
+# 3  => value is the default IVR
+# 4  => value is a queue name
+# 5  => value is DISA
+# 6  => value is CALLBACK
+# 7  => Not Used
+# 8  => value is a sibling
+# 9  => value is a trunk name
+# 10 => value is a custom_app name
+# 11 => value is a trunk group
+# 20 => value is Retrieve Voicemail
+# 21 => value is Leave Voicemail
+#100 => value is Operator
+#101 => value is Hangup
+#
+
+        if ($var == "None") {
+        	return 0;
+        }
+        if (preg_match('/^\*\d{3,4}$/', $var)) {
+        	return 1;
+        }
+        if (preg_match('/^\d{3,4}$/', $var)) {
+        	return 1;
+        }
+
+        if ($var == "Default IVR") {
+        	return 3;
+        }
+        if ($var == "DISA") {
+        	return 5;
+        }
+        if ($var == "CALLBACK") {
+        	return 6;
+        }
+        if ($var == "Retrieve Voicemail") {
+        	return 20;
+        }
+        if ($var == "Leave Voicemail") {
+        	return 21;
+        }
+        if ($var == "Operator") {
+        	return 100;
+        }
+        if ($var == "Hangup") {
+        	return 101;
+        }
+        $ret = 0;
+        $dbh = DB::getInstance();
+        $res = $dbh->query("SELECT ln.pkey,cr.carriertype FROM lineio ln INNER JOIN carrier cr ON cr.pkey = ln.carrier WHERE ln.pkey = '" . $var . "'")->fetch(PDO::FETCH_ASSOC);
+        if ( isset($res['pkey']) ) { 
+			$dbh = NULL;
+			if ($res['carriertype'] == 'group') {
+				return 11;
+            }
+            else {
+        		if (preg_match('/~/', $var)) {
+               		return 8;
+               	}
+               	else {
+               		return 9;
+               	}
+            }
+        }
+        $res = $dbh->query("SELECT pkey FROM speed WHERE pkey = '" . $var . "'")->fetch(PDO::FETCH_ASSOC);
+        if ( isset($res['pkey']) ) {
+			$dbh = NULL;
+			return 1;
+		}
+ 
+        $res = $dbh->query("SELECT pkey FROM Queue WHERE pkey = '" . $var . "'")->fetch(PDO::FETCH_ASSOC);
+        if ( isset($res['pkey']) ) {
+			$dbh = NULL;
+			return 4;
+		}
+
+        $res = $dbh->query("SELECT pkey FROM ivrmenu WHERE pkey = '" . $var . "'")->fetch(PDO::FETCH_ASSOC);
+        if ( isset($res['pkey']) ) {
+			$dbh = NULL;
+			return 2;
+		}
+		
+        $res = $dbh->query("SELECT pkey FROM Appl WHERE pkey = '" . $var . "'")->fetch(PDO::FETCH_ASSOC);
+        if ( isset($res['pkey']) ) {
+			$dbh = NULL;
+			return 10;
+		}		
+
+		$dbh = NULL;
+        return NULL;
+}
+
+public function displayRouteClass($var) {
+
+#
+# This little sub returns a "routeclass name" for the routeclass value you input
+#
+# 0  => value is "None" for an IVR menu selection
+# 1  => value is a dialable internal number (extension or callgroup)
+# 2  => value is an IVR name
+# 3  => value is the default IVR
+# 4  => value is a queue name
+# 5  => value is DISA
+# 6  => value is CALLBACK
+# 7  => Not Used
+# 8  => value is a sibling
+# 9  => value is a trunk name
+# 10 => value is a custom_app name
+# 11 => value is a trunk group
+# 20 => value is Retrieve Voicemail
+# 21 => value is Leave Voicemail
+#100 => value is Operator
+#101 => value is Hangup
+#
+	switch ($var) {
+		
+		case 0:
+			return "None";		
+		case 1:
+			$ret = $this->pkey; 
+
+			if (isset ($this->pkey)) {
+				$dbh = DB::getInstance();
+				$res = $dbh->query("SELECT pkey FROM speed WHERE pkey = '" . $this->pkey . "'")->fetch(PDO::FETCH_ASSOC);
+				$dbh = NULL;
+				if ( isset($res['pkey']) ) {
+					$ret = "Callgrp " . $this->pkey;
+				}
+				else {
+					$handle = fopen("/etc/asterisk/meetme.conf", "r") or die('Could not read file!');
+					$conferences = array();
+					while (!feof($handle)) {
+						$row = trim(fgets($handle));
+						if (preg_match (" /^;/ ", $row)) {
+							continue;
+						}
+						if (preg_match (" /^conf\s*=>\s*(\d{3,4})/ ",$row,$matches)) {
+							$conferences[$matches[1]]=$matches[1];
+						}		
+					}
+					if (array_key_exists($this->pkey, $conferences)) {
+						$ret = "Room " . $this->pkey;
+					}
+				}				
+			}	 
+			return $ret;
+		case 2;
+			return "IVR " . $this->pkey;
+		case 3:
+			return "defaultIVR";
+		case 4:
+			return "Queue " . $this->pkey;
+		case 5:
+			return "DISA ";
+		case 6:
+			return "CALLBACK ";
+		case 7:
+			return NULL;
+		case 8:
+			return "Sib " . $this->pkey;
+		case 9: 
+			return "Trunk " . $this->pkey;
+		case 10:
+			return "App " . $this->pkey;
+		case 11:
+			return "Group " . $this->pkey;
+		case 20:
+			return "Retrieve Voicemail ";
+		case 21:
+			return "Leave Voicemail ";
+		case 100:
+			return "Operator";
+		case 101:
+			return "Hangup";
+		default:
+			return NULL;
+	}
+}
+
+public function loopcheck ($key, $out) {
+	
+	$dbh = DB::getInstance();
+	$speed = array();
+	array_push($speed, $key);
+    $outs = explode(' ', $out);
+    
+    foreach ($outs as $target) {
+        if ( $target == $key ) {
+			return True;  // loop detected
+        }
+        $res = $dbh->query("SELECT pkey,out FROM speed WHERE pkey = '" . $out . "'")->fetch(PDO::FETCH_ASSOC);
+		if ( isset($res['pkey']) ) { 
+			$speednum = $res['pkey'];
+			foreach ($speed as $uplevel) {
+				if ($uplevel == $speednum) {
+					return True; //loop detected
+				}
+			}
+			array_push($speed, $speednum);
+		
+			$tmps = explode (' ', $res['out']);
+			foreach ($tmps as $L2) {
+				array_push($outs, $L2);
+			
+			}	
+		}
+	}
+	return False; // no loop detected
+}
+
+public function ret_localip () {
+    $work = `/sbin/ifconfig eth0`;    
+	if (preg_match(" /inet addr:*?([\d.]+)/",$work,$matches)) { 
+	 		return $matches[1]; 	 		
+ 	}
+	return -1;   
+}
+
+
+//
+// don't use this subnet function - it is incorrect
+//
+public function ret_subnet () {
+    $work = `/sbin/ifconfig eth0`;
+        if (preg_match(" /inet addr:*?([\d\.]+)/",$work,$matches)) {
+             $subnet = preg_replace ( '/\d+$/','0', $matches[1] );
+             return $subnet;
+        }
+    return -1;
+}
+
+/*
+ * not used as far as I can see
+ */ 
+public function ret_externip () {
+    $work = `/usr/bin/wget -q  -O  - checkip.dyndns.org`;   
+	if (preg_match(" /Current IP Address:*.([\d\.]+)/",$work,$matches)) { 
+	 		return $matches[1]; 	 		
+ 	}
+	return -1; 
+}
+/*
+ *  not used as far as I can see
+ */ 
+public function ret_subnetmask () {
+    $work = `/sbin/ifconfig eth0`;    
+	if (preg_match(" /Mask:*?([\d\.]+)/",$work,$matches)) { 
+	 		return $matches[1]; 	 		
+ 	}
+	return -1;
+}
+/*
+ * generate a password
+ */ 
+public function ret_password ($length = 8) {
+
+    $password = "";
+    $possible = "2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ";
+    $maxlength = strlen($possible);
+    if ($length > $maxlength) {
+      $length = $maxlength;
+    }
+    $i = 0; 
+    while ($i < $length) { 
+      $char = substr($possible, mt_rand(0, $maxlength-1), 1);       
+      // have we already used this character in $password?
+      if (!strstr($password, $char)) { 
+        // no, so it's OK to add it onto the end of whatever we've already got...
+        $password .= $char;
+        // ... and increase the counter by one
+        $i++;
+      }
+
+    }
+    return $password;
+}
+
+public function check_pid()  {
+
+   	if  (`/bin/ps -e | /bin/grep asterisk | /bin/grep -v grep`) {
+   		return(true);
+   	}
+
+	return (false);
+}
+
+
+public function check_hapid() {
+	if  (`/bin/ps -e | /bin/grep heartbeat | /bin/grep -v grep`) {
+    	return(true);
+    }
+	return (false);
+}
+
+public function check_hapid_installed () {
+    if  ( file_exists ("/usr/lib/heartbeat/heartbeat") ) {
+    	return(true);
+    }
+	return (false);
+}  
+
+public function getNextFreeExt() {
+/*
+ *  find the next unused ext#
+ */	
+	
+	$dbh = DB::getInstance();
+	$res = $dbh->query("SELECT SIPIAXSTART FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$pkey = $res['SIPIAXSTART'];
+	$res = $dbh->query("SELECT pkey FROM ipphone where pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	while ( isset($res['pkey']) ) {
+		$pkey++;
+		$res = $dbh->query("SELECT pkey FROM ipphone where pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	}
+	return $pkey;
+	
+}
+
+public function getTable($table, $sql='',$filter=true, $default=false) {
+/*
+ * general table getter - it is used to filter the rows a panel "sees" based upon the
+ * user who is making the request. - In general a user is filtered according to the
+ * cluster(tenant) which owns it.
+ */ 
+	$dbh = DB::getInstance();
+		
+	if ( $sql == '' ) {
+		$sql = "SELECT * from $table";
+	}
+		
+	if ( $_SERVER['REMOTE_USER'] != 'admin' && $filter) {	
+		$res = $dbh->query("SELECT cluster,selection FROM user where pkey = '" . $_SERVER['REMOTE_USER'] . "'")->fetch(PDO::FETCH_ASSOC);
+		if 	(array_key_exists('cluster',$res) && $res['selection'] != 'all' ) {
+//			$sql .= " WHERE cluster = '" . $res['cluster'] . "' OR cluster='default'";
+			$sql .= " WHERE cluster = '" . $res['cluster'] . "'";
+			if ($default) {
+					$sql .= " OR cluster='default'";
+			}
+		}
+	}
+	$res = $dbh->query($sql);    
+	$return = $res->fetchAll(); 
+	return $return;
+}
+
+public function createTuple($tab,$rec,$check=true) {
+/*
+ * general tuple create - takes a table name and a partial array and creates a row 
+ * 
+ */ 
+	$dbh = DB::getInstance();
+	$table = "default_" . $tab;	
+/*
+ * Check if the row already exists 
+ */
+	if ($check) {
+		$res = $dbh->query("SELECT pkey FROM $tab WHERE pkey = '" . $rec['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
+		if ( isset($res['pkey']) ) { 
+			return "Row ( " . $rec['pkey'] . " ) already exists!";
+		}
+	} 
+	$ret = $this->getLc(); 
+	if ($ret) {
+		return "Extension limit exceeded";
+	}
+/*
+ * get a default row for this table
+ * careful with this function call - its a call to whatever is in the variable $table not to a 
+ * function called "table".
+ */ 
+
+	$outbuf = $this->$table();
+/*
+ * add the given array to the default array
+ */ 
+	foreach ($rec as $key=>$value ) {
+		$outbuf[$key] = $value;
+	}
+
+/*
+ * build the sql arguments
+ */
+	$varg =  null;	//   variable arg (list of the actual variables)
+	$vnarg = null;	// 	 varable name arg (list of the variable names)
+	
+	foreach ($outbuf as $key=>$value) {
+		if (!strlen($value) == 0) {
+			$varg .= "'" . $value . "'" . ',';
+			$vnarg .= $key . ',';
+		}
+	}
+
+/*
+ * remove trailing commas
+ */ 
+	$varg = substr($varg, 0, -1);
+	$vnarg = substr($vnarg, 0, -1);
+/*
+ * ready the insert
+ */
+	$sql  =  'INSERT INTO ' . $tab . '(' . $vnarg . ') VALUES (' . $varg . ')';	
+
+/*
+ * do it
+ */  
+	$this->exec_SQL($dbh,$sql);
+	$this->commitOn();
+	$this->logit("I'm creating a new $tab with values $varg",3 );
+	return 'OK';
+}
+
+public function setTuple($tab,$rec,$modpkey=false) {
+
+/*
+ * general tuple setter - takes a table name and a partial array and updates a row 
+ */
+	$dbh = DB::getInstance();
+/*
+ *  check for pkey
+ */ 
+	if (!array_key_exists('pkey',$rec)) {
+		return "Update failed - no pkey given!";
+	}
+	$pkey = $rec['pkey'];
+
+/*
+ * Check the row exists 
+ */
+	$res = $dbh->query("SELECT pkey FROM $tab WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	if ( ! isset($res['pkey']) ) { 
+		return "Row (" . $pkey . " ) doesn't exist!";
+	}  
+/*
+ * build the sql arguments
+ */
+	$varg =  null;	//   variable arg (list of the actual variables)
+	$sql = null;
+	
+	foreach ($rec as $key=>$value) {
+// ignore key field unless explicitly changed 
+		if ($key == 'pkey') {
+			if ($modpkey != false) {
+				$varg .= $key . "= '" . $modpkey . "'," ;
+			}				
+		}
+		else {
+			$varg .= $key . "= '" . $value . "'," ;	
+		}			
+	}
+/*
+ * remove trailing commas
+ */ 
+	$varg = substr($varg, 0, -1);
+/*
+ * ready the update
+ */
+	
+	$sql  =  'UPDATE ' . $tab . ' SET ' . $varg . " WHERE pkey = '" . $pkey . "'";
+/*
+ * do it
+ */  
+	$this->exec_SQL($dbh,$sql);
+	$this->commitOn();
+	$this->logit("I'm updating $tab with args $varg",3 );
+	return 'OK';
+}	
+
+public function delTuple($tab,$pkey) {
+/*
+ * general tuple delete - takes a table name and a key
+ */
+	$dbh = DB::getInstance();
+/*
+ *  check for pkey
+ */ 
+	if ( ! isset($pkey)) {
+		return "Delete failed - no pkey given!";
+	}	
+/*
+ * Check the row exists 
+ */
+	$res = $dbh->query("SELECT pkey FROM $tab WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	if ( ! isset($res['pkey']) ) { 
+		return "Row (" . $pkey . " ) doesn't exist!";
+	}  
+ 
+ $sql = 'DELETE FROM ' . $tab . " WHERE pkey = '" . $pkey . "'";
+ $this->exec_SQL($dbh,$sql);
+ $this->commitOn();
+ $this->logit("I'm deleting $tab key $pkey", 5 );
+ return 'OK';
+
+}
+
+public function predDelTuple($tab,$srch,$val) {
+/*
+ * predicated tuple delete - takes a table name, search field and value 
+ */
+	$dbh = DB::getInstance();
+
+ $sql = 'DELETE FROM ' . $tab . " WHERE " . $srch .  " = '" . $val . "'";
+ $this->exec_SQL($dbh,$sql);
+ return 'OK';
+
+}
+
+public function buildTupleArray($post,&$tuple,$custom=false,$stripslash=array()) {
+/*
+ * build the update $tuple array from $_POST (ignoring button fields etc.)
+ */
+	$ignore = array(
+		"save_x" => True,
+		"save_y" => True,
+		"update_x" => True,
+		"update_y" => True,		
+		"commit_x" => True,
+		"commit_y" => True,
+		"commitClick_x" => True,
+		"commitClick_y" => True,
+		"tabselect" => True,
+		"oldpkey" => True,
+		"latency" => True
+	);
+	$dont_strip_tags = array(
+		"provision" => True,
+		"sipiaxfriend" => True,
+		"extalert" => True,
+		"speedalert" => True,
+		"alertinfo" => True,
+		"alert0" => True,
+		"alert1" => True,		
+		"alert2" => True,		
+		"alert3" => True,		
+		"alert4" => True,
+		"alert5" => True,		
+		"alert6" => True,		
+		"alert7" => True,		
+		"alert8" => True,
+		"alert9" => True,		
+		"alert10" => True,		
+		"alert11" => True		
+	);
+/*
+ * we don't strip_tags from the provision or friend variable because they 
+ * often need to contain them 
+ */
+	if ($custom) {
+		$ignore = array_merge($ignore,$custom);
+	}	
+	foreach ($post as $key=>$value) {
+		if (array_key_exists($key,$ignore)) {
+			continue;
+		}
+		if (array_key_exists($key,$dont_strip_tags)) {
+			$tuple[$key] = $value;
+		}
+		else {
+			$tuple[$key] = strip_tags($value);
+		}
+		if (array_key_exists($key,$stripslash)) {		
+			$tuple[$key] = stripslashes($value);
+		}
+	} 
+} 	
+
+public function exec_SQL($dbh,$sql) {
+	
+	try {
+		$this->logit("running SQL -> $sql", 8 );
+		$res=$dbh->prepare($sql);
+		$res->execute();
+	} 
+	catch (PDOException $e) {
+    	echo $e->getMessage();	
+    }
+}
+
+private function setCluster(&$rec) {
+	if ( $_SERVER['REMOTE_USER'] != 'admin' ) {	
+		$dbh = DB::getInstance();
+		$res = $dbh->query("SELECT cluster FROM user where pkey = '" . $_SERVER['REMOTE_USER'] . "'")->fetch(PDO::FETCH_ASSOC);
+		if 	(array_key_exists('cluster',$res)) {
+			$rec ['cluster'] = $res ['cluster'];
+		}
+	}
+}
+
+
+/**********************************************************************
+ * Below here is a set of functions to build the default tuple(row) 
+ * for each new insert.  Tuples are built as sparse arrays containing
+ * only the columns which will be updated (and, of course, a key) and 
+ * then passed to the general tuple setter
+ *********************************************************************/ 
+		
+private function default_agent() {
+	
+	$rec = array(	
+	"cluster"  	=> "default",
+	"name"		=> null,
+	"queue1" 	=> "None",
+	"queue2" 	=> "None",
+	"queue3" 	=> "None",
+	"queue4" 	=> "None",
+	"queue5" 	=> "None",
+	"queue6" 	=> "None"
+     );
+	 $this->setCluster($rec);
+     return $rec;
+}
+				
+private function default_appl() {
+	
+	$rec = array(
+	"cluster" 	=> "default",
+	"desc" => "new row",
+	"span" => "Neither"
+     );
+     $this->setCluster($rec);
+     return $rec;
+}	
+
+private function default_callback() {
+	
+	$rec = array(
+	"cluster" 	=> "default",
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_cluster() {
+	
+	$rec = array(
+	"abstimeout" 	=> "14400",
+	"chanmax"		=> "3"
+     );	
+     return $rec;
+}
+
+private function default_cos() {
+	
+	$rec = array(
+	"active" 		=> "YES", 		
+	"dialplan"		=> null, 	
+	"defaultopen" 	=> "NO",
+	"defaultclosed" => "NO",
+	"orideopen" 	=> "NO",
+	"orideclosed" 	=> "NO"
+	);	
+	 
+     return $rec;
+}
+
+private function default_dateSeg() {
+	
+	$rec = array(
+        "cluster"	=> "default",
+        "datemonth"	=> "*",
+        "dayofweek"	=> "*",
+        "desc"		=> null,
+        "month"		=> "*",
+        "timespan"	=> "*"        
+     );
+     $this->setCluster($rec);	
+     return $rec;
+}
+
+private function default_device() {
+	
+	$rec = array(
+		"blfkeys" => "0",	
+	);	
+     return $rec;
+}
+
+private function default_greeting() {
+	
+	$rec = array(
+	"cluster" 	=> "default",
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_ipphone() {
+	
+	$rec = array(
+	"devicerec" 	=> "default",
+	"cluster"  	=> "default",
+	"sndcreds" => "Once"
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_IPphoneCOSclosed() {
+	
+	$rec = array();	
+     return $rec;
+}
+
+private function default_IPphoneCOSopen() {
+	
+	$rec = array();	
+     return $rec;
+}	
+
+private function default_ivrmenu() {
+	
+	$rec = array(
+	"cluster"  			=> "default", 
+    "greetnum"  		=> null,
+    "option0"			=> "None",
+    "option1"			=> "None",
+    "option2"			=> "None",
+    "option3"			=> "None",
+    "option4"			=> "None",
+    "option5"			=> "None",
+    "option6"			=> "None",
+    "option7"			=> "None",
+    "option8"			=> "None",
+    "option9"			=> "None",
+    "option10" 			=> "None",
+    "option11" 			=> "None",
+    "routeclass0"		=> 0,
+    "routeclass1"		=> 0,
+    "routeclass2"		=> 0,
+    "routeclass3"		=> 0,
+    "routeclass4"		=> 0,
+    "routeclass5"		=> 0,
+    "routeclass6"		=> 0,
+    "routeclass7"		=> 0,
+    "routeclass8"		=> 0,
+    "routeclass9"		=> 0,
+    "routeclass10" 		=> 0,
+    "routeclass11" 		=> 0,
+	"timeout"			=> "Operator", 	
+	"timeoutrouteclass" => "100",
+	"listenforext"		=> "NO"
+	);	
+	$this->setCluster($rec);
+	 
+    return $rec;
+}
+
+private function default_lineio() {
+	
+	$rec = array(
+	"pkey"	 		=> null,
+    "active" 		=> "YES",
+	"callprogress"  => "NO",
+	"closeroute" 	=> "Operator",
+	"cluster" 		=> "default",
+	"faxdetect"		=> "NO",
+	"lcl" 			=> "NO",
+	"moh" 			=> "NO",
+	"monitor" 		=> "NO",
+	"openroute" 	=> "Operator",
+	"routeable" 	=> "NO",
+    "routeclassopen" => 100,
+    "routeclassclosed" => 100,
+	"swoclip" 		=> "NO"
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_queue() {
+	
+	$conf = "musiconhold=default";
+	$conf .= "\nstrategy=ringall";
+	$conf .= "\ntimeout=300";
+	$conf .= "\nretry=5";
+	$conf .= "\nwrapuptime=0";
+	$conf .= "\nmaxlen=0";
+	$conf .= "\nannounce-frequency=30";
+	$conf .= "\nannounce-holdtime=yes";
+		
+	$rec = array(
+        "cluster"	=> "default",
+        "devicerec"	=> "None",
+        "options"	=> "t",
+        "conf"		=> $conf
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_route() {
+	
+	$rec = array(
+		"active"	=> "YES",
+		"auth"		=> "NO",
+        "cluster"	=> "default",
+        "path1"		=> "None",
+        "path2"		=> "None",
+        "path3"		=> "None",
+        "path4"		=> "None"       
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_speed() {
+	
+	$rec = array(
+        "cluster"		=> "default",
+        "outcomerouteclass"    	=> 100,
+        "ringdelay"    	=> "15"
+     );	
+     $this->setCluster($rec);
+     return $rec;
+}
+
+private function default_user() {
+	
+	$rec = array(
+		"cluster"	=> "default",
+	);	
+    return $rec;
+    $this->setCluster($rec); 
+}
+
+private function default_mcast() {
+	
+	$rec = array(
+		"mcasttype"	=> "Dial"
+	);	
+    return $rec;
+    $this->setCluster($rec); 
+}
+
+public function qDistro (&$distro=array()) {
+
+	$distro['rhel'] = false;
+	$distro['centos'] = false;
+	$distro['sme'] = false;
+	$distro['debian'] = false;
+	$distro['pika'] = false;	
+	$distro['soundroot'] = '/var/lib/';
+	$distro['name'] = Null;
+	 
+	if (file_exists('/etc/redhat-release')) {
+		$distro['rhel'] = true;
+		if (`/bin/grep -i CentOS /etc/redhat-release` ) {
+			$distro['centos'] = true;
+			$distro['name'] = 'centos';
+		}
+		if (`/bin/grep -i SME /etc/redhat-release` ) {
+			$distro['sme'] = true;
+			$distro['name'] = 'smeserver';
+		}		
+	}		
+	if (file_exists('/etc/debian_version')) {
+		$distro['debian'] = true;
+		$distro['soundroot'] = '/usr/share/';
+		$distro['name'] = 'debian';
+	}
+	if ( `/bin/uname -r | /bin/grep pika` ) {
+		$distro['pika'] = true;
+		$distro['soundroot'] = '/var/lib/';
+	}		
+	return;
+}
+
+public function getLc() {
+/*
+ * getLc
+ */
+	$dbh = DB::getInstance();
+	$count = $dbh->query('select count(*) from ipphone')->fetchColumn();
+	if (file_exists("/opt/sark/scripts/srkdclf")) { 
+		exec ("/opt/sark/scripts/srkdclf",$output,$retvar);
+		if ($retvar == 0) {
+			if ($count >= $output[0]) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+			
+	$res = $dbh->query("SELECT EXTLIM FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$extlim = $res['EXTLIM'];
+	if (! $extlim) {
+		return 0;
+	}			
+	if ($count >= $extlim) {
+		return 1;
+	} 		
+	return 0;
+}
+
+public function removeLrCr(&$str) {
+/*
+ * remove any spurious lf/cr chars and multiple spaces
+ */  
+  $linefeeds   = array("\r\n", "\n", "\r");
+  $str = str_replace($linefeeds, " ", $str); 
+  $str = preg_replace('/\s+/', ' ', $str);
+  return;
+}
+
+public function send404() {
+	header('HTTP/1.0 404 Not Found');
+	echo "Not Found (404)";
+}  
+                                              	
+public function logIt($someText, $userloglevel=0) {
+	$dbh = DB::getInstance();
+	$res = $dbh->query("SELECT LOGLEVEL FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$dbloglevel = $res['LOGLEVEL'];
+	if ($userloglevel < $dbloglevel) {
+		syslog(LOG_WARNING, date("M j H:i:s") . ": " . $someText . "\n");	
+	}
+  }
+  
+}

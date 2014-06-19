@@ -1,0 +1,536 @@
+<?php
+// SARK page class
+// Developed by CoCo
+// Copyright (C) 2012 CoCoSoFt
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+Class page {
+
+	
+	/*** Button Array ***/
+	public $buttonName = array (
+				'adopt' => array(
+								'src' =>'ADAPT-ON.png',
+                                'onmouseover' => 'ADAPT-ROLLOVER.png',
+                                'alt' =>'Adopt',
+                                'title' =>'Scan the local network for phones to adopt'
+                                ),
+ 				'back' => array (
+								'src' => 'UNDO-ON.png',
+                                'onmouseover' => 'UNDO-ROLLOVER.png',
+                                'alt' => 'Back',
+                                'title' => 'Back',
+                                ),                                 
+				'cancel' => array (
+								'src' => 'CANCEL-ON.png',
+                                'onmouseover' => 'CANCEL-ROLLOVER.png',
+                                'alt' => 'Cancel',
+                                'title' => 'Cancel & Return'
+                                ),
+				'cfwd' => array (
+								'src' => 'CF-ON.png',
+                                'onmouseover' => 'CF-ROLLOVER.png',
+                                'alt' => 'cfwd',
+                                'title' => 'Fetch live call-forward info from Asterisk'
+                                ),
+				'commit' => array (
+								'src' => 'COMMIT-ON.png',
+                                'onmouseover' => 'COMMIT-ROLLOVER.png',
+                                'alt' => 'Commit',
+                                'title' => 'COMMIT (Generate Asterisk objects)',
+                                'onClick' => "return confirmOK('Commit - Confirm?')",
+                                ),
+				'commitClick' => array (
+								'src' => 'COMMIT-CLICK.png',
+                                'onmouseover' => 'COMMIT-ROLLOVER.png',
+                                'alt' => 'Commit',
+                                'title' => 'COMMIT (Generate Asterisk objects)',
+                                'onClick' => "return confirmOK('Commit - Confirm?')",
+                                ),  
+				'delete' => array (
+								'src' => 'DELETE-ON.png',
+                                'onmouseover' => 'DELETE-ROLLOVER.png',
+                                'alt' => 'Delete',
+                                'title' => 'Delete this Object',
+                                'onClick' => "return confirmOK('Delete - Confirm?')",
+                                ),              
+				'ha-start' => array (
+								'src' => 'HA-START-ON.png',
+                                'onmouseover' => 'HA-START-ROLLOVER.png',
+                                'alt' => 'Start',
+                                'title' => 'START the HA engine',
+                                'onClick' => "return confirmOK('START the HA engine - Confirm?')",
+                                ),                                 
+				'ha-stop' => array (
+								'src' => 'HA-STOP-ON.png',
+                                'onmouseover' => 'HA-STOP-ROLLOVER.png',
+                                'alt' => 'Stop',
+                                'title' => 'STOP the HA engine',
+                                'onClick' => "return confirmOK('STOP the HA engine - Confirm?')",
+                                ),                                                                
+				'initialise' => array (
+								'src' => 'RESOLVE-ON.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Resolve',
+                                'title' => 'Initialize & Regenerate the PCI card settings',
+                                'onClick' => "return confirmOK('Regenerate - Confirm?')",
+                                ),                                                                                                                                
+				'new' => array (
+								'src' => 'NEW-ON.png',
+                                'onmouseover' => 'NEW-ROLLOVER.png',
+                                'alt' => 'New',
+                                'title' => 'New Object',
+                                ), 
+ 				'ok' => array (
+								'src' => 'NEXT-ON.png',
+                                'onmouseover' => 'NEXT-ROLLOVER.png',
+                                'alt' => 'OK',
+                                'title' => 'Continue',
+                                ),                                
+ 				'resolve' => array (
+								'src' => 'RESOLVE-ON.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart',
+                                'title' => 'Restart the Firewall',
+                                'onClick' => "return confirmOK('Restart the Firewall - Confirm?')",
+                                ),                                
+ 				'reboot' => array (
+								'src' => 'RESOLVE-ON.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart',
+                                'title' => 'Reboot the PBX',
+                                'onClick' => "return confirmOK('Reboot - Confirm?')",
+                                ),
+ 				'restfw' => array (
+								'src' => 'RESOLVE-ON.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart Firewall',
+                                'title' => 'Restart the Firewall',
+                                'onClick' => "return confirmOK('Restart the Firewall - Confirm?')",
+                                ),                                
+ 				'save' => array (
+								'src' => 'SAVE-ON.png',
+                                'onmouseover' => 'SAVE-ROLLOVER.png',
+                                'alt' => 'Save',
+                                'title' => 'Save',
+                                ),                                    
+  				'saveDiD' => array (
+								'src' => 'SAVE-ON.png',
+                                'onmouseover' => 'SAVE-ROLLOVER.png',
+                                'alt' => 'Save',
+                                'title' => 'Save',
+                                'onClick' => "return confirmOK('Last chance to check the number of DiDs you are about to create...')",
+                                ),  
+ 				'saveUSB' => array (
+								'src' => 'SAVE-ON.png',
+                                'onmouseover' => 'SAVE-ROLLOVER.png',
+                                'alt' => 'Save the backups and snaps to the USB drive',
+                                'title' => 'Save the backups and snaps to the USB drive',
+                                ), 
+ 				'spin' => array (
+								'src' => 'RESOLVE-ON.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Backup',
+                                'title' => 'Take an instant Backup',
+                                'onClick' => "return confirmOK('Create an instant backup - Confirm?')",
+                                ), 
+ 				'start' => array (
+								'src' => 'PLAY-ON.png',
+                                'onmouseover' => 'PLAY-ROLLOVER.png',
+                                'alt' => 'Start',
+                                'title' => 'START the PBX',
+                                'onClick' => "return confirmOK('START the PBX - Confirm?')",
+                                ),                              
+ 				'stop' => array (
+								'src' => 'STOP-ON.png',
+                                'onmouseover' => 'STOP-ROLLOVER.png',
+                                'alt' => 'Stop',
+                                'title' => 'STOP the PBX',
+                                'onClick' => "return confirmOK('STOP the PBX - Confirm?')",
+                                ),
+ 				'undo' => array (
+								'src' => 'UNDO-ON.png',
+                                'onmouseover' => 'UNDO-ROLLOVER.png',
+                                'alt' => 'UNDO',
+                                'title' => 'UNDO',
+                                ), 
+				'upload' => array (
+								'src' => 'CF-ON.png',
+                                'onmouseover' => 'CF-ROLLOVER.png',
+                                'alt' => 'upload',
+                                'title' => 'Upload a saved snapshot'
+                                ),                                                                                                                                                                                                                                                                                                                                                                                               
+	);
+	
+	/*** vars ***/
+	protected $buttonpath = '/sark-common/buttons16/';
+	protected $jspath = "javascript:this.src='/sark-common/buttons16/";
+
+	public $msg;
+	public $pagename;
+	public $override;
+	public $overrideClick;
+	public $selected;
+	
+	
+	/*** FUNCTIONS ***/
+	function __construct(){	
+/*
+ * Not much to do here
+ * Just check we were invoked from the Nav panel or ourself
+ */
+		if ( ! strpos($_SERVER['HTTP_REFERER'], $_SERVER['PHP_SELF']) ) {
+			if (! preg_match('/navigation.php$/',$_SERVER['HTTP_REFERER'])) {
+				header('HTTP/1.0 404 Not Found');
+				echo "Not Found (404)";
+				exit();
+			}
+		}		
+	}
+
+	public function Heading () {
+	/*** set the heading ***/			
+		echo "<h1>";
+//		echo strtoupper(php_uname("n"));
+		echo php_uname("n");
+		echo "/" ;
+		echo $_SERVER['REMOTE_USER'];
+		echo " - " ;
+		
+		if (isset ($this->msg)) {
+			echo $this->msg;
+		}
+		else {
+			echo $this->pagename;
+		}
+		echo "</h1>";
+		echo PHP_EOL;
+	}
+	public function commitButton () {
+	/*** handle special case of commit buttons ***/
+		$dbh = DB::getInstance();		
+		$res = $dbh->query("SELECT MYCOMMIT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+		$commit = $res['MYCOMMIT'];		
+		if ($commit == "YES") {
+				$this->override="commit";
+				$this->Button("commitClick");
+		}
+		else {
+				$this->Button("commit");
+		}   
+    }
+	
+	public function Button ($button) {
+	/*** display a button ***/
+		echo '<input type="image"'. PHP_EOL;
+
+		if (isset($this->override)) {
+				$name = $this->override; 
+				unset($this->override);
+		}
+		else { 
+			$name = $button;
+		} 
+		if ($button == 'cancel') {
+			echo 'class="cancel"' . PHP_EOL;
+		}			
+		echo 'name="' . $name . '"' . PHP_EOL;
+		echo 'id="' . $name . '"' . PHP_EOL;
+		echo 'src="' . $this->buttonpath . $this-> buttonName[$button]['src'] . '"' . PHP_EOL; 
+		echo 'onmouseover="' . $this->jspath . $this->buttonName[$button]['onmouseover'] . '\';"' . PHP_EOL; 
+		echo 'alt="' . $button . '"' . PHP_EOL;
+		echo 'onmouseout="' . $this->jspath . $this->buttonName[$button]['src'] . '\';"' . PHP_EOL;
+//		echo 'style="border-style: none; "' .  PHP_EOL;
+		if (isset ($this->buttonName[$button]['onClick']) ) {
+			if ( ! isset ($this->overrideClick)) { 
+				echo 'onclick="' . $this->buttonName[$button]['onClick'] . '" ' . PHP_EOL;
+			}
+		}
+		echo 'title="' . $this->buttonName[$button]['title'] . '" >' . PHP_EOL;		
+	}
+		
+	public function aLabelFor ($label) {
+		/*** display a label ***/
+		
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$label'")->fetch(PDO::FETCH_ASSOC);
+		
+		if (isset($row['htext'])) {
+			echo '<p><label title="' . $row['htext'] . '">';
+		}
+		else {
+			echo '<p><label>';
+		}	
+				
+        if (isset($row['displayname'])) {
+			echo $row['displayname'];
+		}
+		else {
+			echo $label;
+		}
+		echo '</label></p>';
+        echo "\n";     
+	}
+
+	public function aHeaderFor ($header, $help=true) {		
+		/*** display a column header ***/
+		
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$header'")->fetch(PDO::FETCH_ASSOC);
+		if ( $help ) {				
+			if (isset($row['htext'])) {
+				echo '<th title="' . $row['htext'] . '">';
+			}
+			else {
+				echo '<th>';
+			}
+		}
+		else {
+			echo '<th>';
+		}
+		if (isset($row['displayname'])) {      
+			echo $row['displayname'];
+		}
+		else {
+			echo $header;
+		}		
+        echo '</th>';
+        echo "\n";
+	}
+
+	public function popUp($name = '', $options = array()) {
+		/*** display a selection ***/
+		
+		if ($options) {
+			$html = '<select name="'. $name . '" id="' . $name . '">';		
+			foreach ($options as $option => $value) {
+				$html = $this->genHtml($value,$html);
+			}
+			$html .= '</select>';
+		}
+		else {
+			$html = "LERROR!";
+		}
+		echo $html;
+		echo "\n";
+	}
+	
+	public function displayCluster($rel = null) {
+		$dbh = DB::getInstance();
+						
+		If ($_SERVER['REMOTE_USER'] == 'admin') { 
+			$res = $dbh->query("SELECT pkey from cluster");  
+			$res->setFetchMode(PDO::FETCH_COLUMN, 0);   
+			$clusters = $res->fetchAll(); 
+			$this->popUp('cluster', $clusters); 
+		}
+		else {
+			$res = $dbh->query("SELECT cluster FROM user where pkey = '" . $_SERVER['REMOTE_USER'] . "'")->fetch(PDO::FETCH_ASSOC);
+			$mycluster = $res['cluster'];
+			if ( $rel == null ) {
+				echo '<input type="text" id="cluster" value="' . $mycluster . '"  />' . PHP_EOL;		
+			}
+			else {
+				echo '<input type="text" id="cluster" rel="' .$rel . '" value="' . $mycluster . '"  />' . PHP_EOL;		
+			}
+		}
+	}
+	
+	public function sysSelect($name = '', $none=false, $short=false, $trunk=false ) {
+		/*** display the special "endpoint" selection ***/
+		
+		$helper = new helper;
+		$conferences = array();
+		$handle = fopen("/etc/asterisk/meetme.conf", "r") or die('Could not read file!');
+// get conference room list
+		while (!feof($handle)) {		
+			$row = trim(fgets($handle));		
+			if (preg_match (" /^;/ ", $row)) {
+				continue;
+			}		
+			if (preg_match (" /^conf\s*=>\s*(\d{3,4})/ ",$row,$matches)) {
+				array_push ($conferences,$matches[1]);
+			}				
+		}
+	 
+		$html = '<select name="'. $name . '" id="' . $name . '">' . PHP_EOL;
+		
+	
+		if ($none) {
+			$html = $this->genHtml("None",$html);
+		}
+				
+		if (!$short) {				
+			$html = $this->genHtml("Operator",$html);
+			$html = $this->genHtml("Hangup",$html);
+			
+			$ivr = $helper->getTable("ivrmenu", "SELECT pkey from ivrmenu");   
+			$html .= '<optgroup label="IVRs">' . PHP_EOL; 
+			foreach ($ivr as $ivr => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+			
+			$queue = $helper->getTable("queue", "SELECT pkey from queue");  
+			$html .= '<optgroup label="QUEUES">' . PHP_EOL; 
+			foreach ($queue as $queue => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+		}
+		
+		$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone");	 		
+		$html .= '<optgroup label="EXTENSIONS">' . PHP_EOL; 		
+		foreach ($ipphone as $ipphone => $value)  {
+			$html = $this->genHtml($value['pkey'],$html);
+			if (!$short) {	
+				$html = $this->genHtml("*".$value['pkey'],$html);
+			}
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		 
+		$speed = $helper->getTable("speed", "SELECT pkey from speed");		
+		$html .= '<optgroup label="CALL GROUPS">' . PHP_EOL; 
+		foreach ($speed as $speed => $value)  {
+			$html = $this->genHtml($value['pkey'],$html);
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		
+		if (!$short) {	
+			$html .= '<optgroup label="DISA">' . PHP_EOL; 
+			$html = $this->genHtml('DISA',$html);
+			$html = $this->genHtml('CALLBACK',$html);
+			$html .= '</optgroup>' . PHP_EOL;
+		}		
+
+		if ($trunk) {
+			$trunk = $helper->getTable("lineio", "SELECT pkey,technology from lineio");		
+			$html .= '<optgroup label="TRUNKS">' . PHP_EOL; 
+			foreach ($trunk as $trunk => $value)  {
+				if ($value['technology'] != 'DiD' AND $value['technology'] != 'CLID' AND $value['technology'] != 'Class') {
+					$html = $this->genHtml($value['pkey'],$html);
+				}
+			}
+		}
+		
+		$html .= '</optgroup>' . PHP_EOL;
+		
+		if (!$short) {
+			$html .= '<optgroup label="GET VOICEMAIL">' . PHP_EOL; 
+			$html = $this->genHtml("Retrieve Voicemail",$html);
+			$html .= '</optgroup>' . PHP_EOL; 
+
+			$appl = $helper->getTable("appl", "SELECT pkey from appl"); 		
+			$html .= '<optgroup label="Custom Apps">' . PHP_EOL; 
+			foreach ($appl as $appl => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+		
+			$html .= '</optgroup>' . PHP_EOL;
+			if (is_array($conferences)) {
+				$html .= '<optgroup label="CONF ROOMS">' . PHP_EOL;
+				foreach ($conferences as $value)  {
+					$html = $this->genHtml($value,$html);	
+					
+				}
+			}
+		}
+		
+		$html .= '</optgroup>' . PHP_EOL;	
+		$html .= '</select>';
+		
+		echo $html;
+	}
+	
+	private function genHtml($value,&$html) {
+/*
+ * generate selection html (used by popUp and sysSelect)
+ */ 		
+		$html .= '<option ';
+		if ($value == $this->selected) {
+			$html .= 'selected = "selected" ';
+		}
+		$html .= 'value="' . $value . '">' . $value . '</option>';
+		return $html;	
+	}
+	
+	public function editClick ($callback, $get) {
+	
+		echo '<td class="center"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="/sark-common/edit.png" border=0 title = "Click to Edit"></a></td>';
+		echo "\n";
+	}
+
+	public function notifyClick ($callback, $get) {
+	
+		echo '<td class="center"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="/sark-common/actions/reload.png" border=0 title = "Reboot this endpoint"';
+		echo ' onclick = "return confirmOK(\'Reboot this extension - Confirm?\')"></a></td>';
+		echo "\n";
+	}
+	
+	public function notifypushClick ($callback, $get) {
+	
+		echo '<td class="center"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="/sark-common/actions/down.png" border=0 title = "Reprovision this endpoint"';
+		echo ' onclick = "return confirmOK(\'Reprovision this extension - Confirm?\')"></a></td>';
+		echo "\n";
+	}	
+	
+public function ajaxdeleteClick ($get) {
+
+		echo '<td class="center"><a class="table-action-deletelink" href="delete.php"'; 
+		echo $get;
+		echo '"><img src="/sark-common/edittrash.png" border=0 title = "Click to Delete"></a></td>';
+		echo "\n";
+	}	
+	
+	public function deleteClick ($callback, $pkey) {
+	
+		echo '<td class="center"><a href="'; 
+		echo $callback;
+		echo '?delete=yes&amp;pkey=';
+		echo $pkey;
+		echo '"><img src="/sark-common/edittrash.png" border=0 title = "Click to Delete"></a></td>';
+		echo "\n";
+	}
+	
+	public function fancyBoxAnchor ($name, $value) {
+		echo '<td><a href="#';
+		echo $name;
+		echo '"  id="fbox">';
+//		echo '" style=" color: black; text-decoration: none;" id="';
+//		echo $name; 
+//		echo '">';
+		echo $value;
+		echo '</a></td>'; 
+	}
+	
+	public function fancyBoxText ($id, $name, $value) {
+		echo '<div style="display:none"><div id="' . $id . '">';
+		echo "\n";
+		echo '<input type="text" name="' . $name . '" value="' . $value . '" /><br/>'; 
+		echo "\n";  
+		echo '</div>';
+	}
+	
+}
+?>
