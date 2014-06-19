@@ -1,4 +1,0 @@
-dn: ou=contacts,dc=sark,dc=aelintra,dc=com
-objectClass: organizationalUnit
-objectClass: top
-ou: contacts
