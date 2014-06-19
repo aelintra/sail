@@ -1,0 +1,8 @@
+BEGIN TRANSACTION;
+INSERT OR IGNORE INTO "Panel" VALUES(320, 'sarknetwork/main.php', 'Network', 50);
+INSERT OR IGNORE INTO "PanelGroupPanel" VALUES('500', '320');
+INSERT OR IGNORE INTO "UserPanel" VALUES('admin', '320');
+INSERT OR IGNORE INTO "Panel" VALUES(330, 'sarkedsw/main.php', 'Firewall', 50);
+INSERT OR IGNORE INTO "PanelGroupPanel" VALUES('500', '330');
+INSERT OR IGNORE INTO "UserPanel" VALUES('admin', '330');
+COMMIT;

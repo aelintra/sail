@@ -1,0 +1,16 @@
+#!/bin/bash
+
+sv d srk-ua-responder
+sv d srk-ua-helper
+#sv d sark 
+
+a2dissite sark > /dev/null 2>&1
+
+[ -L /etc/apache2/sites-available/sark  ] &&rm -rf /etc/apache2/sites-available/sark 
+[ -L /etc/cron.d/sark ] && rm -rf /etc/cron.d/sark
+[ -L /etc/service/sark ] && rm -rf /etc/service/sark
+[ -L /etc/service/srk-ua-responder ] && rm -rf /etc/service/srk-ua-responder
+[ -L /etc/service/srk-ua-helper ] && rm -rf /etc/service/srk-ua-helper
+rm -rf /etc/sudoers.d/sail
+rm -rf /etc/asterisk/sark_customer*
+insserv --remove debsetlan

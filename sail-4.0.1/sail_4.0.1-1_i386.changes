@@ -1,0 +1,26 @@
+Format: 1.8
+Date: Fri, 28 Feb 2014 18:00:00 +0000
+Source: sail
+Binary: sail
+Architecture: all
+Version: 4.0.1-1
+Distribution: UNRELEASED
+Urgency: low
+Maintainer: CoCo <admin@aelintra.com>
+Changed-By: CoCoSoft <admin@aelintra.com>
+Description: 
+ sail       - SARK  Asterisk Integration Layer (SAIL) - A fast, lightweight swi
+Changes: 
+ sail (4.0.1-1) UNRELEASED; urgency=low
+ .
+   * svn commit 2163
+   - added new amacs
+   - point change due to replacement of AMACs with unload/reload
+   - rationalised Device table
+   - added new Yealink V70 provisioning
+Checksums-Sha1: 
+ f54d906dbca4fa03d545ed162aaf24065b7c921a 4352688 sail_4.0.1-1_all.deb
+Checksums-Sha256: 
+ f0df5600f5345f0fa234f2494e288d9a863b4b876d81897fe758f61d549126ef 4352688 sail_4.0.1-1_all.deb
+Files: 
+ a6f9e3ea22f772220e9a27247c3c9fe0 4352688 network extra sail_4.0.1-1_all.deb
