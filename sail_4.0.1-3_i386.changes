@@ -1,0 +1,30 @@
+Format: 1.8
+Date: Mon, 14 Apr 2014 18:00:00 +0000
+Source: sail
+Binary: sail
+Architecture: all
+Version: 4.0.1-3
+Distribution: UNRELEASED
+Urgency: low
+Maintainer: CoCo <admin@aelintra.com>
+Changed-By: CoCoSoft <admin@aelintra.com>
+Description: 
+ sail       - SARK  Asterisk Integration Layer (SAIL) - A fast, lightweight swi
+Changes: 
+ sail (4.0.1-3) UNRELEASED; urgency=low
+ .
+   * svn commit 2183
+   * fixed $LAN setting on IP change
+   * added debian-archive-keyring to dependencies
+Checksums-Sha1: 
+ f54d906dbca4fa03d545ed162aaf24065b7c921a 4352688 sail_4.0.1-1_all.deb
+ 242e954b311487711e2acd1ae3a218c30ef391be 5126974 sail_4.0.1-2_all.deb
+ 200f2ade7f4db7b7c60fbd89ee2c3b1b6add06a9 5294920 sail_4.0.1-3_all.deb
+Checksums-Sha256: 
+ f0df5600f5345f0fa234f2494e288d9a863b4b876d81897fe758f61d549126ef 4352688 sail_4.0.1-1_all.deb
+ 234d9aa0ac13e537b2a23b699c8e1beabaa29a42e84fc65068780ca727bfa066 5126974 sail_4.0.1-2_all.deb
+ bbbbf96ec6738e14bcaeff2f44d5b45faed0bf1bb8fc934a15ccb57817e41f3a 5294920 sail_4.0.1-3_all.deb
+Files: 
+ a6f9e3ea22f772220e9a27247c3c9fe0 4352688 network extra sail_4.0.1-1_all.deb
+ 8936d75aeee306bfcb5539a7a56f42bc 5126974 network extra sail_4.0.1-2_all.deb
+ 6b3fca77b74ede4546484ca55d252ccc 5294920 network extra sail_4.0.1-3_all.deb
