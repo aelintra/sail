@@ -1,3 +1,8 @@
+sail (4.0.1-13) UNRELEASED; urgency=low
+  * git commit 9ed9a91a06a63b4af7cdc526366949d227648489
+  - add initial user and cluster rows to initdata.sql
+ -- CoCoSoft <admin@aelintra.com>  Thu, 14 Aug 2014 18:00:00 +0000
+
 sail (4.0.1-12) UNRELEASED; urgency=low
   * svn commit 2243
   - Clean up sarkddi/view.php
