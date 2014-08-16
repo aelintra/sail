@@ -9,7 +9,7 @@ bfb312b356a4ab662a158ce59fa1aefe  opt/sark/cache/ldapcontactou.ldif
 40c94b7553fbe3692311942ae3603d24  opt/sark/cache/passwords
 07698bfd09d4ef2a7343f3d99d835044  opt/sark/cache/template_cust.conf
 675881a3f623c6e24cfd347e9cd301ee  opt/sark/db/db_v4_create.sql
-18f81015b8f89727e951254908b1aea4  opt/sark/db/db_v4_device.sql
+85a55618b38bd5b1046eca2589d311f7  opt/sark/db/db_v4_device.sql
 d7631d13d073fa0d194e1a362f3d0f24  opt/sark/db/db_v4_system.sql
 3b3d2e9fd065c3d877513ad659735aad  opt/sark/db/ldap_create.ldif
 c358d8317ad98f403c310da9a00f1d38  opt/sark/etc/apache2/sites-available/sark
@@ -193,7 +193,7 @@ afc5cb6fb105328d45a7ec4f1e0e2800  opt/sark/php/srkDbClass
 c1c52b97cc745cf2b3b6aa234fa9a9ae  opt/sark/php/srkfoot.php
 07eeb6fc11d4174d77d9fe4521c746fa  opt/sark/php/srkhead.php
 a46bb7d0e9ba2a07c9b1a60dfad34ed0  opt/sark/provisioning/commonFuncs.php
-f18183aa9aa523304a747531863fc353  opt/sark/provisioning/device.php
+a404c91c72323f3611bbe300dbcfcf75  opt/sark/provisioning/device.php
 64a59e64750ecbcee04e30cae06e8ee6  opt/sark/provisioning/settings.php
 9b6764c6a7fcd410d65db49f67499c84  opt/sark/scripts/aelhdlon.pl
 2f11f865191292b100e16ef227c5de06  opt/sark/scripts/age.sh
@@ -2040,5 +2040,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-3c990deceb0d6737a4427bd79464b369  usr/share/doc/sail/changelog.Debian.gz
+7afad028f0ff5d2091a7125cbbbb5958  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

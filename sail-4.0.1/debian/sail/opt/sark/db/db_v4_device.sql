@@ -1489,9 +1489,9 @@ INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('yealink.Co
 ##File header "#!version:1.0.0.1" can not be edited or deleted, and must be placed in the first line.##
 
 local_time.time_zone = 0
-local_time.time_zone_name = UnitedKingdom(London) 
+local_time.time_zone_name = United Kingdom(London) 
 local_time.ntp_server1 = pool.ntp.org
-local_time.ntp_server2 = $localhost
+local_time.ntp_server2 = $localip
 
 features.pickup.direct_pickup_enable = 1
 features.pickup.direct_pickup_code = *8
@@ -1506,7 +1506,7 @@ ldap.number_filter = (|(telephoneNumber=%)(mobile=%)(homePhone=%))
 ldap.host = $localip
 ldap.port = 389
 
-ldap.base = dc=sark,dc=aelintra,dc=com
+ldap.base = $ldapbase
 ldap.user = 
 ldap.password = 
 
@@ -1539,7 +1539,7 @@ edit_alpha_mode&: 123
 
 ldap_server$: $localip
 ldap_port!: 
-ldap_base!: dc=sark,dc=aelintra,dc=com
+ldap_base!: $ldapbase
 ldap_username!: 
 ldap_password!: 
 ldap_max_hits!: 50

@@ -5,6 +5,7 @@ include "commonFuncs.php";
 global $haclusterip;
 global $hausecluster;
 global $externip;
+global $ldapbase;
 global $blfKeys;
 global $local;
 
@@ -68,7 +69,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // get the global env settings we need
 try {	  
-  	$global = $db->query("select EDOMAIN,HACLUSTERIP,HAUSECLUSTER from globals")->fetch();
+  	$global = $db->query("select EDOMAIN,HACLUSTERIP,HAUSECLUSTER,LDAPBASE from globals")->fetch();
 
 } catch (Exception $e) {
   logIt("Unable to retrieve cluster values");
@@ -76,6 +77,7 @@ try {
 $haclusterip = $global['HACLUSTERIP'];
 $hausecluster = $global['HAUSECLUSTER'];
 $externip = $global['EDOMAIN'];
+$ldapbase = $global['LDAPBASE'];
 
 // check for polycom sub config
 if (preg_match('/^0004[Ff]2/',$mac) && strlen($fname) > 4 ) {
@@ -154,6 +156,7 @@ if (isset($thisConfig->location) && $thisConfig->location == 'remote') {
 
 // substitute real values into the output	
 $retstring = preg_replace ( '/\$localip/', ret_localip(), $retstring);
+$retstring = preg_replace ( '/\$ldapbase/', $ldapbase, $retstring);
 
 if (!$descriptor) {
 	$retstring = preg_replace ( '/\$desc/', $thisConfig->desc, $retstring);
