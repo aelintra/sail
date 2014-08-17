@@ -45,6 +45,8 @@ sqlite3 $DBROOT/$SARKDB < $DBROOT/$CREATEDB
 #Load the system data
 echo Loading initial system data
 sqlite3 $DBROOT/$SARKDB < $DBROOT/$SYSTEMDB
+echo Loading system device data
+sqlite3 $DBROOT/$SARKDB < $DBROOT/$SYSDEVICE
 
 #Reload any saved customer data
 if [ "$NEWINSTALL" = false ]; then
@@ -85,10 +87,6 @@ if [ "$(ls -A $SARKROOT/$SYSALWAYS)" ]; then
 else 
 	echo "No ALWAYS files to apply (Directory is empty)"
 fi
-
-echo Merging new device data
-#merge the new release system device data
-sqlite3 $DBROOT/$SARKDB < $DBROOT/$SYSDEVICE
 
 sqlite3 $DBROOT/$SARKDB 'PRAGMA synchronous=1;'
 sqlite3 $DBROOT/$SARKDB 'PRAGMA journal_mode=DELETE;' >/dev/null 2>&1

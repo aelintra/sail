@@ -1,4 +1,5 @@
 fd3487d019760470e5739fa2cbbefb75  opt/sark/always/1400788134.db_v4_admin_perms
+d7d5b6aab66dff5809d666bb5d1d3064  opt/sark/always/1408278454.db_v4_set_defaults
 b6add65ef3f9c65401c199e87993fd5f  opt/sark/always/r1833DEB
 070fbb22d544fc58d65fbc7dfecc6c37  opt/sark/cache/cdr-mysql-setup.sql
 09de627a9b35fea788d9e0818314ccdd  opt/sark/cache/debsetlan
@@ -9,7 +10,7 @@ bfb312b356a4ab662a158ce59fa1aefe  opt/sark/cache/ldapcontactou.ldif
 40c94b7553fbe3692311942ae3603d24  opt/sark/cache/passwords
 07698bfd09d4ef2a7343f3d99d835044  opt/sark/cache/template_cust.conf
 675881a3f623c6e24cfd347e9cd301ee  opt/sark/db/db_v4_create.sql
-85a55618b38bd5b1046eca2589d311f7  opt/sark/db/db_v4_device.sql
+af36fb8bae0d03df0cbd0363c01f5cbb  opt/sark/db/db_v4_device.sql
 d7631d13d073fa0d194e1a362f3d0f24  opt/sark/db/db_v4_system.sql
 3b3d2e9fd065c3d877513ad659735aad  opt/sark/db/ldap_create.ldif
 c358d8317ad98f403c310da9a00f1d38  opt/sark/etc/apache2/sites-available/sark
@@ -36,9 +37,8 @@ bb0e3d50f1b957d0a078e2129a377c74  opt/sark/generator/routealloc.php
 3178f7f20033df9593c08fa33879a419  opt/sark/generator/srkdumper.php
 c44480a5f928daec5788ffb8dfb96905  opt/sark/generator/srktimer.php
 727a133c53c736913054ea12ff10d90d  opt/sark/generator/vmailSQL.php
-2df8ee76072740c4812b5965bbbfd673  opt/sark/once/1393676301.db_v4_initdat.sql
-f991ed051e39ee3e1b5d078cb9f29a63  opt/sark/once/1400408962.db_v4_ldapdefaults.sql
-d60632e515094bf138430062fdbe8aa9  opt/sark/once/1400767304.db_v4_systemDevice_cleanup.sql
+263ff9934ef0e1c288935f5a30b3950b  opt/sark/once/1393676301.db_v4_initdat.sql
+4a7f45d3929d4a41d2dd56ebaa33e91b  opt/sark/once/1400767304.db_v4_systemDevice_cleanup.sql
 88781b3e78d4649486740259f3a67dfa  opt/sark/passwd/ltpasswds
 7ebd6e3a0b498607965c38051019c9e5  opt/sark/perl/modules/sark/SarkSubs.pm
 893a48302bc4e905253a966d54cc4dfb  opt/sark/php/AsteriskManager.php
@@ -213,7 +213,7 @@ fa5835d282709f5dd8eb7b2096b8c492  opt/sark/scripts/setip.sh
 3f6c77d1b0df7e87caeb21860cf21a66  opt/sark/scripts/setsnomidlescreen.pl
 7c744d9bbba85541d6f5ba6935a4de2d  opt/sark/scripts/snap.sh
 554c239fcb78c09f5b83f5c6f33abd18  opt/sark/scripts/spin.sh
-66d0290958675e9efe945eb044e0827c  opt/sark/scripts/srkV4reloader.sh
+d4681456553436eb076cc2ba06753d97  opt/sark/scripts/srkV4reloader.sh
 f6eaf45a171986096702893850152d55  opt/sark/scripts/srkcronqmove.pl
 cd8ce0297f227f524f0f80f2def87c1a  opt/sark/scripts/srkenforcer.pl
 3afc768f9aa409c850e51d122b240900  opt/sark/scripts/srkgenAst
@@ -2040,5 +2040,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-7afad028f0ff5d2091a7125cbbbb5958  usr/share/doc/sail/changelog.Debian.gz
+b9246171f5113b83b139e6d3cf190f3f  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

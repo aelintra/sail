@@ -1,3 +1,8 @@
+sail (4.0.1-15) UNRELEASED; urgency=low
+  * tagged as 4.0.1-15
+  - fixed sequence bug in the db updater (srkV4reloader.sh)
+ -- CoCoSoft <admin@aelintra.com>  Sun, 17 Aug 2014 18:00:00 +0000
+
 sail (4.0.1-14) UNRELEASED; urgency=low
   * tagged as 4.0.1-14
   - dropped commit sha logging in favour of tags
