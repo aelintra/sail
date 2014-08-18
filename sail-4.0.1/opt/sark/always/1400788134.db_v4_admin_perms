@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','100');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','110');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','120');
@@ -24,3 +26,5 @@ INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','300');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','310');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','320');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','330');
+
+COMMIT;
