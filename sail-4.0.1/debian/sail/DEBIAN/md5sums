@@ -1,4 +1,4 @@
-fd3487d019760470e5739fa2cbbefb75  opt/sark/always/1400788134.db_v4_admin_perms
+91a4fafccfe100d67c99a82350260899  opt/sark/always/1400788134.db_v4_admin_perms
 d7d5b6aab66dff5809d666bb5d1d3064  opt/sark/always/1408278454.db_v4_set_defaults
 b6add65ef3f9c65401c199e87993fd5f  opt/sark/always/r1833DEB
 070fbb22d544fc58d65fbc7dfecc6c37  opt/sark/cache/cdr-mysql-setup.sql
@@ -37,8 +37,7 @@ bb0e3d50f1b957d0a078e2129a377c74  opt/sark/generator/routealloc.php
 3178f7f20033df9593c08fa33879a419  opt/sark/generator/srkdumper.php
 c44480a5f928daec5788ffb8dfb96905  opt/sark/generator/srktimer.php
 727a133c53c736913054ea12ff10d90d  opt/sark/generator/vmailSQL.php
-263ff9934ef0e1c288935f5a30b3950b  opt/sark/once/1393676301.db_v4_initdat.sql
-4a7f45d3929d4a41d2dd56ebaa33e91b  opt/sark/once/1400767304.db_v4_systemDevice_cleanup.sql
+0337ef4cce9110132da5effe7f5a97ab  opt/sark/once/1393676301.db_v4_initdat.sql
 88781b3e78d4649486740259f3a67dfa  opt/sark/passwd/ltpasswds
 7ebd6e3a0b498607965c38051019c9e5  opt/sark/perl/modules/sark/SarkSubs.pm
 893a48302bc4e905253a966d54cc4dfb  opt/sark/php/AsteriskManager.php
@@ -2040,5 +2039,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-b9246171f5113b83b139e6d3cf190f3f  usr/share/doc/sail/changelog.Debian.gz
+6c414c04942abe3585416aeff8926c23  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
