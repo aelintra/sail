@@ -11,6 +11,8 @@ DELETE FROM device WHERE pkey LIKE 'spa%cfg';
 DELETE FROM device WHERE pkey LIKE 'snom%.htm';
 DELETE FROM device WHERE pkey LIKE 'snom%XML';
 DELETE FROM device WHERE pkey LIKE 'Snom 3%VXT';
+DELETE FROM device WHERE pkey LIKE 'Snom 7%VXT';
+DELETE FROM device WHERE pkey LIKE 'Snom 8%VXT';
 
 DELETE FROM device WHERE pkey = 'RINGLIST.DAT';
 DELETE FROM device WHERE pkey = 'SIPDefault.cnf';

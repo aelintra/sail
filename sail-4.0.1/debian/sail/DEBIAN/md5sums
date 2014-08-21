@@ -38,6 +38,7 @@ bb0e3d50f1b957d0a078e2129a377c74  opt/sark/generator/routealloc.php
 c44480a5f928daec5788ffb8dfb96905  opt/sark/generator/srktimer.php
 727a133c53c736913054ea12ff10d90d  opt/sark/generator/vmailSQL.php
 0337ef4cce9110132da5effe7f5a97ab  opt/sark/once/1393676301.db_v4_initdat.sql
+5b8268ba3e945a33bafd780618ff259b  opt/sark/once/1408393524.db_v4.delete_old_devices.sql
 88781b3e78d4649486740259f3a67dfa  opt/sark/passwd/ltpasswds
 7ebd6e3a0b498607965c38051019c9e5  opt/sark/perl/modules/sark/SarkSubs.pm
 893a48302bc4e905253a966d54cc4dfb  opt/sark/php/AsteriskManager.php
@@ -2039,5 +2040,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-6c414c04942abe3585416aeff8926c23  usr/share/doc/sail/changelog.Debian.gz
+5d69dfc7f3b08f10572e930724a5b5b9  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

@@ -942,6 +942,10 @@ private function saveEdit() {
 //						'sipiaxfriend' => True
 		);
 		
+		if (! array_key_exists($_POST['provision'])) {
+			$custom ['provision'] = True;
+		}
+		
 		$this->helper->buildTupleArray($_POST,$tuple,$custom);
 		$newkey =  trim(strip_tags($_POST['newkey']));
 
@@ -1015,8 +1019,10 @@ private function saveEdit() {
  * update the SQL database
  */
  
-// remove any escaped quotes 			
-		$tuple['provision'] = preg_replace ( "/\\\/", '', $tuple['provision']);
+// remove any escaped quotes
+		if (array_key_exists($tuple['provision'])) {
+			$tuple['provision'] = preg_replace ( "/\\\/", '', $tuple['provision']);
+		}
 		$tuple['sipiaxfriend'] = preg_replace ( "/\\\/", '', $tuple['sipiaxfriend']);
 		$this->doCos();
 		
