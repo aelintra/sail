@@ -27,7 +27,8 @@
 	  }
   } 
   if ($column == 'beginclose' || $column == 'endclose') {
-	  if (!preg_match("/^(20|21|22|23|[01]\d|\d)(([:][0-5]\d){1,2})$/",$value)) {
+//	  if (!preg_match("/^(20|21|22|23|[01]\d|\d)(([:][0-5]\d){1,2})$/",$value)) {
+	  if (!preg_match("/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/",$value)) {		  
 			if (!preg_match("/^\*$/",$value)) {
 				echo "Incorrect time format - use either * or hh:mm";
 				return;

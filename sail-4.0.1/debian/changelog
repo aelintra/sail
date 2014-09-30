@@ -1,3 +1,8 @@
+sail (4.0.1-17) UNRELEASED; urgency=low
+  * tagged as 4.0.1-17
+  - fix bad regex in sarktimer/update.php
+ -- CoCoSoft <admin@aelintra.com>  Tue, 30 Sep 2014 18:00:00 +0000
+
 sail (4.0.1-16) UNRELEASED; urgency=low
   * tagged as 4.0.1-15
   - fixed device deletion bug in the db updater

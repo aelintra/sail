@@ -34,11 +34,12 @@ dfe5835f22b396c8599497b261e357c3  opt/sark/generator/play.php
 c4dffc854f9d81df21b4319dba849fb3  opt/sark/generator/queuesSQL.php
 bb0e3d50f1b957d0a078e2129a377c74  opt/sark/generator/routealloc.php
 3201db4e388d84a211fd1a4b69eee22c  opt/sark/generator/sipSQL.php
+e6d7dad28e5747dbdc4d037b192a3d8c  opt/sark/generator/srkcsvloader.php
 3178f7f20033df9593c08fa33879a419  opt/sark/generator/srkdumper.php
 c44480a5f928daec5788ffb8dfb96905  opt/sark/generator/srktimer.php
 727a133c53c736913054ea12ff10d90d  opt/sark/generator/vmailSQL.php
 0337ef4cce9110132da5effe7f5a97ab  opt/sark/once/1393676301.db_v4_initdat.sql
-5b8268ba3e945a33bafd780618ff259b  opt/sark/once/1408393524.db_v4.delete_old_devices.sql
+c6a2afdae05ee2588aab5c4f9dbf4440  opt/sark/once/1408393524.db_v4.delete_old_devices.sql
 88781b3e78d4649486740259f3a67dfa  opt/sark/passwd/ltpasswds
 7ebd6e3a0b498607965c38051019c9e5  opt/sark/perl/modules/sark/SarkSubs.pm
 893a48302bc4e905253a966d54cc4dfb  opt/sark/php/AsteriskManager.php
@@ -117,7 +118,7 @@ feb7ad610149d7e6856cbbaa3414583b  opt/sark/php/sarkextension/blflist.php
 94579c9ac71426c93a5b281135bc63ab  opt/sark/php/sarkextension/main.php
 c5a64deef37df6fe71139e065c379508  opt/sark/php/sarkextension/update.php
 d8ba3fa55a57cd40dec551becc874c66  opt/sark/php/sarkextension/updateblf.php
-78293588bac3175ca545bf857a5c9bbd  opt/sark/php/sarkextension/view.php
+2290db9e190653de90c3965f69253654  opt/sark/php/sarkextension/view.php
 88f019e24dd5b1afe9a894fbab20d668  opt/sark/php/sarkglobal/javascript.js
 6ca5bde1e57ada6448bd093e3f41b722  opt/sark/php/sarkglobal/main.php
 30817b90af981b082f7bc20eea363103  opt/sark/php/sarkglobal/view.php
@@ -171,7 +172,7 @@ d68f8c15fdf4891959a82c42efce4f30  opt/sark/php/sarkroute/update.php
 c98de6fefe38e8601a51fd6398e41b31  opt/sark/php/sarktimer/delete.php
 e6fb195fd0ef751a3039ad5e8c8809b1  opt/sark/php/sarktimer/javascript.js
 5a0ff1474aed3f1654d6c8aa4f9b1cac  opt/sark/php/sarktimer/main.php
-4b96b146f7ae77f727f0cbeb8f278998  opt/sark/php/sarktimer/update.php
+3fd449b06375e241a1d423458d97ad7b  opt/sark/php/sarktimer/update.php
 38df01cf61bd4eceec71787d7693cb42  opt/sark/php/sarktimer/view.php
 4309afd76081d699114abb9057faf36f  opt/sark/php/sarktrunk/delete.php
 7112f8d0b4ff526fb7cf0f3934817f82  opt/sark/php/sarktrunk/javascript.js
@@ -2040,5 +2041,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-5d69dfc7f3b08f10572e930724a5b5b9  usr/share/doc/sail/changelog.Debian.gz
+9e4ae5bfa7d6d0487a30f694af35b43b  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
