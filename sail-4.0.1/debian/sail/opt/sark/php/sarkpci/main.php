@@ -2,7 +2,7 @@
 <?php 
 	require 'view.php'; 
 	include "../srkhead.php"; 	
-	echo '<script type="text/javascript" src="/php/sarkglobal/javascript.js" type="text/javascript"></script>' . PHP_EOL;	
+	echo '<script type="text/javascript" src="/php/sarkpci/javascript.js" type="text/javascript"></script>' . PHP_EOL;	
 	echo '</head>' .  PHP_EOL;   
 	$Panel = new pci;
 	$Panel->showForm();

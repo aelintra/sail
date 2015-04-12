@@ -98,7 +98,7 @@ private function saveNew() {
 		array_push($record,trim($row));
 	}
 	fclose($handle);
-	print_r($record);
+//	print_r($record);
 	$i = 0;
 	
 	while ($i < sizeof($record)) {

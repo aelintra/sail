@@ -499,7 +499,7 @@ public function ajaxdeleteClick ($get) {
 
 		echo '<td class="center"><a class="table-action-deletelink" href="delete.php"'; 
 		echo $get;
-		echo '"><img src="/sark-common/edittrash.png" border=0 title = "Click to Delete"></a></td>';
+		echo '><img src="/sark-common/edittrash.png" border=0 title = "Click to Delete"></a></td>';
 		echo "\n";
 	}	
 	

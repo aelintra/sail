@@ -118,7 +118,8 @@ private function showMain() {
 		echo '<td >' . $row['orideclosed']  . '</td>' . PHP_EOL;
 		echo '<td >' . $row['active']  . '</td>' . PHP_EOL;
 		$get = '?id=' . $row['pkey'];		
-		$this->myPanel->ajaxdeleteClick($get);		echo '</td>' . PHP_EOL;
+		$this->myPanel->ajaxdeleteClick($get);		
+		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
 	}
 

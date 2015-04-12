@@ -79,7 +79,7 @@ private function showMain() {
 	
 	$this->myPanel->Heading();
 
-	echo '<div class="datadivwide">';
+	echo '<div class="datadivmax">';
 
 	echo '<table class="display" id="clustertable">' ;	
 
@@ -94,6 +94,7 @@ private function showMain() {
     $this->myPanel->aHeaderFor('localdplan');        	
 	$this->myPanel->aHeaderFor('ato');	
 	$this->myPanel->aHeaderFor('chanmax');
+	$this->myPanel->aHeaderFor('masterclose');
 	$this->myPanel->aHeaderFor('oclo');
 	$this->myPanel->aHeaderFor('del');
 	echo '</tr>' . PHP_EOL;
@@ -104,6 +105,12 @@ private function showMain() {
 
 	$rows = $this->helper->getTable("cluster");
 	foreach ($rows as $row ) {
+		$ret = $this->helper->request_syscmd ("/usr/sbin/asterisk -rx 'database get CustomDevstate " . $row['pkey'] . "'"); 
+		$masterclose = "AUTO";
+		if (preg_match("/Value: INUSE/",$ret)) {
+			$masterclose = "CLOSED";
+		}
+
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
 		echo '<td class="read_only">' . $row['pkey'] . '</td>' . PHP_EOL;
 /*
@@ -116,6 +123,7 @@ private function showMain() {
 		echo '<td >' . $row['localdplan'] . '</td>' . PHP_EOL;				
 		echo '<td >' . $row['abstimeout'] . '</td>' . PHP_EOL;		
 		echo '<td >' . $row['chanmax'] . '</td>' . PHP_EOL;
+		echo '<td >' . $masterclose . '</td>' . PHP_EOL;
 		echo '<td >' . $row['oclo'] . '</td>' . PHP_EOL;
 		if ($row['pkey'] == 'default') {
 			echo '<td class="center">N/A</td>' . PHP_EOL;

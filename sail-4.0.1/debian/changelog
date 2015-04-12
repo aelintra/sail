@@ -1,3 +1,21 @@
+sail (4.0.1-18) UNRELEASED; urgency=low
+  * tagged as 4.0.1-18
+  - add sarkdiscover
+  - add sarkconference
+  - add timers for tenants
+  - message change on sarknet reboot
+  - sarkpci bugfix to tabs
+  - sarktrunk fix to handle unmonitored trunks
+  - srkhelper enhance for meetme table
+  - srkPageclass bug fix
+  - diskabs bugfix for potential loop
+  - setip now allows multiple local networks
+  - sarkhelper now permanently logs
+  - USB automount with autodump of IP
+  - require ipcalc in dependencies
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 12 Apr 2015 18:00:00 +0000
+
 sail (4.0.1-17) UNRELEASED; urgency=low
   * tagged as 4.0.1-17
   - fix bad regex in sarktimer/update.php

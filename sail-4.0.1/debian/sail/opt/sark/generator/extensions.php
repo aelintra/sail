@@ -98,6 +98,10 @@ try {
 	$OUT .= "\tinclude => parkedcalls\n";
 	
 	$OUT .= "\n\texten => MASTER,1,GoTo(extensions,\${EXTEN},1)\n";
+	$sql = "select pkey from Cluster order by pkey";
+ 	foreach ($dbh->query($sql) as $row) {
+		$OUT .= "\texten => " . $row['pkey'] . ",1,GoTo(extensions,\${EXTEN},1)\n";
+	}
 	$OUT .= "\texten => _vm.,1,GoTo(extensions,\${EXTEN},1)\n\n";
 
 //
@@ -213,9 +217,13 @@ try {
 //  open/closed hint
 //	 
 
-		$OUT .= "\n";
-		$OUT .= "\texten => MASTER,hint,Custom:Night\n";
-		$OUT .= "\n";
+	$OUT .= "\n";
+	$OUT .= "\texten => MASTER,hint,Custom:MASTER\n";
+	$sql = "select pkey from Cluster order by pkey";
+ 	foreach ($dbh->query($sql) as $row) {
+		$OUT .= "\texten => " . $row['pkey'] . ",hint,Custom:" . $row['pkey'] . "\n";
+	}		
+	$OUT .= "\n";
 
 //
 //  include any customer supplied hints
@@ -404,7 +412,7 @@ try {
 //  Meetme
 //
 	$file = '/etc/asterisk/meetme.conf' or die('Could not read file!');
-    	$rec = file($file) or die('Could not read file!');
+    $rec = file($file) or die('Could not read file!');
 	$conferences = array(); 
     	foreach ($rec as $line) {
 		if (!preg_match(' /^\s*;/ ',$line)) {   
@@ -413,6 +421,7 @@ try {
 			}
 		} 	
 	}
+
 	$OUT .= "\n[conferences]\n";
 	foreach ($conferences as $conf) {
 		if ($global['CONFTYPE'] == "simple" ) {
@@ -422,7 +431,24 @@ try {
 			$OUT .= "\texten => $conf,1,Meetme($conf,MpI)\n";
 		}
 		$OUT .= "\texten => $conf,hint,Meetme:$conf\n";
-	}	   
+	}	
+
+/*
+ * New 4.0.1 conferences
+ */
+	$sql = "SELECT * FROM meetme ORDER BY pkey";
+	print_r($sql);
+	foreach ($dbh->query($sql) as $room) { 
+		if ($room['type'] == "simple" ) {
+			$OUT .= "\texten => " . $room['pkey'] . ",1,Meetme(" . $room['pkey'] . ",Mp)\n";
+		}
+		else {
+			$OUT .= "\texten => " . $room['pkey'] . ",1,Meetme(" . $room['pkey'] . ",MpI)\n";
+		}
+		$OUT .= "\texten => " . $room['pkey'] . ",hint,Meetme:" . $room['pkey'] . "\n";
+	}	   	
+	   	
+	   
 //
 //  begin mainmenu (inbound context) 
 //	
@@ -607,27 +633,47 @@ THERE;
  	}  
 	
 	
-// V4 master open/closed lamps
+// V4 open/closed lamps
 	
 
 	$OUT .= <<<ANDHERE
+;
+;   open/close custom devices
+;
 		
 	exten => MASTER,1,Set(state=\${DB(STAT/OCSTAT)})
 	exten => MASTER,n,GoToIf(\$["\${state}" = "AUTO"]?closeup:openup)
 
 	exten => MASTER,n(closeup),Set(DB(STAT/OCSTAT)=CLOSED)
-	exten => MASTER,n,Set(DEVICE_STATE(Custom:Night)=BUSY)
+	exten => MASTER,n,Set(DEVICE_STATE(Custom:MASTER)=INUSE)
 	exten => MASTER,n,Playback(activated)
 	exten => MASTER,n,Hangup
 
 	exten => MASTER,n(openup),Set(DB(STAT/OCSTAT)=AUTO)
-	exten => MASTER,n,Set(DEVICE_STATE(Custom:Night)=NOT_INUSE)
+	exten => MASTER,n,Set(DEVICE_STATE(Custom:MASTER)=NOT_INUSE)
 	exten => MASTER,n,Playback(de-activated)
 	exten => MASTER,n,Hangup
 	
 ANDHERE;
 
 	$OUT .= "\n";
+	$sql = "select pkey from Cluster order by pkey";
+ 	foreach ($dbh->query($sql) as $row) {
+		$OUT .= "\texten => " . $row['pkey'] . ",1,Set(state=\${DB(" . $row['pkey'] . "/OCSTAT)})\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,GoToIf(\$[\"\${state}\" = \"AUTO\"]?" . $row['pkey'] . "close:" . $row['pkey'] . "open)\n";
+		$OUT .= "\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n(" . $row['pkey'] . "close),Set(DB(" . $row['pkey'] . "/OCSTAT)=CLOSED)\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,Set(DEVICE_STATE(Custom:" . $row['pkey'] . ")=INUSE)\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,Playback(activated)\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,Hangup\n";
+		$OUT .= "\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n(" . $row['pkey'] . "open),Set(DB(" . $row['pkey'] . "/OCSTAT)=AUTO)\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,Set(DEVICE_STATE(Custom:" . $row['pkey'] . ")=NOT_INUSE)\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,Playback(de-activated)\n";
+		$OUT .= "\texten => " . $row['pkey'] . ",n,Hangup\n";	
+		$OUT .= "\n";	
+	}	
+	
 
 	$OUT .= <<<ANDTHERE
 ;

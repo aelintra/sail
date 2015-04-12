@@ -17,6 +17,10 @@ my $ret;
 my $candidate;
 my $threshold = `sqlite3 /opt/sark/db/sark.db "SELECT RECLIMIT FROM globals"`;
 
+if ($threshold < 1000) {
+   $threshold = 1000;
+}
+
 #print  "LIMIT IS $threshold\n";
 
 $_ = `du -ms $dir`;

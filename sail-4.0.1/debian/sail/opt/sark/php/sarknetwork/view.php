@@ -55,7 +55,12 @@ public function showForm() {
 		$this->saveEdit();
 		if ( ! $this->invalidForm) {
 			$this->helper->request_syscmd ("reboot");
-			$this->message = "Rebooting Now, Back shortly at " . $_POST['ipaddr'];
+			if (isset($_POST['ipaddr'])) {
+				$this->message = "Rebooting Now, Back shortly at " . $_POST['ipaddr'];
+			}
+			else {
+				$this->message = "Rebooting Now, Back shortly";
+			}
 		}
 	}	
 				

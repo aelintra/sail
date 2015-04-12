@@ -48,17 +48,24 @@
 		}
 	  }
   }
-     
+ if ($column == 'masteroclo') {
+	$hint = 'NOT_INUSE'; 
+	if ($value == 'CLOSED') {
+		$hint = 'INUSE';
+	}		
+	$ret = $helper->request_syscmd ("/usr/sbin/asterisk -rx 'devstate change Custom:" .$id . " $hint' ");   
+ } 
+ else {    
 /*  
  * set column=value in the array
  */
-  $tuple[$column] = $value;
-  $tuple['pkey'] = $id;
+	$tuple[$column] = $value;
+	$tuple['pkey'] = $id;
 /*
  * call the setter
  */
-  $ret = $helper->setTuple('cluster',$tuple);
-  
+	$ret = $helper->setTuple('cluster',$tuple);
+ } 
   echo $_REQUEST['value'];
 
 ?>

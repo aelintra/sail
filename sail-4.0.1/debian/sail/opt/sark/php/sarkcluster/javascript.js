@@ -45,7 +45,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tf',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 1,2,3,4,5,6,7,8 ] },
+			{ "bSortable": false, "aTargets": [ 1,2,3,4,5,6,7,8,9 ] },
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey",  "sWidth": "80px"  },
@@ -55,11 +55,12 @@
 			{ "sName": "localdplan", "sWidth": "100px"  },						
 			{ "sName": "abstimeout", "sWidth": "40px"  },	
 			{ "sName": "chanmax", "sWidth": "20px"  },
+			{ "sName": "masteroclo", "sWidth": "20px"  },
 			{ "sName": null, "sWidth": "20px"  },
 			{ "sName": null, "sWidth": "20px"  }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-          $('td:eq(1),td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6)', nRow).addClass( "bluetags" );
+          $('td:eq(1),td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7)', nRow).addClass( "bluetags" );
         }   
 
 	} ).makeEditable({
@@ -113,6 +114,13 @@
                     onblur: 'cancel',
                     submit: 'Save'
                 },		// chanmax
+				{
+					tooltip: 'Double Click to activate/deactivate',
+					type: 'select',
+                    onblur: 'cancel',
+                    submit: 'Save',
+					data: "{ 'AUTO':'AUTO','CLOSED':'CLOSED' }"
+				}, 		// masteroclo				                
                 null, 	// oclo
 				null	// delete col
             ]
