@@ -23,7 +23,7 @@ require_once "../formvalidator.php";
 
 
 
-Class cos {
+Class conference {
 	
 	protected $message; 
 	protected $myPanel;
@@ -40,9 +40,9 @@ public function showForm() {
 	$this->helper = new helper;
 		
 	echo '<body>';
-	echo '<form id="sarkcosForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
+	echo '<form id="sarkconferenceForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 	
-	$this->myPanel->pagename = 'Class of Service';
+	$this->myPanel->pagename = 'Conference Rooms';
 	
 	if (isset($_POST['new_x'])) { 
 		$this->showNew();
@@ -86,19 +86,18 @@ private function showMain() {
 	
 	$this->myPanel->Heading();
 	
-	echo '<div class="datadivwide">';
+	echo '<div class="datadivnarrow">';
 
-	echo '<table class="display" id="costable">' ;
+	echo '<table class="display" id="conferencetable" >' ;
 	echo '<thead>' . PHP_EOL;	
 	echo '<tr>' . PHP_EOL;
 	
-	$this->myPanel->aHeaderFor('cosname'); 	
-	$this->myPanel->aHeaderFor('cosdialplan');
-	$this->myPanel->aHeaderFor('cosopen');
-	$this->myPanel->aHeaderFor('orideopen');
-	$this->myPanel->aHeaderFor('cosclosed');
-	$this->myPanel->aHeaderFor('orideclosed');
-	$this->myPanel->aHeaderFor('active');
+	$this->myPanel->aHeaderFor('confpkey'); 
+	$this->myPanel->aHeaderFor('conftype');
+	$this->myPanel->aHeaderFor('confpin');
+	$this->myPanel->aHeaderFor('confadminpin');		
+	$this->myPanel->aHeaderFor('description');
+	$this->myPanel->aHeaderFor('status');
 	$this->myPanel->aHeaderFor('del');
 	
 	echo '</tr>' . PHP_EOL;
@@ -107,16 +106,22 @@ private function showMain() {
 		
 /*** table rows ****/
 
-	$rows = $this->helper->getTable("cos");
+	$rows = $this->helper->getTable("meetme");
 	foreach ($rows as $row ) {
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
-		echo '<td class="read_only">' . $row['pkey'] . '</td>' . PHP_EOL;			
-		echo '<td >' . $row['dialplan']  . '</td>' . PHP_EOL;		 
-		echo '<td >' . $row['defaultopen']  . '</td>' . PHP_EOL;		
-		echo '<td >' . $row['orideopen']  . '</td>' . PHP_EOL;
-		echo '<td >' . $row['defaultclosed']  . '</td>' . PHP_EOL;
-		echo '<td >' . $row['orideclosed']  . '</td>' . PHP_EOL;
-		echo '<td >' . $row['active']  . '</td>' . PHP_EOL;
+		echo '<td class="read_only">' . $row['pkey'] . '</td>' . PHP_EOL;				 
+		echo '<td >' . $row['type']  . '</td>' . PHP_EOL;		
+		echo '<td >' . $row['pin']  . '</td>' . PHP_EOL;
+		echo '<td >' . $row['adminpin']  . '</td>' . PHP_EOL;		
+		echo '<td >' . $row['description']  . '</td>' . PHP_EOL;
+		$search = $row['pkey'];
+		$status = 'free';
+		$statusrow = `/usr/sbin/asterisk -rx 'meetme list concise' | grep $search`;
+		if ($statusrow) {
+			$roomarray = (explode('!', $statusrow));
+			$status = $roomarray[1] . " users";
+		}
+		echo '<td >' . $status  . '</td>' . PHP_EOL;
 		$get = '?id=' . $row['pkey'];		
 		$this->myPanel->ajaxdeleteClick($get);		
 		echo '</td>' . PHP_EOL;
@@ -124,12 +129,13 @@ private function showMain() {
 	}
 
 	echo '</tbody>' . PHP_EOL;
-	echo '</table>' . PHP_EOL;	
-	echo '</div>' . PHP_EOL;	
+	echo '</table>' . PHP_EOL;
+	echo '</div>';	
+	
 }
 
 private function showNew() {
-	$this->myPanel->msg .= "Add a Class of Service "; 
+	$this->myPanel->msg .= "Add a conference room "; 
 	
 	if (isset($this->message)) {
 		$this->myPanel->msg .= $this->message;
@@ -147,22 +153,10 @@ private function showNew() {
 		}       
 	}	
 	echo '<div class="editinsert">';
-	$this->myPanel->aLabelFor('cosname');
-	echo '<input type="text" name="pkey" size="20" id="pkey" value="' . $pkey . '"  />' . PHP_EOL;
-	$this->myPanel->aLabelFor('active');
-	$this->myPanel->popUp('active', array('YES', 'NO'));	
-	
-	$this->myPanel->aLabelFor('cosdialplan');
-	echo '<input type="text" name="dialplan" id="desc" size="30"  />' . PHP_EOL;
-		
-	$this->myPanel->aLabelFor('defaultopen');
-	$this->myPanel->popUp('defaultopen', array('NO','YES'));	
-	$this->myPanel->aLabelFor('orideopen');
-	$this->myPanel->popUp('orideopen', array('NO','YES'));	
-	$this->myPanel->aLabelFor('defaultclosed');
-	$this->myPanel->popUp('defaultclosed', array('NO','YES'));	
-	$this->myPanel->aLabelFor('orideclosed');
-	$this->myPanel->popUp('orideclosed', array('NO','YES'));
+	$this->myPanel->aLabelFor('confpkey');
+	echo '<input type="text" name="pkey" size="6" id="pkey" size="4"  />' . PHP_EOL;	
+	$this->myPanel->aLabelFor('description');
+	echo '<input type="text" name="description" id="description" size="30"  />' . PHP_EOL;	
 	echo '</div>';		
 }
 
@@ -170,9 +164,8 @@ private function saveNew() {
 // save the data away
 	
 	$this->validator = new FormValidator();
-    $this->validator->addValidation("pkey","req","Please fill in COS name");
-    $this->validator->addValidation("pkey","alnum","COS name must be alpha numeric (no spaces, no special characters)");    
-    $this->validator->addValidation("dialplan","regexp=/^[\+0-9XNZxnz_!#\s\*\.\-]+$/","Dialplan must be a valid Asterisk dialplan");
+    $this->validator->addValidation("pkey","req","Please fill in mcast extension");
+    $this->validator->addValidation("pkey","num","Multicast extension name must be numeric");    
 
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
@@ -181,14 +174,14 @@ private function saveNew() {
  */  
 		$this->helper->buildTupleArray($_POST,$tuple);	
 			  
-		$ret = $this->helper->createTuple("cos",$tuple);
+		$ret = $this->helper->createTuple("meetme",$tuple);
 		if ($ret == 'OK') {
-			$this->message = "Saved new COS " . $tuple['pkey'] . "!";
+			$this->message = "Saved new Conference Room " . $tuple['pkey'] . "!";
 		}
 		else {
 			$this->invalidForm = True;
 			$this->message = "<B>  --  Validation Errors!</B>";	
-			$this->error_hash['cosinsert'] = $ret;	
+			$this->error_hash['mcastinsert'] = $ret;	
 		}
 				
 	}

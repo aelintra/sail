@@ -990,6 +990,17 @@ private function default_mcast() {
     $this->setCluster($rec); 
 }
 
+private function default_meetme() {
+	
+	$rec = array(
+		"type"	=> "simple",
+		"adminpin" => "1111",
+		"pin" => ""
+	);	
+    return $rec;
+    $this->setCluster($rec); 
+}
+
 public function qDistro (&$distro=array()) {
 
 	$distro['rhel'] = false;

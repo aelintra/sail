@@ -42,7 +42,7 @@ Listen => 5,
 Reuse => 1
 ) or die "ERROR in Socket Creation : $!\n";
 
-#print "$t SRKHELPER started and Waiting for client connection on port 7601 \n";
+print "$t SRKHELPER started and Waiting for client connection on port 7601 \n";
 
 while(1)
 {
@@ -53,7 +53,7 @@ $client_socket = $socket->accept();
 $peer_address = $client_socket->peerhost();
 $peer_port = $client_socket->peerport();
 $t = localtime();
-#print "$t Accepted New Client Connection\n";
+print "$t Accepted New Client Connection\n";
 
 # write operation on the newly accepted client.
 $data = "Ready";
@@ -61,18 +61,21 @@ print $client_socket "$data\n";
 
 # read operation on the newly accepted client
 $data = <$client_socket>;
-#print "$t Received cmd : $data";
-#print "$t running command \n";
+print "$t Received cmd : $data";
+print "$t running command \n";
 $return = `$data`;
 $t = localtime();
-#print "$t Returned $return\n";
+print "$t Returned $return\n";
 print $client_socket "$return\n<<EOT>>\n";
-#print "$t waiting for work...\n";
+print "$t waiting for work...\n";
 }
 
 $socket->close();
 exit (0);
 
+#
+# Daemon no longer used - running under runit
+#
 sub daemonize {
     $t = localtime();
     chdir '/'                 or die "$t Can't chdir to /: $!";

@@ -7,6 +7,7 @@
 /usr/bin/php /opt/sark/generator/cdr_mysql.php >/dev/null
 /usr/bin/php /opt/sark/generator/extensions.php >/dev/null
 /usr/bin/php /opt/sark/generator/iaxSQL.php >/dev/null
+/usr/bin/php /opt/sark/generator/meetmeSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/queuesSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/sipSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/featuresSQL.php >/dev/null

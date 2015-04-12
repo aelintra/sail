@@ -229,8 +229,11 @@ private function showMain() {
 				echo '<td><img src="/sark-common/actions/apply.png" border=0 title = "Endpoint is on-line" ></td>' . PHP_EOL;
 			}		
 		}
-		else {
-			echo '<td><img src="/sark-common/actions/no.png" border=0 title = "Endpoint is Offline" ></td>' . PHP_EOL;
+		else if (substr($status, 0, 11) == 'Unmonitored') {
+			echo '<td title = "Endpoint is Unmonitored" >U/M</td>' . PHP_EOL;
+		}
+		else {			
+			echo '<td><img src="/sark-common/actions/no.png" border=0 title = "Endpoint is Offline; Status is ' . $status .'" ></td>' . PHP_EOL;
 		}
 
 		$get = '?edit=yes&amp;pkey=';

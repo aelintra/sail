@@ -133,7 +133,7 @@ private function showMain() {
 	
 	
 	echo '<br/>'. PHP_EOL;		
-	echo '<div id="pagetabs" >' . PHP_EOL;	
+	echo '<div id="pagetabs">' . PHP_EOL;	
     echo '<ul>'.  PHP_EOL;
     echo '<li><a href="#hardware">Hardware</a></li>'.PHP_EOL;
     echo '<li><a href="#system" >system.conf</a></li>'. PHP_EOL;
@@ -180,7 +180,7 @@ private function showMain() {
 /*
  *       TAB channels
  */
-    echo '<div id="channels" >'. PHP_EOL;
+    echo '<div id="channels">'. PHP_EOL;
     echo '<span style="color: rgb(0, 0, 0); font-weight:bold;font-size:small; ">/etc/asterisk/dahdi-channels.conf'. '</span><br/>' . PHP_EOL;
 	echo '<br/>' . PHP_EOL;
 	echo '<textarea rows="17" cols="100" name="dahdi_channels" id="dahdi_channels" >' . $dahdi_channels . '</textarea>' . PHP_EOL;   
@@ -194,7 +194,7 @@ private function showMain() {
 /*
  *       TAB Params
  */
-    echo '<div  id="params" >'. PHP_EOL;
+    echo '<div  id="params">'. PHP_EOL;
     echo '<span style="color: rgb(0, 0, 0); font-weight:bold;font-size:small; ">/etc/dahdi/genconf_parameters'. '</span><br/>' . PHP_EOL;
 	echo '<br/>' . PHP_EOL;
 	echo '<textarea rows="17" cols="100" name="genconf_parameters" id="genconf_parameters" >' . $genconf_parameters . '</textarea>' . PHP_EOL;   
