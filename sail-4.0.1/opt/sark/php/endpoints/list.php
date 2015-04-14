@@ -15,7 +15,7 @@
 		$wherestring = "ORDER BY pkey WHERE cluster='" . $res['cluster'] . "' OR cluster='default'" ;
 	}
 	
-	$handle = fopen("/etc/asterisk/meetme.conf", "r") or die('Could not read file!');
+	$handle = fopen("/etc/asterisk/sark_meetme.conf", "r") or die('Could not read file!');
 
 	while (!feof($handle)) {
 		
@@ -27,6 +27,7 @@
 		
 		if (preg_match (" /^conf\s*=>\s*(\d{3,4})/ ",$row,$matches)) {
 			array_push ($conferences,$matches[1]);
+			$helper->logit("I'm sending room " . $matches[1],3);
 		}
 				
 	}

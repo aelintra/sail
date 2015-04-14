@@ -339,6 +339,12 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cluster','Te
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('clusterstart','Tenant support ON/OFF','Turn ON/OFF multi tenant support');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('compression','CODEC','[FIDELITY,THRUPUT,g729] Sark/SAIL will attempt to minimise CODEC transcoding using this value. If you choose Fidelity it will enforce g711(law) coding where it can.  If you choose Thruput it will use g729 if it is available, otherwise it use gsm.  If you choose g729. it will blanket enforce g729.','compression');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('conftype','Conference Type','Choose from assisted or unassisted conferences.','conftype');
+
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpkey','Conference Room','Room Number (100->9999) .');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confadminpin','Admin PIN','Administrator PIN (0000->9999 or blank)');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpin','Access PIN','Access PIN (0000->9999 or blank)');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('conftype','Conference Type','Choose from assisted or unassisted conferences.');
+
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('context','Context Name','The name of the context you want your custom app to run in.  This must be system-wide unique.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('copy','Copy','Copy an existing Device type or Descriptor as the basis for this new entry.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cosclosed','Default Closed','Defines whether this COS will be ON by default for closed hours when new extensions are created.');
@@ -589,6 +595,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('ztp','Zero T
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname) values ('100','sarkextension/main.php','Extensions');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname) values ('105','sarkphone/main.php','Phone');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('110','sarktrunk/main.php','Trunks','50');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname) values ('115','sarkdiscover/main.php','Discover');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('120','sarkdevice/main.php','Templates','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('130','sarkroute/main.php','Outbound','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('134','sarkddi/main.php','Inbound','20');
@@ -600,6 +607,7 @@ INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('180','sa
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('190','sarkivr/main.php','IVR','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('200','sarkgreeting/main.php','Greetings','30');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('210','sarkcluster/main.php','Multi-Tenant','20');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('215','sarkconference/main.php','Conferences','20');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('220','sarkcallback/main.php','Callback','20');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('224','sarkmcast/main.php','Multicast','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('230','sarkglobal/main.php','Globals','50');
@@ -622,7 +630,9 @@ INSERT OR IGNORE INTO PanelGroup(pkey,groupname) values ('500','System');
 INSERT OR IGNORE INTO PanelGroup(pkey,groupname) values ('600','Asterisk');
 INSERT OR IGNORE INTO PanelGroup(pkey,groupname) values ('700','CDRs');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('100','100');
+INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('100','105');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('100','110');
+INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('100','115');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('100','120');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('200','130');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('200','134');
@@ -634,6 +644,7 @@ INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('300',
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('300','190');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('300','200');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('400','210');
+INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('400','215');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('400','220');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('400','224');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','230');
@@ -647,7 +658,7 @@ INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('600',
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('700','300');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','320');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','330');
-INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('100','105');
+
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT113X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT123X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT133X','Panasonic KX');

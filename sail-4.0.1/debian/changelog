@@ -1,3 +1,9 @@
+sail (4.0.1-19) UNRELEASED; urgency=low
+  * tagged as 4.0.1-19
+  - fix to database structure
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 13 Apr 2015 18:00:00 +0000
+
 sail (4.0.1-18) UNRELEASED; urgency=low
   * tagged as 4.0.1-18
   - add sarkdiscover

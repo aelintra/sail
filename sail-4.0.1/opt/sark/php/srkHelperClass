@@ -286,7 +286,7 @@ public function displayRouteClass($var) {
 					$ret = "Callgrp " . $this->pkey;
 				}
 				else {
-					$handle = fopen("/etc/asterisk/meetme.conf", "r") or die('Could not read file!');
+					$handle = fopen("/etc/asterisk/sark_meetme.conf", "r") or die('Could not read file!');
 					$conferences = array();
 					while (!feof($handle)) {
 						$row = trim(fgets($handle));
@@ -298,7 +298,7 @@ public function displayRouteClass($var) {
 						}		
 					}
 					if (array_key_exists($this->pkey, $conferences)) {
-						$ret = "Room " . $this->pkey;
+						$ret = "Conf " . $this->pkey;
 					}
 				}				
 			}	 
@@ -994,7 +994,7 @@ private function default_meetme() {
 	
 	$rec = array(
 		"type"	=> "simple",
-		"adminpin" => "1111",
+		"adminpin" => "",
 		"pin" => ""
 	);	
     return $rec;

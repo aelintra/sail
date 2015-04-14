@@ -2,6 +2,7 @@ BEGIN TRANSACTION;
 
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','100');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','110');
+INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','115');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','120');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','130');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','134');
@@ -13,6 +14,7 @@ INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','180');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','190');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','200');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','210');
+INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','215');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','220');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','224');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey) values ('admin','230');

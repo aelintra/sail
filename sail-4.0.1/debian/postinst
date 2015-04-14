@@ -75,6 +75,11 @@ if [  "$?" -ne "0" ] ; then
         echo "enable=no" > /etc/asterisk/sark_cdr.conf
 fi
 
+grep -q '#include sark_meetme.conf' /etc/asterisk/meetme.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_meetme.conf" >> /etc/asterisk/meetme.conf
+fi
+
 if [ -d /etc/shorewall ]; then
         perl /opt/sark/scripts/setip.pl
     for file in `ls /opt/sark/shorewall/one-interface` ; do

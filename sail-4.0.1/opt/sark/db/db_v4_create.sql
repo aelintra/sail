@@ -526,4 +526,12 @@ CREATE TABLE IF NOT EXISTS Device_atl (
 pkey TEXT PRIMARY KEY
 );
 
+CREATE TABLE IF NOT EXISTS meetme (
+pkey TEXT PRIMARY KEY,
+adminpin TEXT,
+description TEXT,
+pin TEXT,
+type TEXT
+);
+
 COMMIT;
