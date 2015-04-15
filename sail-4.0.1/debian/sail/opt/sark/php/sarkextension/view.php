@@ -291,7 +291,7 @@ private function showMain() {
 					echo '<td class="center"><a href="/DPRX' . $display_ipaddr . '/"><img src="/sark-common/warning.png" border=0 title = "Device is online but not registered (this may be OK)"></a></td>' . PHP_EOL;
 				}
 				else { 
-					echo '<td class="center"><img src="/sark-common/actions/no.png" border=0 title = "Device is Offline" ></td>' . PHP_EOL;
+					echo '<td class="center"><img src="/sark-common/actions/no.png" border=0 title = "Device is Offline. Satus is ' . $sip_peers [$row['pkey']]['Status'] . '" ></td>' . PHP_EOL;
 				}
 			}
 		}
@@ -942,10 +942,6 @@ private function saveEdit() {
 //						'sipiaxfriend' => True
 		);
 		
-		if (! array_key_exists($_POST['provision'])) {
-			$custom ['provision'] = True;
-		}
-		
 		$this->helper->buildTupleArray($_POST,$tuple,$custom);
 		$newkey =  trim(strip_tags($_POST['newkey']));
 
@@ -1019,10 +1015,8 @@ private function saveEdit() {
  * update the SQL database
  */
  
-// remove any escaped quotes
-		if (array_key_exists($tuple['provision'])) {
-			$tuple['provision'] = preg_replace ( "/\\\/", '', $tuple['provision']);
-		}
+// remove any escaped quotes 			
+		$tuple['provision'] = preg_replace ( "/\\\/", '', $tuple['provision']);
 		$tuple['sipiaxfriend'] = preg_replace ( "/\\\/", '', $tuple['sipiaxfriend']);
 		$this->doCos();
 		

@@ -339,13 +339,11 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cluster','Te
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('clusterstart','Tenant support ON/OFF','Turn ON/OFF multi tenant support');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('compression','CODEC','[FIDELITY,THRUPUT,g729] Sark/SAIL will attempt to minimise CODEC transcoding using this value. If you choose Fidelity it will enforce g711(law) coding where it can.  If you choose Thruput it will use g729 if it is available, otherwise it use gsm.  If you choose g729. it will blanket enforce g729.','compression');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('conftype','Conference Type','Choose from assisted or unassisted conferences.','conftype');
-
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('context','Context Name','The name of the context you want your custom app to run in.  This must be system-wide unique.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpkey','Conference Room','Room Number (100->9999) .');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confadminpin','Admin PIN','Administrator PIN (0000->9999 or blank)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpin','Access PIN','Access PIN (0000->9999 or blank)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('conftype','Conference Type','Choose from assisted or unassisted conferences.');
-
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('context','Context Name','The name of the context you want your custom app to run in.  This must be system-wide unique.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('copy','Copy','Copy an existing Device type or Descriptor as the basis for this new entry.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cosclosed','Default Closed','Defines whether this COS will be ON by default for closed hours when new extensions are created.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cosdialplan','Dialplan','The dialplan pattern for this class-of-service.  COS dialplans follow standard Asterisk dialplan conventions.');
@@ -658,7 +656,6 @@ INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('600',
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('700','300');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','320');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','330');
-
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT113X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT123X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT133X','Panasonic KX');
