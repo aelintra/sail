@@ -1,3 +1,9 @@
+sail (4.0.1-20) UNRELEASED; urgency=low
+  * tagged as 4.0.1-20
+  - added dialout rssh support
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 14 Apr 2015 18:00:00 +0000
+
 sail (4.0.1-19) UNRELEASED; urgency=low
   * tagged as 4.0.1-19
   - fix to database structure

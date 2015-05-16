@@ -52,6 +52,7 @@ else {
 		`awk '!_[\$0]++'  /etc/asterisk/sark_sip_localnet.conf > /tmp/localnet.tmp`;
 		`mv /tmp/localnet.tmp /etc/asterisk/sark_sip_localnet.conf`;
 		`chown asterisk:asterisk /etc/asterisk/sark_sip_localnet.conf`;
+		`chmod 664 /etc/asterisk/sark_sip_localnet.conf`;
 		`asterisk -rx 'reload' > /dev/null`;
 	}
 	if ( -e "/etc/fail2ban") {
