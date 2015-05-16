@@ -109,6 +109,7 @@ chmod +x /opt/sark/service/srk-ua-responder/run
 # link the helpers if they don't exist 
 [ ! -L /etc/service/srk-ua-helper ] && ln -s /opt/sark/service/srk-ua-helper /etc/service
 [ ! -L /etc/service/srk-ua-responder ] && ln -s /opt/sark/service/srk-ua-responder /etc/service
+[ ! -L /etc/service/srk-ua-rssh ] && ln -s /opt/sark/service/srk-ua-rssh /etc/service
 [ ! -L /etc/apache2/sites-available/sark ] && ln -s /opt/sark/etc/apache2/sites-available/sark /etc/apache2/sites-available
 
 a2enmod rewrite > /dev/null 2>&1
@@ -123,6 +124,11 @@ if [ ! -e /etc/sodoers.d/sail ]; then
 	echo www-data ALL=NOPASSWD: /etc/init.d/asterisk > /etc/sudoers.d/sail
 	chmod 0440 /etc/sudoers.d/sail
 fi
+if [ ! -e /etc/sodoers.d/sarkrssh ]; then
+        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sail
+        chmod 0440 /etc/sudoers.d/sarkrssh
+fi
+
 
 #handle multiple NICs
 if [ ! -e /etc/network/interfaces.d ]; then

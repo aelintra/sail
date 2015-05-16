@@ -706,6 +706,20 @@ ANDHERE;
         exten => _*40[*8]XXX,1,agi(sarkhpe,\${EXTEN},,)		; Page Group
         exten => _*4[12][*8],1,agi(sarkhpe,\${EXTEN},,)		; ProVu DND
 ;
+;   RSSH support sessions - requires rssh licence keys to be installed
+;
+		exten=>_*44*XXX.,1,Authenticate(\${SYSPASS})
+		exten=>_*44*XXX.,n,system(echo "PORT1=\${EXTEN:4}" > /opt/sark/service/rssh/serviceport1)
+		exten=>_*44*XXX.,n,system(sudo /usr/bin/sv o srk-ua-rssh)
+		exten=>_*44*XXX.,n,Playback(activated)
+		exten=>*_44*XXX.,n,Hangup
+
+		exten=>*44*,1,Authenticate(\${SYSPASS})
+		exten=>*44*,n,system(sudo /usr/bin/sv d srk-ua-rssh)
+		exten=>*44*,n,Playback(de-activated)
+		exten=>*44*,n,Hangup
+
+;
 ;	Wakeup call 
 ;
 		exten => _*24[*8],1,agi(kwakeup)
