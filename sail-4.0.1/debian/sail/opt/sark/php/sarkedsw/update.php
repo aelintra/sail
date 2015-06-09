@@ -31,8 +31,23 @@
 	if (file_exists($file)) {
 		$rec = file($file, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES) or die('Could not read file!');
 	}
-	$cols = explode (" ", $rec[$rowId]);
-	$cols[$columnId] = $value;
+	if (preg_match(" /#/ ", $rec[$rowId])) {
+		$splitComments = explode("#",$rec[$rowId],1);
+		$cols[5] = $splitComments [1];
+		$cols = explode(" ",$splitComments[0],6);
+	}
+	else {
+		$cols = explode(" ",$rec[$rowId],6);
+	}
+		
+//	$cols = explode (" ", $rec[$rowId],5);
+	if ($columnId == 5) {
+		$cols[$columnId] = '#' . $value;
+	}
+	else {
+		$cols[$columnId] = $value;
+	}
+//	print_r ($cols);
 	$rec[$rowId] = implode(" ",$cols);
 	foreach ($rec as $line) {
 		$OUT .= trim($line) . "\n";

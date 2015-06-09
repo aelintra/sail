@@ -1,8 +1,10 @@
 sail (4.0.1-20) UNRELEASED; urgency=low
   * tagged as 4.0.1-20
   - added dialout rssh support
+  - added icmp response support
+  - added firewall descriptions
 
- -- CoCoSoft <admin@aelintra.com>  Tue, 14 Apr 2015 18:00:00 +0000
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 May 2015 18:00:00 +0000
 
 sail (4.0.1-19) UNRELEASED; urgency=low
   * tagged as 4.0.1-19

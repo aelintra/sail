@@ -82,7 +82,7 @@ private function showMain() {
 	
 	$this->myPanel->Heading();
 	
-	echo '<div class="datadivnarrow">';
+	echo '<div class="datadivwide">';
 
 	echo '<table class="display" id="edswtable" >' ;
 	echo '<thead>' . PHP_EOL;	
@@ -93,6 +93,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('fwdest');
 	$this->myPanel->aHeaderFor('fwproto');
 	$this->myPanel->aHeaderFor('fwdestports');
+	$this->myPanel->aHeaderFor('description');
 	$this->myPanel->aHeaderFor('del');
 	
 	echo '</tr>' . PHP_EOL;
@@ -111,13 +112,22 @@ private function showMain() {
 			continue;			
 		}
 		else {
-			$elements = explode(" ",$row);
+			$fwdesc = Null;
+			if (preg_match(" /#/ ", $row)) {
+				$splitComments = explode("#",$row);
+				$fwdesc = $splitComments [1];
+				$elements = explode(" ",$splitComments[0]);
+			}
+			else {
+				$elements = explode(" ",$row);
+			}
 			echo '<tr id="' . $pkey . '">'. PHP_EOL; 
 			echo '<td class="read_only">' . $elements[0] . '</td>' . PHP_EOL;				 
 			echo '<td >' . $elements[1]  . '</td>' . PHP_EOL;		
 			echo '<td >' . $elements[2]  . '</td>' . PHP_EOL;
 			echo '<td >' . $elements[3]  . '</td>' . PHP_EOL;
 			echo '<td >' . $elements[4]  . '</td>' . PHP_EOL;
+			echo '<td >' . $fwdesc  . '</td>' . PHP_EOL;
 			$get = '?delete=yes&amp;pkey='. $pkey;
 			$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$get);				
 			echo '</td>' . PHP_EOL;

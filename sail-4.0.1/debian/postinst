@@ -125,7 +125,7 @@ if [ ! -e /etc/sodoers.d/sail ]; then
 	chmod 0440 /etc/sudoers.d/sail
 fi
 if [ ! -e /etc/sodoers.d/sarkrssh ]; then
-        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sail
+        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
         chmod 0440 /etc/sudoers.d/sarkrssh
 fi
 

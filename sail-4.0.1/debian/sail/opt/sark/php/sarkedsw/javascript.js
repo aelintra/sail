@@ -25,13 +25,14 @@
 			{ "sName": "fwdest" },
 			{ "sName": "fwproto" },
 			{ "sName": "fwdestport" },
+			{ "sName": "fwdesc" },
 			{ "sName": "del" }
 		],
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5 ] }
+			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5,6 ] }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-          $('td:eq(1),td:eq(3),td:eq(4)', nRow).addClass( "bluetags" );
+          $('td:eq(1),td:eq(3),td:eq(4),td:eq(5)', nRow).addClass( "bluetags" );
         }   
 
 	} ).makeEditable({
@@ -64,7 +65,14 @@
 					tooltip: 'Double Click to set source',
 					onblur: 'cancel',
 					placeholder: 'Null'	
-				}, 		// port															
+				}, 		// port	
+				{
+					type: 'textarea',
+					submit:'Save',
+					tooltip: 'Double Click to set Description',
+					onblur: 'cancel',
+					placeholder: 'Null'	
+				}, 		// fwdesc																					
 				null	// delete col					
             ]
         });   

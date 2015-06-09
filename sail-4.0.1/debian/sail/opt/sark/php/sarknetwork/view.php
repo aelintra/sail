@@ -105,6 +105,12 @@ private function showMain() {
 	 
 	$arch = trim(`/bin/uname -m`);
 	
+	$icmp='NO';
+	$ret = $this->helper->request_syscmd ("grep '^Ping/ACCEPT' /etc/shorewall/rules");
+	if (trim($ret)) {
+		$icmp='YES';
+	}
+	
 	$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'");
 	$ipaddr = preg_replace('/<<EOT>>$/', '', $ret);	
 	$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f4 | awk '{ print $1}'");
@@ -273,8 +279,11 @@ private function showMain() {
 
 		$this->myPanel->aLabelFor('sshport');    
 		echo '<input type="text" name="sshport" id="sshport" size="5"  value="' . $sshport . '"  />' . PHP_EOL; 
+		echo '<br/>' . PHP_EOL; 
+		$this->myPanel->aLabelFor('icmp'); 
+		$this->myPanel->selected = $icmp;
+		$this->myPanel->popUp('icmp', array('YES','NO'));    
 		echo '<br/><br/>' . PHP_EOL; 
-
 	
 /*
  *      TAB DIVEND
@@ -432,6 +441,7 @@ private function saveEdit() {
 		$astfile		= strip_tags($_POST['astfile']);
 		$dns1			= strip_tags($_POST['dns1']);
 		$dns2			= strip_tags($_POST['dns2']);
+		$icmp			= strip_tags($_POST['icmp']);
 		$timez 			= strip_tags($_POST['timez']);
 		$oldtz 			= strip_tags($_POST['oldtz']);
 		if (isset($_POST['dhcpstart'])) {
@@ -482,6 +492,7 @@ private function saveEdit() {
 		$cur_hostname = trim ($cur_hostname);
 		$cur_domain = `hostname -d`;
 		$cur_domain = trim ($cur_domain);
+		
 		
 
 								
@@ -538,7 +549,25 @@ private function saveEdit() {
 			$myret=$this->helper->request_syscmd ("/bin/sed -i 's/^Port [0-9][0-9]*/Port $sshport/' /etc/ssh/sshd_config");
 //			$myret=$this->helper->request_syscmd ("/usr/sbin/service ssh restart");
 			$reboot=true;
-		}	
+		}
+/*
+ * set ICMP rules
+ */
+		
+		$cur_icmp='NO';
+		$myret = $this->helper->request_syscmd ("grep '^Ping/ACCEPT' /etc/shorewall/rules");
+		if (trim($myret)) {
+			$cur_icmp='YES';
+		}
+		if ($cur_icmp != $icmp) {
+			if ($icmp == 'NO') {
+				$myret=$this->helper->request_syscmd ("sed -i 's|^Ping/ACCEPT|Ping/REJECT|' /etc/shorewall/rules");				
+			}
+			else {
+				$myret=$this->helper->request_syscmd ("sed -i 's|^Ping/REJECT|Ping/ACCEPT|' /etc/shorewall/rules");	
+			}
+			$restartShorewall = true;
+		}
 		
 		$rewrite = false;
 		if ( isset($_POST['toggle']) ) {
