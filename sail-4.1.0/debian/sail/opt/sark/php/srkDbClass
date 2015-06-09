@@ -1,0 +1,73 @@
+<?php
+// SARK PDO static Singleton
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+class DB { 
+    
+    private static $objInstance; 
+    
+    /* 
+     * Class Constructor - Create a new database connection if one doesn't exist 
+     * Set to private so no-one can create a new instance via ' = new DB();' 
+     */ 
+    private function __construct() {} 
+    
+    /* 
+     * Like the constructor, we make __clone private so nobody can clone the instance 
+     */ 
+    private function __clone() {} 
+    
+    /* 
+     * Returns DB instance or create initial connection 
+     * @param 
+     * @return $objInstance; 
+     */ 
+    public static function getInstance(  ) { 
+            
+        if(!self::$objInstance){ 
+            self::$objInstance = new PDO("sqlite:/opt/sark/db/sark.db"); 
+            self::$objInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+        } 
+        
+        return self::$objInstance; 
+    
+    } # end method 
+    
+    /* 
+     * Passes on any static calls to this class onto the singleton PDO instance 
+     * @param $chrMethod, $arrArguments 
+     * @return $mix 
+     * This function will only work with php >= 5.3 but it allows you to
+     * call the db from anywhere without any set-up
+     * This allows a call like...
+     * DB::exec("DELETE FROM Blah");  
+     * or like...
+     * foreach( DB::query("SELECT * FROM Blah") as $row){ 
+     *   print_r($row); 
+	 *	} 
+     */ 
+    final public static function __callStatic( $chrMethod, $arrArguments ) { 
+            
+        $objInstance = self::getInstance(); 
+        
+        return call_user_func_array(array($objInstance, $chrMethod), $arrArguments); 
+        
+    } # end method 
+    
+    
+} 	
+
+
+?>

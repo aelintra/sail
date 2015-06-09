@@ -1,0 +1,15 @@
+#!/bin/sh
+
+exec 2>&1
+. /opt/sark/service/rssh/creds
+. /opt/sark/service/rssh/serviceport1
+
+[[ ! -e /opt/sark/service/rssh/rssh.pem ]] && exit 4
+
+[[ -z $PORT1 ]] && PORT1=45901
+PORT2=$((PORT1 + 1))
+exec ssh -i $PEM -R :$PORT1:localhost:22 \
+	-R :$PORT2:localhost:$PORT2 -N \
+	-o StrictHostKeyChecking=no \
+	-o UserKnownHostsFile=/dev/null $USER@$HOST
+
