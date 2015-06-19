@@ -926,6 +926,113 @@ subscribecontext=extensions
 disallow=all 
 allow=alaw
 allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,desc,provision,sipiaxfriend,technology) values ('Yealink T21','Yealink T21 phone','#!version:1.0.0.1
+
+##File header "#!version:1.0.0.1" can not be edited or deleted, and must be placed in the first line.##
+
+account.1.enable = 1
+account.1.label = $desc
+account.1.display_name = $desc
+account.1.auth_name = $ext
+account.1.password = $password  
+account.1.user_name =  $ext
+account.1.sip_server_host = $localip
+account.1.outbound_proxy_enable = 1
+account.1.outbound_host = $localip
+account.1.proxy_require = $localip
+
+#Enable or disable the phone to subscribe the register status; 0-Disabled (default), 1-Enabled;
+account.1.subscribe_register = 1
+
+#Enable or disable the phone to subscribe the message waiting indicator; 0-Disabled (default), 1-Enabled;
+account.1.subscribe_mwi = 1
+
+#Enable or disable the phone to subscribe to the voicemail through the message waiting indicator; 0-Disabled (default), 1-Enabled;
+account.1.subscribe_mwi_to_vm = 1
+
+voice_mail.number.1 = *50*
+
+# Enable/Disable the codecs you want to use - default is law, G729, G722
+
+account.1.codec.1.enable = 1
+account.1.codec.1.payload_type = PCMU
+account.1.codec.1.priority = 1
+account.1.codec.1.rtpmap = 0
+
+account.1.codec.2.enable = 1
+account.1.codec.2.payload_type = PCMA
+account.1.codec.2.priority = 2 
+account.1.codec.2.rtpmap = 8
+
+account.1.codec.3.enable = 0 
+account.1.codec.3.payload_type = G723_53
+account.1.codec.3.priority =0
+account.1.codec.3.rtpmap = 4
+
+account.1.codec.4.enable = 0
+account.1.codec.4.payload_type = G723_63
+account.1.codec.4.priority = 0
+account.1.codec.4.rtpmap = 4
+
+account.1.codec.5.enable = 1
+account.1.codec.5.payload_type = G729
+account.1.codec.5.priority = 3
+account.1.codec.5.rtpmap = 18
+
+account.1.codec.6.enable = 1
+account.1.codec.6.payload_type = G722
+account.1.codec.6.priority = 4
+account.1.codec.6.rtpmap = 9
+
+account.1.codec.7.enable = 0
+account.1.codec.7.payload_type = iLBC
+account.1.codec.7.priority =  0
+account.1.codec.7.rtpmap = 102
+
+account.1.codec.8.enable = 0
+account.1.codec.8.payload_type = G726-16
+account.1.codec.8.priority = 0
+account.1.codec.8.rtpmap = 112
+
+account.1.codec.9.enable = 0
+account.1.codec.9.payload_type = G726-24
+account.1.codec.9.priority = 0
+account.1.codec.9.rtpmap = 102
+
+account.1.codec.10.enable = 0
+account.1.codec.10.payload_type = G726-32 
+account.1.codec.10.priority = 0 
+account.1.codec.10.rtpmap = 99
+
+account.1.codec.11.enable = 0
+account.1.codec.11.payload_type = G726-40
+account.1.codec.11.priority = 0
+account.1.codec.11.rtpmap = 104
+
+account.1.codec.12.enable = 0
+account.1.codec.12.payload_type = iLBC_13_3
+account.1.codec.12.priority = 0 
+account.1.codec.12.rtpmap = 97
+
+account.1.codec.13.enable = 0
+account.1.codec.13.payload_type = iLBC_15_2
+account.1.codec.13.priority = 0 
+account.1.codec.13.rtpmap = 97 ','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,sipiaxfriend,technology) values ('Yealink T22','Yealink T22 phone','#!version:1.0.0.1
 
 ##File header "#!version:1.0.0.1" can not be edited or deleted, and must be placed in the first line.##
@@ -2312,6 +2419,7 @@ INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000029.cfg','Yealink T42 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000031.cfg','Yealink T19 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000032.cfg','Yealink T32 descriptor','#INCLUDE yealink.Common','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000034.cfg','Yealink T21 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000035.cfg','Yealink T48 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000036.cfg','Yealink T41 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000038.cfg','Yealink T38 descriptor','#INCLUDE yealink.Common','Descriptor');

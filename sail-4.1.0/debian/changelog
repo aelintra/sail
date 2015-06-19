@@ -1,3 +1,9 @@
+sail (4.1.0-3) UNRELEASED; urgency=low
+  * tagged as 4.1.0-3
+  - added templates for Yealink T21D
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 19 Jun 2015 18:00:00 +0000
+
 sail (4.1.0-2) UNRELEASED; urgency=low
   * tagged as 4.1.0-2
   - Bumped to 4.1

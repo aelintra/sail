@@ -10,8 +10,8 @@ bfb312b356a4ab662a158ce59fa1aefe  opt/sark/cache/ldapcontactou.ldif
 40c94b7553fbe3692311942ae3603d24  opt/sark/cache/passwords
 07698bfd09d4ef2a7343f3d99d835044  opt/sark/cache/template_cust.conf
 30d81d8bff7a48e06ac5c7ffccc0f56b  opt/sark/db/db_v4_create.sql
-af36fb8bae0d03df0cbd0363c01f5cbb  opt/sark/db/db_v4_device.sql
-dde9b338ef4a711ac4d48d2c86b791bb  opt/sark/db/db_v4_system.sql
+ca22fe8ad5107e59946527ce568c9c9e  opt/sark/db/db_v4_device.sql
+9834be44d5e6a035568defc4ed4a6676  opt/sark/db/db_v4_system.sql
 3b3d2e9fd065c3d877513ad659735aad  opt/sark/db/ldap_create.ldif
 c358d8317ad98f403c310da9a00f1d38  opt/sark/etc/apache2/sites-available/sark
 378e7d9876709df2d59f06c9af6ba355  opt/sark/etc/dnsmasq.d/sarkdns
@@ -2056,5 +2056,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 8588b6a2d5bda9afa8e2bae564c964e0  udev/rules.d/z11-media-by-label-auto-mount.rules
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-012127ec83b4eba5989e9e59ec42007f  usr/share/doc/sail/changelog.Debian.gz
+89b3513774346571c50d3130ef8567cb  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
