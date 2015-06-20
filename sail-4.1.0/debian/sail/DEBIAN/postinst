@@ -129,6 +129,8 @@ if [ ! -e /etc/sodoers.d/sarkrssh ]; then
         chmod 0440 /etc/sudoers.d/sarkrssh
 fi
 
+#reverse proxy port perms
+chown asterisk:asterisk /opt/sark/service/rssh/serviceport1
 
 #handle multiple NICs
 if [ ! -e /etc/network/interfaces.d ]; then
