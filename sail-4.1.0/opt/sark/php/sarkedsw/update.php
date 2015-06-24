@@ -21,6 +21,13 @@
 			}
 		}
 	}
+	
+	if ($column == 'fwdesc') {
+		if (!preg_match("/^[a-zA-Z0-9\(\)\.\-_\s]{2,30}$/",$value)) {
+				echo "Description maxlen=30 and can only contain characters a-zA-Z0-9().-_ and space";
+				return;
+		}
+	}		
  
 	if ($column == 'fwdestport') {
 	  if (!preg_match("/^[0-9:,\s]+$/",$value)) {

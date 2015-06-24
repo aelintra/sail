@@ -9,6 +9,7 @@ bfb312b356a4ab662a158ce59fa1aefe  opt/sark/cache/ldapcontactou.ldif
 1ed8d624dab29b3ca29a5c1c59035811  opt/sark/cache/manager.conf
 40c94b7553fbe3692311942ae3603d24  opt/sark/cache/passwords
 07698bfd09d4ef2a7343f3d99d835044  opt/sark/cache/template_cust.conf
+8588b6a2d5bda9afa8e2bae564c964e0  opt/sark/cache/udev/rules.d/z11-media-by-label-auto-mount.rules
 30d81d8bff7a48e06ac5c7ffccc0f56b  opt/sark/db/db_v4_create.sql
 ca22fe8ad5107e59946527ce568c9c9e  opt/sark/db/db_v4_device.sql
 9834be44d5e6a035568defc4ed4a6676  opt/sark/db/db_v4_system.sql
@@ -116,11 +117,11 @@ aa5abe80d8e61022960df9223623c10a  opt/sark/php/sarkdiscover/javascript.js
 74532c1544b77480f94e3b8674ba3b2f  opt/sark/php/sarkdiscover/view.php
 08e44fd49e1cef8c58bc14645b084067  opt/sark/php/sarkedit/javascript.js
 cf3cf4b2d6b9b846cec6087dbcdc4c09  opt/sark/php/sarkedit/main.php
-7bbd295a9bed881fc59e43318e829c8c  opt/sark/php/sarkedit/view.php
+b7508a0a41c5b7794147b4268d0ce6d8  opt/sark/php/sarkedit/view.php
 047eb59bbcf15a59c4e9e69e7eedaba8  opt/sark/php/sarkedsw/delete.php
 81f2c777f068022d606e8000b772fc73  opt/sark/php/sarkedsw/javascript.js
 952c0264cb820c828854b6eee2628d59  opt/sark/php/sarkedsw/main.php
-be9b3c737daf44db4b75c0c14b7c353a  opt/sark/php/sarkedsw/update.php
+7c3d3d8664ee1b0e3e5eb9f5c47e3304  opt/sark/php/sarkedsw/update.php
 9b02a59e71a8f8a61b4ca2b6d25f3a48  opt/sark/php/sarkedsw/view.php
 feb7ad610149d7e6856cbbaa3414583b  opt/sark/php/sarkextension/blflist.php
 2dfd7e52c822abfc0db0150fbbf806fe  opt/sark/php/sarkextension/delete.php
@@ -2053,8 +2054,7 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 9bd41a6496bc7960de2c4dbc6e2b1caf  opt/sark/www/sark-common/warn.gif
 5b9d089577f66a3b4098fb5365c5665c  opt/sark/www/sark-common/warning.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
-8588b6a2d5bda9afa8e2bae564c964e0  udev/rules.d/z11-media-by-label-auto-mount.rules
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-78f607d30069294916db908cadae2e17  usr/share/doc/sail/changelog.Debian.gz
+848bfc17ae6cb0e9bf1f46edcb8309ae  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
