@@ -60,7 +60,7 @@ else {
 		`sed -i '/^ignoreip/c \ignoreip = 127.0.0.1 $netaddress\/$cidr 224.0.1.0\/24' /etc/fail2ban/jail.conf`;
 		`fail2ban-server reload > /dev/null`;
 	}
-	if ( -e "/etc/dnsmasq" ) {
+	if ( -e "/etc/dnsmasq.d" ) {
 		`tail /etc/dnsmasq.d/sarkdhcp-opt66 > /etc/dnsmasq.d/sarkdhcp-opt66`;
 		foreach (@Phonelist) {
 			my $query = '';

@@ -114,7 +114,7 @@ b77edb868787f49c091f2a04dac926c5  opt/sark/php/sarkdevice/updateblf.php
 d8845c42cbbdffbd05a66508b6d847dd  opt/sark/php/sarkdevice/view.php
 aa5abe80d8e61022960df9223623c10a  opt/sark/php/sarkdiscover/javascript.js
 30371c497b6ece6f85122ca0545a997b  opt/sark/php/sarkdiscover/main.php
-74532c1544b77480f94e3b8674ba3b2f  opt/sark/php/sarkdiscover/view.php
+5b578c6b390ef692de357348c3b1fedb  opt/sark/php/sarkdiscover/view.php
 08e44fd49e1cef8c58bc14645b084067  opt/sark/php/sarkedit/javascript.js
 cf3cf4b2d6b9b846cec6087dbcdc4c09  opt/sark/php/sarkedit/main.php
 b7508a0a41c5b7794147b4268d0ce6d8  opt/sark/php/sarkedit/view.php
@@ -220,7 +220,7 @@ dc5a024e753a96b03270b1124b964e7c  opt/sark/scripts/csvload.pl
 2bdf4e6542f49862e4658871197980a5  opt/sark/scripts/responder.pl
 45f15dfdff76a4e1254cfe4a6ddcc40e  opt/sark/scripts/selmix
 0ccb6b939e136ef42902bb05f90097df  opt/sark/scripts/selmixd
-84d53d63f86c3847749adcf3ce64105f  opt/sark/scripts/setip.pl
+c6e644143c4ecd84049b3b26b6c38a90  opt/sark/scripts/setip.pl
 fa5835d282709f5dd8eb7b2096b8c492  opt/sark/scripts/setip.sh
 3f6c77d1b0df7e87caeb21860cf21a66  opt/sark/scripts/setsnomidlescreen.pl
 7c744d9bbba85541d6f5ba6935a4de2d  opt/sark/scripts/snap.sh
@@ -2056,5 +2056,5 @@ bed426570428c3eb238817a819949abc  opt/sark/www/sark-common/vmail.png
 7ddc15c8aefa06abed97338f60270c77  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-ed999aa5d8732b96e323fd7580222696  usr/share/doc/sail/changelog.Debian.gz
+a9033ba811116c0674b78a27d31dc47e  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
