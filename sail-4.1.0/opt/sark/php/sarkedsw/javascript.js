@@ -45,32 +45,32 @@
 			"aoColumns": [
 				null, 		// action
 				{
-					type: 'textarea',
-					submit:'Save',
+					type: 'text',
+//					submit:'Save',
 					tooltip: 'Double Click to set source',
-					onblur: 'cancel',
+					onblur: 'submit',
 					placeholder: 'Null'	
 				},		// fwsource
 				null,	// fwdest
 				{
 					tooltip: 'Double Click to set',
 					type: 'select',
-                    onblur: 'cancel',
-                    submit: 'Save',
+                    onblur: 'submit',
+//                    submit: 'Save',
 					data: "{ 'tcp':'tcp','udp':'udp' }"
 				}, 		// fwproto	
 				{
-					type: 'textarea',
-					submit:'Save',
+					type: 'text',
+//					submit:'Save',
 					tooltip: 'Double Click to set source',
-					onblur: 'cancel',
+					onblur: 'submit',
 					placeholder: 'Null'	
 				}, 		// port	
 				{
-					type: 'textarea',
-					submit:'Save',
+					type: 'text',					
+//					submit:'Save',
 					tooltip: 'Double Click to set Description',
-					onblur: 'cancel',
+					onblur: 'submit',
 					placeholder: 'Null'	
 				}, 		// fwdesc																					
 				null	// delete col					

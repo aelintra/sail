@@ -409,7 +409,7 @@ private function saveNew() {
 			$tuple['cluster']	= strip_tags($_POST['cluster']);
 		}
 		else {
-			$tuple['cluster']	='Default';
+			$tuple['cluster']	='default';
 		}		
 		$tuple['extalert']		= strip_tags($_POST['extalert']);
 		

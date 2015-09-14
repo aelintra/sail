@@ -23,9 +23,13 @@
 	}
 	
 	if ($column == 'fwdesc') {
-		if (!preg_match("/^[a-zA-Z0-9\(\)\.\-_\s]{2,30}$/",$value)) {
+		$value = str_replace(array("\r\n", "\r", "\n", "\t"), ' ', $value);
+		$value = trim($value);
+		if (!empty($value)) {
+			if (!preg_match("/^[a-zA-Z0-9\(\)\.\-_\s]{2,30}$/",$value)) {
 				echo "Description maxlen=30 and can only contain characters a-zA-Z0-9().-_ and space";
 				return;
+			}
 		}
 	}		
  
@@ -49,7 +53,13 @@
 		
 //	$cols = explode (" ", $rec[$rowId],5);
 	if ($columnId == 5) {
-		$cols[$columnId] = '#' . $value;
+		$value = trim($value);
+		if (!empty($value)) {
+			$cols[$columnId] = '#' . $value;
+		}
+		else {
+			$cols[$columnId] = $value;
+		}
 	}
 	else {
 		$cols[$columnId] = $value;

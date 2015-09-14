@@ -1,3 +1,11 @@
+sail (4.1.0-8) UNRELEASED; urgency=low
+  * tagged as 4.1.0-8
+  - fix to sarkedsw to handle port descriptions
+  - fix to sarkextension for incorrect tenant setting when default
+  - added 000000000000 files for new Yealink models
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 14 Sep 2015 18:00:00 +0000
+
 sail (4.1.0-7) UNRELEASED; urgency=low
   * tagged as 4.1.0-7
   - fix to setip for dnsmasq option66
