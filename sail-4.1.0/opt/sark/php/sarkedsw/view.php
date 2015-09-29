@@ -149,7 +149,9 @@ private function ruleDelete() {
 
 private function showNew() {
 	
-	$rc = $this->helper->request_syscmd ("/bin/echo 'ACCEPT net:\$LAN \$FW tcp 65535' >>  /etc/shorewall/sark_rules");			
+//	$rc = $this->helper->request_syscmd ("/bin/echo 'ACCEPT net:\$LAN \$FW tcp 65535 ' >>  /etc/shorewall/sark_rules");
+	$rc = $this->helper->request_syscmd ("/bin/sed -i '1s/^/ACCEPT net:\$LAN \$FW tcp 65535 # *NEW RULE* \\n/' /etc/shorewall/sark_rules");
+//	sed -i '1s/^/task goes here\n/' todo.txt			
 }
 
 private function restartFirewall() {

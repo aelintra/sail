@@ -55,8 +55,13 @@ public function Search($arg) {
 	return (ldap_get_entries($this->ds, $sr));	
 }
 
+public function Get($uid,$arg) {
+	$sr = ldap_search($this->ds, $this->addressbook . "," . $this->base, $uid, $arg);
+	return (ldap_get_entries($this->ds, $sr));	
+}
+
 public function Add($arg) {
-	$sr = ldap_add($this->ds, "cn=" . $arg["cn"] . "," . $this->addressbook . "," . $this->base, $arg);
+	$sr = ldap_add($this->ds, "uid=" . uniqid("sark-id-") . ","  . $this->addressbook . "," . $this->base, $arg);
 	if (!$sr) {
 		if (ldap_errno($this->ds) == 0x44) { 
          return "Entry already exists!";

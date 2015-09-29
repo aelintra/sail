@@ -136,7 +136,7 @@
                     loadtype: 'GET'
                 }          
             ]
-        });  
+        }).find("tr").find('td:eq(2):contains(*NEW AGENT*)').parent().css('backgroundColor', 'yellow') ;  
         
 	$('#agenttableadmin').dataTable ( {
 		"sScrollY": "238px",
@@ -243,7 +243,7 @@
                     loadtype: 'GET'
                 }          
             ]
-        });  
+        }).find("tr").find('td:eq(2):contains(*NEW AGENT*)').parent().css('backgroundColor', 'yellow') ;  
       });
       
  

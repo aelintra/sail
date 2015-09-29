@@ -54,34 +54,34 @@
 			sReadOnlyCellClass: "read_only",
 			"aoColumns": [
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set phone number',
 					onblur: 'cancel'			
 				}, 		// surname								
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set phone number',
 					onblur: 'cancel',	
 					placeholder: ' '				
 				}, 		// forename				
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set phone number',
 					onblur: 'cancel',	
 					placeholder: 'None',				
 				}, 		// phone								
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set cell phone number',
 					onblur: 'cancel',	
 					placeholder: 'None'				
 				}, 		// mobile				
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set home number',
 					onblur: 'cancel',	

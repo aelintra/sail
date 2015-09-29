@@ -726,6 +726,8 @@ public function exec_SQL($dbh,$sql) {
 	
 	try {
 		$this->logit("running SQL -> $sql", 8 );
+		$audit = fopen("/opt/sark/db/srkaudit.log","a");
+		fwrite($audit,date("M j H:i:s") . ": " . $sql . "\n");		
 		$res=$dbh->prepare($sql);
 		$res->execute();
 	} 
@@ -756,7 +758,7 @@ private function default_agent() {
 	
 	$rec = array(	
 	"cluster"  	=> "default",
-	"name"		=> null,
+	"name"		=> "*NEW AGENT*",
 	"queue1" 	=> "None",
 	"queue2" 	=> "None",
 	"queue3" 	=> "None",
@@ -817,7 +819,7 @@ private function default_dateSeg() {
         "cluster"	=> "default",
         "datemonth"	=> "*",
         "dayofweek"	=> "*",
-        "desc"		=> null,
+        "desc"		=> "*NEW RULE*",
         "month"		=> "*",
         "timespan"	=> "*"        
      );
@@ -984,6 +986,7 @@ private function default_user() {
 private function default_mcast() {
 	
 	$rec = array(
+		"mcastip" => "224.0.1.75",
 		"mcasttype"	=> "Dial"
 	);	
     return $rec;

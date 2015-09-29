@@ -23,7 +23,7 @@
 	  
 	$("#sarkrouteForm").validate ( {
 	   rules: {
-			pkey: "required alpha",
+			pkey: "alpha",
 			alternate: "digits",	
 	   },
 	   messages: {

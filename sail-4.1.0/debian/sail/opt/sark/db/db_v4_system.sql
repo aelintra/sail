@@ -593,7 +593,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('ztp','Zero T
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname) values ('100','sarkextension/main.php','Extensions');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname) values ('105','sarkphone/main.php','Phone');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('110','sarktrunk/main.php','Trunks','50');
-INSERT OR IGNORE INTO Panel(pkey,classname,displayname) values ('115','sarkdiscover/main.php','Discover');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('115','sarkdiscover/main.php','Discover',50);
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('120','sarkdevice/main.php','Templates','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('130','sarkroute/main.php','Outbound','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('134','sarkddi/main.php','Inbound','20');
@@ -612,7 +612,7 @@ INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('230','sa
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('240','sarkbackup/main.php','Backup','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('250','sarklog/main.php','SysLogs','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('260','sarkuser/main.php','Users','50');
-INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('265','sarkldap/main.php','Directory','50');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('265','sarkldap/main.php','Directory','');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('270','sarkedit/main.php','Asterisk Edit','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('280','sarkpci/main.php','PCI Cards','50');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('290','sarkapp/main.php','Apps','50');

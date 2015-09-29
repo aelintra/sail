@@ -22,6 +22,8 @@
 		"aoColumns": [ 
 			{ "sName": "ipaddr" },
 			{ "sName": "macaddr"},
+			{ "sName": "vendor"},			
+			{ "sName": "model"},
 			{ "sName": "description" },
 			{ "sName": "extension" },
 		] 

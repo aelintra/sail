@@ -100,12 +100,8 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('mobile');
 	$this->myPanel->aHeaderFor('home');
 	$this->myPanel->aHeaderFor('del');
-/*		
-	$getattrs = array("givenname", "sn", "telephoneNumber", "mobile", "homePhone", "cn");
-	$sr = ldap_search($this->ldap->ds, $this->ldap->addressbook . "," . $this->ldap->base, "cn=*", $getattrs);
-	$result = ldap_get_entries($this->ldap->ds, $sr);	
-*/
-	$search_arg = array("givenname", "sn", "telephoneNumber", "mobile", "homePhone", "cn");
+
+	$search_arg = array("uid","givenname", "sn", "telephoneNumber", "mobile", "homePhone", "cn");
 	$result = $this->ldap->Search($search_arg);
 	
 	echo '</tr>' . PHP_EOL;
@@ -116,7 +112,7 @@ private function showMain() {
 
 	for ($i=0; $i<$result["count"]; $i++) {
 		
-		echo '<tr id="' .  $result[$i]["cn"][0] . '">'. PHP_EOL; 		
+		echo '<tr id="' .  $result[$i]["uid"][0] . '">'. PHP_EOL; 		
 		echo '<td >' . $result[$i]["sn"][0]  . '</td>' . PHP_EOL;
 		if (isset($result[$i]["givenname"][0])) {
 			echo '<td >' . $result[$i]["givenname"][0] . '</td>' . PHP_EOL;
@@ -142,7 +138,7 @@ private function showMain() {
 		else {
 			echo '<td ></td>' . PHP_EOL;
 		}		
-		$get = '?id=' . $result[$i]["cn"][0];		
+		$get = '?id=' . $result[$i]["uid"][0];		
 		$this->myPanel->ajaxdeleteClick($get);		 
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
@@ -178,7 +174,7 @@ private function showNew() {
 	
 	$this->myPanel->aLabelFor('surname');
 	echo '<input type="text" name="surname" id="surname" size="30"   />' . PHP_EOL;	
-	$this->myPanel->aLabelFor('givenname');
+	$this->myPanel->aLabelFor('forename');
 	echo '<input type="text" name="givenname" id="givenname" size="30"   />' . PHP_EOL;
 	$this->myPanel->aLabelFor('ext');
 	echo '<input type="text" name="phone" id="phone" size="18"   />' . PHP_EOL;
@@ -216,7 +212,7 @@ private function saveNew() {
 			$ldapargs["homephone"] = $_POST['home'];
 		}		
 		$ldapargs["cn"] = $ldapargs["givenname"] . ' ' . $ldapargs["sn"];
-		$ldapargs["objectclass"] = "inetorgperson";
+		$ldapargs["objectclass"] = array('top', 'person', 'organizationalPerson', 'inetOrgPerson');
 		$this->message = $this->ldap->Add($ldapargs);
 	}
     else {

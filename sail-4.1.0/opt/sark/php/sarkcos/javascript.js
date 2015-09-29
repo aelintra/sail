@@ -22,7 +22,7 @@
 		  
 	$("#sarkcosForm").validate ( {
 	   rules: {
-			pkey: "required alpha",	
+			pkey: "alpha",	
 			dialplan: "dialplan"			   
 	   },
 	   messages: {

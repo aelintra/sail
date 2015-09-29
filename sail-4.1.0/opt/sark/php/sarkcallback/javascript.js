@@ -22,7 +22,7 @@
 		  
 	$("#sarkcallbackForm").validate ( {
 	   rules: {
-			pkey: "required digits",
+			pkey: "digits",
 			prefix: "prefix",
 			desc: "desc"		   
 	   },

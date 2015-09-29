@@ -87,7 +87,7 @@
 				},		// description																		
 				null	// delete col
             ]
-    });   
+    }).find("tr").find('td:eq(6):contains(*NEW RULE*)').parent().css('backgroundColor', 'yellow') ;   
 
 	$('#timertableadmin').dataTable ( {
 		"sScrollY": "238px",
@@ -128,14 +128,14 @@
                     loadtype: 'GET'					
 				}, 	// Tenant
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set begin closed',
 					onblur: 'cancel',	
 					placeholder: 'Null',				}, 		// begin closed
 				
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set end closed',
 					onblur: 'cancel',	
@@ -163,7 +163,7 @@
 					data: "{ '*':'*','jan':'jan','feb':'feb','mar':'mar','apr':'apr','may':'may','jun':'jun','jul':'jul','aug':'aug','sep':'sep','oct':'oct','nov':'nov','dec':'dec'  }"
 				}, 		// month
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set desc',
 					onblur: 'cancel',	
@@ -171,7 +171,7 @@
 				},		// description																		
 				null	// delete col
             ]
-    });   
+    }).find("tr").find('td:eq(6):contains(*NEW RULE*)').parent().css('backgroundColor', 'yellow') ;   
 
           
  });

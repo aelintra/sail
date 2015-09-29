@@ -145,8 +145,8 @@ private function showNew() {
 	echo '<div class="editinsert">';
 	$this->myPanel->aLabelFor('mcastpkey');
 	echo '<input type="text" name="pkey" size="6" id="pkey" value="' . $pkey . '"  />' . PHP_EOL;	
-	$this->myPanel->aLabelFor('mcastip');
-	echo '<input type="text" name="mcastip" id="mcastip" size="20"  />' . PHP_EOL;		
+//	$this->myPanel->aLabelFor('mcastip');
+//	echo '<input type="text" name="mcastip" id="mcastip" size="20"  />' . PHP_EOL;		
 	$this->myPanel->aLabelFor('mcastport');
 	echo '<input type="text" name="mcastport" id="mcastport" size="5"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('mcastlport');
@@ -160,11 +160,13 @@ private function saveNew() {
 // save the data away
 	
 	$this->validator = new FormValidator();
-    $this->validator->addValidation("pkey","req","Please fill in mcast extension");
-    $this->validator->addValidation("pkey","num","Multicast extension name must be numeric");    
+    $this->validator->addValidation("pkey","req","Please fill in mcast group (extension)");
+    $this->validator->addValidation("pkey","num","Multicast Group must be numeric");    
+/*
 	$this->validator->addValidation("mcastip",
 		"regexp=/^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$/",
 		"Multicast IP address is invalid");
+*/
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
 /*

@@ -340,10 +340,10 @@ Class page {
 			$res = $dbh->query("SELECT cluster FROM user where pkey = '" . $_SERVER['REMOTE_USER'] . "'")->fetch(PDO::FETCH_ASSOC);
 			$mycluster = $res['cluster'];
 			if ( $rel == null ) {
-				echo '<input type="text" id="cluster" value="' . $mycluster . '"  />' . PHP_EOL;		
+				echo '<input type="text" readonly="readonly" style = "background-color: lightgrey" id="cluster" value="' . $mycluster . '"  />' . PHP_EOL;		
 			}
 			else {
-				echo '<input type="text" id="cluster" rel="' .$rel . '" value="' . $mycluster . '"  />' . PHP_EOL;		
+				echo '<input type="text" readonly="readonly" style = "background-color: lightgrey" id="cluster" rel="' .$rel . '" value="' . $mycluster . '"  />' . PHP_EOL;		
 			}
 		}
 	}

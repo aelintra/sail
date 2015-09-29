@@ -1,7 +1,7 @@
 
   $(document).ready(function() {
  
-	if ( $('#tabselect').val() == 3 ) {
+	if ( $('#tabselect').val() == 1 ) {
 		$("#newblf").show();
 		$("#delblf").show();
 	}
@@ -14,7 +14,7 @@
 		active: $('#tabselect').val(),
         activate: function (event, ui) {		 
             var tactive = $('#pagetabs').tabs("option", "active");
-            if (tactive == 3) {
+            if (tactive == 1) {
 				$("#newblf").show();
 				$("#delblf").show();
 			}

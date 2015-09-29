@@ -30,8 +30,8 @@
 		  
 	$("#sarkmcastForm").validate ( {
 	   rules: {
-			pkey: "required digits",
-			mcastip: "required validIP",
+			pkey: "digits",
+//			mcastip: "required validIP",
 			mcastport: {required: true, range:[0,65535]},
 			mcastport: {range:[0,65535]},			   
 	   },
@@ -73,28 +73,28 @@
 			"aoColumns": [
 				null,		// pkey
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set IP',
 					onblur: 'cancel',
 					placeholder: 'Null'	
 				},		// mcastip
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set Port',
 					onblur: 'cancel',	
 					placeholder: 'Null'
 				},		// mcastport
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set Linksys Port',
 					onblur: 'cancel',	
 					placeholder: 'Null'
 				},		// mcastlport				
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set description',
 					onblur: 'cancel',	

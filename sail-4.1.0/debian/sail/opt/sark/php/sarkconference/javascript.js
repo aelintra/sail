@@ -15,7 +15,7 @@
 		  
 	$("#sarkconferenceForm").validate ( {
 	   rules: {
-			pkey: "required digits",
+			pkey: "digits",
 //			mcastip: "required validIP",
 //			mcastport: {required: true, range:[100,9999]},
 //			mcastport: {range:[0,65535]},			   
@@ -89,7 +89,7 @@
 				null,	// status															
 				null	// delete col					
             ]
-        });           
+        }).find("tr").find('td:eq(5):contains(*NEW ROOM*)').parent().css('backgroundColor', 'yellow') ;           
  });
  
 

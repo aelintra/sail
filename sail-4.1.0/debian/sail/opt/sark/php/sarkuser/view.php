@@ -155,11 +155,11 @@ private function showNew() {
 
 	echo '<div class="editinsert">';
 	$this->myPanel->aLabelFor('user');
-	echo '<input type="text" class="required" name="pkey" id="pkey"   />' . PHP_EOL;
+	echo '<input type="text" name="pkey" id="pkey"   />' . PHP_EOL;
 	$this->myPanel->aLabelFor('password');
-	echo '<input type="password" class="required" name="password" id="password"   />' . PHP_EOL;
+	echo '<input type="password" name="password" id="password"   />' . PHP_EOL;
 	$this->myPanel->aLabelFor('email');
-	echo '<input type="text" class="required email" name="email" id="email"   />' . PHP_EOL;
+	echo '<input type="text" email" name="email" id="email"   />' . PHP_EOL;
 	$this->myPanel->aLabelFor('cluster');
 	$this->myPanel->displayCluster();
 	$this->myPanel->aLabelFor('scope');
@@ -173,12 +173,11 @@ private function saveNew() {
 	$this->validator = new FormValidator();
     $this->validator->addValidation("pkey","req","Please fill in Username");
     $this->validator->addValidation("pkey","alpha","Username must be alpha(no spaces)");    
-    $this->validator->addValidation("email","req","Please fill in Email");
-    $this->validator->addValidation("email","email","The input for Email should be a valid email value");
     $this->validator->addValidation("password","req","Please fill in a password");
     $this->validator->addValidation("password","alnum","Password must be alphanumeric (no spaces)");
-    $this->validator->addValidation("password","minlen=8","Password must be minimum 8 chars");
-
+    $this->validator->addValidation("password","minlen=6","Password must be minimum 6 chars");
+//    $this->validator->addValidation("email","req","Please fill in Email");
+    $this->validator->addValidation("email","email","The input for Email should be a valid email value");
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
 		
@@ -290,7 +289,8 @@ private function setPerms() {
 	$panel = array();
 	
 // clear the old relations	
-	$this->dbh->exec("DELETE FROM userpanel WHERE user_pkey = '" . $user_pkey . "'" ); 
+//	$this->dbh->exec("DELETE FROM userpanel WHERE user_pkey = '" . $user_pkey . "'" ); 
+	$this->helper->predDelTuple("userpanel","user_pkey",$user_pkey);
 	
 // add the new	
 	foreach ($_POST['appl'] as $displayname) {

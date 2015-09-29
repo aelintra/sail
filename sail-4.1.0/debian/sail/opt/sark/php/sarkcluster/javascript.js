@@ -26,7 +26,7 @@
 			
 	$("#sarkclusterForm").validate ( {
 	   rules: {
-		   pkey: "required tenant",
+		   pkey: "tenant",
 		   include : "include",
 		   localdplan: "dialplan",
 		   localarea: "digits",

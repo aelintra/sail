@@ -43,6 +43,10 @@ public function showForm() {
 	
 	$this->myPanel->pagename = 'Queues';
 	
+	if (isset($_POST['cancel_x'])) { 
+		$this->helper->delTuple("queue",$_POST['pkey']);
+	}
+	
 	if (isset($_POST['new_x'])) { 
 		$tuple = array();
 		$tuple['pkey'] 	= 'Queue' . rand(1000, 9999);

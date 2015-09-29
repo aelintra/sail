@@ -1,3 +1,33 @@
+sail (4.1.0-9) UNRELEASED; urgency=low
+  * tagged as 4.1.0-9
+  - added netphone table
+  - Fixed bug in cancel for sarkapp
+  - removed required from js validation in callback
+  - removed required from js validation in calloup
+  - removed required from js validation in cluster
+  - removed required from js validation in conference
+  - added pkey validation to conference
+  - removed required from js validation in COS
+  - added discover panel JS
+  - Changed JS validation on firewall
+  - added highlighter to firewall and added new rules at top
+  - fixed tabselect bug in extensions
+  - changed tab order in extensions
+  - fixed greeting delete bug and allowed mp3 files
+  - added ldap UID to addressbook structure
+  - changed validation for multicast
+  - added call forwards to sarkphone
+  - fixed cancel button on sarkqueue
+  - removed required from js validation in queue
+  - restricted text on timer JS
+  - changed USER JS validation
+  - enhanced USER panel
+  - added UID to LDAPHelper
+  - added harvest function to responder
+  - Added highlighter to agent add
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 29 Sep 2015 18:00:00 +0000
+
 sail (4.1.0-8) UNRELEASED; urgency=low
   * tagged as 4.1.0-8
   - fix to sarkedsw to handle port descriptions

@@ -164,11 +164,12 @@ sub daemonize {
 #
 
 if ($ARGV[0] && $ARGV[0] eq '--daemonize') {
+	doLogit("forking");
 	daemonize();
 }
 elsif ($ARGV[0] && $ARGV[0] eq '--nofork') {
 	if ($debug_level >= 1) {
-		print STDERR "Not forking.\n";
+		doLogit("Not forking");
 	}
 }
 else {
@@ -435,7 +436,16 @@ while (1) {
 
 
 				if ($in_event_type eq 'ua-profile') {
-
+#
+# Harvest the information for later use by the discover program
+#
+					my $dbh = SarkSubs::SQLiteConnect();
+					my $checkmac = SarkSubs::SQLiteGet($dbh, "SELECT pkey FROM netphone where pkey = '$macaddr'");
+					unless ($checkmac) {
+						SarkSubs::SQLiteDo($dbh, "INSERT INTO netphone (pkey,vendor,model) 	
+							VALUES ('$macaddr','$in_event_ua_profile_vendor','$in_event_ua_profile_model')" );
+					}
+					SarkSubs::SQLiteDisconnect($dbh);
 
 #if (($pkt =~ m/MAC%3[aA](000413[^@]+)@/sio || $pkt =~ m/snom/so) && $pkt =~ m/^(?:Accept):\s*application\/url/msio) {
 #				if ($in_event_ua_profile_vendor eq 'snom') {

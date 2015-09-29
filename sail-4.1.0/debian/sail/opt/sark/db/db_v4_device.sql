@@ -2411,7 +2411,7 @@ fkey_label$seq$: $label','BLF Template');
 INSERT OR IGNORE INTO Device(pkey,desc,device,provision,technology) values ('y000000000000.cfg','Yealink T28 descriptor','y000000000000.cfg','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000004.cfg','Yealink T26 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000005.cfg','Yealink T22 descriptor','#INCLUDE yealink.Common','Descriptor');
-INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000007.cfg','Yealink T20 descriptor','#INCLUDE yealinkCommon','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000007.cfg','Yealink T20 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000009.cfg','Yealink T18 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000023.cfg','Yealink VP530 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000025.cfg','Yealink W52P descriptor','#INCLUDE yealink.Common','Descriptor');
@@ -2423,6 +2423,7 @@ INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000035.cfg','Yealink T48 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000036.cfg','Yealink T41 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000038.cfg','Yealink T38 descriptor','#INCLUDE yealink.Common','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('y000000000053.cfg','Yealink T19 descriptor','#INCLUDE yealink.Common','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology) values ('yealink.Common','Yealink common Y file','#!version:1.0.0.1
 
 ##File header "#!version:1.0.0.1" can not be edited or deleted, and must be placed in the first line.##

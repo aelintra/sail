@@ -189,6 +189,11 @@ private function showEdit() {
 	echo  '<li><a href="#vmail">Vmail Settings</a></li>' . PHP_EOL;
     echo '<li><a href="#INBOX">New Vmail</a></li>'. PHP_EOL;
     echo '<li><a href="#Old">Old Vmail</a></li>'.  PHP_EOL;
+    if ( $this->astrunning ) {
+		if ( $amiconrets ) {
+			echo '<li><a href="#cfwd" >CFWD</a></li>' . PHP_EOL;
+		}
+	}
 
     echo '</ul>' . PHP_EOL;
     	
@@ -288,6 +293,25 @@ private function showEdit() {
  */   
  
 	$this->genMail('Old');	
+	
+/*
+ * 	TAB Call Forwards
+ */ 
+	echo '<div id="cfwd"  >' . PHP_EOL;
+    echo '<h2>Internal PBX Call Forwards</h2>' . PHP_EOL;
+    $this->myPanel->aLabelFor('cfim');
+    echo '<input type="text" name="cfim" id="cfim" value="' . $cfim . '"  />' . PHP_EOL;
+    $this->myPanel->aLabelFor('cfbs');
+    echo '<input type="text" name="cfbs" id="cfbs" value="' . $cfbs . '"  />' . PHP_EOL;
+
+/* ToDo - needs AGI support
+    echo '<h2>Cellphone Twinning</h2>' . PHP_EOL;
+    $this->myPanel->aLabelFor('twin');
+    echo '<input type="text" name="twin" id="twin" size="11"  value="' . $extension['twin'] . '"  />' . PHP_EOL;
+*/	
+
+	echo '</div>' . PHP_EOL;
+	
     
 /*
  *      TAB TABEND DIV

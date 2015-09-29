@@ -420,6 +420,12 @@ name TEXT,
 notify TEXT
 );
 
+CREATE TABLE IF NOT EXISTS netphone (
+pkey TEXT PRIMARY KEY,
+vendor TEXT,
+model TEXT
+);
+
 CREATE TABLE IF NOT EXISTS page (
 pkey TEXT PRIMARY KEY,
 pagegroup TEXT

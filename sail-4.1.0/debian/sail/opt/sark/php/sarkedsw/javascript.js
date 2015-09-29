@@ -45,7 +45,7 @@
 			"aoColumns": [
 				null, 		// action
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set source',
 					onblur: 'cancel',
@@ -60,14 +60,14 @@
 					data: "{ 'tcp':'tcp','udp':'udp' }"
 				}, 		// fwproto	
 				{
-					type: 'textarea',
+					type: 'text',
 					submit:'Save',
 					tooltip: 'Double Click to set source',
 					onblur: 'cancel',
 					placeholder: 'Null'	
 				}, 		// port	
 				{
-					type: 'textarea',
+					type: 'text',					
 					submit:'Save',
 					tooltip: 'Double Click to set Description',
 					onblur: 'cancel',
@@ -75,7 +75,7 @@
 				}, 		// fwdesc																					
 				null	// delete col					
             ]
-        });   
+        }).find("tr").find('td:eq(5):contains(*NEW RULE*)').parent().css('backgroundColor', 'yellow') ;   
         
           
  });

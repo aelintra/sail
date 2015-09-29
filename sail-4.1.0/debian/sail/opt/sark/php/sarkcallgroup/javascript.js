@@ -22,7 +22,7 @@
 		  
 	$("#sarkcallgroupForm").validate ( {
 	   rules: {
-			pkey: "required alpha",
+			pkey: "alpha",
 			ringdelay: "required digits",
 			out: "extlist"
 	   },

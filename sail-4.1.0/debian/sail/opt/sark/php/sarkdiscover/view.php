@@ -143,6 +143,8 @@ private function showMain() {
 
 	$this->myPanel->aHeaderFor('ipaddr');
 	$this->myPanel->aHeaderFor('macaddr'); 
+	$this->myPanel->aHeaderFor('vendor'); 
+	$this->myPanel->aHeaderFor('model'); 
 	$this->myPanel->aHeaderFor('description'); 	
 	$this->myPanel->aHeaderFor('extension'); 
 	
@@ -154,8 +156,21 @@ private function showMain() {
 
 	foreach ($file as $row ) {
 		$columns = explode(" ",$row,3); 
+		if ($res = $this->dbh->query("SELECT vendor,model FROM netphone where pkey = '" . $columns[1] .  "' COLLATE NOCASE" )->fetch(PDO::FETCH_ASSOC)) {
+			$vendor = $res['model'];
+			$model = $res['model'];	
+		}
+		else {
+			$vendor = 'N/A';
+			$model = 'N/A';					
+		}		
 		echo '<td class="read_only">' . $columns[0] . '</td>' . PHP_EOL;			
-		echo '<td class="read_only">' . $columns[1] . '</td>' . PHP_EOL;		
+		echo '<td class="read_only">' . $columns[1] . '</td>' . PHP_EOL;
+		$res = $this->dbh->query("SELECT vendor,model FROM netphone where pkey = '" . $columns[1] .  "' COLLATE NOCASE" )->fetch(PDO::FETCH_ASSOC);
+		$vendor = $res['vendor'];
+		$model = $res['model'];
+		echo '<td class="read_only">' . $vendor . '</td>' . PHP_EOL;				
+		echo '<td class="read_only">' . $model . '</td>' . PHP_EOL;		
 		echo '<td class="read_only">' . $columns[2] . '</td>' . PHP_EOL;
 		if ($this->astrunning) {
 			$target = "Unknown Peer";

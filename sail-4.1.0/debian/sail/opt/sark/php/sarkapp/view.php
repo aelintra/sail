@@ -43,6 +43,10 @@ public function showForm() {
 	
 	$this->myPanel->pagename = 'Custom Apps';
 	
+	if (isset($_POST['cancel_x'])) { 
+		$this->helper->delTuple("appl",$_POST['pkey']);
+	}	
+	
 	if (isset($_POST['new_x'])) { 
 		$this->showEdit('new');
 		return;

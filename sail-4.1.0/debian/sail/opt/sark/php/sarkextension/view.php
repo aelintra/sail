@@ -38,7 +38,7 @@ Class extension {
 
 public function showForm() {
 //	$params = array('server' => '127.0.0.1', 'port' => '5038');
-	
+//    print_r($_POST);	
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
@@ -76,12 +76,15 @@ public function showForm() {
 	if (isset($_GET['notify'])) { 
 		$this->sipNotify();
 		$this->message = " - Reboot request sent to Ext" . $_GET['pkey'];
+		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;			
+		$this->showEdit();
+		return;			
 	}
 	
 	if (isset($_POST['reboot_x'])) { 
 		$this->sipNotify();
 		$this->message = " - Reboot request sent to Ext" . $_POST['pkey'];
-		echo '<input type="hidden" id="tabselect" name="tabselect" value="3" />' . PHP_EOL;	
+		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;	
 		$this->showEdit();
 		return;		
 	}	
@@ -89,7 +92,7 @@ public function showForm() {
 	if (isset($_POST['upload_x'])) { 
 		$this->sipNotifyPush();
 		$this->message = " - Config request pushed to Ext" . $_POST['pkey'];
-		echo '<input type="hidden" id="tabselect" name="tabselect" value="3" />' . PHP_EOL;	
+		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;	
 		$this->showEdit();
 		return;			
 	}
@@ -409,7 +412,7 @@ private function saveNew() {
 			$tuple['cluster']	= strip_tags($_POST['cluster']);
 		}
 		else {
-			$tuple['cluster']	='Default';
+			$tuple['cluster']	='default';
 		}		
 		$tuple['extalert']		= strip_tags($_POST['extalert']);
 		
@@ -571,7 +574,7 @@ private function saveNewBlf() {
 // save the data away
 	$pkey = $_POST['pkey'];
 	echo '<input type="hidden" id="pkey" name="pkey" value="' . $pkey . '" />' . PHP_EOL;
-	echo '<input type="hidden" id="tabselect" name="tabselect" value="3" />' . PHP_EOL;	
+	echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;	
 	
 	$seq = $this->dbh->query("select count(*) from ipphone_fkey where pkey='" . $pkey . "'")->fetchColumn();
 	$seq++;
@@ -584,7 +587,7 @@ private function deleteLastBlf() {
 // save the data away
 	$pkey = $_POST['pkey'];
 	echo '<input type="hidden" id="pkey" name="pkey" value="' . $pkey . '" />' . PHP_EOL;
-	echo '<input type="hidden" id="tabselect" name="tabselect" value="3" />' . PHP_EOL;	
+	echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;	
 	
 	$seq = $this->dbh->query("select count(*) from ipphone_fkey where pkey='" . $pkey . "'")->fetchColumn();
 	if ($seq) {
@@ -614,11 +617,11 @@ private function showEdit($key=False) {
 	else {
 		$latency = 'N/A';
 	}
-	$extension = $this->dbh->query("SELECT * FROM IPphone WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	$extension = $this->dbh->query("SELECT * FROM ipphone WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 	
 	$extlist=array();
 	array_push($extlist,"None");	
-	$res = $this->helper->getTable("ipphone","select pkey from ipphone ORDER BY pkey");
+	$res = $this->helper->getTable("ipphone","select pkey from ipphone ORDER BY pkey",false);
 	foreach ($res as $row) {
 		array_push($extlist,$row['pkey']);
 	}
@@ -687,16 +690,12 @@ private function showEdit($key=False) {
 	echo '<ul>' . PHP_EOL;
 	echo '<li><a href="#general">General</a></li>'. PHP_EOL;
 	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
-		if ( $_SERVER['REMOTE_USER'] == 'admin' ) {
-			echo  '<li><a href="#asterisk">Asterisk</a></li>' . PHP_EOL;
-			if (isset($extension['macaddr'])) {
-				echo  '<li><a href="#provisioning">Provisioning</a></li>' . PHP_EOL;
-				if (preg_match(' /\.[FL]key/m ', $extension['provision'])) {
-					echo  '<li><a href="#blf">BLF/DSS Keys</a></li>' . PHP_EOL;
-				}
-			}			
-			echo  '<li><a href="#vmail">Vmail</a></li>' . PHP_EOL;
+		if (isset($extension['macaddr'])) {
+			if (preg_match(' /\.[FL]key/m ', $extension['provision'])) {
+				echo  '<li><a href="#blf">BLF/DSS Keys</a></li>' . PHP_EOL;
+			}
 		}
+		echo  '<li><a href="#vmail">Vmail</a></li>' . PHP_EOL;
 	}
 	if (! empty ($classOfService)) {
 		echo '<li><a href="#cos" >CoS</a></li>' . PHP_EOL;
@@ -707,16 +706,26 @@ private function showEdit($key=False) {
 		}
 	}
     echo '<li><a href="#xref" >XREF</a></li>' . PHP_EOL;
+	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {		
+		if ( $_SERVER['REMOTE_USER'] == 'admin' ) {
+			echo  '<li><a href="#asterisk">Asterisk</a></li>' . PHP_EOL;
+			if (isset($extension['macaddr'])) {
+				echo  '<li><a href="#provisioning">Provisioning</a></li>' . PHP_EOL;
+			}						
+		}
+	}    
     echo '</ul>' . PHP_EOL;
     
 /*
  *   TAB Provisioning
  */
     if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
-		if (isset($extension['macaddr'])) {
-			echo '<div id="provisioning" >';
-			echo '<textarea class="databox" name="provision" id="provision">' . htmlspecialchars($extension['provision']) . '</textarea>' . PHP_EOL;
-			echo '</div>' . PHP_EOL;
+		if ( $_SERVER['REMOTE_USER'] == 'admin' ) {
+			if (isset($extension['macaddr'])) {
+				echo '<div id="provisioning" >';
+				echo '<textarea class="databox" name="provision" id="provision">' . htmlspecialchars($extension['provision']) . '</textarea>' . PHP_EOL;
+				echo '</div>' . PHP_EOL;
+			}
 		}
 	}
 	
@@ -724,9 +733,11 @@ private function showEdit($key=False) {
  *   TAB Asterisk
  */
 	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
-    	echo '<div id="asterisk" >';
-		echo '<textarea class="databox" name="sipiaxfriend" id="sipiaxfriend">' . htmlspecialchars($extension['sipiaxfriend']) . '</textarea>' . PHP_EOL;
-		echo '</div>' . PHP_EOL;
+		if ( $_SERVER['REMOTE_USER'] == 'admin' ) {
+			echo '<div id="asterisk" >';
+			echo '<textarea class="databox" name="sipiaxfriend" id="sipiaxfriend">' . htmlspecialchars($extension['sipiaxfriend']) . '</textarea>' . PHP_EOL;
+			echo '</div>' . PHP_EOL;
+		}
 	}
 	
 /*

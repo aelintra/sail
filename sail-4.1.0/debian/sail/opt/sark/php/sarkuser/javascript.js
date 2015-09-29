@@ -18,30 +18,21 @@
 	  
 	$("#sarkuserForm").validate ( {
 	   rules: {
-//			pkey: "required",
 			pkey: {
-				required: true,
 				alpha: true,
-				minlength: 2,
+				minlength: 4,
 //				remote: "/php/user/check.php"
 			},
 			password: {
-				required: true,
 				alpha: true,
-				minlength: 4
-			},
-			email: {
-				required: true
-			}			   
+				minlength: 6
+			},			   
 	   },
 	   messages: {
 		   	pkey: {
-				required: "Enter a username",
 				minlength: jQuery.format("Enter at least {0} characters"),
 				remote: jQuery.format("{0} is already in use")
 			}
-//		   user: "You must enter the user name",
-//		   alternate: "specify a phone number with no spaces or leave blank"
 	   }					
 	});  
 

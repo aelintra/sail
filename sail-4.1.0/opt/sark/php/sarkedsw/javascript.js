@@ -46,36 +46,36 @@
 				null, 		// action
 				{
 					type: 'text',
-//					submit:'Save',
+					submit:'Save',
 					tooltip: 'Double Click to set source',
-					onblur: 'submit',
+					onblur: 'cancel',
 					placeholder: 'Null'	
 				},		// fwsource
 				null,	// fwdest
 				{
 					tooltip: 'Double Click to set',
 					type: 'select',
-                    onblur: 'submit',
-//                    submit: 'Save',
+                    onblur: 'cancel',
+                    submit: 'Save',
 					data: "{ 'tcp':'tcp','udp':'udp' }"
 				}, 		// fwproto	
 				{
 					type: 'text',
-//					submit:'Save',
+					submit:'Save',
 					tooltip: 'Double Click to set source',
-					onblur: 'submit',
+					onblur: 'cancel',
 					placeholder: 'Null'	
 				}, 		// port	
 				{
 					type: 'text',					
-//					submit:'Save',
+					submit:'Save',
 					tooltip: 'Double Click to set Description',
-					onblur: 'submit',
+					onblur: 'cancel',
 					placeholder: 'Null'	
 				}, 		// fwdesc																					
 				null	// delete col					
             ]
-        });   
+        }).find("tr").find('td:eq(5):contains(*NEW RULE*)').parent().css('backgroundColor', 'yellow') ;   
         
           
  });

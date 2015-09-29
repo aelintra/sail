@@ -164,7 +164,7 @@ private function saveNew() {
 // save the data away
 	
 	$this->validator = new FormValidator();
-    $this->validator->addValidation("pkey","req","Please fill in mcast extension");
+    $this->validator->addValidation("pkey","req","Please fill in Room Number");
     $this->validator->addValidation("pkey","num","Multicast extension name must be numeric");    
 
     //Now, validate the form

@@ -118,7 +118,7 @@ private function showMain() {
 
 	if ( $handle = opendir($this->soundir) ) {
 		while (false !== ($entry = readdir($handle))) {
-			if (preg_match(' /(^usergreeting\d*).(wav|gsm)$/ ',$entry,$matches)) {
+			if (preg_match(' /(^usergreeting\d*).(wav|gsm|mp3)$/ ',$entry,$matches)) {
 				$fgreeting[$matches[1]] = $matches[2];
 			}
 		}	
@@ -130,9 +130,10 @@ private function showMain() {
  */ 
 	$rows = $this->helper->getTable("greeting");
 	foreach ($rows as $row ) {
-		if (!is_array( glob ($soundir . "/" . $row['pkey'] . '*'))) {
+		$globarray = glob ($this->soundir . "/" . $row['pkey'] . '*');
+		if (empty($globarray)) {
 //			$tuple['pkey'] = $key;
-			$ret = $this->helper->delTuple("greeting",$key);
+			$ret = $this->helper->delTuple("greeting",$row['pkey']);
 		}	
 	}
 /*
@@ -160,7 +161,12 @@ private function showMain() {
 		echo '<td >' . $filesize. '</td>' . PHP_EOL;
 		echo '<td >' . $row['type']  . '</td>' . PHP_EOL;
 		echo '<td ><a class="table-action-deletelink" href="/php/sarkgreeting/delete.php?id=' . $row['pkey'] . '"><img src="/sark-common/edittrash.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;				
-		echo '<td ><a href="/server-sounds/' . $row['pkey'] . '.wav"><img src="/sark-common/player_play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
+		if (preg_match('(wav|mp3)',$row['type'])) {
+			echo '<td ><a href="/server-sounds/' . $row['pkey'] . '.wav"><img src="/sark-common/player_play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
+		}
+		else {
+			echo '<td title = "Only  files of type \'wav\' and \'mp3\'  may be played">N/A</td>' . PHP_EOL;
+		}
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
 	}
