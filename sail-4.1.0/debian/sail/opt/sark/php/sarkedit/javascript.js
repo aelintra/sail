@@ -22,7 +22,7 @@
 // ToDo			{ "sClass": "left_align", "aTargets": [ 0 ] }
 		],
 		"aoColumns": [ 
-			{ "sName": "pkey" },
+			{ "sName": "pkey" }
 		] 
 
 	});            

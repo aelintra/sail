@@ -18,7 +18,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tf',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 6,7 ] },
+			{ "bSortable": false, "aTargets": [ 6,7 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "cluster" },
@@ -95,7 +95,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tf',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 6,7 ] },
+			{ "bSortable": false, "aTargets": [ 6,7 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "cluster" },

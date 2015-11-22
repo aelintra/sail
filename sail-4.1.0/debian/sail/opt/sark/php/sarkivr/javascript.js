@@ -31,7 +31,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tf',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 2,3,4,5,6 ] },
+			{ "bSortable": false, "aTargets": [ 2,3,4,5,6 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
@@ -92,7 +92,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tf',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 2,3,4,5,6 ] },
+			{ "bSortable": false, "aTargets": [ 2,3,4,5,6 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },

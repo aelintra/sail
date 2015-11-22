@@ -48,7 +48,7 @@ public function showForm() {
 
 	echo '<body>';
 	echo '<form id="sarkphoneForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
-
+print_r($_SERVER);
 	$this->myPanel->pagename = 'Phone';
 	$user = $_SERVER['REMOTE_USER'];
 	$res = $this->dbh->query("SELECT extension,selection FROM user WHERE pkey = '" . $user . "'")->fetch(PDO::FETCH_ASSOC);

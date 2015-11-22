@@ -110,7 +110,7 @@ private function showMain() {
 	
 	$this->myPanel->Heading();
 	echo '<div class="datadivwide" style="width:80%">';
-	echo '<table class="display" id="devicetable" " >' ;
+	echo '<table class="display" id="devicetable">' ;
 	echo '<thead>' . PHP_EOL;	
 	echo '<tr>' . PHP_EOL;
 	
