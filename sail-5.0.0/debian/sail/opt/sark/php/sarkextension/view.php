@@ -17,7 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkAmiHelperClass";
+//require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
+
 require_once 'Net/IPv4.php';
 
 
@@ -30,7 +32,6 @@ Class sarkextension {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $params = array('server' => '127.0.0.1', 'port' => '5038');
 	protected $astrunning=false;
 	protected $keychange=NULL;
 
@@ -42,6 +43,7 @@ public function showForm() {
 	if ( $this->helper->check_pid() ) {	
 		$this->astrunning = true;
 	}
+
 	echo '<div class="guest"><img src="/sark-common/buttons/cancel.png" id="closebutton" />'. PHP_EOL;
 	echo '<div id="iframecontent"></div></div>' . PHP_EOL;
 	echo '<form id="sarkextensionForm"  action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;
@@ -77,7 +79,7 @@ public function showForm() {
 
 	if (isset($_GET['notify'])) { 
 		$this->sipNotify();
-		$this->message = " - Reboot request sent to Ext" . $_GET['pkey'];
+		$this->message = " - Reboot request sent";
 //		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;			
 		$this->showEdit();
 		return;			
@@ -85,7 +87,7 @@ public function showForm() {
 	
 	if (isset($_POST['reboot_x'])) { 
 		$this->sipNotify();
-		$this->message = " - Reboot request sent to Ext" . $_POST['pkey'];
+		$this->message = " - Reboot request sent";
 //		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;	
 		$this->showEdit();
 		return;		
@@ -93,7 +95,7 @@ public function showForm() {
 			
 	if (isset($_POST['upload_x'])) { 
 		$this->sipNotifyPush();
-		$this->message = " - Config request pushed to Ext" . $_POST['pkey'];
+		$this->message = " - Config request pushed";
 //		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;	
 		$this->showEdit();
 		return;			
@@ -118,9 +120,10 @@ public function showForm() {
 
 	if (isset($_POST['commit_x']) || isset($_POST['commitClick_x'])) { 
 		$this->helper->sysCommit();
-		$this->message = "Updates have been Committed";	
+		$this->message = "Updates Committed";	
 	}
-		
+	
+	
 	$this->showMain();
 	
 	$this->dbh = NULL;
@@ -133,28 +136,13 @@ private function showMain() {
 	if (isset($this->message)) {
 		$this->myPanel->msg = $this->message;
 	} 
-/*
- * sign on to the AMI and build a peer array
- */
-		
-	$sip_peers = array(); 	
-	if ( $this->astrunning ) {			
-		$ami = new ami($this->params);
-		$amiconrets = $ami->connect();
-		if ( !$amiconrets ) {
-			$this->myPanel->msg .= "  (AMI Connect failed)";
-		}
-		else {
-			$ami->login('sark','mysark');
-			$amisiprets = $ami->getSipPeers();
-			$sip_peers = $this->build_peer_array($amisiprets);
-			$ami->logout();
-		}
+	if ( $this->astrunning ) {	
+		$amiHelper = new amiHelper();
+		$sip_peers = $amiHelper->get_peer_array();
 	}
 	else {
 		$this->myPanel->msg .= "  (No Asterisk running)";
-	}
-
+	}	
 
 /* 
  * start page output
@@ -171,7 +159,10 @@ private function showMain() {
 	if (!$ret) {	
 		$this->myPanel->Button("new");
 	}
-	$this->myPanel->commitButton();	
+	$this->myPanel->commitButton();
+	if ( $_SESSION['user']['pkey'] == 'admin' ) {	
+		echo '<a  href="/php/downloadpdf.php?pdf=ipphone"><img id="pdfprint" src="/sark-common/buttons/print.png" border=0 title = "Click to Download PDF" ></a>' . PHP_EOL;									
+	}
 	echo '</div>';
 	if (!empty($this->error_hash)) {
 		$this->myPanel->msg = reset($this->error_hash);	
@@ -346,29 +337,31 @@ private function showNew() {
 	$this->myPanel->aLabelFor('rule');
 	echo '<input type="text" name="pkey" size="4" id="pkey" value="' . $pkey . '"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('device');
+	$this->myPanel->selected = 'General SIP';
 	$this->myPanel->popUp('device', $devices);
 	$this->myPanel->aLabelFor('devicerec');
 	$this->myPanel->popUp('devicerec', array('default','None','OTR','OTRR','Inbound','Outbound','Both'));
+	$this->myPanel->aLabelFor('location');
+	$this->myPanel->popUp('location', array('local','remote'));	
 	$this->myPanel->aLabelFor('vmailfwd');
-	echo '<input type="text" name="vmailfwd" id="vmailfwd" size="20"  />' . PHP_EOL;
+	echo '<input type="text" name="vmailfwd" id="vmailfwd" size="30"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('macaddr');
-	echo '<input type="text" name="macaddr" id="macaddr" size="14" ';	
+	echo '<input type="text" name="macaddr" id="macaddr" size="30" ';	
 	if ($_GET['mac']) {
 		echo 'value="' . $_GET['mac'] . '"';
 	}
 	echo ' />' . PHP_EOL;
 	$this->myPanel->aLabelFor('calleridname');
-	echo '<input type="text" name="desc" id="desc"  value="Ext' . $pkey . '"  />' . PHP_EOL;
-	$this->myPanel->aLabelFor('location');
-	$this->myPanel->popUp('location', array('local','remote'));
+	echo '<input type="text" name="desc" id="desc" size="30"  value="Ext' . $pkey . '"  />' . PHP_EOL;
+
 	$this->myPanel->aLabelFor('cluster','cluster');
 	$this->myPanel->displayCluster();
 	$this->myPanel->aLabelFor('extalert');
-	echo '<input type="text" name="extalert" id="extalert" size="20"   />' . PHP_EOL;
+	echo '<input type="text" name="extalert" id="extalert" size="30"   />' . PHP_EOL;
 	$this->myPanel->aLabelFor('callerid');
-	echo '<input type="text" name="callerid" id="callerid" size="10"  />' . PHP_EOL;
+	echo '<input type="text" name="callerid" id="callerid" size="30"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('cdialstring');
-	echo '<input type="text" name="dialstring" id="dialstring" size="20"  />' . PHP_EOL;
+	echo '<input type="text" name="dialstring" id="dialstring" size="30"  />' . PHP_EOL;
 	echo '</div>';	
 }
 
@@ -498,7 +491,7 @@ private function saveNew() {
 			
 		$ret = $this->helper->createTuple("ipphone",$tuple);
 		if ($ret == 'OK') {
-			$this->message = "Saved new extension " . $tuple['pkey'] . "!";
+			$this->message = "Saved new extension ";
 		}
 		else {
 			$this->invalidForm = True;
@@ -561,6 +554,10 @@ private function deleteRow() {
 
 private function showEdit() {
 
+	$cfim = NULL;
+	$cfbs = NULL;
+	$ringdelay = 20;
+
 	if (isset($this->keychange)) {
 		$pkey = $this->keychange;		
 	}
@@ -606,21 +603,9 @@ private function showEdit() {
 	} 
 	$latency = 'N/A';
 	if ($this->astrunning) {
-		$ami = new ami($this->params);
-		$amiconrets  = $ami->connect();
-		if ( !$amiconrets ) {
-			$this->myPanel->msg .= "  (AMI Connect failed)";
-		}
-		else {
-			$ami->login('sark','mysark');
-			$amisiprets = $ami->getSipPeers();
-			$sip_peers = $this->build_peer_array($amisiprets);			
-			$cfim = $ami->GetDB('cfim', $pkey);
-			$cfbs = $ami->GetDB('cfbs', $pkey);
-			$ringdelay = $ami->GetDB('ringdelay', $pkey);
-			$ami->logout();
-		}
-// get state
+		$amiHelper = new amiHelper();
+		$sip_peers = $amiHelper->get_peer_array();
+		$amiHelper->get_database($pkey,$cfim,$cfbs,$ringdelay);			
 		$latency = $sip_peers [$pkey]['Status'];	
 	}
 	else {
@@ -682,9 +667,9 @@ private function showEdit() {
 		echo '<li><a href="#cos" >CoS</a></li>' . PHP_EOL;
 	}
 	if ( $this->astrunning ) {
-		if ( $amiconrets ) {
+//		if ( $amiconrets ) {
 			echo '<li><a href="#cfwd" >CFWD</a></li>' . PHP_EOL;
-		}
+//		}
 	}
     echo '<li><a href="#xref" >XREF</a></li>' . PHP_EOL;
 	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {		
@@ -855,10 +840,10 @@ private function showEdit() {
 			$cosrec = $sql->fetch();						
 
 			if (is_array($cosrec) && array_key_exists('IPphone_pkey',$cosrec)) {
-				echo '<input type="checkbox" checked="yes" name="opencos[]" value="' . $cos['pkey'] . '" />' . $cos['pkey'] . '<br/>' . PHP_EOL;	 
+				echo '<input type="checkbox" checked="yes" name="opencos[]" value="' . $cos['pkey'] . '" />&nbsp' . $cos['pkey'] . '<br/>' . PHP_EOL;	 
 			}
 			else {
-				echo '<input type="checkbox" name="opencos[]" value="' . $cos['pkey'] . '" />' . $cos['pkey'] . '<br/>' . PHP_EOL;			
+				echo '<input type="checkbox" name="opencos[]" value="' . $cos['pkey'] . '" />&nbsp' . $cos['pkey'] . '<br/>' . PHP_EOL;			
 			}
 		}
 		echo '<h2>Night-time Class of Service</h2>' . PHP_EOL;	
@@ -867,10 +852,10 @@ private function showEdit() {
 			$sql->execute(array($extension['pkey'],$cos['pkey']));
 			$cosrec = $sql->fetch();				
 			if (is_array($cosrec) && array_key_exists('IPphone_pkey',$cosrec)) {
-				echo '<input type="checkbox" checked="yes" name="closedcos[]" value="' . $cos['pkey'] . '" />' . $cos['pkey'] . '<br/>' . PHP_EOL;	 
+				echo '<input type="checkbox" checked="yes" name="closedcos[]" value="' . $cos['pkey'] . '" />&nbsp' . $cos['pkey'] . '<br/>' . PHP_EOL;	 
 			}
 			else {
-				echo '<input type="checkbox" name="closedcos[]" value="' . $cos['pkey'] . '" />' . $cos['pkey'] . '<br/>' . PHP_EOL;			
+				echo '<input type="checkbox" name="closedcos[]" value="' . $cos['pkey'] . '" />&nbsp' . $cos['pkey'] . '<br/>' . PHP_EOL;			
 			}
 		}
 		echo '</div>' . PHP_EOL;
@@ -881,14 +866,14 @@ private function showEdit() {
  * 	TAB Call Forwards
  */
 	if ( $this->astrunning ) {
-		if ( $amiconrets ) {
+//		if ( $amiconrets ) {
 			echo '<div id="cfwd"  >' . PHP_EOL;
 			echo '<h2>Internal PBX Call Forwards</h2>' . PHP_EOL;
 			$this->myPanel->aLabelFor('cfim');
 			echo '<input type="text" name="cfim" id="cfim" value="' . $cfim . '"  />' . PHP_EOL;
 			$this->myPanel->aLabelFor('cfbs');
 			echo '<input type="text" name="cfbs" id="cfbs" value="' . $cfbs . '"  />' . PHP_EOL;
-		}
+//		}
 	}
 
 	echo '</div>' . PHP_EOL;
@@ -896,26 +881,24 @@ private function showEdit() {
 /*
  * 	TAB Vmail
  */ 
-	echo '<div id="vmail"  >' . PHP_EOL;
+	echo '<div id="vmail">' . PHP_EOL;
 	
-
-	$this->myPanel->aLabelFor('vmailfwd') . PHP_EOL;
-	echo '<input type="text" name="vmailfwd" id="vmailfwd" size="30"  value="' . $extension['vmailfwd'] . '"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('dvrvmail') . PHP_EOL;	
 	$this->myPanel->selected = $extension['dvrvmail'];
-	$this->myPanel->popUp('dvrvmail', $extlist) . PHP_EOL;	    
+	$this->myPanel->popUp('dvrvmail', $extlist) . PHP_EOL;	 
+	$this->myPanel->aLabelFor('vmailfwd') . PHP_EOL;
+	echo '<input type="text" name="vmailfwd" id="vmailfwd" size="30"  value="' . $extension['vmailfwd'] . '"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('vdelete') . PHP_EOL;
-    echo '<input type="checkbox"   name="vdelete" value="vdelete" />' . PHP_EOL; 
+    echo '<input type="checkbox"   name="vdelete"  id="vdelete" value="vdelete" />' . PHP_EOL; 
 	$this->myPanel->aLabelFor('vreset') . PHP_EOL;
-    echo '<input type="checkbox"   name="vreset" value="vreset" />' . PHP_EOL;
-    echo '<br/>';
+    echo '<input type="checkbox"   name="vreset" id="vreset" value="vreset" />' . PHP_EOL;
 	
 	echo '</div>' . PHP_EOL;
 	
 /*
  * 	TAB XREF 
  */ 
-	echo '<div id="xref"  >' . PHP_EOL;
+	echo '<div id="xref">' . PHP_EOL;
 	echo '<h2>Cross References to this extension</h2>' . PHP_EOL;
     echo '<p>' . $xref . '</p>' . PHP_EOL;
 	echo '</div>' . PHP_EOL;
@@ -1011,62 +994,25 @@ private function saveEdit() {
 		
 /*	
  * update the asterisk internal database (callforwards and ringdelay)
- */ 
-		if ($this->astrunning) {			
-			$ami = new ami($this->params);
-			$amiconrets  = $ami->connect();
-			if ( !$amiconrets ) {
-				$this->myPanel->msg .= "  (AMI Connect failed)";
-			}
-			else {				
-				$ami->login('sark','mysark');
-				if (isset($_POST['cfim'])) {
-					$cfim			= strip_tags($_POST['cfim']);
-					if ($cfim) {
-						$ami->PutDB('cfim', $newkey, $cfim);
-					}
-					else {
-						$ami->DelDB('cfim', $newkey);
-					}
-				}
-				if (isset($_POST['cfbs'])) {
-					$cfbs			= strip_tags($_POST['cfbs']);
-					if ($cfbs) {
-						$ami->PutDB('cfbs', $newkey, $cfbs);
-					}
-					else {
-						$ami->DelDB('cfbs', $newkey);
-					}					
-				}
-				if (isset($_POST['ringdelay'])) {
-					$ringdelay		= strip_tags($_POST['ringdelay']);	
-					$ami->PutDB('ringdelay', $newkey, $ringdelay);				
-				}
-				if (isset($_POST['celltwin'])) {
-					$twin = strip_tags($_POST['cellphone']);
-					if ($twin) {
-						$ami->PutDB('srktwin', $newkey, $twin);
-					}
-				}
-				else {
-					$ami->DelDB('srktwin', $newkey);
-				}									
-				$ami->logout();
-			}
+ */  
+ 		if ($this->astrunning) {
+			$amiHelper = new amiHelper();
+			$amiHelper->put_database($newkey);			
 		}
+ 		
 /*
  * reset/empty voicemail if requested
  */
 
 	if (isset($_POST['vdelete'])) { 
 		$rc = $this->helper->request_syscmd ("/bin/rm -rf /var/spool/asterisk/voicemail/default/" . $_POST['pkey']."/*");	
-		$this->message = "Voicemail for Ext " . $_POST['pkey'] . " deleted";
+		$this->message = "Voicemail deleted";
 	}	
 	
 	if (isset($_POST['vreset'])) { 
 		$skey = $_POST['pkey'];
 		$rc = $this->helper->request_syscmd ("/bin/sed -i 's/^$skey => [0-9]*\(.*\)/$skey => $skey\\1/' /etc/asterisk/voicemail.conf");	
-		$this->message = "Voicemail password for Ext " . $_POST['pkey'] . " reset";	
+		$this->message = "Voicemail password reset";	
 	}
 		
 /*
@@ -1089,7 +1035,7 @@ private function saveEdit() {
 			if ( isset($res['pkey']) ) { 
 				$this->invalidForm = True;
 				$this->message = "<B>  --  Validation Errors!</B>";	
-				$this->error_hash['extensave'] = " Attempt to change extension key but " . $newkey . " already exists!";	
+				$this->error_hash['extensave'] = " " . $newkey . " already exists!";	
 			}
 			else {
 				// signal a key change to the editor
@@ -1326,11 +1272,11 @@ private function sipNotify () {
 			$chk = 'grandstream-check-cfg';
 		}
 		if ( ! $chk ) {
-			$this->message = "No notify data available for ext $pkey ";
+			$this->message = "No notify data available for ext";
 			return;
 		}
 		$this->helper->request_syscmd ("/usr/sbin/asterisk -rx 'sip notify $chk $pkey' ");
-    	$this->message = "Issued SIP Notify to Ext " . $pkey . "(" . $res['device'] . ")" ;
+    	$this->message = "Issued SIP Notify";
 }
 
 private function sipNotifyPush () {
@@ -1348,7 +1294,7 @@ private function sipNotifyPush () {
 		$sql->execute(array($pkey));
 		$res=$sql->fetch();		
 		if ($res['technology'] != 'SIP') {
-			$this->message = "Ext " . $pkey . " is not a SIP UA!!.";
+			$this->message = "Ext is not a SIP UA!!.";
 			return;
 		}
 #
@@ -1360,58 +1306,15 @@ private function sipNotifyPush () {
 			$chk = 'snom-check-cfg';
 		}
 		if ( ! $chk ) {
-			$this->message = "No notify data available for ext $pkey ";
+			$this->message = "No notify data available";
 			return;
 		}
 		else {
 			$this->helper->request_syscmd ("/usr/sbin/asterisk -rx 'sip notify $chk $pkey' ");
     	}
-    	$this->message = "Issued SIP Notify to Ext " . $pkey . "(" . $res['device'] . ")" ;
+    	$this->message = "Issued SIP Notify" ;
 }
 
-private function build_peer_array($amirets) {
-/*
- * build an array of peers by cleaning up the AMI output
- * (which contains stuff we don't want).
- */ 
-	$peer_array=array();
-	$lines = explode("\r\n",$amirets);	
-	$peer = 0;
-	foreach ($lines as $line) {
-		// ignore lines that aren't couplets
-		if (!preg_match(' /:/ ',$line)) { 
-				continue;
-		}
-		
-		// parse the couplet	
-		$couplet = explode(': ', $line);
-		
-		// ignore events and ListItems
-		if ($couplet[0] == 'Event' || $couplet[0] == 'ListItems') {
-			continue;
-		}
-		
-		//check for a new peer and set a new key if we have one
-		if ($couplet[0] == 'ObjectName') {
-			preg_match(' /^(.*)\// ',$couplet[1],$matches);
-			if (isset($matches[1])) {
-				$peer = $matches[1];
-			}
-			else {
-				$peer = $couplet[1];
-			}
-		}
-		else {
-			if (!$peer) {
-				continue;
-			}
-			else {
-				$peer_array [$peer][$couplet[0]] = $couplet[1];
-			}
-		}
-	}
-	return $peer_array;	
-}
 private function chkMailbox(&$mailbox,&$friend)
 {
 	/*
@@ -1464,6 +1367,5 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
     echo '</div>' . PHP_EOL;
 
 }
-
 
 }

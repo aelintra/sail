@@ -22,4 +22,6 @@ UPDATE globals SET LDAPPASS='sarkadmin' WHERE LDAPPASS IS NULL;
 
 UPDATE meetme SET cluster='default' WHERE cluster IS NULL;
 
+UPDATE Device SET noproxy=1 WHERE technology='SIP' AND pkey LIKE 'Yealink%';
+
 COMMIT;

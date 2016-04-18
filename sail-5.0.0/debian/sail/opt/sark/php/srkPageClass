@@ -108,13 +108,23 @@ Class page {
                                 'onmouseover' => 'NEW-ROLLOVER.png',
                                 'alt' => 'New',
                                 'title' => 'New',
-                                ),  
+                                ), 
+				'pdf' => array (
+								'src' => 'pdf.png',
+                                'alt' => 'PDF',
+                                'title' => 'PDF',
+                                ),                                   
 				'plus' => array (
 								'src' => 'plus.png',
                                 'onmouseover' => 'NEW-ROLLOVER.png',
                                 'alt' => 'Add BLF',
                                 'title' => 'Add BLF',
-                                ),                                                        
+                                ), 
+				'print' => array (
+								'src' => 'print.png',
+                                'alt' => 'Print',
+                                'title' => 'Print',
+                                ),                                                                                           
  				'resolve' => array (
 								'src' => 'redo.png',
                                 'onmouseover' => 'RESOLVE-ROLLOVER.png',
@@ -217,10 +227,12 @@ Class page {
 	/*** set the heading ***/
 		echo '<span class=heading>'; 
 		echo trim(php_uname("n"));
+/*		
 		if (isset($_SESSION['user']['pkey'])) {
 			echo "/" ;
 			echo $_SESSION['user']['pkey'];
 		}
+*/
 		echo " - " ;
 		
 		if ($this->msg) {
@@ -772,7 +784,7 @@ public function pageSwitch($key) {
 	return false;
 }
 	
-public function printSysNotes () {
+public function printSysNotes ($wallboard=false) {
 #
 #   prints sysinfo Box
 #
@@ -792,6 +804,9 @@ public function printSysNotes () {
 	$virtualip=NULL;
 	$masteroclo = `/usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
 	$masteroclo = preg_replace( ' /^.*:\s/ ','',$masteroclo);
+	if (preg_match('/not\sfound/', $masteroclo)) {
+		$masteroclo = 'AUTO';
+	}
 	
     if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
 		$systemName		=  gethostname();
@@ -861,10 +876,10 @@ public function printSysNotes () {
 		$astrelnum = explode('~', $astarray[1]);
 		echo "PBX release: <strong>" . $astrelnum[0] . "</strong><br/>";
 	}
-/* CHANGE FOR PRODUCTION ===============================================>		
+// CHANGE FOR PRODUCTION ===============================================>		
     echo "SAIL Release: <strong>$rlse</strong><br/>";
-*/
-	echo "SAIL Release: <strong>V5.0(Alpha)</strong><br/>";
+
+//	echo "SAIL Release: <strong>V5.0(Alpha)</strong><br/>";
     if ( $distro['debian'] ) {
 		$rlse = `dpkg-query -W -f '\${version}\n' sailhpe`;
 		echo "HPE Release: <strong>$rlse</strong><br/>";
@@ -873,6 +888,7 @@ public function printSysNotes () {
 		echo "Endpoints licenced: <strong>" .$global['EXTLIM'] . "</strong><br/>";
 	}
 	echo "Endpoints defined: <strong>$extcount</strong><br/>";
+	echo "Serial Num: <strong>" . $helper->rets() . "</strong><br/>";
 		    
     preg_match ( '/^(\w*)\b/', $_SERVER['SERVER_SOFTWARE'], $matches);
     $server = $matches[1];        
@@ -893,25 +909,21 @@ public function printSysNotes () {
 	}
 //    print "Netmask: <strong>$snmask</strong><br/>";
 
-
-    echo '<span style="font-weight:bold; font-size:small; ">Resource</span><br />';
-    
-//    echo "System Media: <strong>$systemMedia</strong><br/>";
-    
-    echo "Disk Usage: <strong>$diskusage</strong><br/>";
-
-    echo "RAM Size: <strong>$totmem</strong><br/>";
-    echo "RAM Free: <strong>$freemem</strong><br/>";
-
-    echo '<span style="font-weight:bold; font-size:small; ">Status</span><br />';
-    echo "PBX: <strong>$runstate</strong><br/>";
-    echo "Master Timer: <strong>$masteroclo</strong><br/>";
-    if ($global['CLUSTER'] == 'OFF') {
-		echo "Timer State: <strong>$clusteroclo</strong><br/>";
-    }
-    echo "SysTime: <strong>" . `date '+%H:%M:%S'` . "</strong><br/>" . PHP_EOL;
-    if ($updays) {
-    	echo "System Uptime: <strong>$updays</strong><br/>";
+	if (!$wallboard) {
+    	echo '<span style="font-weight:bold; font-size:small; ">Resource</span><br />';    
+    	echo "Disk Usage: <strong>$diskusage</strong><br/>";
+    	echo "RAM Size: <strong>$totmem</strong><br/>";
+    	echo "RAM Free: <strong>$freemem</strong><br/>";	
+    	echo '<span style="font-weight:bold; font-size:small; ">Status</span><br />';
+    	echo "PBX: <strong>$runstate</strong><br/>";
+   	 	echo "Master Timer: <strong>$masteroclo</strong><br/>";
+    	if ($global['CLUSTER'] == 'OFF') {
+			echo "Timer State: <strong>$clusteroclo</strong><br/>";
+   	 	}
+    	echo "SysTime: <strong>" . `date '+%H:%M:%S'` . "</strong><br/>" . PHP_EOL;
+    	if ($updays) {
+    		echo "System Uptime: <strong>$updays</strong><br/>";
+    	}
     }
     echo '<span style="color: #696969;" >';
     echo '<span style="font-weight:bold; font-size:small; ">Client</span><br />';
@@ -961,12 +973,17 @@ private function clientPlatform($user_agent) {
             $platform_array['os']    =   $value;
         }
 
-    }   
+    }
+/*
+Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
+*/   
      $browser_array  =   array(
                             '/msie/i'       =>  'Internet Explorer',
+                            '/Trident/i'    =>  'Internet Explorer',
+                            '/Edge/i'     	=>  'Internet Explorer',
                             '/firefox/i'    =>  'Firefox',
-                            '/safari/i'     =>  'Safari',
                             '/chrome/i'     =>  'Chrome',
+                            '/safari/i'     =>  'Safari',                            
                             '/opera/i'      =>  'Opera',
                             '/netscape/i'   =>  'Netscape',
                             '/maxthon/i'    =>  'Maxthon',
@@ -975,11 +992,10 @@ private function clientPlatform($user_agent) {
                         );
 
     foreach ($browser_array as $regex => $value) { 
-
         if (preg_match($regex, $user_agent)) {
             $platform_array['browser']    =   $value;
+            break;
         }
-
     }
     return ($platform_array);
 	

@@ -5,7 +5,9 @@
 	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkHelperClass";
 	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkhead.php"; 
 	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/banner.php";
-	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/navigation.php";
+	if (!$_SESSION['nag']) {
+		require_once $_SERVER["DOCUMENT_ROOT"] . "../php/navigation.php";
+	}
 	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/formvalidator.php";
 	
 	$myPanel = new page;

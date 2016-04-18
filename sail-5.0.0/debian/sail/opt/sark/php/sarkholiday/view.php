@@ -163,7 +163,7 @@ private function showNew() {
 		}       
 	}
 	echo '<br/><br/>';	
-	echo '<div class="datadivedit">';
+	echo '<div class="editinsert">';
 	
 	echo '<h2>Schedule</h2>';
 	$this->myPanel->aLabelFor('description');
@@ -174,7 +174,7 @@ private function showNew() {
 	echo '<h2>Start of period</h2>';
 		
 	$this->myPanel->aLabelFor('hhmm');
-	echo '<input type="test" name="stime" id="stime" size="10" value="00:00"  />' . PHP_EOL;	
+	echo '<input type="test" name="stime" id="stime" size="5" value="00:00"  />' . PHP_EOL;	
 	
 	$this->myPanel->aLabelFor('day');
 	$this->myPanel->popUp('sdate', $days);	
@@ -189,7 +189,7 @@ private function showNew() {
 	
 	echo '<h2>End of period</h2>';	
 	$this->myPanel->aLabelFor('hhmm');
-	echo '<input type="test" name="etime" id="etime" size="10" value="00:00"  />' . PHP_EOL;	
+	echo '<input type="test" name="etime" id="etime" size="5" value="00:00"  />' . PHP_EOL;	
 	
 	$this->myPanel->aLabelFor('day');
 	$this->myPanel->popUp('edate', $days);	

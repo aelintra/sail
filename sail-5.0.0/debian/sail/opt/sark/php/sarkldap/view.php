@@ -89,7 +89,10 @@ private function showMain() {
   
 	echo '<div class="buttons">';
 	$this->myPanel->Button("new");
-	echo '<img src="/sark-common/buttons/upload.png" id="upimg" alt="upload" title="Upload a vcard (.vcf) file" />'. PHP_EOL;	
+	echo '<img src="/sark-common/buttons/upload.png" id="upimg" alt="upload" title="Upload a vcard (.vcf) file" />'. PHP_EOL;
+	if ( $_SESSION['user']['pkey'] == 'admin' ) {
+		echo '<a  href="/php/downloadpdf.php?pdf=ldap"><img id="pdfprint" src="/sark-common/buttons/print.png" border=0 title = "Click to Download PDF" ></a>' . PHP_EOL;									
+	}
 	echo '</div>';	
 	
 	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;

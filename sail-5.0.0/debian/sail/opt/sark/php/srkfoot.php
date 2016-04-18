@@ -18,7 +18,7 @@
 	}	
 
 	if (!isset($_GET['edit'])) {
-		echo '<span class="copyright" >Copyright &copy; CoCoSoft 2008-2015. All rights reserved.</span>';
+		echo '<span class="copyright" >Copyright &copy; CoCoSoft 2008-2016. All rights reserved.</span>';
 	}
 ?>
 

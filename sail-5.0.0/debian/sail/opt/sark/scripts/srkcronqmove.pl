@@ -2,7 +2,7 @@
 #
 #
 #
-#	Copyright Aelintra Telecom Limited(2008-16), all rights reserved
+#	Copyright Aelintra Telecom Limited(2008-10), all rights reserved
 #
 # load required modules
 
@@ -12,19 +12,12 @@ use strict;
 use File::ReadBackwards;
 use File::Copy;
 use sark::SarkSubs;
-use Sys::Syslog;
 
-sub doLogit($)
-{
-	my $logmsg = shift;
-	syslog('info', $logmsg);
-}
+
 
 #unless ( -e "/opt/sark/.recone" ) {
 #	exit 0;
 #;}
-
-doLogit("queuemover started ...");
 
 my $dbh = SarkSubs::SQLiteConnect();
 my $monitorstage =  SarkSubs::SQLiteGet($dbh, "SELECT MONITORSTAGE FROM globals where pkey = 'global'") || "/home/sark/monstage";
@@ -50,7 +43,7 @@ my $linecnt = 1;
 my $found;
 my $filename;
 
-print STDERR "Queuemover started \n";
+
 
         my $Qlog = File::ReadBackwards->new('/var/log/asterisk/queue_log')
     		or die "Srkqmove102 - Couldn't open queue_log - ending \n";
@@ -77,27 +70,27 @@ print STDERR "Queuemover started \n";
 
         if (@files) {
 	   foreach (@files) {
-        	if (/Qexec(\d+)-(\w+)-(\w+)-(\w+).wav$/) {
+        	if (/Qexec(\d+)-(\w+)-(\d+)-(\w+).wav$/) {
                 	my $filename = $_;
                 	my $filetimestamp = $1;
-                	my $cluster = $2;
+                	my $tenant = $2;
                 	my $dnid = $3;
                 	my $clid = $4;
 			$found = 0;
-			print STDERR "Candidate found $_ \n";
+#			print STDERR "Candidate found $_ \n";
                         foreach (@qlogtail) {
                         	my @fields = split /\|/, $_;
-				print STDERR "qlogrec being examined is $_ \n";
+#				print STDERR "qlogrec being examined is $_ \n";
                                 my $logtimestamp = $fields[0];
                                 my $queue =  $fields[2];
                                 my $extension =  $fields[3];
 				$extension =~ s/\///;
-				print STDERR "Found $logtimestamp, $queue, $extension \n";
+#				print STDERR "Found $logtimestamp, $queue, $extension \n";
                                 if ( ($filetimestamp + $recqdither) >= $logtimestamp &&
 					($filetimestamp - $recqdither) <= $logtimestamp ) {
-					print STDERR "Matched $_ \n";
-                                	my $newfilename = $monitorout."/".$filetimestamp."-".$queue."-".$extension."-".$clid.".wav";
-                                	print STDERR "Moving Queue file $filename to $newfilename\n";
+#					print STDERR "Matched $_ \n";
+                                	my $newfilename = $monitorout."/".$filetimestamp."-".$tenant."-".$queue."-".$extension."-".$clid.".wav";
+#                                	print STDERR "Moving Queue file $filename to $newfilename\n";
                                         move ($monitorstage."/".$filename, $newfilename);
                                         $found = 1;
                                         last;
@@ -105,14 +98,13 @@ print STDERR "Queuemover started \n";
                         }
                         unless ($found) {
                         # Bugger! we didn't find it!
-                        	print STDERR "Couldn't find a match for Queuefile $filename using $filetimestamp and $recqdither- will strip Qexec and  move anyway \n";
-                        	move ($monitorstage."/".$filename, $monitorout."/".$filetimestamp."-".$dnid."-".$clid.".wav");
+#                        	print STDERR "Couldn't find a match for Queuefile $filename using $filetimestamp and $recqdither- will strip Qexec and  move anyway \n";
+                        	move ($monitorstage."/".$filename, $monitorout."/".$filetimestamp."-".$tenant."-".$dnid."-".$clid.".wav");
                         }
                 }
                 else {  # It's a regular file
-                        print STDERR "Moving regular file $_ \n";
+#                        print STDERR "Moving regular file $_ \n";
                         move ($monitorstage."/".$_, $monitorout."/".$_);
                 }
            }
 	}
-doLogit("queuemover ended ...");

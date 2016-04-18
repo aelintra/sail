@@ -303,14 +303,14 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('blflabel','L
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('blftype','Type','Key Type (None/BLF/Speed/Line)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('blfvalue','Target','Target number (specify extension for BLF, any diallable number for Speed dial');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('blindbusy','Bounce busy destination','Alternative destination if a bounce returns to a busy sender.','blindbusy');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('bouncealert','Alert-Info for Blind Xfer Bounce','Use this field to specify distinctive ring data for the sip header.  This is phone specific so you will need to read up on your phone type.','bouncealert');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('bouncealert','Alert-Info for Xfer Bounce','Use this field to specify distinctive ring data for the sip header.  This is phone specific so you will need to read up on your phone type.','bouncealert');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('bt','boot','reboot the endpoint');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('c lassmask','Class Dial Plan','Create a dialplan for the class using standard Asterisk dialplan syntax (e.g. _XXXXX would match all 5 digit DiDs).');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('callerid','Caller ID','Caller ID.  You may be able to change this depending upon the sending device and the carrier rules.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('calleridname','Caller Name','This is what the phone will send in the callerid (name) variable.  It is usually set to the user name or to some department function.  Do not put spaces in this field because some phones do not handle spaces well. ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('callgroup','Number','Name (extension number) of this call group');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('callprogress','Call Progress?','Force an early ringback tone.');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('callrecord1','Call Recording System Default','Set the global recording preferences you want. This can be overriden at the individual call group or extension.','callrecord1');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('callrecord1','Call Recording Default','Set the global recording preferences you want. This can be overriden at the individual call group or extension.','callrecord1');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('callstate','C/S','State of the device (call state) when the panel was displayed.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('camponqonoff','Campon mini-queue ON/OFF','Turn the camp-on feature ON and OFF','camponqonoff');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('camponqopt','Campon mini-queue options','Camp-on uses standard asterisk queues.  You can set the queue parameters as you wish using this field.','camponqopt');
@@ -346,6 +346,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpkey','C
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confadminpin','Admin PIN','Administrator PIN (0000->9999 or blank)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpin','Access PIN','Access PIN (0000->9999 or blank)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('conftype','Conference Type','Choose from assisted or unassisted conferences.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('connrate','Connrate','Connection Rate.  Format is <i>[-|[{s|d}:[[name]:]]]rate/{sec|min|hour|day}[:burst]</i>. See http://shorewall.net/manpages/shorewall-rules.html -> Rate');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('copy','Copy','Copy an existing Device type or Descriptor as the basis for this new entry.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cosclosed','Default Closed','Defines whether this COS will be ON by default for closed hours when new extensions are created.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cosdialplan','Dialplan','The dialplan pattern for this class-of-service.  COS dialplans follow standard Asterisk dialplan conventions.');
@@ -372,12 +373,12 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('displayname'
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dl','D/L','Download');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dns','DNS Server','Set this to the correct value for your network');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('domain','Domain','Domain');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dvrvmail','Deliver Vmail to','Number of the voice mailbox you wish to have voicemail delivered to.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dvrvmail','Voicemailbox','Number of the voice mailbox you wish to have voicemail delivered to. The default is the extension but you can have it delivered to a different extension if you wish');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('eclose','end-close','End of a closed period ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('ed','Edit','Edit this entry');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('edomain','External IP Address','This field should usually only be filled out if you are running server-only behind a NATed firewall. It forces Asterisk to include the correct return IP address in outbound packets. Without it, Asterisk will use the local server IP address and effectively spoof itself.','edomain');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('emailalert','Email Alert Addresses','Administrator email address','emailalert');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('emergency','COS passthru (Emergency) numbers','Use this field to set your Emergency number (e.g. 911, 999, 112).  This is used by Class of Service and becomes part of the always-available set of dialable numbers.','emergency');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('emergency','COS Emergency passthru','Use this field to set your Emergency number (e.g. 911, 999, 112).  This is used by Class of Service and becomes part of the always-available set of dialable numbers.','emergency');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('endclosed','End of Closed Period','Select the end time of your closed segment.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('eurl','External URL','Well formed URL for external phone provisioning');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('ext','Ext','Extension Number');
@@ -551,7 +552,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('smsc','
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('sndcreds','Auth','Controls when credentials will be sent; Yes means send on next request, Always means send always');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('source','Source','Source of the tooltip help (either CORE (from the SARK tt DB) or USER (from the user tt DB).');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('spammode','Spamassassin(spamd)','Enable or disable the SPAMD server. This can save significant memory in a small system if you are not using the mail server.','spammode');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('spypass','4-digit Password for Agent Spy','Password used to validate spy requests.','spypass');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('spypass','4-digit Spy Password','Password used to validate spy requests.','spypass');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('squidmode','Squid Proxy','Enable or disable the Squid server from being started at system start-up.','squidmode');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('sshport','SSH Port','Set this value to the required port number, save it and issue a reboot. ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('strategy','Strategy','Whether to (a) select trunks in priority, i.e only select trunk 2 if trunk 1 is unavailable (hunt) or (b) to load-balance calls across all available trunks in the route (balance) ');
@@ -562,7 +563,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('supemai
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('surname','Surname/Organization','Surname or organization name');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('swoclip','SWOC?','Whether this trunk will route CLID patterns (defined in a CLIP DDI)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('sysop','Operator Real Extension','The operator endpoint.  This is used by SARK as the endpoint of last resort so it is important that you point this at a real endpoint.','sysop');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('syspass','4-digit Password for KEY Ops','Password used for privileged key operations (such as recording a greeting or putting the system into night mode).','syspass');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('syspass','4-digit Sys Password','Password used for privileged key operations (such as recording a greeting or putting the system into night mode).','syspass');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tactive','A','Active flag.  You can De-activate a trunk by clicking off the ACT checkbox in trunk edit.  SARK will keep the trunk definition but will not generate any entries in the Asterisk .conf files.  This makes it easy to bring trunks into and out of the complex.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tag','Alpha Tag','Alpha tagging allows you to send a short character string to the phone.  Most phones will display this tag when they receive it.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('technology','Technology','The Asterisk technology type (e.g. SIP, Zap, DAHDI, mISDN etc etc)');
@@ -571,8 +572,8 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tenantoperat
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tertiary','Tertiary Path','The third choice trunk for this route.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('tftp','TFTP Server','Enable or disable the tftp server. This can save memory in a small system if you are not using provisioning','tftp');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('timespan','Time Span','Time when this segment is active (asterisk * means any time).');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tls','TLS/SRTP','Enable/disable TLS/SRTP for this phone');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tlsport','SIP/TLS Port Number','TLS default port number is 5061 but you can choose a high port if you wish');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tls','SIP TLS/SRTP','Enable/disable SIP TLS/SRTP for this phone');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tlsport','SIP TLS Port Number','SIP TLS default port number is 5061 but you can choose a high port if you wish');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('tmon','M','End-point monitor flag. Turn on in trunk edit to have SARK monitor the channel health.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('transform','Transformation mask','Used to transform numbers using value comparisons and proceeding left to right... xx:xx xx:xx.  Nulls in the left operand result in addition.  Nulls in the right operand result in suppression.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('trunkname','Name','This is a name you can give to the trunk to help identify it.');
@@ -587,13 +588,13 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('userstanza',
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vdelete','Empty the mailbox','Delete all the mail for this account (cannot be undone)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('version','Version','THis is the SAIL version number.  You may need this when dealing with Tech Support.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('vlibs','VLIB libraries','The list of directories which a diskless system will keep in memory.  You should leave this field to default unless you absolutely know what you are doing.  Getting this value wrong can lead to data loss and/or early media failure in a CF based system.','vlibs');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vmailage','Delete voicemail after (days)','Number of days after which opened voicemail will be deleted (blank for never)');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vmailfwd','User to receive email notifications','Set this to the email address of the user if you want Asterisk to send voicemails as encapsulated attachments in an e-mail.  This is often called unified messaging.');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('voiceinstr','Play Long Voicemail Instructions','Setting this value to YES will cause voicemail to play the long instruction message.  Setting it to NO plays the short version.','voiceinstr');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vmailage','Delete old vmail','Number of days after which opened voicemail will be deleted (blank for never)');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vmailfwd','Email address','Set this to the email address of the user if you want Asterisk to send voicemails as encapsulated attachments in an e-mail.  This is often called unified messaging.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('voiceinstr','Play Long Vmail Intro','Setting this value to YES will cause voicemail to play the long instruction message.  Setting it to NO plays the short version.','voiceinstr');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext,name) values ('voipmax','Max Outbound VOIP calls','Maximum number of concurrent VOIP outbound calls the system will allow before failing over to other pathways.  This number should be set well below the bandwidth threshold of your Internet circuit.','voipmax');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vp','Vp','Reset the vmailbox');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vr','Vr','Empty the vmailbox');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vreset','Reset Voicemail password','Reset the voicemail password the the default (extension number) ');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vreset','Reset Vmail password','Reset the voicemail password the the default (extension number) ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('vringdelay','Induced VoIP Ring Delay','Allows you place an artificial ring-back tone delay onto a VOIP circuit.  Voip circuits do not naturally ring.  This feature will generate a ring-back tone for the number of seconds specified.  Usually, it is best to leave this value at zero since the target extensions will in any event generate their own ring-back tone.  However, it can be useful if you are using IVR to answer all of your calls.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('weekday','Day','Day of the week when this segment is active (asterisk * means any day).');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('xmpp','XMPP','Enable/Disable XMPP presence');
@@ -633,6 +634,7 @@ INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('330','sa
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,fastnew) values ('335','sarkipblacklist/main.php','IP Blacklist','50','no');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,fastnew) values ('340','sarkfreset/main.php','Factory Reset','50','no');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight) values ('350','sarkholiday/main.php','Holiday Schedule','30');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,fastnew) values ('370','sarkwallboard/main.php','Wallboard','0','no');
 
 INSERT OR IGNORE INTO PanelGroup(pkey,groupname) values ('100','End points');
 INSERT OR IGNORE INTO PanelGroup(pkey,groupname) values ('200','Routing');
@@ -670,14 +672,18 @@ INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500',
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','260');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','265');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','310');
+
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('600','270');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('600','280');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('600','290');
+INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('600','370');
+
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('700','300');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','320');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','330');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','335');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','340');
+
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT113X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT123X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT133X','Panasonic KX');
@@ -804,15 +810,5 @@ INSERT OR IGNORE INTO Device_atl(pkey) values ('yealink.Common');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('yealink.Fkey');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('yealink.Lkey');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('yealink.tls');
-
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('1','LAN','tcp','22','SSH local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('2','LAN','tcp','123','NTP local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('3','LAN','tcp','80','HTTP local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('4','LAN','tcp','389','LDAP local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('5','LAN','tcp','443','HTTPS local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('6','LAN','udp','4569','IAX2 local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('7','LAN','udp','5060','SIP local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('8','LAN','tcp','5061','SIPS local');
-INSERT OR IGNORE INTO shorewall(pkey,source,protocol,portrange,comment) values ('9','LAN','udp','10000:20000','RDP local');
 
 COMMIT;

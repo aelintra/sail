@@ -105,3 +105,16 @@ sh $SARKROOT$GENAST
 
 #set ownership
 chown $HTTPOWNER $DBROOT/*
+
+# clean the firewall up
+echo Running firewall sanitizer
+php /opt/sark/generator/sanitize-firewall.php
+echo Firewall rules are as follows
+cat /etc/shorewall/sark_rules
+echo running firewall check
+if /sbin/shorewall check ;then
+	echo "\nfirewall rules checked out OK...\n\n"
+else
+	echo "\nfirewall check failed with errors.  \nYou must correct the firewall rules!\n\n"
+fi
+

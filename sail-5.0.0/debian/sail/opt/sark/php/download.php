@@ -1,5 +1,5 @@
 <?php
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srksessions/session.php";
 $path = "/opt/sark/"; 
 $path .= strip_tags($_GET['dtype']); 
 $path .= '/';

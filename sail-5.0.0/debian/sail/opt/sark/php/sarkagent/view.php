@@ -189,7 +189,7 @@ private function showNew() {
 		}
 	}   
 	$pkey		=  $agentstart;	
-	$this->myPanel->msg .= "Add New Agent " . $pkey; 
+	$this->myPanel->msg .= "Add New Agent "; 
 	
 	if (isset($this->message)) {
 		$this->myPanel->msg .= $this->message;
@@ -206,6 +206,8 @@ private function showNew() {
 		}       
 	}	
 	echo '<div class="editinsert">';
+	$this->myPanel->aLabelFor('agent');
+	echo '<input type="text" name="pkey" size="4" id="pkey" value=' . $pkey . ' />' . PHP_EOL;		
 	$this->myPanel->aLabelFor('agentname');
 	echo '<input type="text" name="name" size="15" id="name" placeholder="Name" />' . PHP_EOL;	
 	$this->myPanel->aLabelFor('cluster','cluster');
@@ -213,7 +215,7 @@ private function showNew() {
 	$this->myPanel->aLabelFor('PIN');
 	echo '<input type="password" name="passwd" id="passwd" size="5" placeholder="PIN" />' . PHP_EOL;
 	echo '</div>';
-	echo '<input type="hidden" name="pkey" id="pkey" value="' . $pkey . '" />' . PHP_EOL;		
+//	echo '<input type="hidden" name="pkey" id="pkey" value="' . $pkey . '" />' . PHP_EOL;		
 }
 
 

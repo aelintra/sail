@@ -25,7 +25,7 @@
 	echo '<form id="sarknavForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;
 	
 	$url = explode('/', $_SERVER['SCRIPT_URL']);
-	if (!preg_match( '/^sarkstat/', $url[2] )) {
+	if ( !preg_match( '/^sarkstat/', $url[2] ) && !preg_match( '/^sarkmonitor/', $url[2] ) ) {
 		if ($_SESSION['user']['pkey'] == 'admin') {
 			$myPanel = new page;
 			$myPanel->searchBox();
@@ -41,7 +41,7 @@
 	<li>
 		<a href="#">New</a>
 		<ul>
-<?		
+<?php		
 		$sql = $dbh->query("SELECT * FROM Panel ORDER BY displayname");
 		$rows = $sql->fetchAll();
 		foreach ($rows as $panel) {

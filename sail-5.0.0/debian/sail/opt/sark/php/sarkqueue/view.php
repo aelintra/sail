@@ -229,10 +229,10 @@ private function showEdit($pkey=false) {
 		}       
 	}	
 // ToDo - make into fancybox on main page
-	echo '<div class="editinsert">';
+	echo '<div class="datadivtabedit">';
 //    $this->myPanel->aLabelFor('queuename');
 	echo '<input type="hidden" name="pkey" id="pkey" value="' . $pkey . '"  />' . PHP_EOL;	
-	echo '<textarea class="databox" name="conf" id="conf">' . $queue['conf'] . '</textarea>' . PHP_EOL;
+	echo '<textarea class="qbox" name="conf" id="conf">' . $queue['conf'] . '</textarea>' . PHP_EOL;
 	echo '<input type="hidden" name="pkey" id="pkey" value="' . $queue['pkey'] . '"  />' . PHP_EOL;
 	echo '</div>'; 
 			

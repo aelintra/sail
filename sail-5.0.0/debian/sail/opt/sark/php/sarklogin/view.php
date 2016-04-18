@@ -38,9 +38,18 @@ public function showForm() {
 				
 	if(!empty($_POST)) {		
 		if ($this->helper->checkCreds( $_POST['pkey'],$_POST['password'],$this->message,$login )) {
+	// force password change if it is set to the default
+			if ($_SESSION['nag']) {
+				header("Location: ../sarkpasswd/main.php"); 
+				die("Redirecting to: sarkpasswd/main.php"); 
+			}
 			if ( $_POST['pkey'] == 'admin' ) {
 				header("Location: ../sarkglobal/main.php"); 
 				die("Redirecting to: sarkglobal/main.php");
+			}
+			else if ( $_POST['pkey'] == 'wallboard' ) {
+				header("Location: ../sarkwallboard/main.php"); 
+				die("Redirecting to: sarkwallboard/main.php");
 			}
 			else {
 				header("Location: ../sarkphone/main.php"); 
@@ -49,7 +58,7 @@ public function showForm() {
         }		
 	}
 
-	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/banner.php";	
+//	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/banner.php";	
 	
 	$msg = NULL;
 	

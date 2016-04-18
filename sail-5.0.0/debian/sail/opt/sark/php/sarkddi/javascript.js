@@ -15,7 +15,7 @@
 	});
 	
 	$.validator.addMethod("dialplan",function(value,element) {
-		return this.optional(element) || /^\_?\+?[0-9XNZxnz.*#\-\[\]\/]+$/i.test(value); 
+		return this.optional(element) || /^\_?\+?[0-9XNZxnz.*#\-\[\]\/]+$|^Anonymous$|^anonymous$|^withheld$|^unknown$/i.test(value); 
 	},"field must be a valid asterisk dialplan ( _+ 0-9XNZxnz.*#-[]/ )");	
 	
 	$.validator.addMethod("alpha",function(value,element) {
@@ -51,7 +51,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tfi',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 3,4,5,6,7,8 ] }
+			{ "bSortable": false, "aTargets": [ 3,4,5,6,7,8,9 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
@@ -60,12 +60,13 @@
 			{ "sName": "trunkname" },
 			{ "sName": "openroute" },		
 			{ "sName": "closeroute" },
+			{ "sName": "tag" },
 			{ "sName": "swoclip" },
 			{ "sName": "active" },					
 			{ "sName": "del" }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-          $('td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7)', nRow).addClass( "bluetags" );
+          $('td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8)', nRow).addClass( "bluetags" );
         },
         "drawCallback": function() {
 			$(".dataTables_scrollBody").scrollTop(scrollPosition);
@@ -121,6 +122,14 @@
                     loadtype: 'GET',
                     placeholder: "None"						
 				}, 	// closed
+				{
+					type: 'text',
+                    onblur: 'cancel',
+					submit: 'Save',			
+					tooltip: 'Click to set Alphatag',
+					event: 'click',
+					placeholder: 'None',
+				}, 		// tag				
 				{
 					tooltip: 'Click to activate/deactivate',
 					event: 'click',

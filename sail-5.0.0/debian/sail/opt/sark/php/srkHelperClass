@@ -382,6 +382,26 @@ public function ret_localip () {
 	return -1;   
 }
 
+public function rets() {
+	
+	$flg=false; 
+	if ($handle = opendir('/opt/sark/passwd')) {
+		while (false !== ($entry = readdir($handle))) {
+			if (preg_match( '/\.(\d+)$/',$entry,$matches)) {
+				$flg =  $matches[1];
+				break;
+			}
+		}
+		closedir($handle);
+	}  
+	if (! $flg) {
+        $flg = rand(100000,1000000);
+		`/bin/touch /opt/sark/passwd/.$flg`;
+	}
+	return ($flg);
+}
+
+
 //
 // don't use this subnet function - it is incorrect
 //
@@ -953,6 +973,7 @@ public function checkCreds($pkey, $password, &$msg, $login) {
 public function restartFirewall() {
 	$fwrule = null;
 	$restart=false;
+	$rc = $this->request_syscmd ("cp /etc/shorewall/sark_rules /etc/shorewall/last_sark_rules" );
 	$rc = $this->request_syscmd ("cat /dev/null > /etc/shorewall/sark_rules");
 	$rows = $this->getTable("shorewall");
 	foreach ($rows as $row ) {
@@ -982,8 +1003,19 @@ public function restartFirewall() {
 		$restart=true;
 	}
 	if ($restart) {	
-		$rc = $this->request_syscmd ("/etc/init.d/shorewall restart");
-		return $rc;
+		$rc = $this->request_syscmd ("shorewall check");
+		echo 'RC=' . $rc . "\n";
+		if (empty($rc)) {
+			$rc = $this->request_syscmd ("/etc/init.d/shorewall restart");
+			return $rc;
+		}
+		else {
+			$this->request_syscmd ("cp /etc/shorewall/last_sark_rules /etc/shorewall/sark_rules" );
+			$retstring = "ERROR IN FIREWALL CONFIG!\n";
+			$retstring .= $rc;
+			$retstring .= "\nFIX THE ERROR AND RESUBMIT.  FIREWALL NOT RESTARTED\n";
+			return $retstring;
+		}
 	}
 	return 'No data, no restart';			
 }
@@ -1207,11 +1239,6 @@ private function default_queue() {
         "conf"		=> $conf
      );	
      $this->setCluster($rec);
-     return $rec;
-}
-
-private function default_shorewall() {
-	 $rec = array();	
      return $rec;
 }
 

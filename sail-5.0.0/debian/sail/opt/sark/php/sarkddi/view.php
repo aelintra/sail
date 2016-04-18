@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
-
 
 Class sarkddi {
 	
@@ -29,13 +27,11 @@ Class sarkddi {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $params = array('server' => '127.0.0.1', 'port' => '5038');
 	protected $span = 1;
 	protected $smartlink;
 	
 public function showForm() {
-	$params = array('server' => '127.0.0.1', 'port' => '5038');
-	
+		
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
@@ -96,6 +92,9 @@ private function showMain() {
 	echo '<div class="buttons">';	
 	$this->myPanel->Button("new");
 	$this->myPanel->commitButton();
+	if ( $_SESSION['user']['pkey'] == 'admin' ) {
+		echo '<a  href="/php/downloadpdf.php?pdf=ddi"><img id="pdfprint" src="/sark-common/buttons/print.png" border=0 title = "Click to Download PDF" ></a>' . PHP_EOL;									
+	}
 	echo '</div>';	
 	
 	$this->myPanel->Heading();
@@ -114,6 +113,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('trunkname');	
 	$this->myPanel->aHeaderFor('openroute');
 	$this->myPanel->aHeaderFor('closeroute');
+	$this->myPanel->aHeaderFor('tag');
 	$this->myPanel->aHeaderFor('swoclip');
 	$this->myPanel->aHeaderFor('Act');		
 //	$this->myPanel->aHeaderFor('ed');
@@ -130,7 +130,7 @@ private function showMain() {
 			"from lineio li inner join carrier ca  on li.carrier=ca.pkey WHERE " . 
 			"ca.carriertype = 'DiD' OR ca.carriertype = 'CLID' or ca.carriertype = 'Class'";
 */			
-	$sql = "select li.pkey,cluster,trunkname,openroute,closeroute,peername,routeclassopen,routeclassclosed,swoclip,active,ca.technology,ca.carriertype " . 
+	$sql = "select li.pkey,cluster,trunkname,openroute,closeroute,peername,routeclassopen,routeclassclosed,swoclip,tag,active,ca.technology,ca.carriertype " . 
 			"from lineio li inner join carrier ca  on li.carrier=ca.pkey";				
 	$rows = $this->helper->getTable("lineio", $sql);
 	foreach ($rows as $row ) {
@@ -158,7 +158,8 @@ private function showMain() {
 		$this->helper->pkey = $row['openroute'];
 		echo '<td >' . $this->helper->displayRouteClass($row['routeclassopen']) . '</td>' . PHP_EOL;
 		$this->helper->pkey = $row['closeroute'];
-		echo '<td >' . $this->helper->displayRouteClass($row['routeclassclosed']) . '</td>' . PHP_EOL;	
+		echo '<td >' . $this->helper->displayRouteClass($row['routeclassclosed']) . '</td>' . PHP_EOL;
+		echo '<td >' . $row['tag'] . '</td>' . PHP_EOL;	
 		echo '<td class="icons">' . $row['swoclip'] . '</td>' . PHP_EOL;	
 		echo '<td class="icons">' . $row['active'] . '</td>' . PHP_EOL;
 		$get = '?edit=yes&amp;pkey=';

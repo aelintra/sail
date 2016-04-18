@@ -1,128 +1,99 @@
 <?php
-class ami {
+//
+// Developed by CoCo
+// Copyright (C) 2016 CoCoSoft
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
-var $socket;
-var $error;
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
 
-function Clear()
-{
-	$this->socket = FALSE;
-	$this->error = "";
-}
+class amiHelper {
 
-function Login($host="localhost", $username="sark", $password="mysark") {
-	
-	$this->socket = @fsockopen("127.0.0.1","5038", $errno, $errstr, 1);
-	if (!$this->socket) {
-		$this->error = "Could not connect - $errstr ($errno)";
-		syslog(LOG_WARNING, "Couldn't login to the AMI " . $$errstr ($errno) );
-		return FALSE;
+public function get_peer_array($iax=false) {
+	$params = array('server' => '127.0.0.1', 'port' => '5038');
+	$astrunning=false;
+	helper = new helper;
+	if ( $helper->check_pid() ) {	
+		$astrunning = true;
 	}
-	else {
-		stream_set_timeout($this->socket, 1);
-
-		$wrets = $this->Query("Action: Login\r\nUserName: $username\r\nSecret: $password\r\nEvents: off\r\n\r\n");
-
-		if (strpos($wrets, "Message: Authentication accepted") != FALSE) {
-			return true;
+	$sip_peers = array(); 	
+	if ( $astrunning ) {			
+		$ami = new ami($params);
+		$amiconrets = $ami->connect();
+		if ( !$amiconrets ) {
+			return false;
 		}
 		else {
-			$this->error = "Could not login - Authentication failed";
-			fclose($this->socket);
-			$this->socket = FALSE;
-			return FALSE;
+			$ami->login('sark','mysark');
+			if ($iax) {
+				$amisiprets = $ami->getIaxPeers();
+			}
+			else {
+				$amisiprets = $ami->getSipPeers();
+			}
+			$sip_peers = $this->build_peer_array($amisiprets);
+			$ami->logout();
+			return $sip_peers;
 		}
-	}
+	}	
 }
 
-function Logout() {
-	if ($this->socket){
-		fputs($this->socket, "Action: Logoff\r\n\r\n");
-		while (!feof($this->socket)) {
-			$wrets .= fread($this->socket, 8192);
+public function build_peer_array($amirets) {
+/*
+ * build an array of peers by cleaning up the AMI output
+ * (which contains stuff we don't want).
+ */ 
+	$peer_array=array();
+	$lines = explode("\r\n",$amirets);	
+	$peer = 0;
+	foreach ($lines as $line) {
+		// ignore lines that aren't couplets
+		if (!preg_match(' /:/ ',$line)) { 
+				continue;
 		}
-		fclose($this->socket);
-		$this->socket = "FALSE";
-	}
-	return;
-}
-
-function Query($query) {
-	$wrets = "";
-
-	if ($this->socket === FALSE)
-		return FALSE;
-
-	fputs($this->socket, $query);
-	do
-		{
-		$line = fgets($this->socket, 4096);
-		$wrets .= $line;
-		$info = stream_get_meta_data($this->socket);
-		}while ($line != "\r\n" && $infotimed_out>'timed_out' == false );
-	return $wrets;
-}
-
-function GetError() {
-	return $this->error;
-}
-
-function GetDB($family, $key) {
-	$value = "";
-
-	$wrets = $this->Query("Action: Command\r\nCommand: database get $family $key\r\n\r\n");
-
-	if ($wrets) {
-		$value_start = strpos($wrets, "Value: ") + 7;
-		$value_stop = strpos($wrets, "\n", $value_start);
-		if ($value_start > 8) {
-			$value = substr($wrets, $value_start, $value_stop - $value_start);
+		
+		// parse the couplet	
+		$couplet = explode(': ', $line);
+		
+		// ignore events and ListItems
+		if ($couplet[0] == 'Event' || $couplet[0] == 'ListItems') {
+			continue;
 		}
-	}
-	return $value;
-}
-
-function PutDB($family, $key, $value) {
-	$wrets = $this->Query("Action: Command\r\nCommand: database put $family $key $value\r\n\r\n");
-
-	if (strpos($wrets, "Updated database successfully") != FALSE) {
-		return TRUE;
-	}
-	$this->error = "Could not updated database";
-	return FALSE;
-}
-
-function DelDB($family, $key) {
-	$wrets = $this->Query("Action: Command\r\nCommand: database del $family $key\r\n\r\n");
-
-	if (strpos($wrets, "Database entry removed.") != FALSE){
-		return TRUE;
-	}
-	$this->error = "Database entry does not exist";
-	return FALSE;
-}
-
-
-function GetFamilyDB($family) {
-	$wrets = $this->Query("Action: Command\r\nCommand: database show $family\r\n\r\n");
-	if ($wrets) {
-		$value_start = strpos($wrets, "Response: Follows\r\n") + 19;
-		$value_stop = strpos($wrets, "--END COMMAND--\r\n", $value_start);
-		if ($value_start > 18) {
-			$wrets = substr($wrets, $value_start, $value_stop - $value_start);
-		}
-		$lines = explode("\n", $wrets);
-		foreach($lines as $line) {
-			if (strlen($line) > 4) {
-				$value_start = strpos($line, ": ") + 2;
-				$value_stop = strpos($line, " ", $value_start);
-				$key = trim(substr($line, strlen($family) + 2, strpos($line, " ") - strlen($family) + 2));
-				$value = trim(substr($line, $value_start));
+		
+		//check for a new peer and set a new key if we have one
+		if ($couplet[0] == 'ObjectName') {
+			preg_match(' /^(.*)\// ',$couplet[1],$matches);
+			if (isset($matches[1])) {
+				$peer = $matches[1];
+			}
+			else {
+				$peer = $couplet[1];
 			}
 		}
-		return $value;
+		else {
+			if (!$peer) {
+				continue;
+			}
+			else {
+				$peer_array [$peer][$couplet[0]] = $couplet[1];
+			}
+		}
 	}
-	return FALSE;
+	return $peer_array;	
 }
+
+
 }
 ?>

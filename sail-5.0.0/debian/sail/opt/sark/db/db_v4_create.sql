@@ -707,19 +707,6 @@ pkey TEXT NOT NULL,
 relation TEXT
 );
 
-/* Shorewall firewall */
-
-CREATE TABLE IF NOT EXISTS shorewall (
-pkey integer PRIMARY KEY,
-source TEXT default '$LAN',
-protocol TEXT,
-portrange TEXT NOT NULL,
-comment TEXT,
-z_created datetime,
-z_updated datetime,
-z_updater TEXT DEFAULT 'system'
-);
-
 CREATE TABLE IF NOT EXISTS shorewall_blacklist (
 pkey integer PRIMARY KEY,
 source TEXT,
@@ -972,21 +959,6 @@ END;
 CREATE TRIGGER Route_delete AFTER DELETE ON Route
 BEGIN
    INSERT INTO master_audit(act,owner,relation,tstamp) VALUES ('DELETE', old.pkey, 'Route', datetime('now'));
-END;
-
-CREATE TRIGGER shorewall_insert AFTER INSERT ON shorewall
-BEGIN
-   UPDATE shorewall set z_created=datetime('now'), z_updated=datetime('now') where pkey=new.pkey;
-   INSERT INTO master_audit(act,owner,relation,tstamp) VALUES ('INSERT', new.pkey, 'shorewall', datetime('now'));   
-END;
-CREATE TRIGGER shorewall_update AFTER UPDATE ON shorewall
-BEGIN
-   UPDATE shorewall set z_updated=datetime('now') where pkey=new.pkey;
-   INSERT INTO master_audit(act,owner,relation,tstamp) VALUES ('UPDATE', new.pkey, 'shorewall', datetime('now'));
-END;
-CREATE TRIGGER shorewall_delete AFTER DELETE ON shorewall
-BEGIN
-   INSERT INTO master_audit(act,owner,relation,tstamp) VALUES ('DELETE', old.pkey, 'shorewall', datetime('now'));
 END;
 
 CREATE TRIGGER shorewall_blacklist_insert AFTER INSERT ON shorewall_blacklist
