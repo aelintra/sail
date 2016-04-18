@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkAmiHelperClass";
 
 
 Class sarktrunk {
@@ -29,7 +29,6 @@ Class sarktrunk {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $params = array('server' => '127.0.0.1', 'port' => '5038');
 	protected $astrunning=false;	
 	protected $span = 1;
 	protected $smartlink;
@@ -107,20 +106,10 @@ private function showMain() {
 	$iax_peers = array(); 
 	$iax_lines = array();	
 	
-	if ( $this->astrunning ) {			
-		$ami = new ami($this->params);
-		$amiconrets = $ami->connect();
-		if ( !$amiconrets ) {
-			$this->myPanel->msg .= "  (AMI Connect failed)";
-		}
-		else {
-			$ami->login('sark','mysark');
-			$amisiprets = $ami->getSipPeers();
-			$sip_peers = $this->build_peer_array($amisiprets);
-			$amiiaxrets = $ami->getIaxPeers();
-			$iax_peers = $this->build_peer_array($amiiaxrets);
-			$ami->logout();
-		}
+	if ( $this->astrunning ) {
+		$amiHelper = new amiHelper();
+		$sip_peers = $amiHelper->get_peer_array();	
+		$iax_peers = $amiHelper->get_peer_array(true);			
 	}
 	else {
 		$this->myPanel->msg .= "  (No Asterisk running)";
@@ -134,6 +123,9 @@ private function showMain() {
 	echo '<div class="buttons">';	
 	$this->myPanel->Button("new");
 	$this->myPanel->commitButton();
+	if ( $_SESSION['user']['pkey'] == 'admin' ) {
+		echo '<a  href="/php/downloadpdf.php?pdf=trunks"><img id="pdfprint" src="/sark-common/buttons/print.png" border=0 title = "Click to Download PDF" ></a>' . PHP_EOL;									
+	}
 	echo '</div>';	
 	if (!empty($this->error_hash)) {
 		$this->myPanel->msg = reset($this->error_hash);	
@@ -197,7 +189,6 @@ private function showMain() {
 		
 		
 		$searchkey = $row['peername'];
-//		echo 'searchkey= ' .  $searchkey . '<br/>';
 		if ($row['active'] == 'YES' && $this->astrunning) {
 			if ($row['technology'] == 'SIP' ) {
 				if (preg_match(' /\((\d+)\sms/ ',$sip_peers [$searchkey]['Status'],$matches)) {
@@ -228,18 +219,10 @@ private function showMain() {
 				echo '<td class="icons" title = "Endpoint status" >' . $status . '</td>' . PHP_EOL;
 			}
 			else {		
-				echo '<td><img src="/sark-common/actions/apply.png" border=0 title = "Endpoint is assumed on-line" ></td>' . PHP_EOL;
+				echo '<td class="icons" >Unknown</td>' . PHP_EOL;
 			}		
 //		}
 
-/*
-		else if (substr($status, 0, 11) == 'Unmonitored') {
-			echo '<td title = "Endpoint is Unmonitored" >U/M</td>' . PHP_EOL;
-		}
-		else {			
-			echo '<td><img src="/sark-common/actions/no.png" border=0 title = "Endpoint is Offline; Status is ' . $status .'" ></td>' . PHP_EOL;
-		}
-*/
 		$get = '?edit=yes&amp;pkey=';
 		$get .= urlencode($row['pkey']);	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
@@ -548,23 +531,9 @@ private function showEdit() {
 	} 
 	
 	if ( $this->astrunning ) {			
-		$ami = new ami($this->params);
-		$amiconrets = $ami->connect();
-		if ( !$amiconrets ) {
-			$this->myPanel->msg .= "  (AMI Connect failed)";
-		}
-		else {
-			$ami->login('sark','mysark');
-			if ($tuple['technology'] == 'SIP') {
-				$amisiprets = $ami->getSipPeers();
-				$si_peers = $this->build_peer_array($amisiprets);
-			}
-			else {
-				$amiiaxrets = $ami->getIaxPeers();
-				$si_peers = $this->build_peer_array($amiiaxrets);
-			}
-			$ami->logout();
-		}
+		$amiHelper = new amiHelper();
+		$sip_peers = $amiHelper->get_peer_array();	
+		$iax_peers = $amiHelper->get_peer_array(true);
 	}
 	else {
 		$this->myPanel->msg .= "  (No Asterisk running)";
@@ -590,8 +559,13 @@ private function showEdit() {
 			echo "<p>$inpname : $inp_err</p>\n";
 		}       
 	}
-	echo '</div>';	
-	$this->printEditNotes($tuple['peername'],$tuple,$si_peers);
+	echo '</div>';
+	if ($tuple['technology'] == 'IAX2') {
+		$this->printEditNotes($tuple['peername'],$tuple,$iax_peers);
+	}
+	else {
+		$this->printEditNotes($tuple['peername'],$tuple,$sip_peers);
+	}
 	echo '<div class="exttabedit">';
 		
 	echo '<div id="pagetabs">' . PHP_EOL;
@@ -782,50 +756,6 @@ private function deleteRow() {
 	$this->myPanel->msgDisplay('Deleted trunk ' . $pkey);
 	$this->myPanel->navRowDisplay("lineio", $pkey);
 	$this->helper->commitOn();	
-}
-
-private function build_peer_array($amirets) {
-/*
- * build an array of peers by cleaning up the AMI output
- * (which contains stuff we don't want).
- */ 
-	$peer_array=array();
-	$lines = explode("\r\n",$amirets);	
-	$peer = 0;
-	foreach ($lines as $line) {
-		// ignore lines that aren't couplets
-		if (!preg_match(' /:/ ',$line)) { 
-				continue;
-		}
-		
-		// parse the couplet	
-		$couplet = explode(': ', $line);
-		
-		// ignore events and ListItems
-		if ($couplet[0] == 'Event' || $couplet[0] == 'ListItems') {
-			continue;
-		}
-		
-		//check for a new peer and set a new key if we have one
-		if ($couplet[0] == 'ObjectName') {
-			preg_match(' /^(.*)\// ',$couplet[1],$matches);
-			if (isset($matches[1])) {
-				$peer = $matches[1];
-			}
-			else {
-				$peer = $couplet[1];
-			}
-		}
-		else {
-			if (!$peer) {
-				continue;
-			}
-			else {
-				$peer_array [$peer][$couplet[0]] = $couplet[1];
-			}
-		}
-	}
-	return $peer_array;	
 }
 
 private function copyTemplates (&$tuple) {

@@ -1,5 +1,5 @@
 <?php
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srksessions/session.php";
 $fullPath = strip_tags($_GET['dfile']);
 
 if ($fd = fopen ($fullPath, "r")) {

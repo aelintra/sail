@@ -4,7 +4,7 @@
 # description : network set IP
 #
 #
-# Copyright (c) aelintra.com         2011
+# Copyright (c) aelintra.com         2011-2016
 #
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
@@ -36,13 +36,10 @@ my $cidr = SarkSubs::ret_cidr ();
 my $msk = SarkSubs::ret_subnetmask ();
 my $ip = SarkSubs::ret_localip ();
 my @Phonelist = qw ( aastra ciscospa gigaset polycom snom yealink );
+my $f2b_target = '/etc/fail2ban/jail.conf';
 
 if ($netaddress eq '0.0.0.0') {
-#	$netaddress = '10.10.10.0';
-#	$cidr = '24';
-#	$msk = '255.255.255.0';
 	print "No IP from ifconfig  - got $netaddress \n";
-#	`ifconfig eth0 10.10.10.10 netmask 255.255.255.0 up`;
 }
 else {
 	print "Setting local subnet as $netaddress/$cidr \n";
@@ -55,10 +52,21 @@ else {
 		`chown asterisk:asterisk /etc/asterisk/sark_sip_localnet.conf`;
 		`chmod 664 /etc/asterisk/sark_sip_localnet.conf`;
 		`asterisk -rx 'reload' > /dev/null`;
+		# shorewall pre 4.5.13
+		`sed -i '/^BLACKLISTNEWONLY=/c\\BLACKLISTNEWONLY=NO' /etc/shorewall/shorewall.conf`;
+		# shorewall 4.5.13+
+		`sed -i '/^BLACKLIST=/c\\BLACKLIST=ALL' /etc/shorewall/shorewall.conf`;
 	}
-	if ( -e "/etc/fail2ban") {
-		`sed -i '/^ignoreip/c \ignoreip = 127.0.0.1 $netaddress\/$cidr 224.0.1.0\/24' /etc/fail2ban/jail.conf`;
+	
+	if ( -e "/etc/fail2ban/jail.local") {	
+		`sed -i --follow-symlinks '/^ignoreip/c \ignoreip = 127.0.0.1 $netaddress\/$cidr 224.0.1.0\/24' /etc/fail2ban/jail.local`;
 		`fail2ban-server reload > /dev/null`;
+	}
+		
+	if ( -e "/etc/asterisk") {
+		# set correct Asterisk dateformat in logger.conf
+		`sed -i 's/^;dateformat=%F %T /dateformat=%F %T/' /etc/asterisk/logger.conf`;
+		`sed -i '/^messages/c \messages => security,notice,warning,error' /etc/asterisk/logger.conf`;
 	}
 	if ( -e "/etc/dnsmasq.d" ) {
 		`tail /etc/dnsmasq.d/sarkdhcp-opt66 > /etc/dnsmasq.d/sarkdhcp-opt66`;

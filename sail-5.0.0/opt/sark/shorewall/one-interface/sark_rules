@@ -1,4 +1,5 @@
 ACCEPT net:$LAN $FW tcp 80
+ACCEPT net:$LAN $FW tcp 443
 ACCEPT net:$LAN $FW tcp 22
 ACCEPT net:$LAN $FW udp 69
 ACCEPT net:$LAN $FW udp 123
@@ -6,5 +7,6 @@ ACCEPT net:$LAN $FW tcp 389
 ACCEPT net:$LAN $FW tcp 636
 ACCEPT net:$LAN $FW udp 4569
 ACCEPT net:$LAN $FW udp 5060
+ACCEPT net:$LAN $FW udp 5061
 ACCEPT net:$LAN $FW udp 10000:20000
 

@@ -20,19 +20,26 @@
 		"bAutoWidth": true,
 		"sDom": 't',
 		"aoColumns": [ 
-			{ "sName": "source" },
-//			{ "sName": "fwdest" },
-			{ "sName": "protocol" },
-			{ "sName": "portrange" },
-			{ "sName": "comment" },
+			{ "sName": "action" },
+			{ "sName": "fwsource" },
+			{ "sName": "fwdest" },
+			{ "sName": "fwproto" },
+			{ "sName": "fwdestport" },
+			{ "sName": "fwsport" },
+			{ "sName": "fworigdest" },
+			{ "sName": "fwconnrate" },
+			{ "sName": "fwdesc" },
 			{ "sName": "del" }
 		],
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 0,1,2,3,4] }
+			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5,6,7,8,9 ] }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-          $('td:eq(1),td:eq(2),td:eq(3),td:eq(4)', nRow).addClass( "bluetags" );
-        },
+          $('td:eq(1),td:eq(3),td:eq(4),td:eq(5),td:eq(6)', nRow).addClass( "bluetags" );
+          if ( aData[1] == "net" ) {
+            	$('td', nRow).css('background-color', 'yellow');
+          } 
+        },   
         "drawCallback": function() {
 			$(".dataTables_scrollBody").scrollTop(scrollPosition);
 		}     
@@ -41,11 +48,11 @@
 			sUpdateURL: "/php/sarkedsw/update.php",
 				fnOnEdited: function(status)
 				{ 	
-					$("#restfw").attr("src", "/sark-common/buttons/redo-red.png");
+					$("#commit").attr("src", "/sark-common/buttons16/COMMIT-CLICK.png");
 				},					
 			sReadOnlyCellClass: "read_only",
 			"aoColumns": [
-//				null, 		// seq
+				null, 		// action
 				{
 					type: 'text',
 //					submit:'Save',
@@ -54,7 +61,7 @@
 					onblur: 'submit',
 					placeholder: 'Null'	
 				},		// fwsource
-//				null,	// fwdest
+				null,	// fwdest
 				{
 					tooltip: 'Click to set protocol',
 					type: 'select',
@@ -71,6 +78,16 @@
 					onblur: 'submit',
 					placeholder: 'Null'	
 				}, 		// port	
+				null,	// SPORT
+				null,   // ORIGDEST
+				{
+					type: 'text',
+//					submit:'Save',
+					event: 'click',
+					tooltip: 'Click to set rate',
+					onblur: 'submit',
+					placeholder: 'Unrestricted'	
+				}, 		// connrate					
 				{
 					type: 'text',					
 //					submit:'Save',
@@ -81,9 +98,16 @@
 				}, 		// fwdesc																					
 				null	// delete col					
             ]
-        })  
+        }).find("tr").find('td:eq(1):contains(0.0.0.0)').parent().css('backgroundColor', 'yellow') ;   
         
-    $(".dataTables_scrollBody").find("tr").find('td:eq(0):contains(0.0.0.0)').css('color', 'Red')     
+    $(".dataTables_scrollBody").find("tr").find('td:eq(1):contains(0.0.0.0)').css('color', 'Red') 
+
+// hide action and destination
+	var mytable = $('#edswtable').DataTable(); 
+	mytable.column( 0 ).visible( false );
+	mytable.column( 2 ).visible( false );
+	mytable.column( 5 ).visible( false );
+    mytable.column( 6 ).visible( false );
  
 // save scroll for redraw	
 	$(".dataTables_scrollBody").mousedown(function(){

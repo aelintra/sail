@@ -1,3 +1,79 @@
+sail (5.0.0-10) UNRELEASED; urgency=low
+  * tagged as 5.0.0-10
+  - fix to snap/spin directory create on new install
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 12 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-9) UNRELEASED; urgency=low
+  * tagged as 5.0.0-9
+  - fixed confbridge support by adding the sark user
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 11 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-8) UNRELEASED; urgency=low
+  * tagged as 5.0.0-8
+  - added updated F2B support
+  - added dual F2b support for jessie/wheezy
+  - added IE11/12 and Edge to the browser recognition tables
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 10 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-7) UNRELEASED; urgency=low
+  * tagged as 5.0.0-7
+  - fixed sudoers misspelling in postinst
+  - Moved the reloader to the last step in postinst
+  - added change to asterisk logger timeformat
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 30 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-6) UNRELEASED; urgency=low
+  * tagged as 5.0.0-6
+  - fixed bug in the new shorewall update.  It didn't handle old shorewall formats
+  - added shorewall verify routine to the reloader
+  - added FPDF Class
+  - added pdf option for admins to most of the big tables
+  - added a simple wallboard page to the Asterisk group
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 29 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-5) UNRELEASED; urgency=low
+  * tagged as 5.0.0-5
+  - fixed public directories for phone types
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 23 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-4) UNRELEASED; urgency=low
+  * tagged as 5.0.0-4
+  - fixed banner reference bug (sark/sail)
+  - force password change when password is the default
+  - changed firewall back to in-line
+  - added firewall throttling
+  - added wallboard
+  - cleaned up css on edit and insert screens
+  - fiddled banner out to full screen width
+  - updated copyright to 2016
+  - added Jessie support in postinst and prerm
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 11 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-3) UNRELEASED; urgency=low
+  * tagged as 5.0.0-3
+  - updated sip default reg timeout to 3600
+  - added ssl keygens for Apache2 and Asterisk
+  - added firewall sync to postinst
+  - removed banner from login screen
+  - minor css change for edittab height
+  - added always rule to set noproxy in Yealink phones
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 Jan 2016 18:00:00 +0000
+
+sail (5.0.0-2) UNRELEASED; urgency=low
+  * tagged as 5.0.0-2
+  - added ssl keygens for Apache2 and Asterisk
+  - added firewall sync to postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 Jan 2016 18:00:00 +0000
+
 sail (5.0.0-1) UNRELEASED; urgency=low
   * tagged as 5.0.0-1
   - first out of new release.  New UI and Ast 11+

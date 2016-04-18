@@ -86,6 +86,9 @@ private function showMain() {
 	echo '<div class="buttons">';	
 	$this->myPanel->Button("new");
 	$this->myPanel->commitButton();
+	if ( $_SESSION['user']['pkey'] == 'admin' ) {
+		echo '<a  href="/php/downloadpdf.php?pdf=groups"><img id="pdfprint" src="/sark-common/buttons/print.png" border=0 title = "Click to Download PDF" ></a>' . PHP_EOL;	
+	}
 	echo '</div>';	
 	
 	$this->myPanel->Heading();

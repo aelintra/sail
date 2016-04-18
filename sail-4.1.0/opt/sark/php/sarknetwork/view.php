@@ -684,7 +684,7 @@ private function saveEdit() {
 			$output .= "UseSTARTTLS=" . $smtpusestrttls . PHP_EOL;		
 			fwrite($fh,$output) or die('Could not write to ssmtp.conf file');
 			fclose($fh);
-			$this->helper->request_syscmd ("chmod 600 /etc/ssmtp/ssmtp.conf");
+			$this->helper->request_syscmd ("chmod 664 /etc/ssmtp/ssmtp.conf");
 		}				
 		
 		$ntpservers = explode("\n", $astfile);

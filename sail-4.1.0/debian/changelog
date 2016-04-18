@@ -1,6 +1,21 @@
+sail (4.1.0-12) UNRELEASED; urgency=low
+  * tagged as 4.1.0-12
+  - fix to snap/spin directory create on new install
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 12 Apr 2016 18:00:00 +0000
+
+sail (4.1.0-11) UNRELEASED; urgency=low
+  * tagged as 4.1.0-11
+  - fixed ssmtp.conf perms
+  - mods to allow running under Jessie
+  - fix to asterisk logger timeformat
+  - fixed sudoers misspelling in postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 30 Mar 2016 18:00:00 +0000
+
 sail (4.1.0-10) UNRELEASED; urgency=low
   * tagged as 4.1.0-10
-  - fixed trailing comma (I.E) bug in javascripts
+  - fixed trailing comma (I.E) bug in javascript
 
  -- CoCoSoft <admin@aelintra.com>  Sun, 22 Nov 2015 18:00:00 +0000
 

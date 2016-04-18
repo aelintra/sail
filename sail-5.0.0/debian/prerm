@@ -4,13 +4,24 @@ sv d srk-ua-responder
 sv d srk-ua-helper
 #sv d sark 
 
-a2dissite sark > /dev/null 2>&1
+#Wheezy
+[ -L /etc/apache2/sites-enabled/sark  ] && a2dissite sark
+[ -L /etc/apache2/sites-available/sark  ] && rm -rf /etc/apache2/sites-available/sark
+#Jessie 
+[ -L /etc/apache2/sites-enabled/sark.conf  ] && a2dissite sark.conf
+[ -L /etc/apache2/sites-available/sark.conf  ] && rm -rf /etc/apache2/sites-available/sark.conf
+[ -L /etc/apache2/sites-enabled/sark-ssl.conf  ] && a2dissite sark-ssl.conf
+[ -L /etc/apache2/sites-available/sark-ssl.conf  ] && rm -rf /etc/apache2/sites-available/sark-ssl.conf
 
-[ -L /etc/apache2/sites-available/sark  ] &&rm -rf /etc/apache2/sites-available/sark 
 [ -L /etc/cron.d/sark ] && rm -rf /etc/cron.d/sark
 [ -L /etc/service/sark ] && rm -rf /etc/service/sark
 [ -L /etc/service/srk-ua-responder ] && rm -rf /etc/service/srk-ua-responder
 [ -L /etc/service/srk-ua-helper ] && rm -rf /etc/service/srk-ua-helper
+
+[ -L /etc/fail2ban/jail.local ] && rm -rf /etc/fail2ban/jail.local
+[ -L /etc/fail2ban/action.d/shorewall.local ] && rm -rf /etc/fail2ban/action.d/shorewall.local
+[ -L /etc/fail2ban/filter.d/asterisk.conf ] && /etc/fail2ban/filter.d/asterisk.conf 
+
 rm -rf /etc/sudoers.d/sail
 rm -rf /etc/asterisk/sark_customer*
 insserv --remove debsetlan

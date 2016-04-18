@@ -14,6 +14,10 @@
 		
 	$("#sarkagentForm").validate ( {
 	   rules: {
+	   		pkey: {
+				min: 1000,
+				max: 9999
+			},	 	   
 			name: {
 //				required: true
 			},
@@ -188,5 +192,3 @@
 		};  
 		
 	});
-      
- 

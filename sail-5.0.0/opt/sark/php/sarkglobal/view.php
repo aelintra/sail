@@ -163,7 +163,7 @@ private function showMain() {
  */
 	$this->myPanel->printSysNotes();
  	
-	echo '<div class="globaltabedit">';		
+	echo '<div class="exttabedit">';		
 
 	echo '<div id="pagetabs" class="mytabs"  >' . PHP_EOL;
 	
@@ -518,27 +518,6 @@ private function goodEditOutcome($tuple) {
 
     $this->helper->request_syscmd ( "/usr/bin/sv k  srk-ua-responder" );
 }
-
-
-private function rets() {
-	
-	$flg=false; 
-	if ($handle = opendir('/opt/sark/passwd')) {
-		while (false !== ($entry = readdir($handle))) {
-			if (preg_match( '/\.(\d+)$/',$entry,$matches)) {
-				$flg =  $matches[1];
-				break;
-			}
-		}
-		closedir($handle);
-	}  
-	if (! $flg) {
-        $flg = rand(100000,1000000);
-		`/bin/touch /opt/sark/passwd/.$flg`;
-	}
-	return ($flg);
-}
-
 
 private function sark_stop () {
 	

@@ -110,21 +110,26 @@ chmod +x /opt/sark/service/srk-ua-responder/run
 [ ! -L /etc/service/srk-ua-helper ] && ln -s /opt/sark/service/srk-ua-helper /etc/service
 [ ! -L /etc/service/srk-ua-responder ] && ln -s /opt/sark/service/srk-ua-responder /etc/service
 [ ! -L /etc/service/srk-ua-rssh ] && ln -s /opt/sark/service/srk-ua-rssh /etc/service
-[ ! -L /etc/apache2/sites-available/sark ] && ln -s /opt/sark/etc/apache2/sites-available/sark /etc/apache2/sites-available
+[ ! -L /etc/apache2/sites-available/sark.conf ] && ln -s /opt/sark/etc/apache2/sites-available/sark.conf /etc/apache2/sites-available
 
 a2enmod rewrite > /dev/null 2>&1
 a2enmod proxy > /dev/null 2>&1
 a2enmod proxy_http > /dev/null 2>&1
-a2dissite default > /dev/null 2>&1
-a2ensite sark > /dev/null 2>&1
+
+# Jessie
+[ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
+# Wheezy
+[ -L /etc/apache2/sites-enabled/default ] && a2dissite default > /dev/null 2>&1
+
+a2ensite sark.conf > /dev/null 2>&1
 service apache2 reload > /dev/null 2>&1
 
 #sudoers
-if [ ! -e /etc/sodoers.d/sail ]; then 
+if [ ! -e /etc/sudoers.d/sail ]; then 
 	echo www-data ALL=NOPASSWD: /etc/init.d/asterisk > /etc/sudoers.d/sail
 	chmod 0440 /etc/sudoers.d/sail
 fi
-if [ ! -e /etc/sodoers.d/sarkrssh ]; then
+if [ ! -e /etc/sudoers.d/sarkrssh ]; then
         echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
         chmod 0440 /etc/sudoers.d/sarkrssh
 fi
@@ -143,6 +148,8 @@ mv /opt/sark/etc/fail2ban/filter.d/asterisk.conf /etc/fail2ban/filter.d
 mv /opt/sark/etc/fail2ban/filter.d/apache-auth.conf /etc/fail2ban/filter.d 
 mv /opt/sark/etc/fail2ban/jail.conf /etc/fail2ban
 #fail2ban-client reload > /dev/null 2>&1
+# set correct Asterisk dateformat in logger.conf
+sed -i 's/^;dateformat=%F %T /dateformat=%F %T/' /etc/asterisk/logger.conf
 
 date --iso-8601=minutes > /opt/sark/db/.sail-install-date
 
