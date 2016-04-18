@@ -70,11 +70,12 @@ my $filename;
 
         if (@files) {
 	   foreach (@files) {
-        	if (/Qexec(\d+)-(\d+)-(\w+).wav$/) {
+        	if (/Qexec(\d+)-(\w+)-(\d+)-(\w+).wav$/) {
                 	my $filename = $_;
                 	my $filetimestamp = $1;
-                	my $dnid = $2;
-                	my $clid = $3;
+                	my $tenant = $2;
+                	my $dnid = $3;
+                	my $clid = $4;
 			$found = 0;
 #			print STDERR "Candidate found $_ \n";
                         foreach (@qlogtail) {
@@ -88,7 +89,7 @@ my $filename;
                                 if ( ($filetimestamp + $recqdither) >= $logtimestamp &&
 					($filetimestamp - $recqdither) <= $logtimestamp ) {
 #					print STDERR "Matched $_ \n";
-                                	my $newfilename = $monitorout."/".$filetimestamp."-".$queue."-".$extension."-".$clid.".wav";
+                                	my $newfilename = $monitorout."/".$filetimestamp."-".$tenant."-".$queue."-".$extension."-".$clid.".wav";
 #                                	print STDERR "Moving Queue file $filename to $newfilename\n";
                                         move ($monitorstage."/".$filename, $newfilename);
                                         $found = 1;
@@ -98,7 +99,7 @@ my $filename;
                         unless ($found) {
                         # Bugger! we didn't find it!
 #                        	print STDERR "Couldn't find a match for Queuefile $filename using $filetimestamp and $recqdither- will strip Qexec and  move anyway \n";
-                        	move ($monitorstage."/".$filename, $monitorout."/".$filetimestamp."-".$dnid."-".$clid.".wav");
+                        	move ($monitorstage."/".$filename, $monitorout."/".$filetimestamp."-".$tenant."-".$dnid."-".$clid.".wav");
                         }
                 }
                 else {  # It's a regular file
