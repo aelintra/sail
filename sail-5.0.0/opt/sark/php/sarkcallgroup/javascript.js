@@ -126,6 +126,7 @@
             ]
         });
         
+      
 // save scroll for redraw	
 		$(".dataTables_scrollBody").mousedown(function(){
 			scrollPosition = $(".dataTables_scrollBody").scrollTop();
@@ -136,6 +137,35 @@
 			mytable.column( 1 ).visible( false );
 			$('#cluster').hide();
 			$('.cluster').hide();		
-		};            
+		}; 
+			
+		if( $('#grouptype').val() == 'Alias' || $('#grouptype').val() == 'Page' ) {
+			$('#divringname').hide();			
+			$('#divhuntname').hide();							
+		};
+		if( $('#grouptype').val() == 'Ring' ) {
+			$('#divringname').show();
+			$('#divhuntname').hide();			
+		};
+		if( $('#grouptype').val() == 'Hunt' ) {
+			$('#divringname').hide();
+			$('#divhuntname').show();	
+		};
+				           		
+		$('#grouptype').change(function(){
+			if(this.value=='Page' || this.value=='Alias' ) {
+				$('#divringname').hide();			
+				$('#divhuntname').hide();							
+			}
+			if(this.value=='Ring') {
+				$('#divringname').show();
+				$('#divhuntname').hide();			
+			}
+			if(this.value=='Hunt') {
+				$('#divringname').hide();
+				$('#divhuntname').show();
+			}	
+		});	           
       });
+      
       

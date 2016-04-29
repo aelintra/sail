@@ -1268,9 +1268,11 @@ private function default_route() {
 private function default_speed() {
 	
 	$rec = array(
-        "cluster"		=> "default",
+        "cluster"				=> "default",
+        "dialparamsring" 		=> "ciIkt",
+        "dialparamshunt" 		=> "cIkt",
         "outcomerouteclass"    	=> 100,
-        "ringdelay"    	=> "15"
+        "ringdelay"    			=> "15"
      );	
      $this->setCluster($rec);
      return $rec;

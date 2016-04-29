@@ -365,6 +365,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('description'
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('device','Device','This is the device type from SARKs IP Device database.  It is used to provide the provisioning template.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('devicerec','RecOpts','Recording options for this object.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dhcp','DHCP','Default YES; set this to NO if you want to set your own IP address');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dialparams','Dial Params','Here we expose a subset of the Asterisk Dialplan parameters.  You should only change these if you REALLY know what you are doing.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('dialplan','Dialplan','Route dialplan.  The dialplan consists of the set of numbers and number patterns that this route will be sensitive to. (e.g. _0XXX. 100 _XXXXX)   Arguments are separated by whitespace.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('didend','DiD End','End DiD (DDI) for this group (its perfectly fine to allocate only a single number).');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('didstart','DiD Start','Beginning DiD (DDI) for this group (its perfectly fine to allocate only a single number).');

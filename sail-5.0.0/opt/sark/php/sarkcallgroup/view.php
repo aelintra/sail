@@ -282,6 +282,27 @@ private function showEdit($key=False) {
 	$this->myPanel->aLabelFor('grouptype');
 	$this->myPanel->selected = $res['grouptype'];
 	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page','Alias'));
+	
+	$dialparams = 'ciIkt';
+	if (isset($res['dialparamsring']) ) {
+		$dialparams = $res['dialparamsring'];
+	}
+		
+	echo '<div id="divringname">' . PHP_EOL;
+	$this->myPanel->aLabelFor('dialparams');
+	echo '<input type="text" name="dialparamsring" id="dialparamsring" size="6" value="' . $dialparams . '"   />' . PHP_EOL;
+	echo '</div>' . PHP_EOL;
+
+	$dialparams = 'cIkt';
+	if (isset($res['dialparamshunt']) ) {
+		$dialparams = $res['dialparamshunt'];
+	}
+		
+	echo '<div id="divhuntname">' . PHP_EOL;	
+	$this->myPanel->aLabelFor('dialparams');
+	echo '<input type="text" name="dialparamshunt" id="dialparamshunt" size="6" value="' . $dialparams . '"   />' . PHP_EOL;
+	echo '</div>' . PHP_EOL;	
+	
 	$this->myPanel->aLabelFor('cluster','cluster');
 	$this->myPanel->selected = $res['cluster'];
 	$this->myPanel->displayCluster();
