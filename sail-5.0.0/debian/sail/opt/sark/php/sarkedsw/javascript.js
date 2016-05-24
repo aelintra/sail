@@ -35,7 +35,7 @@
 			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5,6,7,8,9 ] }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-          $('td:eq(1),td:eq(3),td:eq(4),td:eq(5),td:eq(6)', nRow).addClass( "bluetags" );
+          $('td:eq(1),td:eq(3),td:eq(4),td:eq(7),td:eq(8)', nRow).addClass( "bluetags" );
           if ( aData[1] == "net" ) {
             	$('td', nRow).css('background-color', 'yellow');
           } 

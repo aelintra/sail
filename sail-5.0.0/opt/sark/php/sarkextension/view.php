@@ -633,7 +633,7 @@ private function showEdit() {
 		
 		$this->myPanel->buttonName["redo"]["title"] = "Send a reboot request to the endpoint";
 		$this->myPanel->Button("notify");
-		if (preg_match('/^Snom/',$extension['device'])) {
+		if (preg_match('/^Snom|Panasonic\sKX-HDV/',$extension['device'])) {
 			$this->myPanel->buttonName["upload"]["title"] = "Send config without reboot(Snom only)";
 			$this->myPanel->Button("upload");
 		}
@@ -1298,13 +1298,16 @@ private function sipNotifyPush () {
 			return;
 		}
 #
-#	Only for Snoms 
+#	Only for Snoms....   and Panasonics now!
 #
 		$chk = false;
 	
 		if (preg_match ( " /Snom/ ", $res['device'])) {
 			$chk = 'snom-check-cfg';
 		}
+		if (preg_match ( " /Panasonic/ ", $res['device'])) {	
+			$chk = 'panasonic-check-cfg';
+		}			
 		if ( ! $chk ) {
 			$this->message = "No notify data available";
 			return;

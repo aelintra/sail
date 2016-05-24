@@ -46,10 +46,12 @@
 	} 	
  
 	if ($column == 'fwconnrate') {
-	  if (!preg_match("/^\d{1,3}\/\w{3,7}:\d{1,3}$/",$value)) {
-		  echo "Connection Rate looks wrong (^\d{1,3}\/\w{3,7}:\d{1,3}$) ";
-		  return;
-	  }
+		if (!empty($value)) {
+			if (!preg_match("/^\d{1,3}\/\w{3,7}:\d{1,3}$/",$value)) {
+				echo "Connection Rate looks wrong (^\d{1,3}\/\w{3,7}:\d{1,3}$) ";
+				return;
+			}
+		}
 	} 	
 	 
 	if (file_exists($file)) {
@@ -58,14 +60,16 @@
 	
 	if (preg_match(" /#/ ", $rec[$rowId])) {
 		$splitComments = explode("#",$rec[$rowId],2);
+//		print_r($splitComments);
 		if (!empty($splitComments [1])) {
-			$cols[9] = $splitComments [1];
+			$comment = $splitComments [1];
 		}
 		$cols = explode(" ",$splitComments[0],9);
 	}
 	else {
 		$cols = explode(" ",$rec[$rowId],9);
 	}
+//	print_r($cols);
 		
 	if ($columnId == 8) {		
 		$value = preg_replace(' /#/ ', '', $value);  
@@ -79,6 +83,7 @@
 	}
 	else {
 		$cols[$columnId] = $value;
+		$cols[8] = '#' . $comment;
 	}
 //	print_r ($cols);
 	$rec[$rowId] = implode(" ",$cols);

@@ -254,8 +254,8 @@ dfced7667010a86c22b82ed77cdb4841  opt/sark/countries/zm.zone
 8c94efe3682ba36a21e6c56af65aa8a0  opt/sark/countries/zw.zone
 d9a06d67646549c502dc676e4373f25a  opt/sark/db/.sail-install-date
 a41ea0de4b3c9276b7e37d7aa6426b32  opt/sark/db/db_v4_create.sql
-5db3e7568b5d6bd3558e7e2b361d2bb3  opt/sark/db/db_v4_device.sql
-e6f8446592e61cfac5779fad1d0eab2a  opt/sark/db/db_v4_system.sql
+8cfa121f312af71eb9c2fd071fd9f941  opt/sark/db/db_v4_device.sql
+84af5bad79cba06e9c3c67085ef2735a  opt/sark/db/db_v4_system.sql
 fc6ff2307a71a374b7148da57410afcf  opt/sark/db/ldap_create.ldif
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/db/srkaudit.log
 a05697c3c3f75be879a4e38e2c79c5f2  opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf
@@ -273,7 +273,7 @@ e83e5d0a4969814e91d940916132750e  opt/sark/generator/agentSQL.php
 8189c534d5480566e1c541f217f306a4  opt/sark/generator/cdr_mysql.php
 e31c21b62d08300367dfd89b57a9a6c6  opt/sark/generator/daycall
 d1da3e76ed1fe1a8449bb6824395f237  opt/sark/generator/edsw.php
-0c68fe7f57a44422be6ad3148a589bc5  opt/sark/generator/extensions.php
+b02ed50bb672346c67612d48e1c37cc1  opt/sark/generator/extensions.php
 bef52c45ec63de682fbe396138fa352b  opt/sark/generator/featuresSQL.php
 1acf0f78f843caeb0597878cb3899910  opt/sark/generator/generated_file_banner.php
 e2c408e9ecc7ee5e6e14549555da984b  opt/sark/generator/iaxSQL.php
@@ -396,14 +396,14 @@ a1aaf669c804812519a5408e4d4ca756  opt/sark/php/sarkdevice/javascript.js
 5e9f187bca84645f1d41b47eb45ffe9d  opt/sark/php/sarkdevice/view.php
 73669bfdf076e21de98ef716d6ff6d09  opt/sark/php/sarkdiscover/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkdiscover/main.php
-78fa1fdcd1ae50db94281b04ed47ca55  opt/sark/php/sarkdiscover/view.php
+4adba03c451f715c2a69dc774005c4f8  opt/sark/php/sarkdiscover/view.php
 ff8aa0f2c6f592bdd843493c94bfadb0  opt/sark/php/sarkedit/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkedit/main.php
 2611118d73e26bd1194f990ce6599bdb  opt/sark/php/sarkedit/view.php
 047eb59bbcf15a59c4e9e69e7eedaba8  opt/sark/php/sarkedsw/delete.php
-7fbc339a0a90fe292fe01fae8c80306e  opt/sark/php/sarkedsw/javascript.js
+687baf84c7f3043f856ed6d1b7ae0e52  opt/sark/php/sarkedsw/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkedsw/main.php
-4125a11fb0bf609f15ce9f8143508f00  opt/sark/php/sarkedsw/update.php
+44656bc61202606361998a7e7db7df6d  opt/sark/php/sarkedsw/update.php
 1dff4dbd8391c96e58bf8684743a25fd  opt/sark/php/sarkedsw/view.php
 ea4055b9123ff5334a3d7a51b802e3ba  opt/sark/php/sarkextension/blflist.php
 670157d460ce2b1dc856fdfd357e2155  opt/sark/php/sarkextension/delete.php
@@ -411,7 +411,7 @@ a214e8b44a51b9fe2bb194a63381c037  opt/sark/php/sarkextension/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkextension/main.php
 7bc584258baa51de30c1249b89d3b104  opt/sark/php/sarkextension/update.php
 72d675db1a467fbc9cd316f700b19911  opt/sark/php/sarkextension/updateblf.php
-9598696b617d49fc09f1ce451a4a00bc  opt/sark/php/sarkextension/view.php
+1c2f591cc2d0ce3477136553c9e5bca1  opt/sark/php/sarkextension/view.php
 af5b76c7ac5b4b1816f9bae57e153860  opt/sark/php/sarkfreset/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkfreset/main.php
 ba22fc17a889ca2e35e132d96068fb24  opt/sark/php/sarkfreset/view.php
@@ -519,8 +519,8 @@ f2ed3471b2ac07d27e9e9a310c32d806  opt/sark/php/srkfoot.php
 dd8ee99244cd5135668e7375eee07232  opt/sark/php/srksessions/common.php
 ac74fbe354e32d42db0beffae0726e97  opt/sark/php/srksessions/logout.php
 5dc1ef867c9cfd5ab272a949b7e82689  opt/sark/php/srksessions/session.php
-a46bb7d0e9ba2a07c9b1a60dfad34ed0  opt/sark/provisioning/commonFuncs.php
-4bab4f98954e5f27e741853a785c4c0e  opt/sark/provisioning/device.php
+ae5872c6e707d1c076b4965c7ed95dc0  opt/sark/provisioning/commonFuncs.php
+7390f2684fa527fce4f84bb4ce1acdcd  opt/sark/provisioning/device.php
 64a59e64750ecbcee04e30cae06e8ee6  opt/sark/provisioning/settings.php
 9b6764c6a7fcd410d65db49f67499c84  opt/sark/scripts/aelhdlon.pl
 2f11f865191292b100e16ef227c5de06  opt/sark/scripts/age.sh
@@ -532,7 +532,7 @@ dc5a024e753a96b03270b1124b964e7c  opt/sark/scripts/csvload.pl
 40555277c3c9e6f88ba2728610779bfe  opt/sark/scripts/move_files.php
 20e1602edd9e43b3af0172f2d8abc59f  opt/sark/scripts/name_op_buttons.pl
 753db831e4c23e36855476c227726842  opt/sark/scripts/op_buttons.pl
-813940d3bd8f87efaa5cbf8648bedf43  opt/sark/scripts/responder.pl
+8cc2fe1dfd2e16bcef1850f3a35bf5ba  opt/sark/scripts/responder.pl
 45f15dfdff76a4e1254cfe4a6ddcc40e  opt/sark/scripts/selmix
 0ccb6b939e136ef42902bb05f90097df  opt/sark/scripts/selmixd
 19e47eb2885e88be7b8321f4d95c7b93  opt/sark/scripts/setip.pl
@@ -1401,5 +1401,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-e5e6606f6f390b8609db2cd267404b98  usr/share/doc/sail/changelog.Debian.gz
+542b8ec70d195240fce198c5a41d44e0  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

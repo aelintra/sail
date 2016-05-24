@@ -111,7 +111,7 @@ private function showMain() {
 	$cidr .= '/24';
  
 	$nmapcmd= array(
-	"nmap -sP -n $cidr | grep -v Host | grep -v '$myip' | awk '/Nmap scan/ {printf \$0 \" \"; getline; print $0}' | grep -i 'Snom\|Panasonic\|Yealink\|Polycom\|Cisco\|Gigaset\|Aastra\|Grandstream\|2N ' > /tmp/netfile",
+	"nmap -sP -n $cidr | grep -v Host | grep -v '$myip' | awk '/Nmap scan/ {printf \$0 \" \"; getline; print $0}' | grep -i 'Snom\|Panasonic\|Yealink\|Polycom\|Cisco\|Gigaset\|Aastra\|Grandstream\|2N\|Vtech' > /tmp/netfile",
 	"sed -i 's/Nmap scan report for //' /tmp/netfile",
 	"sed -i 's/MAC Address: //' /tmp/netfile",
 	"sed -i 's/://g' /tmp/netfile",

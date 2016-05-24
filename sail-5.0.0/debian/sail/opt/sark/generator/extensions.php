@@ -175,9 +175,9 @@ try {
 //
 //   Tidy up clusters
 //
-	$OUT .= "\n\texten => t,1,Hangup\n";
-    	$OUT .= "\texten => h,1,Hangup\n";
-    	$OUT .= "\texten => i,1,Playtones(congestion)\n";
+//	$OUT .= "\n\texten => t,1,Hangup\n";
+//    	$OUT .= "\texten => h,1,Hangup\n";
+//    	$OUT .= "\texten => i,1,Playtones(congestion)\n";
     	if ($row['pkey'] == "default") {
         	$OUT .= "[qrxvtmny-callback]\n";
         	$OUT .= "\texten => _X.,1,DISA(no-password,qrxvtmny)\n";
@@ -290,9 +290,9 @@ try {
     	$OUT .= "\texten => o,1,Playback(pls-hold-while-try)\n";
     	$OUT .= "\texten => o,2,GoTo(0,1)\n";
     	$OUT .= "\texten => t,1,Hangup\n";
-    	$OUT .= "\texten => h,1,Hangup\n";
-    	$OUT .= "\texten => i,1,Playtones(congestion)\n";
-    	$OUT .= "\texten => i,2,Hangup\n";
+//    	$OUT .= "\texten => h,1,Hangup\n";
+//    	$OUT .= "\texten => i,1,Playtones(congestion)\n";
+//    	$OUT .= "\texten => i,2,Hangup\n";
 //
 //	Queues
 //
@@ -309,9 +309,9 @@ try {
 //
 //	Clean up
 //
-    	$OUT .= "\texten => t,1,Hangup\n";
-    	$OUT .= "\texten => h,1,Hangup\n";
-    	$OUT .= "\texten => i,1,Playtones(congestion)\n\n";
+//    	$OUT .= "\texten => t,1,Hangup\n";
+//    	$OUT .= "\texten => h,1,Hangup\n";
+//    	$OUT .= "\texten => i,1,Playtones(congestion)\n\n";
 
 
 //
@@ -501,8 +501,8 @@ $OUT .= "\n[mainmenu]\n";
 	exten => t,2,Voicemail(\${SYSOP},su)
 	exten => t,3,Hangup
 	exten => t,4,Goto(extensions,\${SYSOP},1)
-	exten => t,5,Hangup
-	exten => h,1,Hangup
+;	exten => t,5,Hangup
+;	exten => h,1,Hangup
 	exten => i,1,Goto(extensions,\${SYSOP},1)
 	
 [macro-clear]
@@ -719,8 +719,8 @@ ANDHERE;
        	exten => *98,1,agi(sarkhpe,*51*,,)
        	exten => _*99XXXX,1,agi(sarkhpe,*61*\${EXTEN:3},,)
 
-       	exten => h,1,Hangup
-       	exten => t,1,Hangup
+;       	exten => h,1,Hangup
+;       	exten => t,1,Hangup
        	exten => i,1,Playtones(congestion)
 
 [defaultOpenGreet]

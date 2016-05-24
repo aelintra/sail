@@ -682,8 +682,8 @@ sub createExten($$) {
     
 # insert the extension   
 
-	SarkSubs::SQLiteDo($dbh, "INSERT INTO ipphone (pkey,callerid,cluster,desc,device,devicerec,dvrvmail,location,macaddr,passwd,provision,sndcreds,sipiaxfriend,technology) 	
-		VALUES ('$pkey','$pkey','default','$desc','$device','default','$dvrvmail','local','$macaddr','$passwd','$provision','Always','$sipiaxfriend','SIP')" );
+	SarkSubs::SQLiteDo($dbh, "INSERT INTO ipphone (pkey,active,callerid,cluster,desc,device,devicerec,dvrvmail,location,macaddr,passwd,provision,sndcreds,sipiaxfriend,technology) 	
+		VALUES ('$pkey','YES','$pkey','default','$desc','$device','default','$dvrvmail','local','$macaddr','$passwd','$provision','Always','$sipiaxfriend','SIP')" );
 
 
 	if ($debug_level >= 2) {

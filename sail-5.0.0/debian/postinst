@@ -81,7 +81,7 @@ if [  "$?" -ne "0" ] ; then
         echo "#include sark_meetme.conf" >> /etc/asterisk/meetme.conf
 fi
 
-grep -q '#include sark_confbridge.conf' /etc/asterisk/confbrideg.conf
+grep -q '#include sark_confbridge.conf' /etc/asterisk/confbridge.conf
 if [  "$?" -ne "0" ] ; then
         echo "#include sark_confbridge.conf" >> /etc/asterisk/confbridge.conf
 fi
@@ -205,12 +205,12 @@ fi
 grep -q '^8\.' /etc/debian_version 
 if [  "$?" -eq "0" ] ; then	
 #jessie
-	[ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
-	[ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
+	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 else 
 #wheezy
-	[ -e  /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf ] && ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
-	[ -e /opt/sark/etc/fail2ban/jail-wheezy.local ] && ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
+	[ ! -e /etc/fail2ban/filter.d/asterisk.conf ] && [ -e  /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf ] && ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-wheezy.local ] && ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
 fi
 	
 

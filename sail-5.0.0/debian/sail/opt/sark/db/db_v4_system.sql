@@ -81,9 +81,14 @@ INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:14:A8','Cisco 7940','
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:15:65','Yealink T2x','yealink-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:23:69','Linksys','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:80:F0','Panasonic','panasonic-check-cfg');
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('08:00:23','Panasonic','panasonic-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name) values ('08:00:0F','Mitel');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('64:9E:F3','Cisco SPA','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('7C:2F:80','Gigaset','gigaset-check-cfg');
+
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('14:AE:DB','Vtech','vtech-check-cfg');
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:12:2A','Vtech','vtech-check-cfg');
+
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('Act','Act?','Denotes whether the object is active (i.e. part of the running config) ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,name) values ('Globals_Main','Globals','Globals_Main');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('SarkPCIh21','Hardware Discovery','Heading');
@@ -690,6 +695,9 @@ INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT123X','Panasonic KX
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT133X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT136X','Panasonic KX');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-UT248X','Panasonic KX');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-HDV130X','Panasonic KX-HDV');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-HDV230X','Panasonic KX-HDV');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('KX-HDV330B','Panasonic KX-HDV');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('N510 IP PRO','Gigaset');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T12P','Yealink T12');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T18P','Yealink T18');
@@ -717,6 +725,12 @@ INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snom760','Snom 760');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snom820','Snom 820');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snom821','Snom 821');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snom870','Snom 870');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP600A','Vtech');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP715A','Vtech');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP725A','Vtech');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP735A','Vtech');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VCS754A','Vtech');
+
 INSERT OR IGNORE INTO Device_atl(pkey) values ('Aastra');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('Aastra VXT');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('AnalogFXS');
@@ -728,6 +742,7 @@ INSERT OR IGNORE INTO Device_atl(pkey) values ('Gigaset');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('MAILBOX');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('PIKAFXS');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('Panasonic KX');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('Panasonic KX-HDV');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('Panasonic TGP5xx');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('Polycom');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('Polycom IP320/330');
@@ -784,6 +799,7 @@ INSERT OR IGNORE INTO Device_atl(pkey) values ('cisco.Common');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('cisco.Fkey');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('directory.xml');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('panasonic.Fkey');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('panasonicHDV.Fkey');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('phone.cfg');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('polycom-locals.cfg');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('polycom-phone1.cfg');
@@ -791,6 +807,14 @@ INSERT OR IGNORE INTO Device_atl(pkey) values ('polycom.Fkey');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('snom.Common');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('snom.Fkey');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('snom.tls');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('VCS754A.cfg');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('VSP600A.cfg');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('VSP715A.cfg');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('VSP725A.cfg');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('VCS754A.cfg');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('Vtech');
+INSERT OR IGNORE INTO Device_atl(pkey) values ('Vtech.Common');
+
 INSERT OR IGNORE INTO Device_atl(pkey) values ('y000000000000.cfg');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('y000000000004.cfg');
 INSERT OR IGNORE INTO Device_atl(pkey) values ('y000000000005.cfg');

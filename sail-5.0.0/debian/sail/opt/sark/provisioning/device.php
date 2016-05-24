@@ -37,7 +37,8 @@ else {	// analyze what we got
 			polycomFirmware($frequest);
 			exit;
 		}
-		if (preg_match('/^([0-9A-Fa-f]{12})(.*)$/',$frequest,$matches)  ) {
+// try to harvest a MAC address
+		if (preg_match('/([0-9A-Fa-f]{12})(.*)$/',$frequest,$matches)  ) {
 			$mac = $matches[1];
 			$fname = $matches[2];
 			// check for polycom zero config file

@@ -1,8 +1,25 @@
+sail (5.0.0-15) UNRELEASED; urgency=low
+  * tagged as 5.0.0-15
+  - Fixed minor bug in descriptions in Firewall
+  - Added LDAP objects for Panasonic KX-HDV phones
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 24 May 2016 18:00:00 +0000
+
+sail (5.0.0-14) UNRELEASED; urgency=low
+  * tagged as 5.0.0-14
+  - Added Vtech objects for provisioning
+  - Added new Panasonic objects for KX-HDV phones
+  - Added hot reprovision support for KX-HDV phones
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 16 May 2016 18:00:00 +0000
+
 sail (5.0.0-12) UNRELEASED; urgency=low
   * tagged as 5.0.0-12
   - exposed dial params in callgroups
+  - fixed typo in postinst
+  - fixed link glitch in postinst
 
- -- CoCoSoft <admin@aelintra.com>  Fri, 29 Apr 2016 18:00:00 +0000
+ -- CoCoSoft <admin@aelintra.com>  Tue, 3 May 2016 18:00:00 +0000
 
 sail (5.0.0-11) UNRELEASED; urgency=low
   * tagged as 5.0.0-10

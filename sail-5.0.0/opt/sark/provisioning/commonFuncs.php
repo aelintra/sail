@@ -90,7 +90,13 @@ function genFkeys($phonepkey,$devpkey,$db,&$inline) {
 			"speed" => "ONETOUCH",
 			"line" => "DN",
 			"None" => "DN"
-		),			
+		),	
+		"panasonicHDV" => Array(
+			"blf" => "BLF",
+			"speed" => "ONETOUCH",
+			"line" => "LINE",
+			"None" => ""
+		),					
 		"polycom" => Array (
 			"None" => ""
 		),				
