@@ -539,7 +539,7 @@ Class page {
 		echo "\n";
 	}	
 	
-public function ajaxdeleteClick ($get) {
+	public function ajaxdeleteClick ($get) {
 
 		echo '<td class="icons"><a class="table-action-deletelink" href="delete.php"'; 
 		echo $get;

@@ -32,7 +32,7 @@
 			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5 ] }
 		],
 		"aaSorting": [[ 2, "desc" ]]
-	});
+	}).makeEditable();
 	 
 	$('#snaptable').dataTable ( {
 		"bPaginate": false,
@@ -42,7 +42,7 @@
 			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5 ] }
 		],
 		"aaSorting": [[ 2, "desc" ]]
-	});           
+	}).makeEditable();           
  });
  
 

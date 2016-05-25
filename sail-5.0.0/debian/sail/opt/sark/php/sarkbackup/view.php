@@ -210,7 +210,7 @@ private function showMain() {
 		echo '<td >' . $rdate . '</td>' . PHP_EOL;
 		echo '<td class="center"><a href="/php/download.php?dtype=bkup&dfile=' . $file . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;									
 		echo '<td class="center"><a href="/php/sarkbackup/main.php?regressbk=yes&dfile=' . $file . '" ><img src="/sark-common/icons/undo.png" border=0 title = "Click to Restore" )"></a></td>' . PHP_EOL;	
-		echo '<td class="center"><a class="table-action-deletelink" href="/php/sarkbackup/delete.php?id=/opt/sark/bkup/' . $file . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;							
+		echo '<td class="icons"><a class="table-action-deletelink" href="delete.php?id=/opt/sark/bkup/' . $file . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;							
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
 	}
@@ -250,7 +250,7 @@ private function showMain() {
 		echo '<td>' . $rdate . '</td>' . PHP_EOL;
 		echo '<td class="center"><a href="/php/download.php?dtype=snap&dfile=' . $file . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;									
 		echo '<td class="center"><a href="/php/sarkbackup/main.php?regress=yes&dfile=' . $file . '"><img src="/sark-common/icons/undo.png" border=0 title = "Click to Regress" onclick="return confirmOK(\'Regress to this Snapshot - Confirm?\')"></a></td>' . PHP_EOL;	
-		echo '<td class="center"><a class="table-action-deletelink" href="/php/sarkbackup/delete.php?id=/opt/sark/snap/' . $file . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;							
+		echo '<td class="center"><a class="table-action-deletelink" href="delete.php?id=/opt/sark/snap/' . $file . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;							
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
 	}
