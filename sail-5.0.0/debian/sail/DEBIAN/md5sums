@@ -290,7 +290,7 @@ d96430251e14697f663955bdbbe377fd  opt/sark/generator/shorewallreload.php
 e6d7dad28e5747dbdc4d037b192a3d8c  opt/sark/generator/srkcsvloader.php
 0570f829f317efd2963e9065713d4882  opt/sark/generator/srkdumper.php
 2c6b19a21d66f950afae0354609ce63e  opt/sark/generator/srktimer.php
-3027e95aeaa40a9f61d54ce6ac163c19  opt/sark/generator/srkusb.php
+c99181eb40488dedba31cd3b87b9e8b0  opt/sark/generator/srkusb.php
 3935564d084961a2412fb91278f14ba3  opt/sark/generator/vcard_convert.php
 8828408697734e343bdbd5e179797bb5  opt/sark/generator/vcfconvert.php
 727a133c53c736913054ea12ff10d90d  opt/sark/generator/vmailSQL.php
@@ -1401,5 +1401,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-542b8ec70d195240fce198c5a41d44e0  usr/share/doc/sail/changelog.Debian.gz
+1fec80ff85127d44150a22f3860d2047  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

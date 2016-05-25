@@ -15,8 +15,12 @@
 // +-----------------------------------------------------------------------+
 // 
 
-$media = "/media/S200UTILS";
-if (!file_exists($media)) {
+if ( ! `mount | grep "/dev/sda1 on /media/usb0 type"`) {
+	exit;
+}
+
+$media = "/media/usb0";
+if (!file_exists($media . '/SARK')) {
 	exit;
 }
 
@@ -31,11 +35,8 @@ $dhcp_on_string =
 		"iface default inet dhcp\n" .
 		"source /etc/network/interfaces.d/*\n";
 
-if (!file_exists($media."/SARK")) {
-	`/bin/mkdir $media/SARK`;
-}
 ini_set("log_errors", 1);
-ini_set("error_log", $media."/SARK/runlog");
+ini_set("error_log", $media."/media/usb0/SARK/runlog");
 logIt("USB UTILS stick detected, Begin processing");
 
 if (file_exists($media."/SARK/MAC")) {
@@ -61,9 +62,13 @@ if (file_exists($media."/SARK/MAC")) {
 		if (file_exists($media."/SARK/RESETPASS")) {
 			logIt("Password RESET REQUESTED");
 			logIt("resettng web password");
+/*
 			`echo admin:saY5WNr1mlMqU > /opt/sark/passwd/htpasswd`;
 			logIt("resetting root password");
 			`/usr/sbin/usermod -p $(echo sarkroot | openssl passwd -1 -stdin) root`;
+*/
+			`/usr/bin/sqlite3 /opt/sark/db/sark.db "delete from User where pkey='admin';"`;
+			`/usr/bin/sqlite3 /opt/sark/db/sark.db < /opt/sark/always/1408278454.db_v4_set_defaults`;
 			unlink($media."/SARK/RESETPASS");
 		}	
 	}	
