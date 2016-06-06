@@ -31,19 +31,20 @@
 		"bAutoWidth": true,
 		"sDom": 'tf',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 2,3,4,5,6 ] }
+			{ "bSortable": false, "aTargets": [ 2,3,4,5,6,7 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
 			{ "sName": "cluster"},
 			{ "sName": "greetnum" },
+			{ "sName": "description" },
 			{ "sName": "timeout" },
 			{ "sName": "listenforext" },			
 			{ "sName": "edit" },
 			{ "sName": "del" }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-          $('td:eq(1),td:eq(2),td:eq(3),td:eq(4)', nRow).addClass( "bluetags" );
+          $('td:eq(1),td:eq(2),td:eq(3),td:eq(4),td:eq(5)', nRow).addClass( "bluetags" );
         }   
 
 	} ).makeEditable({
@@ -73,7 +74,15 @@
                     loadurl: '/php/greetings/list.php',       
                     loadtype: 'GET',
                     placeholder: "None"					
-				}, 		// greetings	
+				}, 		// greetings
+				{
+					type: 'textarea',
+					submit:'Save',
+					tooltip: 'Click to set description',
+					event: 'click',
+					onblur: 'cancel',	
+					placeholder: 'Null'
+				},		// description					
 				{
 					type: 'select',
 					tooltip: 'Click to select timeout action',

@@ -107,6 +107,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('ivrname');
 	$this->myPanel->aHeaderFor('cluster'); 	
 	$this->myPanel->aHeaderFor('greeting');
+	$this->myPanel->aHeaderFor('description');
 	$this->myPanel->aHeaderFor('timeout');
 	$this->myPanel->aHeaderFor('listenforext');
 	$this->myPanel->aHeaderFor('ed');
@@ -123,7 +124,8 @@ private function showMain() {
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
 		echo '<td class="read_only">' . $row['pkey'] . '</td>' . PHP_EOL;			
 		echo '<td >' . $row['cluster']  . '</td>' . PHP_EOL;		 
-		echo '<td class="icons">' . $row['greetnum']  . '</td>' . PHP_EOL;	
+		echo '<td class="icons">' . $row['greetnum']  . '</td>' . PHP_EOL;
+		echo '<td >' . $row['description']  . '</td>' . PHP_EOL;	
 		echo '<td >' . $row['timeout']  . '</td>' . PHP_EOL;
 		echo '<td class="icons">' . $row['listenforext']  . '</td>' . PHP_EOL;	
 		$get = '?edit=yes&amp;pkey=';
@@ -166,7 +168,7 @@ private function showNew() {
 	$this->myPanel->aLabelFor('cluster','cluster');
 	$this->myPanel->displayCluster();	
 	$this->myPanel->aLabelFor('description');
-	echo '<input type="test" name="desc" id="desc" size="30" placeholder="enter description"  />' . PHP_EOL;			
+	echo '<input type="test" name="description" id="description" size="30" placeholder="enter description"  />' . PHP_EOL;			
 		
 
 }

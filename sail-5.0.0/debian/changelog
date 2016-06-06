@@ -1,3 +1,10 @@
+sail (5.0.0-18) UNRELEASED; urgency=low
+  * tagged as 5.0.0-18
+  - fixed bug in srkIVR.  Adding description in create panel causes blank screen to be rendered
+  - updated Vtech templates after input from Vtech
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 6 Jun 2016 18:00:00 +0000
+
 sail (5.0.0-17) UNRELEASED; urgency=low
   * tagged as 5.0.0-17
   - fixed bug in srkbackup.  Screen not rendering after bkup/snap delete

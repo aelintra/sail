@@ -254,7 +254,7 @@ dfced7667010a86c22b82ed77cdb4841  opt/sark/countries/zm.zone
 8c94efe3682ba36a21e6c56af65aa8a0  opt/sark/countries/zw.zone
 d9a06d67646549c502dc676e4373f25a  opt/sark/db/.sail-install-date
 a41ea0de4b3c9276b7e37d7aa6426b32  opt/sark/db/db_v4_create.sql
-8cfa121f312af71eb9c2fd071fd9f941  opt/sark/db/db_v4_device.sql
+62beaf5624c7c3dbbf5ab930f1a5d113  opt/sark/db/db_v4_device.sql
 84af5bad79cba06e9c3c67085ef2735a  opt/sark/db/db_v4_system.sql
 fc6ff2307a71a374b7148da57410afcf  opt/sark/db/ldap_create.ldif
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/db/srkaudit.log
@@ -434,10 +434,10 @@ d844513c39d13b48d915d1aa174ca8f5  opt/sark/php/sarkholiday/update.php
 4a892a783ef2a15f3ea9e48c6b9dc008  opt/sark/php/sarkipblacklist/update.php
 4ea925437ddc27d9c1336bf88c63bd5b  opt/sark/php/sarkipblacklist/view.php
 d9c42a9d7f4c2580ec78f4fdd90f3a52  opt/sark/php/sarkivr/delete.php
-6167762d2a7215bc9bca105dc772995f  opt/sark/php/sarkivr/javascript.js
+19d2bc010c0c876fc5d90cba33a329e5  opt/sark/php/sarkivr/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkivr/main.php
 d39c2554da2c092fd4efb2a957b12734  opt/sark/php/sarkivr/update.php
-e2b60a889c9603a5d95105fa7d1d921f  opt/sark/php/sarkivr/view.php
+a2f9c20bbdac25a0d9982fe3ecd180aa  opt/sark/php/sarkivr/view.php
 ed57e19edeb522ea10e70f3a5ff3a7b0  opt/sark/php/sarkldap/delete.php
 4fa90c1f49aaf55b1dede1ea53598cab  opt/sark/php/sarkldap/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkldap/main.php
@@ -1401,5 +1401,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-e0d97dcdc5fd6099bb520b70ed4f055c  usr/share/doc/sail/changelog.Debian.gz
+c804c0150dc3b769186d952251dde1ce  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
