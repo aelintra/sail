@@ -256,6 +256,184 @@ subscribecontext=extensions
 disallow=all 
 allow=alaw
 allow=ulaw','SIP');
+
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D305','snom.Fkey','5','Snom D305 series','Snom D305','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D315','snom.Fkey','5','Snom D315 series','Snom D315','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D345','snom.Fkey','5','Snom D345 series','Snom D345','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D710','snom.Fkey','5','Snom D710 series','Snom D710','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D715','snom.Fkey','5','Snom D715 series','Snom D715','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D725','snom.Fkey','5','Snom D725 series','Snom D725','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D745','snom.Fkey','5','Snom D745 series','Snom D745','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom D765','snom.Fkey','5','Snom D765 series','Snom D765','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
+
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom 300','snom.Fkey','5','Snom 300 series','Snom 300','#INCLUDE snom.Common
 user_realname1$: $desc
 user_name1$: $ext
