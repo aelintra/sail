@@ -51,6 +51,10 @@ public function showForm() {
 				header("Location: ../sarkwallboard/main.php"); 
 				die("Redirecting to: sarkwallboard/main.php");
 			}
+            else if ( $_POST['pkey'] == 'directory' ) {
+                header("Location: ../sarkldap/main.php");
+                die("Redirecting to: sarkldap/main.php");
+            }			
 			else {
 				header("Location: ../sarkphone/main.php"); 
 				die("Redirecting to: sarkphone/main.php");	

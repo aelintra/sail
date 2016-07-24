@@ -1,3 +1,15 @@
+sail (5.0.0-20) UNRELEASED; urgency=low
+  * tagged as 5.0.0-20
+  - fixed corrupt download for zip backups
+  - fixed display error after restore in backup panel
+  - fixed COS error after extension number change
+  - added master checkbox to factory reset
+  - fixed/modified ldap reset function
+  - added 'Clean()' function to ldapHelper 
+  - fixed spelling error in sip_header.conf (maxexpiry)
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 24 July 2016 18:00:00 +0000
+
 sail (5.0.0-19) UNRELEASED; urgency=low
   * tagged as 5.0.0-19
   - added templates for Snom D series phones

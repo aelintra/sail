@@ -40,8 +40,9 @@ public function showForm() {
 
 	if (!empty( $_POST['password'] )) {
 		if ($this->helper->checkCreds( "admin",$_POST['password'],$this->message,false )) {
-			$this->doRestore();
+			$this->doRestore();			
 			$this->message = "Restore complete";
+			return;
 //			$this->helper->request_syscmd ("reboot");
 //			$this->reboot=true;
 		}

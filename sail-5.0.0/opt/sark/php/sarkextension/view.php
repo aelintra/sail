@@ -1053,7 +1053,11 @@ private function saveEdit() {
 						$newmail = '/var/spool/asterisk/voicemail/default/'.$newkey;
 						$this->helper->request_syscmd ("/bin/mv $oldmail $newmail");
 					}
+					// delete the old COS entries
+					$this->helper->predDelTuple("IPphoneCOSopen","IPphone_pkey",$tuple['pkey']);
+	 				$this->helper->predDelTuple("IPphoneCOSclosed","IPphone_pkey",$tuple['pkey']);
 				}
+				
 				else {
 					$this->invalidForm = True;
 					$this->message = "<B>  --  Validation Errors!</B>";	

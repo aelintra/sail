@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkLDAPHelperClass";
 
 Class sarkfreset {
 	
@@ -44,10 +45,12 @@ public function showForm() {
 	
 	if (!empty( $_POST['password'] )) {
 		if ($this->helper->checkCreds( "admin",$_POST['password'],$this->message,$login )) {
+			$this->reboot = false;
 			$this->doReset();
-			$this->message = "Rebooting now (IP may change)";
-			$this->helper->request_syscmd ("reboot");
-			$this->reboot=true;
+			if ($this->reboot) {
+				$this->message = "Rebooting now (IP may change)";			
+				$this->helper->request_syscmd ("reboot");
+			}
 		}		
 	}
 	else {
@@ -75,7 +78,7 @@ private function showMain() {
 		}       
 	}
 	
-	if ($this->reboot) {
+	if ($this->log) {
 		echo '<div class="messagebox" >';
 		echo '<div class="message" style="font-size: 2em;padding-left:10em;padding-top:2em;">';
 		echo $this->log;
@@ -87,48 +90,52 @@ private function showMain() {
     echo '<div class="datadivtabedit">';
 
 	echo '<div id="reset" >'. PHP_EOL;
-	
+	echo '<input id="selectall" type="checkbox" name="selectall" >'. PHP_EOL;
+	echo ' :Select/Deselect all';
+	echo '<br/>';
+	echo '<br/>';	
 	echo '<h2>'. PHP_EOL;
-	echo '<input id="resetdb" type="checkbox" name="resetdb" checked="checked" >'. PHP_EOL;
+	
+	echo '<input class="resetcheck" id="resetdb" type="checkbox" name="resetdb" >'. PHP_EOL;
 	echo ' :Reset PBX Database?';
 	echo '<br/>';
-	echo '<input id="backups" type="checkbox" name="backups" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="backups" type="checkbox" name="backups" >'. PHP_EOL;
 	echo ' :Delete backups?';				
 	echo '<br/>';
-	echo '<input id="snaps" type="checkbox" name="snaps" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="snaps" type="checkbox" name="snaps" >'. PHP_EOL;
 	echo ' :Delete snapshots?';				
 	echo '<br/>';
-	echo '<input id="usergreets" type="checkbox" name="usergreets" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="usergreets" type="checkbox" name="usergreets" >'. PHP_EOL;
 	echo ' :Delete greetings?';				
 	echo '<br/>';
-	echo '<input id="vmail" type="checkbox" name="vmail" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="vmail" type="checkbox" name="vmail" >'. PHP_EOL;
 	echo ' :Delete voicemail?';				
 	echo '<br/>';
-	echo '<input id="vrec" type="checkbox" name="vrec" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="vrec" type="checkbox" name="vrec" >'. PHP_EOL;
 	echo ' :Delete recordings?';				
 	echo '<br/>';		
-	echo '<input id="cdrs" type="checkbox" name="cdrs" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="cdrs" type="checkbox" name="cdrs" >'. PHP_EOL;
 	echo ' :Delete CDRs?';				
 	echo '<br/>';
-	echo '<input id="logs" type="checkbox" name="logs" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="logs" type="checkbox" name="logs" >'. PHP_EOL;
 	echo ' :Delete logs?';				
 	echo '<br/>';
-	echo '<input id="firewall" type="checkbox" name="firewall" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="firewall" type="checkbox" name="firewall" >'. PHP_EOL;
 	echo ' :Reset firewall rules to default?';				
 	echo '<br/>';
-	echo '<input id="dhcp" type="checkbox" name="dhcp" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="dhcp" type="checkbox" name="dhcp" >'. PHP_EOL;
 	echo ' :Reset network to defaults (DHCP)?';				
 	echo '<br/>';	
-	echo '<input id="host" type="checkbox" name="host" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="host" type="checkbox" name="host" >'. PHP_EOL;
 	echo ' :Reset hostname and domain to default?';				
 	echo '<br/>';		
-	echo '<input id="sshport" type="checkbox" name="sshport" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="sshport" type="checkbox" name="sshport" >'. PHP_EOL;
 	echo ' :Reset ssh port to default?';				
 	echo '<br/>';	
-	echo '<input id="recs" type="checkbox" name="recs" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="recs" type="checkbox" name="recs" >'. PHP_EOL;
 	echo ' :Delete voice recordings?';				
 	echo '<br/>';
-	echo '<input id="ldap" type="checkbox" name="ldap" checked="checked" >'. PHP_EOL;
+	echo '<input class="resetcheck" id="ldap" type="checkbox" name="ldap" >'. PHP_EOL;
 	echo ' :Delete LDAP directory entries?';				
 	echo '<br/>';																													
 	echo '</h2>'. PHP_EOL;
@@ -173,7 +180,6 @@ private function doReset() {
 		"wtmp"
 	);
 
-
 //	return;
 	$dhcp_reset_string = 
 		"auto lo eth0\niface lo inet loopback\n".
@@ -189,66 +195,52 @@ private function doReset() {
 		"127.0.0.1 debian";
 	
 	if ( isset($_POST['resetdb'] ) ) {
-		if ($this->live) {
 			$this->helper->request_syscmd ("mv /opt/sark/db/sark.db /opt/sark/db/sark.db.insurance");
 			$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reload");
-		}
 		$this->log .= "<p>database RESET</p>";
 	}
 	else {
 		$this->log .= "<p>database PRESERVED</p>";	
 	}
 	if ( isset($_POST['backups'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("rm -rf /opt/sark/bkup/*");
-//		}
 		$this->log .= "<p>backups DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>backups PRESERVED</p>";	
 	}	
 	if ( isset($_POST['snaps'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("rm -rf /opt/sark/snap/*");
-//		}
 		$this->log .= "<p>snaps DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>snaps PRESERVED</p>";	
 	}		 			
 	if ( isset($_POST['usergreets'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("rm -rf /usr/share/asterisk/sounds/usergreeting*");
-//		}
 		$this->log .= "<p>greetings DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>greetings PRESERVED</p>";	
 	}	
 	if ( isset($_POST['vmail'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/voicemail/default/*");
-//		}
 		$this->log .= "<p>voicemail DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>voicemail PRESERVED</p>";	
 	}	
 	if ( isset($_POST['vrec'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/monitor/*");
 			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/monout/*");
 			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/monstage/*");
-//		}
 		$this->log .= "<p>recordings DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>recordings PRESERVED</p>";	
 	}				
 	if ( isset($_POST['cdrs'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("cat /dev/null > /var/log/asterisk/cdr-csv/Master.csv");
-//		}
 		$this->log .= "<p>CDRs DELETED</p>";
 	}
 	else {
@@ -265,11 +257,9 @@ private function doReset() {
 		$this->log .= "<p>logs PRESERVED</p>";	
 	}		
 	if ( isset($_POST['firewall'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("cp -a /opt/sark/cache/sark_rules_reset /etc/shorewall/sark_rules");
 			$this->helper->request_syscmd ("sed -i 's|^Ping/REJECT|Ping/ACCEPT|' /etc/shorewall/rules");
 			$this->helper->request_syscmd ("shorewall restart");
-//		}	
 		$this->log .= "<p>firewall RESET</p>";
 		$this->log .= "<p>firewall RESTARTED</p>";
 	}
@@ -277,7 +267,6 @@ private function doReset() {
 		$this->log .= "<p>firewall PRESERVED</p>";	
 	}			
 	if ( isset($_POST['dhcp'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("echo $dhcp_reset_string > /etc/network/interfaces");
 			$this->helper->request_syscmd ('echo "nameserver 8.8.8.8" > /etc/resolv.dnsmasq');
 			$this->helper->request_syscmd ('echo "nameserver 8.8.8.8" > /etc/resolv.conf');
@@ -292,45 +281,47 @@ private function doReset() {
 			$this->helper->request_syscmd ("cp -a /opt/sark/cache/revaliases-reset /etc/ssmtp/revaliases");	
 			$this->helper->request_syscmd ("cp -a /opt/sark/cache/ntp-reset.conf /etc/ntp.conf");						
 			$this->helper->request_syscmd ("cat /dev/null > /etc/resolv.conf");
-//		}
-		$this->log .= "<p>network RESET</p>";	
+		$this->log .= "<p>network RESET</p>";
+		$this->reboot = true;	
 	}
 	else {
 		$this->log .= "<p>network PRESERVED</p>";	
 	}		
 	if ( isset($_POST['host'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("echo s200 > /etc/hostname");
-//		}
 		$this->log .= "<p>hostname RESET</p>";
+		$this->reboot = true;
 	}
 	else {
 		$this->log .= "<p>hostname PRESERVED</p>";	
 	}	
 	if ( isset($_POST['sshport'] ) ) {
-//		if ($this->live) {
 			$this->helper->request_syscmd ("/bin/sed -i 's/^Port [0-9][0-9]*/Port 22/' /etc/ssh/sshd_config");
-//		}
-		$this->log .= "<p>sshport RESET</p>";		
+		$this->log .= "<p>sshport RESET</p>";
+		$this->reboot = true;		
 	}
 	else {
 		$this->log .= "<p>sshport PRESERVED</p>";	
 	}
 	if ( isset($_POST['ldap'] ) ) {
-//		if ($this->live) {
-			$this->helper->request_syscmd ("/etc/init.d/slapd stop");
-			$this->helper->request_syscmd ("rm -rf /var/lib/ldap/*");
-			$this->helper->request_syscmd ("slapadd -l /opt/sark/cache/sark.local.empty.ldif");
-			$this->helper->request_syscmd ("chown openldap:openldap /var/lib/ldap/*");
-			$this->helper->request_syscmd ("/etc/init.d/slapd start");			
-//		}
+		$this->ldap = new ldaphelper;
+		if (!$this->ldap->Connect()) {
+			$this->message = "ERROR - Could not connect to LDAP";
+		}
+		else {
+			$result = $this->ldap->Clean();
+		}
 		$this->log .= "<p>LDAP Directory RESET</p>";
 	}
 	else {
 		$this->log .= "<p>LDAP Directory PRESERVED</p>";	
 	}
 		
-	$this->log .= "<br/><br/><p>Rebooting...</p>";
-
+	if ($this->reboot) {
+		$this->log .= "<br/><br/><p>Rebooting...</p>";
+	}
+	else {
+		$this->log .= "<br/><br/><p>Reset complete...</p>";
+	}
 }
 }

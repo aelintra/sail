@@ -73,13 +73,13 @@ public function Add($arg) {
     return "Saved new LDAP contact ";	
 }
 
-// untested, unused
+// Used by the factory reset function
 public function Clean() {
-	$sr=ldap_list($thisds,$this->addressbook . "," . $this->base,"cn=*",array(""));
+	$sr=ldap_list($this->ds,$this->addressbook . "," . $this->base,"cn=*",array(""));
     $info = ldap_get_entries($this->ds, $sr);
     for($i=0;$i<$info['count'];$i++){
-		$dn = "uid=" . $info[$i]['dn'] . "," . $ldap->addressbook . "," . $ldap->base;
-        $result = ldap_delete($ds,$dn);
+		$dn = $info[$i]['dn'];
+        $result = ldap_delete($this->ds,$dn);
         if(!$result){
 			//return result code, if delete fails
 			return($result);
