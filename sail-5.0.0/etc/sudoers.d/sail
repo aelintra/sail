@@ -1,0 +1,3 @@
+www-data ALL=NOPASSWD: /etc/init.d/asterisk
+www-data ALL=NOPASSWD: /usr/sbin/asterisk
+www-data ALL=NOPASSWD: /sbin/shorewall

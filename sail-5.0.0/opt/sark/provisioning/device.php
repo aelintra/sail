@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
 	send200();
 	exit;	
 }
+logit ("processing URI " . $_SERVER["REQUEST_URI"]);
 // see if we have a mac in the GET
 if (isset($_GET['mac'])) {
 	$mac = strtolower($_GET['mac']);
@@ -37,20 +38,28 @@ else {	// analyze what we got
 			polycomFirmware($frequest);
 			exit;
 		}
-// try to harvest a MAC address
-		if (preg_match('/([0-9A-Fa-f]{12})(.*)$/',$frequest,$matches)  ) {
-			$mac = $matches[1];
-			$fname = $matches[2];
-			// check for polycom zero config file
-			if ($mac != '000000000000') {
-			}
-			else {
-				$mac=$frequest;
-				$descriptor=true;
-			}
+// check for Yealink Y file
+		if (preg_match('/^y000000(.*).cfg$/',$frequest)  ) {
+			logit ("Found Yealink Y file  " . $frequest);
+			$descriptor = true;
 		}
 		else {
-			$descriptor=true;
+// try to harvest a MAC address
+			if (preg_match('/([0-9A-Fa-f]{12})(.*)$/',$frequest,$matches)  ) {
+				$mac = $matches[1];
+				$fname = $matches[2];
+				logit ("Found MAC " . $mac);
+				// check for polycom zero config file
+				if ($mac != '000000000000') {
+				}
+				else {
+				$mac=$frequest;
+				$descriptor=true;
+				}
+			}
+			else {
+				$descriptor=true;
+			}
 		}
 	}
 	else {
@@ -58,7 +67,7 @@ else {	// analyze what we got
 		send404();
 		exit;
 	}
-}	
+}
 
 // see if this mac/descriptor exists, quit if not
 try {

@@ -357,6 +357,8 @@ UNDO TEXT,                          -- not used in 4.x
 UNDONUM TEXT,                       -- not used in 4.x 
 UNDOONOFF TEXT,                     -- not used in 4.x 
 USBRECDISK TEXT,                    -- not used in 4.x 
+VCL TEXT,							-- V5 cloud
+VCLFULL TEXT,						-- V5 cloud param
 VDELAY TEXT,                        -- artificial ring on inbound SIP
 VLIBS TEXT,                         -- not used in 4.x 
 VMAILAGE TEXT,                      -- oldest age of vmail

@@ -37,7 +37,7 @@
 	$helper = new helper;
 
 	if ( $helper->check_pid() ) {	
-		$ccount = `/usr/sbin/asterisk -rx 'core show channels count'`;
+		$ccount = `sudo /usr/sbin/asterisk -rx 'core show channels count'`;
 	}
 		
 /*	
@@ -67,8 +67,8 @@
 	}  
 	else {
 		echo "</div>";
-		$result = `/usr/sbin/asterisk -rx 'core show channels concise'`;
-		$ccount = `/usr/sbin/asterisk -rx 'core show channels count'`;
+		$result = `sudo /usr/sbin/asterisk -rx 'core show channels concise'`;
+		$ccount = `sudo /usr/sbin/asterisk -rx 'core show channels count'`;
     	$data = explode("\n", $result);
 		echo '<div class="statusdiv">'; 
     	echo '<table id="statustable">';

@@ -183,8 +183,6 @@ fi
 
 #sudoers
 if [ ! -e /etc/sudoers.d/sail ]; then 
-	echo www-data ALL=NOPASSWD: /etc/init.d/asterisk > /etc/sudoers.d/sail
-	echo www-data ALL=NOPASSWD: /sbin/shorewall >> /etc/sudoers.d/sail
 	chmod 0440 /etc/sudoers.d/sail
 fi
 if [ ! -e /etc/sudoers.d/sarkrssh ]; then
