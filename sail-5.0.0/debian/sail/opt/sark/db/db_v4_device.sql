@@ -3406,3 +3406,169 @@ INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,
 FLEX_BUTTON_FACILITY_ARG$seq="$value"
 FLEX_BUTTON_LABEL$seq="$label"','BLF Template','2016-05-16 16:23:05','2016-05-16 16:23:54','system');
 COMMIT;
+INSERT OR IGNORE INTO "Device" VALUES('Aastra VXT',NULL,NULL,'Aastra Hot Desk Template','AastraVXT',NULL,NULL,NULL,NULL,'["$MAC.cfg"
+download protocol: TFTP
+sip outbound proxy: $localip
+sip registrar ip: $localip
+sip screen name: $desc
+sip user name: $ext
+sip display name: $ext
+sip vmail: *50*
+sip auth name: $ext
+sip password: $password
+sip mode: 0
+sip proxy ip: $localip
+sip proxy port: 5060
+missed calls indicator disabled: 1
+directory 1: seldir
+#softkey1 type: blf
+#softkey1 label: name
+#softkey1 value: 5000
+#softkey1 line: 1
+]','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP',NULL,NULL,'2016-06-08 19:42:37','2016-06-08 19:42:37','system');
+INSERT OR IGNORE INTO "Device" VALUES('Snom VXT','snom.Fkey',NULL,'Snom Hot Desk Template','Snom VXT',NULL,NULL,NULL,NULL,'#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP',NULL,NULL,'2016-06-08 19:42:37','2016-07-28 19:05:56','system');
+INSERT INTO "Device" VALUES('Yealink VXT',NULL,NULL,'Yealink office phone range',NULL,NULL,NULL,'1',NULL,'#!version:1.0.0.1
+
+##File header "#!version:1.0.0.1" can not be edited or deleted, and must be placed in the first line.##
+
+account.1.enable = 1
+account.1.label = $ext
+account.1.display_name = $desc
+account.1.auth_name = $ext
+account.1.password = $password  
+account.1.user_name =  $ext
+account.1.sip_server_host = $localip
+account.1.outbound_proxy_enable = 1
+account.1.outbound_host = $localip
+account.1.proxy_require = $localip
+
+#Enable or disable the phone to subscribe the register status; 0-Disabled (default), 1-Enabled;
+account.1.subscribe_register = 1
+
+#Enable or disable the phone to subscribe the message waiting indicator; 0-Disabled (default), 1-Enabled;
+account.1.subscribe_mwi = 1
+
+#Enable or disable the phone to subscribe to the voicemail through the message waiting indicator; 0-Disabled (default), 1-Enabled;
+account.1.subscribe_mwi_to_vm = 1
+
+voice_mail.number.1 = *50*
+
+# Enable/Disable the codecs you want to use - default is law, G729, G722
+
+account.1.codec.1.enable = 1
+account.1.codec.1.payload_type = PCMU
+account.1.codec.1.priority = 1
+account.1.codec.1.rtpmap = 0
+
+account.1.codec.2.enable = 1
+account.1.codec.2.payload_type = PCMA
+account.1.codec.2.priority = 2 
+account.1.codec.2.rtpmap = 8
+
+account.1.codec.3.enable = 0 
+account.1.codec.3.payload_type = G723_53
+account.1.codec.3.priority =0
+account.1.codec.3.rtpmap = 4
+
+account.1.codec.4.enable = 0
+account.1.codec.4.payload_type = G723_63
+account.1.codec.4.priority = 0
+account.1.codec.4.rtpmap = 4
+
+account.1.codec.5.enable = 1
+account.1.codec.5.payload_type = G729
+account.1.codec.5.priority = 3
+account.1.codec.5.rtpmap = 18
+
+account.1.codec.6.enable = 1
+account.1.codec.6.payload_type = G722
+account.1.codec.6.priority = 4
+account.1.codec.6.rtpmap = 9
+
+account.1.codec.7.enable = 0
+account.1.codec.7.payload_type = iLBC
+account.1.codec.7.priority =  0
+account.1.codec.7.rtpmap = 102
+
+account.1.codec.8.enable = 0
+account.1.codec.8.payload_type = G726-16
+account.1.codec.8.priority = 0
+account.1.codec.8.rtpmap = 112
+
+account.1.codec.9.enable = 0
+account.1.codec.9.payload_type = G726-24
+account.1.codec.9.priority = 0
+account.1.codec.9.rtpmap = 102
+
+account.1.codec.10.enable = 0
+account.1.codec.10.payload_type = G726-32 
+account.1.codec.10.priority = 0 
+account.1.codec.10.rtpmap = 99
+
+account.1.codec.11.enable = 0
+account.1.codec.11.payload_type = G726-40
+account.1.codec.11.priority = 0
+account.1.codec.11.rtpmap = 104
+
+account.1.codec.12.enable = 0
+account.1.codec.12.payload_type = iLBC_13_3
+account.1.codec.12.priority = 0 
+account.1.codec.12.rtpmap = 97
+
+account.1.codec.13.enable = 0
+account.1.codec.13.payload_type = iLBC_15_2
+account.1.codec.13.priority = 0 
+account.1.codec.13.rtpmap = 97 
+
+#INCLUDE yealink.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP',NULL,NULL,'2016-06-08 19:42:37','2016-07-28 19:01:43','system');

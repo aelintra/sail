@@ -1,3 +1,11 @@
+sail (5.0.0-22) UNRELEASED; urgency=low
+  * tagged as 5.0.0-22
+  - Added VXT templates for snom and yealink
+  - fixed perms issue in the V4reloader
+  - fixed issue with sibling peer/user names
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 31 Aug 2016 18:00:00 +0000
+
 sail (5.0.0-21) UNRELEASED; urgency=low
   * tagged as 5.0.0-21
   - Added cust app stubs for hotdesk

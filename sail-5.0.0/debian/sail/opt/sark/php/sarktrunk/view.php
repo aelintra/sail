@@ -454,14 +454,14 @@ private function saveSibling(&$tuple) {
 			
 			$tuple['username'] 	= php_uname("n") . strip_tags($_POST['peername']);
 			$tuple['peername']  = strip_tags($_POST['peername']) . php_uname("n");
-			$tuple['desc']  	= $tuple['username'] ;				
+			$tuple['desc']  	= $tuple['peername'] ;				
 		}
 		else {
 	
 			$tuple['username'] 	= php_uname("n") . "~" . strip_tags($_POST['peername']);
 			$tuple['peername']  = strip_tags($_POST['peername']) . "~" . php_uname("n");;
-			$tuple['desc']  	= $tuple['username'] ;					
-		}	 							
+			$tuple['desc']  	= $tuple['peername'] ;					
+		}	 										
 		$template = $this->copyTemplates ($tuple);	
 	}
     else {

@@ -33,7 +33,12 @@ if [ ! -e /etc/asterisk/sark_customer_sip_header.conf ]; then
         echo "language=en-gb" >> /etc/asterisk/sark_customer_sip_header.conf
 fi
 
-usermod -a -G asterisk www-data 
+usermod -a -G asterisk www-data
+
+# added in 5.0.0-21 for hotdesk 
+usermod -a -G www-data asterisk
+chmod 775 /opt/sark/db
+chmod 664 /opt/sark/db/sark.db
 
 [ -e /etc/dahdi ] && chown -R asterisk:asterisk /etc/dahdi
 [ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf

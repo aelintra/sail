@@ -103,8 +103,11 @@ sqlite3 $DBROOT/$SARKDB 'PRAGMA journal_mode=DELETE;' >/dev/null 2>&1
 echo Running the Generator
 sh $SARKROOT$GENAST
 
-#set ownership
+#set db ownership
 chown $HTTPOWNER $DBROOT/*
+
+#set db perms 
+chmod 664 $DBROOT/$SARKDB
 
 # clean the firewall up
 echo Running firewall sanitizer

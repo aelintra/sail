@@ -254,7 +254,7 @@ dfced7667010a86c22b82ed77cdb4841  opt/sark/countries/zm.zone
 8c94efe3682ba36a21e6c56af65aa8a0  opt/sark/countries/zw.zone
 d9a06d67646549c502dc676e4373f25a  opt/sark/db/.sail-install-date
 ab8ab800500436e7c9e69645729bb8b8  opt/sark/db/db_v4_create.sql
-0f29ba504543f5296de23bd6f684c1fe  opt/sark/db/db_v4_device.sql
+dd375cdae8c8b97847daf030ebd68c19  opt/sark/db/db_v4_device.sql
 bb23fc6ed36076c9258c93a3d1e49d8a  opt/sark/db/db_v4_system.sql
 fc6ff2307a71a374b7148da57410afcf  opt/sark/db/ldap_create.ldif
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/db/srkaudit.log
@@ -496,7 +496,7 @@ d755350b37071537dd6dbf91b6b1caa8  opt/sark/php/sarktimer/javascript.js
 ca5cf9cf3c36150aba5ce7fab8287ed2  opt/sark/php/sarktrunk/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarktrunk/main.php
 e00aa6f8e51e7637242ea5182ee96fcf  opt/sark/php/sarktrunk/update.php
-5fe3446bdec17bafafd6ef3e7cffc211  opt/sark/php/sarktrunk/view.php
+3991e3f45954f1871e3b45971bb62efc  opt/sark/php/sarktrunk/view.php
 ec00670675dea3518ac757cf795fff02  opt/sark/php/sarkuser/delete.php
 6983b50d410f992d9f38001793fdab67  opt/sark/php/sarkuser/extlist.php
 566f06493d13d4a15d41d82467ae54d0  opt/sark/php/sarkuser/javascript.js
@@ -544,7 +544,7 @@ fa5835d282709f5dd8eb7b2096b8c492  opt/sark/scripts/setip.sh
 7c744d9bbba85541d6f5ba6935a4de2d  opt/sark/scripts/snap.sh
 3bf6b7d431b32f7b593be5882b510a61  opt/sark/scripts/spin.sh
 0f964374943f16879b50a0a51c89f916  opt/sark/scripts/srkV4getCountries.sh
-3ab9170341e68e163bea0a0773e6fb9d  opt/sark/scripts/srkV4reloader.sh
+89cffe4910dd206c8a95fbf268378b3d  opt/sark/scripts/srkV4reloader.sh
 01f6a0a017be404ca4149fcd85202fa6  opt/sark/scripts/srkcronqmove.pl
 cd8ce0297f227f524f0f80f2def87c1a  opt/sark/scripts/srkenforcer.pl
 763528416bd19d4b01c93d34df1dfdd3  opt/sark/scripts/srkgenAst
@@ -1404,5 +1404,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-1c675a9b1a7448eff5d647ec819d15ff  usr/share/doc/sail/changelog.Debian.gz
+84eb5a5c86c1b6ea3f2e0092477c38dd  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
