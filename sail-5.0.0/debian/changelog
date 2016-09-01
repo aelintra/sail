@@ -1,3 +1,9 @@
+sail (5.0.0-23) UNRELEASED; urgency=low
+  * tagged as 5.0.0-23
+  - Turn on noproxy for general SIP extensions
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 1 Sep 2016 18:00:00 +0000
+
 sail (5.0.0-22) UNRELEASED; urgency=low
   * tagged as 5.0.0-22
   - Added VXT templates for snom and yealink
