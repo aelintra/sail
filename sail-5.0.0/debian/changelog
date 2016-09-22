@@ -1,3 +1,9 @@
+sail (5.0.0-24) UNRELEASED; urgency=low
+  * tagged as 5.0.0-24
+  - Fix to selmix for old selmx/selmixd problem
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 22 Sep 2016 18:00:00 +0000
+
 sail (5.0.0-23) UNRELEASED; urgency=low
   * tagged as 5.0.0-23
   - Turn on noproxy for general SIP extensions
