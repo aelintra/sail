@@ -21,7 +21,7 @@
 	}); 
 
 	$.validator.addMethod("alpha",function(value,element) {
-		return this.optional(element) || /^[A-Za-z0-9_-]{2,20}$/i.test(value); 
+		return this.optional(element) || /^[A-Za-z0-9_\-]{2,20}$/i.test(value); 
 	},"field can only contain alphanumerics and no spaces");
 	
 	$("#sarkappForm").validate ( {

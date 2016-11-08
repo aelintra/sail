@@ -47,7 +47,7 @@ public function showForm() {
 	
 	if (isset($_POST['upimgclick'])) { 
 		$filename = strip_tags($_FILES['file']['name']);
-		if (preg_match (' /^(usergreeting\d{4})\.(wav|gsm|mp3)$/ ', $filename, $matches) ) {
+		if (preg_match (' /^(usergreeting\d{4})\.(mp3)$/ ', $filename, $matches) ) {
 			if (glob('/usr/share/asterisk/sounds/' . $matches[1] . '.*')) {
 				$this->message = $matches[1] . " already exists";
 			}
@@ -58,7 +58,7 @@ public function showForm() {
 			}
 		}
 		else {
-			$this->message = "File name or type is incorrect";
+			$this->message = "*ERROR* - File name must be usergreetingxxxx.mp3";
 		}					
 	}	
 	
@@ -171,7 +171,13 @@ private function showMain() {
 		echo '<td >' . $row['desc']  . '</td>' . PHP_EOL;
 		echo '<td >' . $filesize. '</td>' . PHP_EOL;
 		echo '<td >' . $row['type']  . '</td>' . PHP_EOL;
-		echo '<td class="center"><a href="/php/downloadg.php?dfile=' . $file[0] . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
+		if (preg_match('/mp3$/',$file[0])) {
+			echo '<td class="center"><a href="/php/downloadg.php?dtype=greet&dfile=' . $file[0] . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
+		}
+		else {
+			echo '<td class="center">N/A</td>' . PHP_EOL;
+		}
+									
 		if (preg_match('(wav|mp3)',$row['type'])) {
 			echo '<td ><a href="/server-sounds/' . $row['pkey'] . '.' .$row['type'] . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
 		}

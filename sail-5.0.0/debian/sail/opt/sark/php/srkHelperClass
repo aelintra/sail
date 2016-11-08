@@ -747,7 +747,8 @@ public function buildTupleArray($post,&$tuple,$custom=false,$stripslash=array())
 		"alert8" => True,
 		"alert9" => True,		
 		"alert10" => True,		
-		"alert11" => True		
+		"alert11" => True,
+		"BOUNCEALERT" => True		
 	);
 /*
  * we don't strip_tags from the provision or friend variable because they 

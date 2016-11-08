@@ -37,7 +37,7 @@
 	$('#snaptable').dataTable ( {
 		"bPaginate": false,
 		"bAutoWidth": true,
-		"sDom": 'tf',
+		"sDom": 't',
 		"aoColumnDefs": [ 
 			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,5 ] }
 		],

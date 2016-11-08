@@ -433,7 +433,7 @@ subscribecontext=extensions
 disallow=all 
 allow=alaw
 allow=ulaw','SIP');
-
+Ä725
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology) values ('Snom 300','snom.Fkey','5','Snom 300 series','Snom 300','#INCLUDE snom.Common
 user_realname1$: $desc
 user_name1$: $ext
@@ -2671,6 +2671,7 @@ INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,z_updater) values ('VSP600A.cfg','Vtech cfg','#INCLUDE Vtech.Common','Descriptor','2016-05-16 13:25:21','2016-05-16 13:25:21','system');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,z_updater) values ('VSP715A.cfg','Vtech cfg','#INCLUDE Vtech.Common','Descriptor','2016-05-16 13:25:21','2016-05-16 13:25:21','system');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,z_updater) values ('VSP725A.cfg','Vtech cfg','#INCLUDE Vtech.Common','Descriptor','2016-05-16 13:25:21','2016-05-16 13:25:21','system');
+INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,z_updater) values ('VSP726A.cfg','Vtech cfg','#INCLUDE Vtech.Common','Descriptor','2016-05-16 13:25:21','2016-05-16 13:25:21','system');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,technology,z_created,z_updated,z_updater) values ('VSP735A.cfg','Vtech cfg','#INCLUDE Vtech.Common','Descriptor','2016-05-16 13:25:21','2016-05-16 13:25:21','system');
 INSERT OR IGNORE INTO Device(pkey,desc,provision,sipiaxfriend,technology,z_created,z_updated,z_updater) values ('Vtech','Vtech SIP Phone','sip_account.1.sip_account_enable = 1
 sip_account.1.label = $ext

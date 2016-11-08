@@ -3,31 +3,31 @@
 #	script to merge/move sound recordings 
 #
 
+# uncomment next line for syslog debug output
+#	DEBUG=1
+
 	test ! $1 && echo "NO P1!" && exit 4
 #	test ! $2 && echo "NO P2"  && exit 4
+
+	[ $DEBUG ] && logger selmixd running with $1 $2 $3
 
 	LEFT="$1" 
 	RIGHT="$2"
 	OUT="$3"
 
-	SOX=`/usr/bin/which soxmix`
-        MONITOROUT=/var/spool/asterisk/monout
+	SOX=`/usr/bin/which sox`
+	NICE=`/usr/bin/which nice`
+    MONITOROUT=/var/spool/asterisk/monout
 	MONITORSTAGE=/var/spool/asterisk/monstage
-	if [ -e /persistent ]; then 
-		MONITORSTAGE=/var/spool/asterisk/monout
-	fi
+	
 	if [ -e /opt/sark/.noqueues ]; then
 		MONITORSTAGE=/var/spool/asterisk/monout
 	fi
 
-#	echo "LEFT IS $LEFT"
-#	echo "RIGHT IS $RIGHT"
-#	echo "OUT IS $OUT"
-
-#	/usr/bin/test ! -r $RIGHT && exit 22
+	[ $DEBUG ] && logger LEFT IS $LEFT . RIGHT IS $RIGHT . OUT IS $OUT
 
 	if [ "$LEFT" = "mixmon" ]; then
-#		echo "MOVING MIXMON $RIGHT"
+		[ $DEBUG ] && logger MOVING MIXMON $RIGHT
 		if [ -e /opt/sark/otrr/$RIGHT ]; then
 			/bin/rm -rf /opt/sark/otrr/$RIGHT
 			/usr/bin/test ! -r  /opt/sark/.recone && exit 0
@@ -40,17 +40,15 @@
 			/bin/mv $RIGHT $MONITOROUT
 			exit 0
 		fi
-		echo "Removing unwanted mixmon $RIGHT"
+		[ $DEBUG ] && logger Removing unwanted mixmon $RIGHT
         	rm -rf $RIGHT
 		exit 0
 	fi
 	
-#	echo "MERGE/MOVE MONITOR"
+	[ $DEBUG ] && logger MERGE/MOVE $LEFT $RIGHT
 	/usr/bin/test ! -r $LEFT && exit 21
-	/bin/nice $SOX  -v 1 $LEFT -v 1 $RIGHT  $OUT
+	$NICE $SOX -m -v 1 $LEFT -v 1 $RIGHT  $OUT
 	/usr/bin/test  -r $OUT && rm -rf $LEFT $RIGHT
-#	/usr/bin/test ! -r  /opt/sark/.recone && exit 0 
 	/bin/mv $OUT $MONITORSTAGE
-#	/bin/rm -rf /home/sark/$OUT
 	exit 0
 # eof

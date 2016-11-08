@@ -47,10 +47,11 @@ public function showForm() {
 		if ($this->helper->checkCreds( "admin",$_POST['password'],$this->message,$login )) {
 			$this->reboot = false;
 			$this->doReset();
-			if ($this->reboot) {
+			unset($_SESSION['user']); 
+//			if ($this->reboot) {
 				$this->message = "Rebooting now (IP may change)";			
 				$this->helper->request_syscmd ("reboot");
-			}
+//			}
 		}		
 	}
 	else {
@@ -132,9 +133,11 @@ private function showMain() {
 	echo '<input class="resetcheck" id="sshport" type="checkbox" name="sshport" >'. PHP_EOL;
 	echo ' :Reset ssh port to default?';				
 	echo '<br/>';	
+/*
 	echo '<input class="resetcheck" id="recs" type="checkbox" name="recs" >'. PHP_EOL;
 	echo ' :Delete voice recordings?';				
 	echo '<br/>';
+*/
 	echo '<input class="resetcheck" id="ldap" type="checkbox" name="ldap" >'. PHP_EOL;
 	echo ' :Delete LDAP directory entries?';				
 	echo '<br/>';																													
@@ -196,7 +199,8 @@ private function doReset() {
 	
 	if ( isset($_POST['resetdb'] ) ) {
 			$this->helper->request_syscmd ("mv /opt/sark/db/sark.db /opt/sark/db/sark.db.insurance");
-			$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reload");
+			$this->helper->request_syscmd ("rm -rf /opt/sark/oncedone/*");
+			$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reloader.sh");
 		$this->log .= "<p>database RESET</p>";
 	}
 	else {

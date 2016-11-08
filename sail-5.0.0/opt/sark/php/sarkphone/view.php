@@ -673,7 +673,7 @@ private function genMail($mailbox) {
 		$epoch = $infoarray['origtime'];
 		$dt = new DateTime("@$epoch");
 		echo '<td  class="icons">' . $dt->format('d/m/y  H:i:s') . '</td>' . PHP_EOL;
-		echo '<td  class="icons"><a href="/php/downloadvm.php?dfile=' . $fullpath . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;									
+		echo '<td  class="icons"><a href="/php/download.php?path=&dfile=' . $fullpath . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;									
 		echo '<td  class="icons"><a href=/server-vmail/default/' . $this->pkey . "/$mailbox/" . $file . '><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
 		$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$deletepath);
 		echo '</td>' . PHP_EOL;

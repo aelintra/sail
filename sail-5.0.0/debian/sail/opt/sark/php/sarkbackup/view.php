@@ -366,8 +366,8 @@ private function doRestore() {
 	
 	
 	$tempDname = "/tmp/bkup" . time();
-	$this->helper->request_syscmd ("mkdir $tempDname");
-	$this->helper->request_syscmd ("unzip /opt/sark/bkup/$rfile -d $tempDname");
+	`mkdir $tempDname`;
+	`unzip /opt/sark/bkup/$rfile -d $tempDname`;
 	if (!file_exists($tempDname)) {
 		$this->message = "Oops!, Directory not instantiated";
 		return;
@@ -458,7 +458,7 @@ private function doRestore() {
 		$this->log .= "<p>LDAP Directory PRESERVED</p>";	
 	}	
 	
-	$this->helper->request_syscmd ("rm -rf " . $tempDname);
+	`rm -rf $tempDname`;
 	$this->log .= "<p>Temporary work files deleted</p>";
 	$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reload");
 	$this->log .= "<p>System Regen complete</p>";

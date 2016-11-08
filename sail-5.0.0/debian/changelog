@@ -1,3 +1,27 @@
+sail (5.0.0-27) UNRELEASED; urgency=low
+  * tagged as 5.0.0-27
+  - Fix buffer overflow bug in sarkbackup. Fails when the backup set contains too many files
+  - Fix to Asterisk start/stop logic in globals
+  - Greetings will no longer upload wav files.  mp3 only.
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 08 Nov 2016 18:00:00 +0000
+
+sail (5.0.0-26) UNRELEASED; urgency=low
+  * tagged as 5.0.0-26
+  - Fix bug in sarkapp js regex.  It wasn't allowing hyphens in the name field.
+  - Fix bug in globals.  It was removing tags from the bounce alertinfo
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 23 Oct 2016 18:00:00 +0000
+
+sail (5.0.0-25) UNRELEASED; urgency=low
+  * tagged as 5.0.0-25
+  - Fix bug in factory reset.  Database refresh not done correctly.  Force logoff at reboot.
+  - Force logoff at reboot in globals and network
+  - sarkphone and sarkgreeting now use general purpose download.php
+  - backup page no longer shows find box (unnecessary)
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 23 Oct 2016 18:00:00 +0000
+
 sail (5.0.0-24) UNRELEASED; urgency=low
   * tagged as 5.0.0-24
   - Fix to selmix for old selmx/selmixd problem

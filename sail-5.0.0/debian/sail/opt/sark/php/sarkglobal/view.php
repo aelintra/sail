@@ -62,6 +62,7 @@ public function showForm() {
 //		$this->saveEdit();
 		if ( ! $this->invalidForm) {
 //			$this->helper->request_syscmd ("reboot");
+			unset($_SESSION['user']);
 			echo "reboot detected";
 			$this->message = "Rebooting Now, Please wait...";
 		}
@@ -522,6 +523,7 @@ private function goodEditOutcome($tuple) {
 private function sark_stop () {
 	
 if ( $this->distro['debian'] ) {
+//	$ret = ($this->helper->request_syscmd ( "/etc/init.d/asterisk stop"));
 	`/usr/bin/sudo /etc/init.d/asterisk stop`;
 }
 else {
@@ -535,6 +537,7 @@ private function sark_start () {
 
 //	
 if ( $this->distro['debian'] ) {	
+//	$ret = ($this->helper->request_syscmd ( "/etc/init.d/asterisk start"));
 	`/usr/bin/sudo /etc/init.d/asterisk start`;
 }
 else {

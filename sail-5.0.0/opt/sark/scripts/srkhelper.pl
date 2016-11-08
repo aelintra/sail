@@ -9,6 +9,8 @@ $0 = $app_name;
 my $t;
 # flush after every write
 $| = 1;
+# set debug=1 for debug output
+my $debug;
 
 # open logs
 
@@ -42,7 +44,7 @@ Listen => 5,
 Reuse => 1
 ) or die "ERROR in Socket Creation : $!\n";
 
-print "$t SRKHELPER started and Waiting for client connection on port 7601 \n";
+print "$t SRKHELPER started and Waiting for client connection \n";
 
 while(1)
 {
@@ -61,11 +63,16 @@ print $client_socket "$data\n";
 
 # read operation on the newly accepted client
 $data = <$client_socket>;
-print "$t Received cmd : $data";
+if ($debug) {
+	print "$t Received cmd : $data";
+}	
 print "$t running command \n";
+
 $return = `$data`;
 $t = localtime();
-print "$t Returned $return\n";
+if ($debug) {
+	print "$t Returned $return\n";
+}
 print $client_socket "$return\n<<EOT>>\n";
 print "$t waiting for work...\n";
 }

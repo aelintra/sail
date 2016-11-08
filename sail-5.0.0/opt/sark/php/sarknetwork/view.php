@@ -50,6 +50,7 @@ public function showForm() {
 	if (isset($_POST['reboot_x'])) { 
 		$this->saveEdit();
 		if ( ! $this->invalidForm) {
+			unset($_SESSION['user']); 
 			$this->helper->request_syscmd ("reboot");
 			if (isset($_POST['ipaddr'])) {
 				$this->message = "Rebooting Now, Back shortly at " . $_POST['ipaddr'];
