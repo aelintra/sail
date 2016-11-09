@@ -172,7 +172,7 @@ private function showMain() {
 		echo '<td >' . $filesize. '</td>' . PHP_EOL;
 		echo '<td >' . $row['type']  . '</td>' . PHP_EOL;
 		if (preg_match('/mp3$/',$file[0])) {
-			echo '<td class="center"><a href="/php/downloadg.php?dtype=greet&dfile=' . $file[0] . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
+			echo '<td class="center"><a href="/php/download.php?dfile=' . $file[0] . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
 		}
 		else {
 			echo '<td class="center">N/A</td>' . PHP_EOL;

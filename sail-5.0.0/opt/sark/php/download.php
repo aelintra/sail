@@ -1,9 +1,14 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srksessions/session.php";
-$path = "/opt/sark/"; 
-$path .= strip_tags($_GET['dtype']); 
-$path .= '/';
-$fullPath = $path.strip_tags($_GET['dfile']);
+if (isset($_GET['dtype'])) {
+	$path = "/opt/sark/"; 
+	$path .= strip_tags($_GET['dtype']); 
+	$path .= '/';
+	$fullPath = $path . strip_tags($_GET['dfile']);
+}
+else {
+	$fullPath = strip_tags($_GET['dfile']);
+}
 
 if(ini_get('zlib.output_compression'))
     ini_set('zlib.output_compression', 'Off');
@@ -18,6 +23,7 @@ if(ini_get('zlib.output_compression'))
     switch ($ext) {
       case "pdf": $ctype="application/pdf"; break;
       case "exe": $ctype="application/octet-stream"; break;
+      case "mp3": $ctype="application/octet-stream"; break;
       case "zip": $ctype="application/zip"; break;
       case "doc": $ctype="application/msword"; break;
       case "xls": $ctype="application/vnd.ms-excel"; break;

@@ -1,10 +1,18 @@
+sail (5.0.0-28) UNRELEASED; urgency=low
+  * tagged as 5.0.0-28
+  - Fix bug in sarkgreeting - download of mp3 fails.
+  - Enhance download.php to handle snaps, bkups and greetings. 
+  - Greetings will no longer upload wav files.  mp3 only.
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 09 Nov 2016 18:00:00 +0000
+
 sail (5.0.0-27) UNRELEASED; urgency=low
   * tagged as 5.0.0-27
   - Fix buffer overflow bug in sarkbackup. Fails when the backup set contains too many files
   - Fix to Asterisk start/stop logic in globals
   - Greetings will no longer upload wav files.  mp3 only.
 
- -- CoCoSoft <admin@aelintra.com>  Thu, 08 Nov 2016 18:00:00 +0000
+ -- CoCoSoft <admin@aelintra.com>  Tue, 08 Nov 2016 18:00:00 +0000
 
 sail (5.0.0-26) UNRELEASED; urgency=low
   * tagged as 5.0.0-26
