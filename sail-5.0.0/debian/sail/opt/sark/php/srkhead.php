@@ -46,7 +46,9 @@ $(document).ready(function() {
 		};
 		window.onload = init;
 		function init(){
-			document.getElementById("searchkey").focus();
+			if (document.getElementById('searchkey')) {
+				document.getElementById("searchkey").focus();
+			}
 		}; 				   
 });
 

@@ -634,7 +634,7 @@ private function showEdit() {
 		$this->myPanel->buttonName["redo"]["title"] = "Send a reboot request to the endpoint";
 		$this->myPanel->Button("notify");
 		if (preg_match('/^Snom|Panasonic\sKX-HDV/',$extension['device'])) {
-			$this->myPanel->buttonName["upload"]["title"] = "Send config without reboot(Snom only)";
+			$this->myPanel->buttonName["upload"]["title"] = "Send config without reboot";
 			$this->myPanel->Button("upload");
 		}
 	} 

@@ -1,3 +1,12 @@
+sail (5.0.0-29) UNRELEASED; urgency=low
+  * tagged as 5.0.0-29
+  - Fix bug in wav downloads
+  - Fix bug in wav/p3 playback.
+  - fix minor javascript bug in srkheader
+  - change message text in extensions for in-flight provisioning
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 13 Nov 2016 18:00:00 +0000
+
 sail (5.0.0-28) UNRELEASED; urgency=low
   * tagged as 5.0.0-28
   - Fix bug in sarkgreeting - download of mp3 fails.
