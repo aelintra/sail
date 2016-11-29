@@ -1,7 +1,14 @@
+sail (5.0.0-30) UNRELEASED; urgency=low
+  * tagged as 5.0.0-30
+  - Fix bad data line in device load data
+  - Amalgamated sudoers.d files
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 29  Nov 2016 18:00:00 +0000
+
 sail (5.0.0-29) UNRELEASED; urgency=low
   * tagged as 5.0.0-29
   - Fix bug in wav downloads
-  - Fix bug in wav/p3 playback.
+  - Fix bug in wav/mp3 playback.
   - fix minor javascript bug in srkheader
   - change message text in extensions for in-flight provisioning
 

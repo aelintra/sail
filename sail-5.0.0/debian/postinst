@@ -187,13 +187,14 @@ if [ ! -e /etc/asterisk/ssl ]; then
 fi
 
 #sudoers
-if [ ! -e /etc/sudoers.d/sail ]; then 
+if [ -e /etc/sudoers.d/sail ]; then 
 	chmod 0440 /etc/sudoers.d/sail
 fi
-if [ ! -e /etc/sudoers.d/sarkrssh ]; then
-        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
-        chmod 0440 /etc/sudoers.d/sarkrssh
-fi
+# all moved to sudoers.d/sail in 5.0.0-30
+#if [ ! -e /etc/sudoers.d/sarkrssh ]; then
+#        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
+#        chmod 0440 /etc/sudoers.d/sarkrssh
+#fi
 
 #reverse proxy port perms
 chown asterisk:asterisk /opt/sark/service/rssh/serviceport1
