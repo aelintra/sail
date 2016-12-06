@@ -649,8 +649,8 @@ ANDHERE;
 ;	SARK Service Codes
 ;
 ;
-        exten => _*12[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)		; SYSOP Redir
-        exten => _*12[*]XXX,1,agi(sarkhpe,\${EXTEN},,)		; SYSOP Redir
+        exten => _*12[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)	; SYSOP Redir
+        exten => _*12[*]XXX,1,agi(sarkhpe,\${EXTEN},,)	; SYSOP Redir
         exten => _*12[*],1,agi(sarkhpe,\${EXTEN},,)		; SYSOP OFF
         exten => _*1[89][*],1,agi(sarkhpe,\${EXTEN},,)		; DND ON/OFF
         exten => _*20[*],1,agi(sarkhpe,\${EXTEN},,)		; DND TOGGLE
@@ -663,7 +663,8 @@ ANDHERE;
         exten => _*26[*]XX,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay
         exten => _*3[012345][*],1,agi(sarkhpe,\${EXTEN},,)	; TIMERS
         exten => _*5[012567][*],1,agi(sarkhpe,\${EXTEN},,)	; VMAIL, TIME etc.
-        exten => _*6[01][*]XXXX,1,agi(sarkhpe,\${EXTEN},,)	; Greetings
+        exten => _*60*XXXX,1,agi(sarkhpe,\${EXTEN},,)		; Greetings
+        exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN,4})	; Greetings
         exten => _*6[34][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent pause/unpause(63 64)
         exten => _*6[56][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent Login/out(65 66)
         exten => _*67[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)		; ChanSpy (Whisper)
@@ -882,6 +883,9 @@ function confBridge(&$OUT,$dbh) {
 		}		 
 		if ($room['type'] == "hosted" ) {			
 			$profile = 'sark_hosted_user';
+		}
+		else {
+			$profile = 'sark_user';
 		}		
 		$OUT .= "\tsame => n,ConfBridge(\${EXTEN},,$profile)\n";
 		$OUT .= "\tsame => n,Hangup()\n";

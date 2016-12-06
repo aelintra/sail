@@ -273,7 +273,7 @@ e83e5d0a4969814e91d940916132750e  opt/sark/generator/agentSQL.php
 8189c534d5480566e1c541f217f306a4  opt/sark/generator/cdr_mysql.php
 e31c21b62d08300367dfd89b57a9a6c6  opt/sark/generator/daycall
 d1da3e76ed1fe1a8449bb6824395f237  opt/sark/generator/edsw.php
-b02ed50bb672346c67612d48e1c37cc1  opt/sark/generator/extensions.php
+20ccbef4b41f3ea315059c2141a76b5c  opt/sark/generator/extensions.php
 bef52c45ec63de682fbe396138fa352b  opt/sark/generator/featuresSQL.php
 1acf0f78f843caeb0597878cb3899910  opt/sark/generator/generated_file_banner.php
 e2c408e9ecc7ee5e6e14549555da984b  opt/sark/generator/iaxSQL.php
@@ -423,7 +423,7 @@ d837a91a62ea10ed4c7f39c03b34c1af  opt/sark/php/sarkgreeting/delete.php
 d3ab1eccd8975e498c90952d9b568904  opt/sark/php/sarkgreeting/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkgreeting/main.php
 3affe4c53e9bda9031a0b8ed6d9be1a1  opt/sark/php/sarkgreeting/update.php
-5bc8ee4744303ea20bcd8fde7a5b4b79  opt/sark/php/sarkgreeting/view.php
+d0a0e7b6e4ebcb6cd9b9f19e58e692a9  opt/sark/php/sarkgreeting/view.php
 71d65d6ad8d48bcedb3911f6aed2cec6  opt/sark/php/sarkholiday/delete.php
 76dac9466d0e84829c6b4f3c5933e246  opt/sark/php/sarkholiday/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkholiday/main.php
@@ -1403,5 +1403,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-059d1b61ff6314a82afd04144f8e8642  usr/share/doc/sail/changelog.Debian.gz
+5e8c285b91e769843532127c70284983  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

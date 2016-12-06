@@ -54,6 +54,8 @@ public function showForm() {
 			else {
 				$tfile = strip_tags($_FILES['file']['tmp_name']);
 				$this->helper->request_syscmd ("/bin/mv $tfile /usr/share/asterisk/sounds/$filename");
+				$this->helper->request_syscmd ("/bin/chown asterisk:asterisk /usr/share/asterisk/sounds/$filename");
+				$this->helper->request_syscmd ("/bin/chmod 664 /usr/share/asterisk/sounds/$filename");
 				$this->message = "File $filename uploaded!";
 			}
 		}
