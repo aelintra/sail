@@ -51,7 +51,7 @@
 		"bAutoWidth": true,
 		"sDom": 'tfi',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 3,4,5,6,7,8,9 ] }
+			{ "bSortable": false, "aTargets": [ 3,4,5,6,7,8,9,10 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
@@ -62,7 +62,8 @@
 			{ "sName": "closeroute" },
 			{ "sName": "tag" },
 			{ "sName": "swoclip" },
-			{ "sName": "active" },					
+			{ "sName": "active" },
+			{ "sName": "edit" },					
 			{ "sName": "del" }
 		],
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
@@ -130,6 +131,7 @@
 					event: 'click',
 					placeholder: 'None',
 				}, 		// tag				
+
 				{
 					tooltip: 'Click to activate/deactivate',
 					event: 'click',
@@ -137,7 +139,8 @@
                     onblur: 'cancel',
                     submit: 'Save',
 					data: "{ 'YES':'YES','NO':'NO' }",
-				}, 		// swoclip					
+				}, 		// swoclip	
+				
 				{
 					tooltip: 'Click to activate/deactivate',
 					event: 'click',
@@ -145,7 +148,8 @@
                     onblur: 'cancel',
                     submit: 'Save',
 					data: "{ 'YES':'YES','NO':'NO' }",
-				}, 		// act						
+				}, 		// act
+				null,   // edit col						
 				null	// delete col					
             ]
         }).find("tr").find('td:eq(7):contains(NO)').parent().css('color', 'Gray') ; 

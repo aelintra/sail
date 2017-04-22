@@ -10,6 +10,18 @@
 		$("#delblf").hide();
 	};
 	
+	$("a#inline").fancybox({
+
+		'openEffect'	:	'elastic',
+		'closeEffect '	:	'elastic',
+		'openSpeed'		:	200, 
+		'closeSpeed '	:	200
+/*
+		'afterClose' : 	function() {
+			$('[name=update]').click ();
+		}
+*/
+	});
 	
 
 	$('#connect').click(function() {
@@ -62,8 +74,8 @@
 	});
 	
 	$.validator.addMethod("callername",function(value,element) {
-		return this.optional(element) || /^[A-Za-z0-9-_]{2,16}$/i.test(value); 
-	},"Caller Name is 2 to 16 chars [A-Za-z0-9-_] i.e no spaces or specal characters");
+		return this.optional(element) || /^[A-Za-z0-9\-_() ]{2,30}$/i.test(value); 
+	},"Caller Name is 2 to 16 chars [A-Za-z0-9-_() ] i.e no specal characters");
 	
 	$.validator.addMethod("macaddress",function(value,element) {
 		return this.optional(element) || /^[A-Fa-f0-9]{12}$/i.test(value); 
@@ -111,7 +123,7 @@
 //		"bStateSave": true,
 		"sDom": 'tfi',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 6,7,8,9,10,11,12 ] }
+			{ "bSortable": false, "aTargets": [ 6,7,8,9,10,11,12,13 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
@@ -122,7 +134,8 @@
 			{ "sName": "ipaddr" },		
 			{ "sName": "location" },
 			{ "sName": "sndcreds"},
-			{ "sName": "boot"},		
+			{ "sName": "boot"},
+			{ "sName": "trns"},		
 			{ "sName": "connect"},
 			{ "sName": "active"},
 			{ "sName": "edit" },
@@ -158,6 +171,7 @@
 					data: "{ 'No':'No','Once':'Once','Always':'Always' }"
 				}, 		// sndcreds
 				null,	// boot
+				null,   // trns 
 				null,   // connect
 				{
 					tooltip: 'Click to edit',
@@ -172,7 +186,7 @@
             ]	
 	});
 	
-	$(".dataTables_scrollBody").find("tr").find('td:eq(9):not(:contains("OK"))').css('color', 'Red') ; 
+	$(".dataTables_scrollBody").find("tr").find('td:eq(10):not(:contains("OK"))').css('color', 'Red') ; 
 
 	if ( $('#cosflag').val() == 'OFF' || $('#sysuser').val() == 'NO' ) {
 		var mytable = $('#extensiontable').DataTable(); 

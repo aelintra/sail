@@ -1,3 +1,24 @@
+sail (5.0.0-33) UNRELEASED; urgency=low
+  * tagged as 5.0.0-33
+  - Smarter auto phone recognition
+  - Simplified phone definition
+  - provisioning stream expansion from browser app
+  - new image management for phones
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 22  Apr 2017 18:00:00 +0000
+
+sail (5.0.0-32) UNRELEASED; urgency=low
+  * tagged as 5.0.0-32
+  - Fix ghost registration strings (sipsql.php)
+  - moved sudoers.d/sail to sark/cache and install from there 
+  - support aastra firmwares 
+  - support polycom site licence
+  - support for Yealink T29G
+  - support for Vtech  VSP726A
+  - support for full password suppression in provisioning (commonFuncs.php)
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 29  Dec 2016 18:00:00 +0000
+
 sail (5.0.0-31) UNRELEASED; urgency=low
   * tagged as 5.0.0-31
   - Fix permissions bug in greetings upload

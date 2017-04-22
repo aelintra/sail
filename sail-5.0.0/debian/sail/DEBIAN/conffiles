@@ -35,4 +35,3 @@
 /etc/dnsmasq.d/sarkdhcp-opt114
 /etc/dnsmasq.d/sarkdhcp-opt66
 /etc/dnsmasq.d/sarkdns
-/etc/sudoers.d/sail

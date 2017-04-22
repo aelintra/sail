@@ -97,6 +97,7 @@ blfkeys INTEGER,
 desc TEXT,
 device TEXT,
 fkeys INTEGER,
+imageurl TEXT,
 legacy TEXT,
 noproxy TEXT,
 pkeys INTEGER,
@@ -148,7 +149,8 @@ celltwin TEXT,							-- cell twin on/off
 channel TEXT,                           -- not used
 cluster TEXT,                           -- Tenant
 desc TEXT,                              -- asterisk username
-device TEXT,                            -- device type
+device TEXT,                            -- device vendor
+devicemodel TEXT,						-- Harvested model number
 devicerec TEXT,                         -- recopts
 dialstring TEXT,                        -- not used
 dvrvmail TEXT,                          -- mailbox
@@ -156,6 +158,7 @@ extalert TEXT,                          -- alert info
 externalip TEXT,                        -- not used
 location TEXT,                          -- local/remote
 macaddr TEXT,                           -- macaddr
+newformat TEXT,							-- set to YES for new format SIP entries
 openfirewall TEXT,                      -- not used
 passwd TEXT,                            -- asterisk password
 provision TEXT,                         -- provisioning string    

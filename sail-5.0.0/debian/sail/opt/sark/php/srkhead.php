@@ -72,7 +72,7 @@ $(window).load(function() {
 	if (file_exists($_SERVER["DOCUMENT_ROOT"] . "../php/" . $url[2] . '/javascript.js')) {
 		echo '<script type="text/javascript" src="/php/' . $url[2] . '/javascript.js" type="text/javascript"></script>' . PHP_EOL;
 	}
-	if ($url[2] == 'sarkivr' ) {
+	if ($url[2] == 'sarkivr' || $url[2] == 'sarkextension' ) {
 			echo '<link rel="stylesheet" type="text/css" href="/sark-common/js/jquery.fancybox-2.1.5/source/jquery.fancybox.css" />'. PHP_EOL; 
 			echo '<script type="text/javascript" src="/sark-common/js/jquery.fancybox-2.1.5/source/jquery.fancybox.js"></script>'. PHP_EOL;				
 	}	

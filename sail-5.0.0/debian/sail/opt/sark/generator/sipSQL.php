@@ -63,7 +63,7 @@ try {
 	include("generated_file_banner.php");	 
 	$sql = "SELECT * FROM lineIO order by pkey";
     	foreach ($dbh->query($sql) as $row) {    
-        	if (isset($row['register'])) {
+        	if (!empty($row['register'])) {
 			$cquery = "select * from Carrier where pkey='" . $row['carrier'] . "'";
 			$carrier = $dbh->query($cquery)->fetch();       
 			if ($carrier['technology'] == "SIP") {

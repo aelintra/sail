@@ -19,53 +19,90 @@ $fname=NULL;
 $local=True;
 
 // ignore polycom logging requests
-if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
-	logIt("Ignoring PUT request - Sending 200 and giving up");
-	send200();
-	exit;	
+
+
+if (defined('STDIN')) {
+    $mac = strtolower($argv[1]);
 }
-logit ("processing URI " . $_SERVER["REQUEST_URI"]);
+else {
+	if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
+		logIt("Ignoring PUT request - Sending 200 and giving up");
+		send200();
+		exit;	
+	}
+	logit ("processing URI " . $_SERVER["REQUEST_URI"]);
 // see if we have a mac in the GET
-if (isset($_GET['mac'])) {
-	$mac = strtolower($_GET['mac']);
-} 
-else {	// analyze what we got
-	$uri_array = explode('/', $_SERVER["REQUEST_URI"]);
-	if (isset($uri_array[2])) {
-		$frequest = $uri_array[2];
-		// check for polycom firmware request - no longer relevant
-		if (preg_match('/^.*\.sip\.ld$/',$frequest)) {
-			polycomFirmware($frequest);
-			exit;
-		}
+	if (isset($_GET['mac'])) {
+		$mac = strtolower($_GET['mac']);
+		logit ("Found MAC " . $mac);
+		logUA();
+	} 
+	else {	// analyze what we got
+		$uri_array = explode('/', $_SERVER["REQUEST_URI"]);
+		if (isset($uri_array[2])) {
+			$frequest = $uri_array[2];
+// check for Yealink security file request and ignore it		
+			if (preg_match('/^.*_Security\.enc$/',$frequest)) {
+				logIt("Yealink security request for " . $_SERVER["REQUEST_URI"] . ", Sending 404 and giving up");
+				send404();
+				exit;
+			}
+// check for Yealink boot file request and ignore it		
+			if (preg_match('/\.boot$/',$frequest)) {
+				logIt("Yealink bootfile request for " . $_SERVER["REQUEST_URI"] . ", Sending 404 and giving up");
+				send404();
+				exit;
+			}			
+// check for polycom firmware request - no longer relevant - handled by mod_rewrite
+			if (preg_match('/^.*\.sip\.ld$/',$frequest)) {
+				polycomFirmware($frequest);
+				exit;
+			}						
 // check for Yealink Y file
-		if (preg_match('/^y000000(.*).cfg$/',$frequest)  ) {
-			logit ("Found Yealink Y file  " . $frequest);
-			$descriptor = true;
-		}
-		else {
+			if (preg_match('/^y000000(.*).cfg$/',$frequest)  ) {
+				logit ("Found Yealink Y file  " . $frequest . " serving as common");
+				$frequest = 'yealink.Common';
+				$descriptor = true;
+			}
+/* check for vtech .cfg file
+			else if (preg_match('/^VCS|VSP(.*).cfg$/',$frequest)  ) {
+				logit ("Found Vtech cfg file  " . $frequest . " serving as common");
+				$frequest = 'vtech.Common';
+				$descriptor = true;	
+			}
+*/			
+			else {
 // try to harvest a MAC address
-			if (preg_match('/([0-9A-Fa-f]{12})(.*)$/',$frequest,$matches)  ) {
-				$mac = $matches[1];
-				$fname = $matches[2];
-				logit ("Found MAC " . $mac);
-				// check for polycom zero config file
-				if ($mac != '000000000000') {
+				if (preg_match('/([0-9A-Fa-f]{12})(.*)$/',$frequest,$matches)  ) {
+					$mac = $matches[1];
+					$fname = $matches[2];
+					logit ("Found MAC " . $mac);
+					logUA();
+					// check for polycom zero config file
+					if ($mac != '000000000000') {
+					}
+					else {
+						$mac=$frequest;
+						$descriptor=true;
+					}
 				}
 				else {
-				$mac=$frequest;
-				$descriptor=true;
+					$descriptor=true;
+// check for vtech .cfg file (vtech end all their requests with .cfg)
+/*
+					if (preg_match('/^VCS|VSP(.*).cfg$/',$frequest)  ) {
+						logit ("Found Vtech cfg file  " . $frequest . " serving as common");
+					$frequest = 'vtech.Common';					
+					}
+*/
 				}
 			}
-			else {
-				$descriptor=true;
-			}
 		}
-	}
-	else {
-		logIt("no request file found in URI for " . $_SERVER["REQUEST_URI"] . " ,  Sending 404 and giving up");
-		send404();
-		exit;
+		else {
+			logIt("no request file found in URI for " . $_SERVER["REQUEST_URI"] . " ,  Sending 404 and giving up");
+			send404();
+			exit;
+		}
 	}
 }
 
@@ -132,13 +169,33 @@ try {
   if ($descriptor) {
 	$configs = $db->prepare('select pkey,provision from Device where pkey = ?'); 
 	$configs->execute(array($frequest));
+	$thisConfig = $configs->fetchObject();
   }
-  else { 
-	$configs = $db->prepare('select pkey,provision,device,desc,location,passwd,sndcreds from IPphone where lower(macaddr) = ? COLLATE NOCASE limit 1');
+  else {
+	$configs = $db->prepare('select pkey,provision,device,devicemodel,desc,location,passwd,sndcreds from IPphone where lower(macaddr) = ? COLLATE NOCASE limit 1');
 	$configs->execute(array($mac));
+	$thisConfig = $configs->fetchObject();
+// update the phone model (it may have changed or it may not be present yet)
+  	$model = logUA();
+  	if (!empty($model)) {
+// set the model in the extension record  	
+  	  	$sql = $db->prepare('UPDATE ipphone SET devicemodel=? WHERE pkey = ?');
+		$sql->execute(array($model,$thisConfig->pkey));
+// create and/or set the model in netphone record
+		$sql = $db->prepare('select * from netphone WHERE pkey = ?');
+		$sql->execute(array($mac));
+		$thisNetphone = $sql->fetchObject();
+		If (!empty($thisNetphone->pkey)) {
+			$sql = $db->prepare('UPDATE netphone SET model=? WHERE pkey = ?');
+			$sql->execute(array($model,$mac));
+		}
+		else {
+			$sql = $db->prepare('INSERT INTO netphone (pkey,model) VALUES(?,?)');
+			$sql->execute(array($mac,$model));
+		}
+	}	
   }
-  
-  $thisConfig = $configs->fetchObject();
+   
 //  $masterkey = $thisConfig->pkey;
 } catch (Exception $e) {
   logIt("Unable send mac file for $mac");
@@ -199,6 +256,7 @@ if ($frequest) {
 else {
 	logIt("sending config $mac$fname");
 }
+$retstring = str_replace("\r", "", $retstring);
 echo $retstring;
 
 // disable auth send for next time

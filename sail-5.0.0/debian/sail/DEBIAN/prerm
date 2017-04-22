@@ -22,6 +22,7 @@ sv d srk-ua-helper
 [ -L /etc/fail2ban/action.d/shorewall.local ] && rm -rf /etc/fail2ban/action.d/shorewall.local
 [ -L /etc/fail2ban/filter.d/asterisk.conf ] && /etc/fail2ban/filter.d/asterisk.conf 
 
+[ -e /etc/sudoers.d/sarkrssh ] && rm -rf /etc/sudoers.d/sarkrssh 
 rm -rf /etc/sudoers.d/sail
-rm -rf /etc/asterisk/sark_customer*
+#rm -rf /etc/asterisk/sark_customer*
 insserv --remove debsetlan

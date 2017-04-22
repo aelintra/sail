@@ -1311,7 +1311,7 @@ private function default_meetme() {
 }
 
 private function country_codes($search,$vector=true) {
-
+// not used
 $countries = array(  'AF'=>'AFGHANISTAN', 
 					 'AL'=>'ALBANIA', 
 					 'DZ'=>'ALGERIA', 

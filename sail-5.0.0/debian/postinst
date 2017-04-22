@@ -187,8 +187,10 @@ if [ ! -e /etc/asterisk/ssl ]; then
 fi
 
 #sudoers
-if [ -e /etc/sudoers.d/sail ]; then 
-	chmod 0440 /etc/sudoers.d/sail
+if [ -e /opt/sark/cache/sailsudoers ]; then 
+	chmod 0440 /opt/sark/cache/sailsudoers
+	chown root:root /opt/sark/cache/sailsudoers
+	mv /opt/sark/cache/sailsudoers /etc/sudoers.d/sail
 fi
 # all moved to sudoers.d/sail in 5.0.0-30
 #if [ ! -e /etc/sudoers.d/sarkrssh ]; then

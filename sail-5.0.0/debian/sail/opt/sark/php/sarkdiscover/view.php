@@ -111,7 +111,7 @@ private function showMain() {
 	$cidr .= '/24';
  
 	$nmapcmd= array(
-	"nmap -sP -n $cidr | grep -v Host | grep -v '$myip' | awk '/Nmap scan/ {printf \$0 \" \"; getline; print $0}' | grep -i 'Snom\|Panasonic\|Yealink\|Polycom\|Cisco\|Gigaset\|Aastra\|Grandstream\|2N\|Vtech' > /tmp/netfile",
+	"nmap -sP -n $cidr | grep -v Host | grep -v '$myip' | awk '/Nmap scan/ {printf \$0 \" \"; getline; print $0}'  > /tmp/netfile",
 	"sed -i 's/Nmap scan report for //' /tmp/netfile",
 	"sed -i 's/MAC Address: //' /tmp/netfile",
 	"sed -i 's/://g' /tmp/netfile",
@@ -121,7 +121,9 @@ private function showMain() {
 	foreach ($nmapcmd as $cmd) {
 		$this->helper->request_syscmd ($cmd);
 	} 
-	$file = file("/tmp/netfile") or die("Could not read file /tmp/netfile!");	
+	if (file_exists("/tmp/netfile")) {
+		$file = file("/tmp/netfile") or die("Could not read file /tmp/netfile!");	
+	}
 
 /*
  * output results
@@ -145,7 +147,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('macaddr'); 
 	$this->myPanel->aHeaderFor('vendor'); 
 	$this->myPanel->aHeaderFor('model'); 
-	$this->myPanel->aHeaderFor('description'); 	
+//	$this->myPanel->aHeaderFor('description'); 	
 	$this->myPanel->aHeaderFor('extension'); 
 	
 	echo '</tr>' . PHP_EOL;
@@ -157,18 +159,23 @@ private function showMain() {
 	foreach ($file as $row ) {
 
 		$columns = explode(" ",$row,3);
-		$vendor = '';
+		$vendor = $this->get_mfg($columns[1]);
+		if (!preg_match('/Snom|Panasonic|Yealink|Polycom|Cisco|Gigaset|Aastra|Grandstream|2N|Vtech/i',$vendor)) {
+			continue;
+		}
 		$model = '';							
 		echo '<td class="read_only">' . $columns[0] . '</td>' . PHP_EOL;			
 		echo '<td class="read_only">' . $columns[1] . '</td>' . PHP_EOL;
-		$sql = $this->dbh->prepare("SELECT vendor,model FROM netphone where pkey = ? COLLATE NOCASE" );
+		$sql = $this->dbh->prepare("SELECT model FROM netphone where pkey = ? COLLATE NOCASE" );
 		$sql->execute(array($columns[1]));
 		$res = $sql->fetch();
-		$vendor = $res['vendor'];
 		$model = $res['model'];
+		if (!$model) {
+			$model='Unknown';
+		}
 		echo '<td class="read_only">' . $vendor . '</td>' . PHP_EOL;				
 		echo '<td class="read_only">' . $model . '</td>' . PHP_EOL;		
-		echo '<td class="read_only">' . $columns[2] . '</td>' . PHP_EOL;
+//		echo '<td class="read_only">' . $columns[2] . '</td>' . PHP_EOL;
 		$sql = $this->dbh->prepare("SELECT pkey FROM ipphone where macaddr = ? COLLATE NOCASE");
 		$sql->execute(array($columns[1]));
 		$res = $sql->fetch();
@@ -230,6 +237,20 @@ private function build_peer_array($amirets) {
 		}
 	}
 	return $peer_array;	
+}
+
+private function get_mfg($mac_address) {
+/*
+ * Get a vendor from the MAC
+ */
+  	$url = "http://api.macvendors.com/" . urlencode($mac_address);
+  	$ch = curl_init();
+  	curl_setopt($ch, CURLOPT_URL, $url);
+  	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  	$response = curl_exec($ch);
+  	if($response) {
+    	return "$response";	
+  	} 
 }
 
 }

@@ -705,10 +705,12 @@ INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T20P','Yealink T20')
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T22P','Yealink T22');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T26P','Yealink T26');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T28P','Yealink T28');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T29G','Yealink T29');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T32G','Yealink T32');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T38G','Yealink T38');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T19D','Yealink T19');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T21D','Yealink T21');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T40','Yealink T40');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T41','Yealink T41');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T42','Yealink T42');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T46','Yealink T46');
@@ -738,6 +740,7 @@ INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snom870','Snom 870');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP600A','Vtech');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP715A','Vtech');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP725A','Vtech');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP726A','Vtech');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VSP735A','Vtech');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('VCS754A','Vtech');
 

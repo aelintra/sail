@@ -519,7 +519,7 @@ while (1) {
 
 					unless ($macisknown) {
 						if ($ztp eq 'enabled') {							
-								unless (createExten($in_event_ua_profile_model,$macaddr)) {
+								unless (createExten($in_event_ua_profile_vendor, $in_event_ua_profile_model,$macaddr)) {
 #									sleep 2;
 									$bytes = $sock->mcast_send( $resp, $remote_addr.':'.$remote_port );
 									if ($debug_level >= 2) {
@@ -561,23 +561,23 @@ while (1) {
 sleep(1);
 }
 
-sub createExten($$) {
+sub createExten($$$) {
+
 	
-	my $vendordevice = shift;
+	
+	my $vendor = shift;
+	my $devicemodel = shift;
 	my $macaddr = shift;
+# only snom, yealink and panasonic supported for PnP ZTP	
+	if ($vendor != 'Panasonic' && $vendor != 'yealink' && $vendor != 'snom') {
+		if ($debug_level >= 1) {
+			doLogit("Unknown Vendor $vendor - can't create extension");
+			return (-1);
+		}
+	}
 	
 	my $dbh = SarkSubs::SQLiteConnect();
 		
-# check vendor device type is in the database
-	my $device =  SarkSubs::SQLiteGet($dbh, "SELECT intpkey FROM vendorxref where pkey = '$vendordevice'") ;
-	unless ($device) {
-		if ($debug_level >= 1) {
-			doLogit("Unknown Vendor device type $vendordevice - can't create extension");
-		}
-		SarkSubs::SQLiteDisconnect($dbh);
-		return (-1);
-	}
-
 # Do clf check
 	my $count = SarkSubs::SQLiteGet($dbh,"SELECT count(*) FROM ipphone");
 	if (-e "/opt/sark/scripts/srkdclf") { 
@@ -597,17 +597,17 @@ sub createExten($$) {
 				
 # get an extension key	
     my $pkey = SarkSubs::SQLiteGet($dbh, "SELECT SIPIAXSTART FROM globals where pkey = 'global'");
-    my $pwdlen = SarkSubs::SQLiteGet($dbh, "SELECT PWDLEN FROM globals where pkey = 'global'") || 8;
+    my $pwdlen = SarkSubs::SQLiteGet($dbh, "SELECT PWDLEN FROM globals where pkey = 'global'") || 12;
     while (SarkSubs::SQLiteGet($dbh, "SELECT pkey FROM IPphone where pkey = '$pkey'"))  {
 	$pkey++;
     }
     
 # get the template 
 
-    my $sipiaxfriend = SarkSubs::SQLiteGet($dbh, "SELECT sipiaxfriend FROM Device where pkey = '$device'");
-    my $provision 	 = SarkSubs::SQLiteGet($dbh, "SELECT provision FROM Device where pkey = '$device'"); 
-    my $blfkeyname	 = SarkSubs::SQLiteGet($dbh, "SELECT blfkeyname FROM Device where pkey = '$device'"); 
-    my $blfkeys	 	 = SarkSubs::SQLiteGet($dbh, "SELECT blfkeys FROM Device where pkey = '$device'");
+    my $sipiaxfriend = SarkSubs::SQLiteGet($dbh, "SELECT sipiaxfriend FROM Device where pkey = '$vendor'");
+    my $provision 	 = SarkSubs::SQLiteGet($dbh, "SELECT provision FROM Device where pkey = '$vendor'"); 
+    my $blfkeyname	 = SarkSubs::SQLiteGet($dbh, "SELECT blfkeyname FROM Device where pkey = '$vendor'"); 
+    my $blfkeys	 	 = SarkSubs::SQLiteGet($dbh, "SELECT blfkeys FROM Device where pkey = '$vendor'");
     my $passwd	 	 = SarkSubs::sark_password($pwdlen);    
     my $desc = "Ext".$pkey;
 	my $callerid = $pkey;
@@ -618,44 +618,6 @@ sub createExten($$) {
     	
 # tailor the template
 
-#	
-#    if ($sipiaxfriend =~ /callerid=/) {
-#     		$sipiaxfriend =~ s/callerid=/callerid=\"\$desc\" <\$ext>/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\ncallerid=\"\$desc\" <\$pkey>";
-#    }
-#    if ($sipiaxfriend =~ /username=/) {
-#    		$sipiaxfriend =~ s/username=/username=\$desc/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\nusername=\$desc";
-#    }
-#   if ($sipiaxfriend =~ /secret=/) {
-#    		$sipiaxfriend =~ s/secret=/secret=\$password/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\nsecret=\$password";
-#    }
-#    if ($sipiaxfriend =~ /mailbox=/) {
-#		$sipiaxfriend =~ s/mailbox=/mailbox=\$ext/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\nmailbox=\$ext";
-#    }
-#    if ($sipiaxfriend =~ /pickupgroup=/) {
-#		$sipiaxfriend =~ s/pickupgroup=/pickupgroup=1 \ncallgroup=1/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\npickupgroup=1\ncallgroup=1";
-#    }
-#    unless ($sipiaxfriend =~ /call-limit/) {
-#                $sipiaxfriend .= "\ncall-limit=3";
-#    }
-#    unless ($sipiaxfriend =~ /subscribecontext/) {
-#                $sipiaxfriend .= "\nsubscribecontext=extensions";
-#    }
-    
 # set ACL
 	my $acl 		 = SarkSubs::SQLiteGet($dbh, "SELECT ACL FROM globals where pkey = 'global'") || 'NO'; 
 	if ($acl eq "YES") {
@@ -674,20 +636,21 @@ sub createExten($$) {
     $sipiaxfriend =~ s/^\s+//;
     $sipiaxfriend =~ s/\s+$//;
     $sipiaxfriend =~ s/\r//g;
-
-	$provision = "#INCLUDE $device";
+	
+	$provision = "#INCLUDE $vendor";
 	if ($blfkeyname) {
 		$provision .= "\n#INCLUDE $blfkeyname";
 	}
+
     
 # insert the extension   
 
-	SarkSubs::SQLiteDo($dbh, "INSERT INTO ipphone (pkey,active,callerid,cluster,desc,device,devicerec,dvrvmail,location,macaddr,passwd,provision,sndcreds,sipiaxfriend,technology) 	
-		VALUES ('$pkey','YES','$pkey','default','$desc','$device','default','$dvrvmail','local','$macaddr','$passwd','$provision','Always','$sipiaxfriend','SIP')" );
+	SarkSubs::SQLiteDo($dbh, "INSERT INTO ipphone (pkey,active,cluster,desc,device,devicemodel,devicerec,dvrvmail,location,macaddr,passwd,provision,sndcreds,sipiaxfriend,technology) 	
+		VALUES ('$pkey','YES','default','$desc','$vendor','$devicemodel','default','$dvrvmail','local','$macaddr','$passwd','$provision','Always','$sipiaxfriend','SIP')" );
 
 
 	if ($debug_level >= 2) {
-		doLogit("Inserted new extension $pkey with MAC $macaddr");
+		doLogit("Inserted new extension $pkey with MAC $macaddr for vendor $vendor and model $devicemodel");
 	}		
 #
 #               doCOS

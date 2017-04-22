@@ -143,7 +143,15 @@ try {
 		$OUT .= "\tinclude => internal-presets\n";
     	$OUT .= "\tinclude => extensions\n";
 //    	$OUT .= "\tinclude => conferences\n"; 
-
+		if ($row['pkey'] == "default") {
+			$OUT .= "\tinclude => qrxvtmny-routes\n";
+			$OUT .= "[qrxvtmny-routes]\n";    
+		}
+		else {
+			$OUT .= "\tinclude => " . $row['pkey'] . "-routes\n";
+			$OUT .= "[" . $row['pkey'] . "-routes]\n"; 
+		}			
+				
 		$sql = "SELECT * FROM Appl WHERE cluster='" . $row['pkey'] . "' ORDER BY pkey";
 		foreach ($dbh->query($sql) as $applrow) {
 			if ($applrow['span'] == "Both" || $applrow['span'] == "Internal") {
@@ -193,8 +201,8 @@ try {
 	$OUT .= ";\n";
     	$OUT .= "[extensions] \n";
     	$OUT .= "\tinclude => internal-presets\n";
-    	$OUT .= "\tinclude => parkedcalls\n\n";
-        $OUT .= "\tinclude => conferences\n";
+    	$OUT .= "\tinclude => parkedcalls\n";
+        $OUT .= "\tinclude => conferences\n\n";
 //
 //  Call Parks
 //	
@@ -254,35 +262,36 @@ try {
 //
 	$sql = "SELECT * FROM IPphone ORDER BY pkey";
 	foreach ($dbh->query($sql) as $IPphone) {
-		if ($IPphone['technology'] == "Analogue" ) {
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",hint,DAHDI/" . $IPphone['channel'] . "\n";
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
+		if ($IPphone['active'] != "NO" ) {
+			if ($IPphone['technology'] == "Analogue" ) {
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",hint,DAHDI/" . $IPphone['channel'] . "\n";
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
+			}
+			elseif ($IPphone['technology'] == "IAX2" ) {
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
+			}
+			elseif ($IPphone['technology'] == "Custom" ) {
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",hint," . $IPphone['dialstring'] . "\n";
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
+			}
+			elseif ($IPphone['technology'] == "SIP" ) {
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",hint,SIP/" . $IPphone['pkey'] . "\n";
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
+			}
+			if ($IPphone['dvrvmail'] != "None") {
+            	if ($IPphone['dvrvmail'] == "") {
+              		$IPphone['dvrvmail'] = $IPphone['pkey'];
+            	}
+          		$OUT .=  "\texten => *" . $IPphone['pkey'] . ",1,Voicemail(" . $IPphone['dvrvmail'] . ",su)\n";
+          		$OUT .=  "\texten => vm" . $IPphone['pkey'] . ",hint,Custom:vm" . $IPphone['pkey'] . "\n";
+          		$OUT .=  "\texten => vm" . $IPphone['pkey'] . ",1,VoicemailMain(" . $IPphone['pkey'] . ")\n";
+			}
+			if ($global['CAMPONQONOFF'] == "ON") {
+          		$OUT .=  "\texten => **" . $IPphone['pkey'] . ",1,Set(save_caller=\${BLINDTRANSFER:4:4})\n";
+	  			$OUT .=  "\texten => **" . $IPphone['pkey'] . ",n,Queue(Q" . $IPphone['pkey'] . "," . $global['CAMPONQOPT'] . ")\n";
+	  			$OUT .=  "\texten => **" . $IPphone['pkey'] . ",n,Goto(extensions,\${save_caller},1) \n";  
+			}
 		}
-		elseif ($IPphone['technology'] == "IAX2" ) {
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
-		}
-		elseif ($IPphone['technology'] == "Custom" ) {
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",hint," . $IPphone['dialstring'] . "\n";
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
-		}
-		elseif ($IPphone['technology'] == "SIP" ) {
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",hint,SIP/" . $IPphone['pkey'] . "\n";
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
-		}
-		if ($IPphone['dvrvmail'] != "None") {
-            if ($IPphone['dvrvmail'] == "") {
-              	$IPphone['dvrvmail'] = $IPphone['pkey'];
-            }
-          	$OUT .=  "\texten => *" . $IPphone['pkey'] . ",1,Voicemail(" . $IPphone['dvrvmail'] . ",su)\n";
-          	$OUT .=  "\texten => vm" . $IPphone['pkey'] . ",hint,Custom:vm" . $IPphone['pkey'] . "\n";
-          	$OUT .=  "\texten => vm" . $IPphone['pkey'] . ",1,VoicemailMain(" . $IPphone['pkey'] . ")\n";
-		}
-		if ($global['CAMPONQONOFF'] == "ON") {
-          	$OUT .=  "\texten => **" . $IPphone['pkey'] . ",1,Set(save_caller=\${BLINDTRANSFER:4:4})\n";
-	  		$OUT .=  "\texten => **" . $IPphone['pkey'] . ",n,Queue(Q" . $IPphone['pkey'] . "," . $global['CAMPONQOPT'] . ")\n";
-	  		$OUT .=  "\texten => **" . $IPphone['pkey'] . ",n,Goto(extensions,\${save_caller},1) \n";  
-		}
-		
 	}
 //
 //  Clean up
@@ -300,10 +309,12 @@ try {
 	$OUT .= "[queues]\n";
 	$sql = "SELECT * FROM IPphone ORDER BY pkey";
 	foreach ($dbh->query($sql) as $IPphone) {
-		if ($IPphone['technology'] == "Analogue" ||
+		if ($IPphone['active'] != "NO" ) {
+			if ($IPphone['technology'] == "Analogue" ||
 				$IPphone['technology'] == "IAX2"  ||
 				$IPphone['technology'] == "SIP"   ) {
-			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,Dial," . $IPphone['pkey'] . ",queue,)\n";
+				$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,Dial," . $IPphone['pkey'] . ",queue,)\n";
+	  		}
 	  	}
     }
 //
@@ -337,44 +348,47 @@ try {
 //							
 		$sql = "SELECT * FROM IPphone ORDER BY pkey";
 		foreach ($dbh->query($sql) as $IPphone) {
-			$OUT .= "[" . $IPphone['pkey'] . "opencos]\n";
-			$OUT .= "\tinclude => Emergency\n"; 
+			if ($IPphone['active'] != "NO" ) {
+				$OUT .= "[" . $IPphone['pkey'] . "opencos]\n";
+				$OUT .= "\tinclude => Emergency\n"; 
 //			
 //			print the overrides
 //			 
-			foreach ($orideopenarray as $key => $value) {
-				$OUT .= "\tinclude => " . $key . "\n";
-			} 	
+				foreach ($orideopenarray as $key => $value) {
+					$OUT .= "\tinclude => " . $key . "\n";
+				} 	
 	 
-			$sqlcos = 	"SELECT COS_pkey FROM IPphoneCOSopen where IPphone_pkey='" . $IPphone['pkey'] . "'";
-			foreach ($dbh->query($sqlcos) as $coskeys) {
+				$sqlcos = 	"SELECT COS_pkey FROM IPphoneCOSopen where IPphone_pkey='" . $IPphone['pkey'] . "'";
+				foreach ($dbh->query($sqlcos) as $coskeys) {
 //
 //          don't print if already overridden
 // 
-				if (! $orideopenarray [$coskeys['COS_pkey']]) {
-					$OUT .= "\tinclude => " . $coskeys['COS_pkey'] . "\n";
-				} 	
-			}
-			$OUT .= "\tinclude => Cosend\n";	
-			$OUT .= "[" . $IPphone['pkey'] . "closedcos]\n";
-			$OUT .= "\tinclude => Emergency\n"; 
+					if (! $orideopenarray [$coskeys['COS_pkey']]) {
+						$OUT .= "\tinclude => " . $coskeys['COS_pkey'] . "\n";
+					} 	
+				}
+				$OUT .= "\tinclude => Cosend\n";	
+				$OUT .= "[" . $IPphone['pkey'] . "closedcos]\n";
+				$OUT .= "\tinclude => Emergency\n"; 
 			
-			foreach ($orideclosedarray as $key => $value) {
-				$OUT .= "\tinclude => " . $key . "\n";
-			}
+				foreach ($orideclosedarray as $key => $value) {
+					$OUT .= "\tinclude => " . $key . "\n";
+				}
 			  
-			$sqlcos = 	"SELECT COS_pkey FROM IPphoneCOSclosed where IPphone_pkey='" . $IPphone['pkey'] . "'";
-			foreach ($dbh->query($sqlcos) as $coskeys) {
+				$sqlcos = 	"SELECT COS_pkey FROM IPphoneCOSclosed where IPphone_pkey='" . $IPphone['pkey'] . "'";
+				foreach ($dbh->query($sqlcos) as $coskeys) {
 //
 //          don't print if already overridden
 // 
-				if (! $orideclosedarray [$coskeys['COS_pkey']]) {
-					$OUT .= "\tinclude => " . $coskeys['COS_pkey'] . "\n";
-				} 	
+					if (! $orideclosedarray [$coskeys['COS_pkey']]) {
+						$OUT .= "\tinclude => " . $coskeys['COS_pkey'] . "\n";
+					} 	
+				} 
+				$OUT .= "\tinclude => Cosend\n";
 			} 
-			$OUT .= "\tinclude => Cosend\n";
-		}  
-	}		
+		} 
+	}
+				
 	$sql = "SELECT * FROM COS ORDER BY pkey";
 	foreach ($dbh->query($sql) as $COS) {
 		$OUT .= "[" . $COS['pkey'] . "]\n";

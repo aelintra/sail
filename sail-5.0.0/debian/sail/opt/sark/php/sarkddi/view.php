@@ -116,7 +116,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('tag');
 	$this->myPanel->aHeaderFor('swoclip');
 	$this->myPanel->aHeaderFor('Act');		
-//	$this->myPanel->aHeaderFor('ed');
+	$this->myPanel->aHeaderFor('ed');
 	$this->myPanel->aHeaderFor('del');	
 
 	
@@ -164,10 +164,10 @@ private function showMain() {
 		echo '<td class="icons">' . $row['active'] . '</td>' . PHP_EOL;
 		$get = '?edit=yes&amp;pkey=';
 		$get .= urlencode($row['pkey']);
-/*	
+	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
 		$get = '?id=' . $row['pkey'];
-*/		
+		
 		$this->myPanel->ajaxdeleteClick($get);		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
 
@@ -457,10 +457,11 @@ private function showEdit() {
     $this->myPanel->aLabelFor('cluster','cluster');
 	$this->myPanel->selected = $tuple['cluster'];
 	$this->myPanel->displayCluster();
-	
+/*	
     $this->myPanel->aLabelFor('faxonoff');
     $this->myPanel->selected = $tuple['faxdetect'];
-	$this->myPanel->popUp('faxdetect', array('NO','YES'));	
+	$this->myPanel->popUp('faxdetect', array('NO','YES'));
+ */		
 /*	
 	if ( $tuple['technology'] != 'DiD' && $tuple['technology'] != 'Class' )  {
 		$this->myPanel->aLabelFor('match');
