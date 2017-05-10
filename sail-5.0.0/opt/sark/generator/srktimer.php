@@ -24,6 +24,7 @@ require_once $sarkpath . "/php/srkHelperClass";
     $holarray=array();
     $dateseg=array();
     $tuple = array();
+    $dbupdated = false;
     $debug = false; 	// set true for debug output
     
     $helper->logit(" SARKTIMER Started", 0 );
@@ -184,7 +185,7 @@ require_once $sarkpath . "/php/srkHelperClass";
 			echo "NO MATCH  - WE'RE OPEN " . $row['pkey'] . "\n";
 		}
     }
-    $dbupdated = false;
+    
     foreach ($cluster as $k=>$v) {
 		$dboclo = $dbh->query("select oclo from Cluster WHERE pkey='" . $k . "'")->fetch();
 		if ($dboclo['oclo'] == $v) {
@@ -214,6 +215,7 @@ require_once $sarkpath . "/php/srkHelperClass";
         
     if ($dbupdated == true) {
 		$helper->logit(" SARKTIMER MODIFY", 0 );
+		`/usr/bin/sqlite3 /opt/sark/db/sark.db "UPDATE globals SET MYCOMMIT='NO' WHERE pkey='global';"`;
 		$rc = `/bin/cp /opt/sark/db/sark.db /opt/sark/db/sark.copy.db`;
 		$rc = `/bin/mv /opt/sark/db/sark.copy.db /opt/sark/db/sark.rdonly.db`;
 #		$rc = `/bin/chown www:www /opt/sark/db/sark.rdonly.db`;  

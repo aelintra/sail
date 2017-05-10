@@ -185,13 +185,16 @@ if [ ! -e /etc/asterisk/ssl ]; then
         -out /etc/asterisk/ssl/server.pem \
         -days 3650 > /dev/null 2>&1
 fi
-
 #sudoers
+
 if [ -e /opt/sark/cache/sailsudoers ]; then 
 	chmod 0440 /opt/sark/cache/sailsudoers
 	chown root:root /opt/sark/cache/sailsudoers
 	mv /opt/sark/cache/sailsudoers /etc/sudoers.d/sail
 fi
+#  remove old rssh sudoers file
+[ -e /etc/sudoers.d/sarkrssh ] && rm /etc/sudoers.d/sarkrssh
+
 # all moved to sudoers.d/sail in 5.0.0-30
 #if [ ! -e /etc/sudoers.d/sarkrssh ]; then
 #        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
@@ -234,10 +237,19 @@ if [ -d /etc/shorewall ]; then
     done
     grep -q 'INCLUDE local.lan' /etc/shorewall/params
         if [  "$?" -ne "0" ] ; then
-        cp -f /opt/sark/shorewall/one-interface/params /etc/shorewall
+        	cp -f /opt/sark/shorewall/one-interface/params /etc/shorewall
         fi
     sed -i 's/startup=0/startup=1/' /etc/default/shorewall
     chown www-data:www-data /etc/shorewall/sark_rules
+    if [ ! -e /etc/shorewall/blrules ] ; then
+    	cp /usr/share/shorewall/configfiles/blrules /etc/shorewall
+    fi
+    grep  -q 'INCLUDE sark_blrules' /etc/shorewall/blrules
+    if [  "$?" -ne "0" ] ; then
+     	echo 'INCLUDE sark_blrules' >> /etc/shorewall/blrules
+    fi
+    touch /etc/shorewall/sark_blrules
+    chown www-data:www-data /etc/shorewall/sark_blrules
 fi
 
 #Rebuild the SARK database

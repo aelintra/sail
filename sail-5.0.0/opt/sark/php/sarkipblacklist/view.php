@@ -51,16 +51,19 @@ public function showForm() {
 		}			
 	}	
 	
-	if (isset($_POST['restfw_x'])) { 
-		$this->message = $this->helper->restartFirewall();				
-	}
 	
 	if (isset($_GET['delete'])) { 
 		$this->ruleDelete();
 	}	
 
-		
+	if (isset($_POST['restfw_x'])) { 
+		if (!$this->restartFirewall() ) {
+			return;
+		}
+	}
+
 	$this->showMain();
+
 	
 	$this->dbh = NULL;
 	return;
@@ -175,7 +178,6 @@ private function saveNew() {
 		
 		$ret = $this->helper->createTuple("shorewall_blacklist",$tuple,false);
 		if ($ret == 'OK') {
-//			$this->helper->commitOn();	
 			$this->message = "Saved new Rule!";
 		}
 		else {
@@ -191,5 +193,65 @@ private function saveNew() {
     }
     unset ($this->validator);
 }
+private function restartFirewall() {
 
+	$fwrule = null;	
+	$rows = $this->helper->getTable("shorewall_blacklist");
+	foreach ($rows as $row ) {
+		$fwrule .= "DROP\t net:" . $row['source'] . "\tall\n";	
+	}
+
+	if ($fwrule) {
+		$fh = fopen("/etc/shorewall/sark_blrules", 'w') or die('Could not open blrules file!');
+		fwrite($fh, $fwrule) or die('Could not write to blrules file');
+		fclose($fh);
+	}
+	else {
+		`/usr/bin/tail /etc/shorewall/sark_blrules > /etc/shorewall/sark_blrules`;
+	}
+	
+	$rc = `sudo /sbin/shorewall check 2>&1`;
+
+    if (! strchr($rc, 'ERROR')) {
+    	$rc = `sudo /sbin/shorewall restart`;
+		$this->message = "RESTARTED OK";
+		return "OK";
+    }
+
+	$this->myPanel->msg .= "BAD RULE - NO RESTART!";
+/* 
+ * start page output
+ */
+  
+	echo '<div class="buttons">';	
+	$this->myPanel->Button("cancel");
+	echo '</div>';	
+	
+	$this->myPanel->Heading();
+	if (isset($this->message)) {	
+		foreach($this->error_hash as $inpname => $inp_err) {
+			echo "<p>$inpname : $inp_err</p>\n";
+		}       
+	}	
+	echo '<br/><br/><br/><br/>';		
+	echo '<div class="datadivnarrow">';
+	if ($error) {
+		echo '<strong style="color:Red">ERROR(S) FOUND IN YOUR RULES!<br/>';
+		echo 'The firewall has not been restarted. You MUST correct the error(s) and you MUST NOT reboot<br/>';
+		echo 'the system until you have fixed the problem or your firewall may be disabled!<br/>';
+		echo 'Error(s) are highlighted below...</strong><br/><br/>'; 
+	} 
+	$lines = explode("...", $rc);
+	foreach ($lines as $line) {
+		if (strchr($line, 'ERROR')) {
+			echo '<strong>' . $line . '</strong><br/>';
+		}
+		else {
+			echo $line . '<br/>';
+		}
+	}
+	echo '</div>';
+	echo '</div>';
+	return;			
+}
 }
