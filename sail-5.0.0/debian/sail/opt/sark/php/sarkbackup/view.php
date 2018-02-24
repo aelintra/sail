@@ -381,6 +381,7 @@ private function doRestore() {
 		if (file_exists($tempDname . '/opt/sark/db/sark.db')) {
 			$this->helper->request_syscmd ("cp -f $tempDname/opt/sark/db/sark.db  /opt/sark/db/sark.db");
 			$this->helper->request_syscmd ("chown www-data:www-data  /opt/sark/db/sark.db");
+			$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reloader.sh");
 			$this->log .= "<p>Database RESTORED</p>";
 		}
 		else {

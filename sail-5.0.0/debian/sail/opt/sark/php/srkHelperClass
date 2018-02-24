@@ -971,56 +971,7 @@ public function checkCreds($pkey, $password, &$msg, $login) {
      
 }
 
-public function restartFirewall() {
-	$fwrule = null;
-	$restart=false;
-	$rc = $this->request_syscmd ("cp /etc/shorewall/sark_rules /etc/shorewall/last_sark_rules" );
-	$rc = $this->request_syscmd ("cat /dev/null > /etc/shorewall/sark_rules");
-	$rows = $this->getTable("shorewall");
-	foreach ($rows as $row ) {
-		$dollar = null;
-		if ($row['source'] == 'LAN') {
-			$dollar = '$';
-		}	
-		$fwrule .= "ACCEPT\t net:" . $dollar . $row['source'] . "\t\$FW\t" . $row['protocol'] . "\t" . $row['portrange'] . "\n";	
 
-	}
-	if ($fwrule) {
-		$fh = fopen("/etc/shorewall/sark_rules", 'w') or die('Could not open rules file!');
-		fwrite($fh, $fwrule) or die('Could not write to rules file');
-		fclose($fh);
-		$restart=true;
-	}	
-	$fwrule = null;	
-	$rows = $this->getTable("shorewall_blacklist");
-	foreach ($rows as $row ) {
-		$fwrule .= "DROP\t net:" . $row['source'] . "\tall\n";	
-	}
-	if ($fwrule) {
-		$rc = $this->request_syscmd ("cat /dev/null > /etc/shorewall/sark_blrules");
-		$fh = fopen("/etc/shorewall/sark_blrules", 'w') or die('Could not open blrules file!');
-		fwrite($fh, $fwrule) or die('Could not write to blrules file');
-		fclose($fh);
-		$restart=true;
-	}
-	if ($restart) {	
-		$rc = $this->request_syscmd ("shorewall check");
-		echo 'RC=' . $rc . "\n";
-		if (empty($rc)) {
-			$rc = $this->request_syscmd ("/etc/init.d/shorewall restart");
-			return $rc;
-		}
-		else {
-			$this->request_syscmd ("cp /etc/shorewall/last_sark_rules /etc/shorewall/sark_rules" );
-			$retstring = "ERROR IN FIREWALL CONFIG!\n";
-			$retstring .= $rc;
-			$retstring .= "\nFIX THE ERROR AND RESUBMIT.  FIREWALL NOT RESTARTED\n";
-			return $retstring;
-		}
-	}
-	return 'No data, no restart';			
-}
-  
 /**********************************************************************
  * Below here is a set of functions to build the default tuple(row) 
  * for each new insert.  Tuples are built as sparse arrays containing
@@ -1311,7 +1262,7 @@ private function default_meetme() {
 }
 
 private function country_codes($search,$vector=true) {
-// not used
+
 $countries = array(  'AF'=>'AFGHANISTAN', 
 					 'AL'=>'ALBANIA', 
 					 'DZ'=>'ALGERIA', 

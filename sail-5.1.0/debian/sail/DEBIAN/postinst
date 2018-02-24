@@ -1,0 +1,247 @@
+#!/bin/bash
+
+#Copy Asterisk file fragents
+[ ! -e /etc/asterisk/sark_customer_agents_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_agents_main.conf 
+[ ! -e /etc/asterisk/sark_customer_extensions_globals.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_extensions_globals.conf 
+[ ! -e /etc/asterisk/sark_customer_hints.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_hints.conf 
+[ ! -e /etc/asterisk/sark_customer_iax_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_iax_main.conf 
+[ ! -e /etc/asterisk/sark_customer_queues_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_queues_main.conf 
+[ ! -e /etc/asterisk/sark_customer_sip_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_sip_main.conf 
+[ ! -e /etc/asterisk/sark_customer_vmail_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_vmail_main.conf 
+[ ! -e /etc/asterisk/sark_customer_agents_header.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_agents_header.conf
+[ ! -e /etc/asterisk/sark_customer_queues_header.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_queues_header.conf
+[ ! -e /etc/asterisk/sark_customer_vmail_header.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_vmail_header.conf
+[ ! -e /etc/asterisk/sark_customer_manager.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_manager.conf 
+[ ! -e /opt/sark/otrr/var/spool/asterisk/monitor ] && mkdir -p /opt/sark/otrr/var/spool/asterisk/monitor
+[ ! -e /opt/sark/mixmon/var/spool/asterisk/monitor ] && mkdir -p /opt/sark/mixmon/var/spool/asterisk/monitor
+[ ! -e /var/spool/asterisk/monstage ] && mkdir -p /var/spool/asterisk/monstage
+[ ! -e /var/spool/asterisk/monout ] && mkdir -p /var/spool/asterisk/monout
+[ ! -e /opt/sark/passwd/htpasswd ] && cp -f /opt/sark/cache/htpasswd /opt/sark/passwd/htpasswd
+#[ ! -e /opt/sark/www/header.htm ] && /bin/cp -f /opt/sark/cache/header.htm /opt/sark/www
+
+if [ ! -e /etc/asterisk/sark_customer_iax_header.conf ]; then 
+        cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_iax_header.conf
+        echo "language=en-gb" >> /etc/asterisk/sark_customer_iax_header.conf
+fi
+
+cp -f /opt/sark/cache/debsetlan /etc/init.d
+
+update-rc.d debsetlan defaults > /dev/null 2>&1
+
+if [ ! -e /etc/asterisk/sark_customer_sip_header.conf ]; then
+        cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_sip_header.conf
+        echo "language=en-gb" >> /etc/asterisk/sark_customer_sip_header.conf
+fi
+
+usermod -a -G asterisk www-data
+
+# added in 5.0.0-21 for hotdesk 
+usermod -a -G www-data asterisk
+chmod 775 /opt/sark/db
+chmod 664 /opt/sark/db/sark.db
+
+[ -e /etc/dahdi ] && chown -R asterisk:asterisk /etc/dahdi
+[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf
+
+chown -R www-data:www-data /opt/sark/www
+chown -R www-data:www-data /opt/sark/db
+chown -R www-data:www-data /opt/sark/passwd
+chown -R www-data:www-data /opt/sark/cache
+
+chown -R asterisk:asterisk /opt/sark/otrr/var/spool/asterisk/monitor 
+chown -R asterisk:asterisk /opt/sark/mixmon/var/spool/asterisk/monitor 
+
+chown -R asterisk:asterisk /etc/asterisk/*
+chown -R asterisk:asterisk /var/lib/asterisk
+chown -R asterisk:asterisk /usr/share/asterisk/sounds
+chown -R asterisk:asterisk /var/log/asterisk
+chown -R asterisk:asterisk /var/spool/asterisk
+
+chmod 664 -R /etc/asterisk/*
+chmod +x /etc/asterisk/ssl
+chmod +x /etc/asterisk/manager.d
+chmod 755 -R /opt/sark/www
+chmod 755 -R /opt/sark/generator
+chmod 755 -R /opt/sark/perl
+chmod 755 -R /opt/sark/scripts
+
+grep -q '#include sark_manager.conf' /etc/asterisk/manager.conf
+if [  "$?" -ne "0" ] ; then
+        cp -f /opt/sark/cache/manager.conf /etc/asterisk
+fi
+
+grep -q '#include sark_sip_notify.conf' /etc/asterisk/sip_notify.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_sip_notify.conf" >> /etc/asterisk/sip_notify.conf
+fi
+
+grep -q '#include sark_cdr.conf' /etc/asterisk/cdr.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_cdr.conf" >> /etc/asterisk/cdr.conf
+        echo "enable=no" > /etc/asterisk/sark_cdr.conf
+fi
+
+grep -q '#include sark_meetme.conf' /etc/asterisk/meetme.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_meetme.conf" >> /etc/asterisk/meetme.conf
+fi
+
+grep -q '#include sark_confbridge.conf' /etc/asterisk/confbridge.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_confbridge.conf" >> /etc/asterisk/confbridge.conf
+fi
+
+
+# we enable asterisk in case this is an upgrade from a pre 3.1.1-98 release
+# pre 98 we used runit to manage asterisk.  Post 98 we use init.d
+# we don't enable asterisk if ASHA is installed because Pacemaker will handle
+
+[ ! -e /opt/asha/asha.conf ] && update-rc.d asterisk defaults 
+ 
+chmod +x /opt/sark/service/srk-ua-helper/run 
+chmod +x /opt/sark/service/srk-ua-responder/run
+
+# remove old runit sark entry if it exists
+[ -L /etc/service/sark ] && rm /etc/service/sark
+# link the helpers if they don't exist 
+[ ! -L /etc/service/srk-ua-helper ] && ln -s /opt/sark/service/srk-ua-helper /etc/service
+[ ! -L /etc/service/srk-ua-responder ] && ln -s /opt/sark/service/srk-ua-responder /etc/service
+[ ! -L /etc/service/srk-ua-rssh ] && ln -s /opt/sark/service/srk-ua-rssh /etc/service
+
+#
+# deal with the new apache 2.4 auth rules and jessie
+# 
+
+# disable defaults
+# Jessie
+[ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
+# Wheezy
+[ -L /etc/apache2/sites-enabled/000-default ] && a2dissite 000-default > /dev/null 2>&1
+
+# remove any previous sark references
+
+rm -rf /etc/apache2/sites-enabled/sark*
+rm -rf /etc/apache2/sites-available/sark*
+
+# set links to the correct Vhost
+
+grep -q '^8\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
+# since we're checking for Jessie anyway, we can also turn on php short tags - Areski Stat needs them 
+	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php5/apache2/php.ini		
+else
+	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf /etc/apache2/sites-available/sark-ssl.conf
+fi
+
+
+#HTTPD
+a2enmod rewrite > /dev/null 2>&1
+a2enmod proxy > /dev/null 2>&1
+a2enmod proxy_http > /dev/null 2>&1
+
+#HTTPS
+a2enmod ssl
+if [ ! -e /etc/apache2/ssl ]; then
+    mkdir /etc/apache2/ssl
+    openssl req \
+        -new \
+        -x509 \
+        -days 3650 \
+        -keyout /etc/apache2/ssl/vhost1.key \
+        -out /etc/apache2/ssl/vhost1.crt \
+        -nodes \
+        -subj "/O=Aelintra/OU=PBX/CN=sark.local" > /dev/null 2>&1
+fi
+
+a2ensite sark-ssl.conf > /dev/null 2>&1
+service apache2 reload > /dev/null 2>&1
+
+#SIP/TLS
+if [ ! -e /etc/asterisk/ssl ]; then
+    mkdir /etc/asterisk/ssl
+    echo 00 > /etc/asterisk/ssl/file.srl
+    openssl req \
+        -new \
+        -days 3650 \
+        -x509 \
+        -out /etc/asterisk/ssl/ca.pem \
+        -passin pass:artichok3 \
+        -passout pass:artichok3 \
+        -subj "/C=GB/ST=Yorkshire/L=Leeds/O=Aelintra/CN=sark.local" > /dev/null 2>&1
+    openssl genrsa -out /etc/asterisk/ssl/server.key 2048 > /dev/null 2>&1
+    openssl req \
+        -key /etc/asterisk/ssl/server.key \
+        -new \
+        -out /etc/asterisk/ssl/server.req \
+        -days 3650 \
+        -subj "/C=GB/ST=Yorkshire/L=Leeds/O=Aelintra/CN=aelintra.com" > /dev/null 2>&1
+    openssl x509 -req \
+    	-in /etc/asterisk/ssl/server.req \
+        -CA /etc/asterisk/ssl/ca.pem \
+        -CAkey privkey.pem \
+        -CAserial /etc/asterisk/ssl/file.srl \
+        -passin pass:artichok3 \
+        -out /etc/asterisk/ssl/server.pem \
+        -days 3650 > /dev/null 2>&1
+fi
+
+#sudoers
+if [ -e /opt/sark/cache/sailsudoers ]; then 
+	chmod 0440 /opt/sark/cache/sailsudoers
+	chown root:root /opt/sark/cache/sailsudoers
+	mv /opt/sark/cache/sailsudoers /etc/sudoers.d/sail
+fi
+# all moved to sudoers.d/sail in 5.0.0-30
+#if [ ! -e /etc/sudoers.d/sarkrssh ]; then
+#        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
+#        chmod 0440 /etc/sudoers.d/sarkrssh
+#fi
+
+#reverse proxy port perms
+chown asterisk:asterisk /opt/sark/service/rssh/serviceport1
+
+#handle multiple NICs
+if [ ! -e /etc/network/interfaces.d ]; then
+	mkdir -p /etc/network/interfaces.d
+	echo "source /etc/network/interfaces.d/*" >> /etc/network/interfaces
+fi
+
+#fail2ban
+grep -q '^8\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+#jessie
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
+	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+else 
+#wheezy
+	[ ! -e /etc/fail2ban/filter.d/asterisk.conf ] && [ -e  /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf ] && ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-wheezy.local ] && ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
+fi
+	
+
+# set correct Asterisk dateformat in logger.conf
+sed -i 's/^;dateformat=%F %T /dateformat=%F %T/' /etc/asterisk/logger.conf
+# set security logging for Ast11 
+sed -i '/^messages/c \messages => security,notice,warning,error' /etc/asterisk/logger.conf;
+/usr/sbin/asterisk -rx 'logger reload'
+
+#Shorewall setup
+if [ -d /etc/shorewall ]; then
+    perl /opt/sark/scripts/setip.pl
+    for file in `ls /opt/sark/shorewall/one-interface` ; do
+                [ ! -e /etc/shorewall/$file ] && cp -f /opt/sark/shorewall/one-interface/$file /etc/shorewall            
+    done
+    grep -q 'INCLUDE local.lan' /etc/shorewall/params
+        if [  "$?" -ne "0" ] ; then
+        cp -f /opt/sark/shorewall/one-interface/params /etc/shorewall
+        fi
+    sed -i 's/startup=0/startup=1/' /etc/default/shorewall
+    chown www-data:www-data /etc/shorewall/sark_rules
+fi
+
+#Rebuild the SARK database
+/bin/sh /opt/sark/scripts/srkV4reloader.sh
+
+#Install date
+date --iso-8601=minutes > /opt/sark/db/.sail-install-date

@@ -68,6 +68,11 @@ fi
 
 #run the once files
 echo Running ONCE files..
+if [ ! -e $SARKROOT/$SYSONCEDONE ] ; then
+	echo Creating oncedone directory
+	mkdir $SARKROOT/$SYSONCEDONE
+fi
+
 if [ "$(ls -A $SARKROOT/$SYSONCE)" ]; then
 	for file in $(ls $SARKROOT/$SYSONCE/) ; do
 		if [ ! -e $SARKROOT/$SYSONCEDONE/$file ]; then

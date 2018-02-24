@@ -33,13 +33,6 @@
 		}
 	}		
  
-	if ($column == 'portrange') {
-	  if (!preg_match("/^[0-9:,\s]+$/",$value)) {
-		  echo "portrange has invalid characters - use only [0-9,:] ";
-		  return;
-	  }
-	}   
-
 	
 	$helper = new helper;
 	$helper->logit("I'm updating shorewall rule $id with a new " . $column . " of $value",3 );
@@ -51,6 +44,6 @@
 /*
  * call the setter
  */
-	$ret = $helper->setTuple('shorewall',$tuple);
+	$ret = $helper->setTuple('shorewall_blacklist',$tuple);
 	echo $_REQUEST['value'];
 ?>

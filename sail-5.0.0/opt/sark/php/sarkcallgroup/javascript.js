@@ -85,8 +85,7 @@
 					event: 'click',
                     onblur: 'cancel',
                     submit: 'Save',
-//                  data: "{ 'Ring':'Ring','Hunt':'Hunt','Page':'Page','Alias':'Alias' }",
-					data: "{ 'Ring':'Ring','Hunt':'Hunt','Page':'Page' }",
+					data: "{ 'Ring':'Ring','Hunt':'Hunt','Page':'Page','Alias':'Alias' }",
 				}, 		// grouptype
 				{
 					type: 'textarea',

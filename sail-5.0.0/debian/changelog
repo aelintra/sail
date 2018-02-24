@@ -1,23 +1,42 @@
-sail (5.0.0-33) UNRELEASED; urgency=low
-  * tagged as 5.0.0-33
-  - Smarter auto phone recognition
-  - Simplified phone definition
-  - provisioning stream expansion from browser app
-  - new image management for phones
+sail (5.0.0-45) UNRELEASED; urgency=low
+  * tagged as 5.0.0-45
+  - minor fix to setip to check presence of asterisk localnet file
+  - fix for incorrect blrules creation in postinst
+  - fix to Freset to clear any blrules on FW reset
+  - DB recover runs srkV4reloader after recovery
 
- -- CoCoSoft <admin@aelintra.com>  Sat, 22  Apr 2017 18:00:00 +0000
+ -- CoCoSoft <admin@aelintra.com>  Fri, 23  Feb 2018 18:00:00 +0000
+ 
+sail (5.0.0-43) UNRELEASED; urgency=low
+  * untagged - development
+  - this was just a data sync between R5 copies
+ -- CoCoSoft <admin@aelintra.com>  Fri, 23  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-42) UNRELEASED; urgency=low
+  * untagged - development
+  - bumped to -40 to avoid clash with deb9 testing releases -33 thru -36
+  - this is the runout and bug fix branch for 5.0.0
+  - fixed the Yealink .boot issue in Yealink V80 
+  - added bkup and snap in the correct folder
+  - fixed download bug where ldap entries not being captured
+  - changed provisioning to supply yealink.Commom on any Y file request
+  - added latest T series Yealink phones
+  - fix for Yealink V80 firmware
+  - fix for incorrect blrules creation in postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 19  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-34) UNRELEASED; urgency=low
+  * tagged as 5.0.0-34
+  - Mod srkV4reloader to create oncedone on demand 
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 12  Aug 2017 18:00:00 +0000
 
 sail (5.0.0-32) UNRELEASED; urgency=low
   * tagged as 5.0.0-32
-  - Fix ghost registration strings (sipsql.php)
-  - moved sudoers.d/sail to sark/cache and install from there 
-  - support aastra firmwares 
-  - support polycom site licence
-  - support for Yealink T29G
-  - support for Vtech  VSP726A
-  - support for full password suppression in provisioning (commonFuncs.php)
+  - Fix bug in ipblacklist update
 
- -- CoCoSoft <admin@aelintra.com>  Thu, 29  Dec 2016 18:00:00 +0000
+ -- CoCoSoft <admin@aelintra.com>  Sun, 21  May 2017 18:00:00 +0000
 
 sail (5.0.0-31) UNRELEASED; urgency=low
   * tagged as 5.0.0-31

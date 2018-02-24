@@ -336,13 +336,9 @@ private function showEdit() {
 	if ($device['technology'] == 'SIP' ) {
 		if ( preg_match(' /\.Fkey/ ', $device['blfkeyname'] )) {
 			echo  '<li><a href="#blf">BLF/DSS Keys</a></li>' . PHP_EOL;
-		}		
+		}	
 	}
-/* NOT used	
-	if ($device['technology'] == 'SIP' ) { 
-		echo  '<li><a href="#image">Image</a></li>' . PHP_EOL;
-	}	
-*/		
+		
 	
 	
 	
@@ -379,21 +375,6 @@ private function showEdit() {
 	$this->myPanel->aLabelFor('description');
 	echo '<input type="text" name="desc" id="desc" size="30"  value="' . $device['desc'] . '"  />' . PHP_EOL;				
 	echo '</div>' . PHP_EOL;
-
-/*
- *  TAB IMAGE - NOT used
- *
- 	if ($device['technology'] == 'SIP') {
-		echo '<div id="image">';
-    	echo '<br/><br/>';
-    	$this->myPanel->aLabelFor('imageurl');
-		echo '<input type="text" name="imageurl" id="imageurl" size="50"  value="' . $device['imageurl'] . '"  />' . PHP_EOL;
-		if (isset($device['imageurl'])) {
-			echo '<br/><br/><img src="' . $device['imageurl'] . '"/>' . PHP_EOL;
-		}				
-		echo '</div>' . PHP_EOL;
-	} 
- */ 
 	
 /*
  * 	TAB BLF/DSS Keys
@@ -434,10 +415,7 @@ private function showEdit() {
 	}	
 	echo '</div>' . PHP_EOL;		
 	echo '</div>' . PHP_EOL;
-/* 	NOT used on this panel	
- *	$this->myPanel->navRowDisplay("device", $pkey);
- */	
- 		
+	$this->myPanel->navRowDisplay("device", $pkey);			
 }
 
 private function saveEdit() {
@@ -461,7 +439,6 @@ private function saveEdit() {
  
 // remove any escaped quotes 			
 		$tuple['provision'] = preg_replace ( "/\\\/", '', $tuple['provision']);
-		$tuple['provision'] = preg_replace ( "/&type/", '&amp;type', $tuple['provision']);
 		if (isset($tuple['sipiaxfriend'])) {
 			$tuple['sipiaxfriend'] = preg_replace ( "/\\\/", '', $tuple['sipiaxfriend']);
 		}

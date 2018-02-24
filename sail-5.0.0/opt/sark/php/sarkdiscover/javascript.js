@@ -24,7 +24,7 @@
 			{ "sName": "macaddr"},
 			{ "sName": "vendor"},			
 			{ "sName": "model"},
-//			{ "sName": "description" },
+			{ "sName": "description" },
 			{ "sName": "extension" }
 		] 
 	});   	

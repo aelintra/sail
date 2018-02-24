@@ -1,0 +1,19 @@
+dn: dc=sark,dc=local
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: sark.local
+dc: sark
+
+dn: cn=admin,dc=sark,dc=local
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP administrator
+userPassword:: e1NTSEF9MjJrWDl4dmExOHBvcFpHL2tXNVBtYlRCeXk1LzhZVno=
+
+dn: ou=contacts,dc=sark,dc=local
+objectClass: organizationalUnit
+objectClass: top
+ou: contacts
+

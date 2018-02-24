@@ -1,0 +1,1015 @@
+<?php
+// SARK page class
+// Developed by CoCo
+// Copyright (C) 2012 CoCoSoFt
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+Class page {
+
+	
+	/*** Button Array ***/
+	public $buttonName = array (
+				'adopt' => array(
+								'src' =>'redo.png',
+                                'onmouseover' => 'ADAPT-ROLLOVER.png',
+                                'alt' =>'Adopt',
+                                'title' =>'Scan the local network for phones to adopt'
+                                ),
+ 				'arrow-right' => array(
+								'src' =>'arrow-right.png',
+                                'onmouseover' => 'ADAPT-ROLLOVER.png',
+                                'alt' =>'Next',
+                                'title' =>'Next'
+                                ),
+				'arrow-rightd' => array(
+								'src' =>'arrow-rightd.png',
+                                'onmouseover' => 'ADAPT-ROLLOVER.png',
+                                'alt' =>'last',
+                                'title' =>'last'
+                                ),
+ 				'arrow-left' => array(
+								'src' =>'arrow-left.png',
+                                'onmouseover' => 'ADAPT-ROLLOVER.png',
+                                'alt' =>'Previous',
+                                'title' =>'Previous'
+                                ),
+				'arrow-leftd' => array(
+								'src' =>'arrow-leftd.png',
+                                'onmouseover' => 'ADAPT-ROLLOVER.png',
+                                'alt' =>'First',
+                                'title' =>'First'
+                                ),                                                                                                                              
+ 				'back' => array (
+								'src' => 'back.png',
+                                'onmouseover' => 'UNDO-ROLLOVER.png',
+                                'alt' => 'Back',
+                                'title' => 'Back',
+                                ),                                 
+				'cancel' => array (
+								'src' => 'cancel.png',
+                                'onmouseover' => 'CANCEL-ROLLOVER.png',
+                                'alt' => 'Cancel',
+                                'title' => 'Cancel & Return'
+                                ),
+				'commit' => array (
+								'src' => 'commit.png',
+                                'onmouseover' => 'COMMIT-ROLLOVER.png',
+                                'alt' => 'Commit',
+                                'title' => 'COMMIT (Generate Asterisk objects)',
+                                'onClick' => "return confirmOK('Commit - Confirm?')",
+                                ),
+				'commitClick' => array (
+								'src' => 'commitClick.png',
+                                'onmouseover' => 'COMMIT-ROLLOVER.png',
+                                'alt' => 'Commit',
+                                'title' => 'COMMIT (Generate Asterisk objects)',
+                                'onClick' => "return confirmOK('Commit - Confirm?')",
+                                ), 
+				'delete' => array (
+								'src' => 'delete.png',
+                                'onmouseover' => 'DELETE-ROLLOVER.png',
+                                'alt' => 'Delete',
+                                'title' => 'Delete this Object',
+                                'onClick' => "return confirmOK('Delete - Confirm?')",
+                                ),                                                                   
+				'initialise' => array (
+								'src' => 'redo.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Resolve',
+                                'title' => 'Initialize & Regenerate the PCI card settings',
+                                'onClick' => "return confirmOK('Regenerate - Confirm?')",
+                                ),
+ 				'list' => array (
+								'src' => 'list.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Resolve',
+                                'title' => 'Show all',
+                                ),                                
+				'minus' => array (
+								'src' => 'minus.png',
+                                'onmouseover' => 'NEW-ROLLOVER.png',
+                                'alt' => 'delete',
+                                'title' => 'delete',
+                                ),                                                                                                                                                                
+				'new' => array (
+								'src' => 'new.png',
+                                'onmouseover' => 'NEW-ROLLOVER.png',
+                                'alt' => 'New',
+                                'title' => 'New',
+                                ), 
+				'pdf' => array (
+								'src' => 'pdf.png',
+                                'alt' => 'PDF',
+                                'title' => 'PDF',
+                                ),                                   
+				'plus' => array (
+								'src' => 'plus.png',
+                                'onmouseover' => 'NEW-ROLLOVER.png',
+                                'alt' => 'Add BLF',
+                                'title' => 'Add BLF',
+                                ), 
+				'print' => array (
+								'src' => 'print.png',
+                                'alt' => 'Print',
+                                'title' => 'Print',
+                                ),                                                                                           
+ 				'resolve' => array (
+								'src' => 'redo.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart',
+                                'title' => 'Restart the Firewall',
+                                'onClick' => "return confirmOK('Restart the Firewall - Confirm?')",
+                                ),                                
+ 				'reboot' => array (
+								'src' => 'reboot.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart',
+                                'title' => 'Reboot the server',
+                                'onClick' => "return confirmOK('Reboot - Confirm?')",
+                                ),
+  				'notify' => array (
+								'src' => 'redo.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart',
+                                'title' => 'Reboot the Endpoint',
+                                'onClick' => "return confirmOK('Reboot - Confirm?')",
+                                ),                               
+ 				'restfw' => array (
+								'src' => 'redo.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Restart Firewall',
+                                'title' => 'Restart the Firewall',
+                                'onClick' => "return confirmOK('Restart the Firewall - Confirm?')",
+                                ),                                
+ 				'save' => array (
+								'src' => 'save.png',
+                                'onmouseover' => 'SAVE-ROLLOVER.png',
+                                'alt' => 'Save',
+                                'title' => 'Save',
+                                ),
+ 				'sipcapIsOff' => array (
+								'src' => 'screenshot.png',
+                                'alt' => 'Turn on SIP logging',
+                                'title' => 'Turn on SIP logging',
+                                ), 
+ 				'sipcapIsOn' => array (
+								'src' => 'screenshot-red.png',
+                                'alt' => 'Turn off SIP logging',
+                                'title' => 'Turn off SIP logging',
+                                ),                                                                
+ 				'spin' => array (
+								'src' => 'spin.png',
+                                'onmouseover' => 'RESOLVE-ROLLOVER.png',
+                                'alt' => 'Backup',
+                                'title' => 'Take an instant Backup',
+                                'onClick' => "return confirmOK('Create an instant backup - Confirm?')",
+                                ), 
+ 				'start' => array (
+								'src' => 'start.png',
+                                'onmouseover' => 'PLAY-ROLLOVER.png',
+                                'alt' => 'Start',
+                                'title' => 'START the PBX',
+                                'onClick' => "return confirmOK('START the PBX - Confirm?')",
+                                ),                              
+ 				'stop' => array (
+								'src' => 'stop.png',
+                                'onmouseover' => 'STOP-ROLLOVER.png',
+                                'alt' => 'Stop',
+                                'title' => 'STOP the PBX',
+                                'onClick' => "return confirmOK('STOP the PBX - Confirm?')",
+                                ),
+
+				'upload' => array (
+								'src' => 'upload.png',
+                                'onmouseover' => 'CF-ROLLOVER.png',
+                                'alt' => 'upload',
+                                'title' => 'Upload a saved snapshot'
+                                ),                                                                                                                                                                                                                                                                                                                                                                                               
+	);
+	
+	/*** vars ***/
+
+	protected $buttonpath = '/sark-common/buttons/';
+	protected $iconpath = '/sark-common/icons/';
+	protected $jspath = "javascript:this.src='/sark-common/buttons/commitClick.png/";
+
+	public $msg;
+	public $pagename;
+	public $override;
+	public $overrideClick;
+	public $selected;
+	public $opSys;
+	
+	
+	/*** FUNCTIONS ***/
+	function __construct(){	
+/*
+ * Not much to do here
+ * Just check we were invoked from the Nav panel or ourself
+ */
+ 
+ /*
+		if ( ! strpos($_SERVER['HTTP_REFERER'], $_SERVER['PHP_SELF']) ) {
+			if (! preg_match('/main.php$/',$_SERVER['HTTP_REFERER'])) {
+				header('HTTP/1.0 404 Not Found');
+				echo "Not Found (404)";
+				exit();
+			}
+		}
+*/		
+	$client = $this->clientPlatform($_SERVER['HTTP_USER_AGENT']);
+	$this->opSys = $client['os'];		
+	}
+
+	public function Heading () {
+	/*** set the heading ***/
+		echo '<span class=heading>'; 
+		echo trim(php_uname("n"));
+/*		
+		if (isset($_SESSION['user']['pkey'])) {
+			echo "/" ;
+			echo $_SESSION['user']['pkey'];
+		}
+*/
+		echo " - " ;
+		
+		if ($this->msg) {
+			echo '<span id="errorhash" >' . $this->msg . "</span>";
+		}
+		else {
+			echo $this->pagename;
+		}
+		echo "</span>";
+		echo PHP_EOL;
+	}
+	
+	public function searchBox() {
+		echo '<input type="image" name="search" id="search" alt="search" src="' . $this->iconpath . 'key.png" border=0 title = "Go to key">' . PHP_EOL;
+		echo '<input type="text" name="searchkey" id="searchkey" />' . PHP_EOL; 	
+	}
+			
+	public function commitButton () {
+	/*** handle special case of commit buttons ***/
+		$dbh = DB::getInstance();		
+		$res = $dbh->query("SELECT MYCOMMIT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+		$commit = $res['MYCOMMIT'];		
+		if ($commit == "YES") {
+				$this->override="commit";
+				$this->Button("commitClick");
+		}
+		else {
+				$this->Button("commit");
+		}   
+    }
+	
+	public function Button ($button) {
+	/*** display a button ***/
+		echo '<input type="image" ';
+
+		if (isset($this->override)) {
+				$name = $this->override; 
+				unset($this->override);
+		}
+		else { 
+			$name = $button;
+		} 
+//		if ($button == 'cancel') {
+//			echo 'class="cancel"' . PHP_EOL;
+//		}
+		if (isset ($this->buttonName[$button]['class']) ) {
+				echo 'class="' . $this->buttonName[$button]['class'] . '" ';
+		} 	
+			
+		echo 'name="' . $name . '"';
+		echo ' id="' . $name . '"';
+		echo ' src="' . $this->buttonpath . $this-> buttonName[$button]['src'] . '"'; 
+//		echo 'onmouseover="' . $this->jspath . $this->buttonName[$button]['onmouseover'] . '\';"' . PHP_EOL; 
+		echo ' alt="' . $button . '"';
+//		echo 'onmouseout="' . $this->jspath . $this->buttonName[$button]['src'] . '\';"' . PHP_EOL;
+//		echo 'style="border-style: none; "' .  PHP_EOL;
+		if (isset ($this->buttonName[$button]['onClick']) ) {
+			if ( ! isset ($this->overrideClick)) { 
+				echo ' onclick="' . $this->buttonName[$button]['onClick'] . '" ';
+			}
+		} // don't send titles to touch devices
+		
+		if (!preg_match('/^(A|B|i)/',$this->opSys)) {
+			echo ' title="' . $this->buttonName[$button]['title'] . '"';
+		}
+		echo ' >' . PHP_EOL;		
+	}
+		
+	public function aLabelFor ($label,$class=false) {
+		/*** display a label ***/
+		
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$label'")->fetch(PDO::FETCH_ASSOC);
+		
+		echo '<p><label';
+		
+		if ($class) {
+			echo ' class="' . $class . '"';
+		}
+		
+		if (isset($row['htext'])) {
+			echo ' title="' . $row['htext'] . '"';
+		}
+		echo '>'; 
+				
+        if (isset($row['displayname'])) {
+			echo $row['displayname'];
+		}
+		else {
+			echo $label;
+		}
+		echo '</label></p>';
+        echo "\n";     
+	}
+
+	public function aHeaderFor ($header, $help=true) {		
+		/*** display a column header ***/
+		
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$header'")->fetch(PDO::FETCH_ASSOC);
+		if ( $help ) {				
+			if (isset($row['htext'])) {
+				echo '<th title="' . $row['htext'] . '">';
+			}
+			else {
+				echo '<th>';
+			}
+		}
+		else {
+			echo '<th>';
+		}
+		if (isset($row['displayname'])) {      
+			echo $row['displayname'];
+		}
+		else {
+			echo $header;
+		}		
+        echo '</th>';
+        echo "\n";
+	}
+
+	public function popUp($name = '', $options = array()) {
+		/*** display a selection ***/
+		
+		if ($options) {
+			$html = '<select name="'. $name . '" id="' . $name . '">';		
+			foreach ($options as $option => $value) {
+				$html = $this->genHtml($value,$html);
+			}
+			$html .= '</select>';
+		}
+		else {
+			$html = "LERROR!";
+		}
+		echo $html;
+		echo "\n";
+	}	
+
+	public function displayCluster($rel = null) {
+		$dbh = DB::getInstance();
+						
+		If ($_SESSION['user']['pkey'] == 'admin') { 
+			$res = $dbh->query("SELECT pkey from cluster");  
+			$res->setFetchMode(PDO::FETCH_COLUMN, 0);   
+			$clusters = $res->fetchAll(); 
+			$this->popUp('cluster', $clusters); 
+		}
+		else {
+			$res = $dbh->query("SELECT cluster FROM user where pkey = '" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
+			$mycluster = $res['cluster'];
+			if ( $rel == null ) {
+				echo '<input type="text" readonly="readonly" style = "background-color: lightgrey" id="cluster" value="' . $mycluster . '"  />' . PHP_EOL;		
+			}
+			else {
+				echo '<input type="text" readonly="readonly" style = "background-color: lightgrey" id="cluster" rel="' .$rel . '" value="' . $mycluster . '"  />' . PHP_EOL;		
+			}
+		}
+	}
+	
+	public function sysSelect($name = '', $none=false, $short=false, $trunk=false ) {
+		/*** display the special "endpoint" selection ***/
+		
+		$helper = new helper;
+		$conferences = array();
+		$handle = fopen("/etc/asterisk/sark_meetme.conf", "r") or die('Could not read file!');
+// get conference room list
+		while (!feof($handle)) {		
+			$row = trim(fgets($handle));		
+			if (preg_match (" /^;/ ", $row)) {
+				continue;
+			}		
+			if (preg_match (" /^conf\s*=>\s*(\d{3,4})/ ",$row,$matches)) {
+				array_push ($conferences,$matches[1]);
+			}				
+		}
+	 
+		$html = '<select name="'. $name . '" id="' . $name . '" class="keyoption">' . PHP_EOL;
+		
+	
+		if ($none) {
+			$html = $this->genHtml("None",$html);
+		}
+				
+		if (!$short) {				
+			$html = $this->genHtml("Operator",$html);
+			$html = $this->genHtml("Hangup",$html);
+			
+			$ivr = $helper->getTable("ivrmenu", "SELECT pkey from ivrmenu");   
+			$html .= '<optgroup label="IVRs">' . PHP_EOL; 
+			foreach ($ivr as $ivr => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+			
+			$queue = $helper->getTable("queue", "SELECT pkey from queue");  
+			$html .= '<optgroup label="QUEUES">' . PHP_EOL; 
+			foreach ($queue as $queue => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+		}
+		
+		$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone");	 		
+		$html .= '<optgroup label="EXTENSIONS">' . PHP_EOL; 		
+		foreach ($ipphone as $ipphone => $value)  {
+			$html = $this->genHtml($value['pkey'],$html);
+			if (!$short) {	
+				$html = $this->genHtml("*".$value['pkey'],$html);
+			}
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		 
+		$speed = $helper->getTable("speed", "SELECT pkey from speed");		
+		$html .= '<optgroup label="CALL GROUPS">' . PHP_EOL; 
+		foreach ($speed as $speed => $value)  {
+			$html = $this->genHtml($value['pkey'],$html);
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		
+		if (!$short) {	
+			$html .= '<optgroup label="DISA">' . PHP_EOL; 
+			$html = $this->genHtml('DISA',$html);
+			$html = $this->genHtml('CALLBACK',$html);
+			$html .= '</optgroup>' . PHP_EOL;
+		}		
+
+		if ($trunk) {
+			$trunk = $helper->getTable("lineio", "SELECT pkey,technology from lineio");		
+			$html .= '<optgroup label="TRUNKS">' . PHP_EOL; 
+			foreach ($trunk as $trunk => $value)  {
+				if ($value['technology'] != 'DiD' AND $value['technology'] != 'CLID' AND $value['technology'] != 'Class') {
+					$html = $this->genHtml($value['pkey'],$html);
+				}
+			}
+		}
+		
+		$html .= '</optgroup>' . PHP_EOL;
+		
+		if (!$short) {
+			$html .= '<optgroup label="GET VOICEMAIL">' . PHP_EOL; 
+			$html = $this->genHtml("Retrieve Voicemail",$html);
+			$html .= '</optgroup>' . PHP_EOL; 
+
+			$appl = $helper->getTable("appl", "SELECT pkey from appl"); 		
+			$html .= '<optgroup label="Custom Apps">' . PHP_EOL; 
+			foreach ($appl as $appl => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+		
+			$html .= '</optgroup>' . PHP_EOL;
+			if (is_array($conferences)) {
+				$html .= '<optgroup label="CONF ROOMS">' . PHP_EOL;
+				foreach ($conferences as $value)  {
+					$html = $this->genHtml($value,$html);	
+					
+				}
+			}
+		}
+		
+		$html .= '</optgroup>' . PHP_EOL;	
+		$html .= '</select>';
+		
+		echo $html;
+	}
+	
+	private function genHtml($value,&$html) {
+/*
+ * generate selection html (used by popUp and sysSelect)
+ */ 		
+		$html .= '<option ';
+		if ($value == $this->selected) {
+			$html .= 'selected = "selected" ';
+		}
+		$html .= 'value="' . $value . '">' . $value . '</option>';
+		return $html;	
+	}
+	
+	public function editClick ($callback, $get) {
+	
+		echo '<td class="icons"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="' . $this->iconpath . 'edit.png" border=0 title = "Click to Edit"></a></td>';
+		echo "\n";
+	}
+
+	public function notifyClick ($callback, $get) {
+	
+		echo '<td class="icons"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="' . $this->iconpath . 'redo.png" border=0 title =  "Reboot this endpoint"';
+		echo ' onclick = "return confirmOK(\'Reboot this extension - Confirm?\')"></a></td>';
+		echo "\n";
+	}
+	
+	public function notifypushClick ($callback, $get) {
+	
+		echo '<td class="icons"><a href="';
+		echo $callback;
+		echo $get;
+		echo '">><img src="' . $this->iconpath . 'upload.png" border=0 title =  "Reprovision this endpoint"';
+		echo ' onclick = "return confirmOK(\'Reprovision this extension - Confirm?\')"></a></td>';
+		echo "\n";
+	}	
+	
+	public function ajaxdeleteClick ($get) {
+
+		echo '<td class="icons"><a class="table-action-deletelink" href="delete.php"'; 
+		echo $get;
+		echo '><img src="' . $this->iconpath . 'delete.png" border=0 title = "Click to Delete"></a></td>';
+		echo "\n";
+	}	
+	
+	public function deleteClick ($callback, $pkey) {
+	
+		echo '<td class="icons"><a href="'; 
+		echo $callback;
+		echo '?delete=yes&amp;pkey=';
+		echo $pkey;
+		echo '"><img src="' . $this->iconpath . 'delete.png" border=0 title = "Click to Delete"></a></td>';
+		echo "\n";
+	}
+	
+	public function lockState ($lock=true) {
+		
+		$lockicon = "locked.png";		
+		if ($lock) {
+			echo '<td class="icons"><img src="' . $this->iconpath . $lockicon . '" border=0></a></td>';
+		}
+		else {
+			echo '<td class="icons">&nbsp</td>';
+		}	
+		
+	}
+		
+	public function fancyBoxAnchor ($name, $value) {
+		echo '<td><a href="#';
+		echo $name;
+		echo '"  id="fbox">';
+//		echo '" style=" color: black; text-decoration: none;" id="';
+//		echo $name; 
+//		echo '">';
+		echo $value;
+		echo '</a></td>'; 
+	}
+	
+	public function fancyBoxText ($id, $name, $value) {
+		echo '<div style="display:none"><div id="' . $id . '">';
+		echo "\n";
+		echo '<input type="text" name="' . $name . '" value="' . $value . '" /><br/>'; 
+		echo "\n";  
+		echo '</div>';
+	}
+	
+public function msgDisplay($msg) {
+/*
+ * flash message
+ */
+	echo '<div class="messagebox"><div class="message" align="center">' . $msg . '</div></div>';
+	return;
+}
+
+public function navRowDisplay($tab, $pkey,$trunk=false) {
+/*
+ * Display "where to next?" panel after a delete from an edit panel
+ */	
+	
+	$dbh = DB::getInstance();
+
+// Deal with trunk/ddi selection
+
+	$queryXtend = NULL;
+	if ($trunk == "TRUNK") {
+		$queryXtend = " AND (technology != 'DiD' AND technology != 'CLID')";
+	}
+	if ($trunk == "DDI") {
+		$queryXtend = " AND (technology='DiD' OR technology='CLID')";
+	}
+
+// Get next higher key	
+	$querystring = "SELECT pkey FROM $tab WHERE pkey > ?";	
+	$querystring .= $queryXtend;	
+	$querystring .= " ORDER BY pkey COLLATE NOCASE LIMIT 1";
+	$sql = $dbh->prepare ($querystring);	
+	$sql->execute(array($pkey));
+	$res = $sql->fetch();
+	$next = $res['pkey'];
+	
+// Get next lower key	
+	$querystring = "SELECT pkey FROM $tab WHERE pkey < ?";	
+	$querystring .= $queryXtend;	
+	$querystring .= " ORDER BY pkey COLLATE NOCASE DESC LIMIT 1";
+	$sql = $dbh->prepare ($querystring);	
+	$sql->execute(array($pkey));
+	$res = $sql->fetch();
+	$prev = $res['pkey'];
+	
+	if ($trunk == "TRUNK") {
+		$queryXtend = " WHERE (technology != 'DiD' AND technology != 'CLID')";
+	}
+	if ($trunk == "DDI") {
+		$queryXtend = " WHERE (technology='DiD' OR technology='CLID')";
+	}	
+
+// Get first key
+
+	$querystring = "SELECT pkey FROM $tab";	
+	$querystring .= $queryXtend;	
+	$querystring .= " ORDER BY pkey COLLATE NOCASE LIMIT 1";		
+	$sql = $dbh->prepare ($querystring);
+	$sql->execute();
+	$res = $sql->fetch();
+	$first = $res['pkey'];
+	
+// Get last key
+	$querystring = "SELECT pkey from $tab";
+	$querystring .= $queryXtend;
+	$querystring .= " ORDER BY pkey COLLATE NOCASE DESC LIMIT 1";	
+	$sql = $dbh->prepare ($querystring);
+	$sql->execute();
+	$res = $sql->fetch();
+	$last = $res['pkey'];	
+		
+// print it
+	$url = explode('/', $_SERVER['SCRIPT_URL']);	
+	echo '<div class="notice"/>';
+	echo '<table class="noticeAction" id="noticeAction" >' ;
+	echo '<tbody>' . PHP_EOL;
+	echo '<td class=center>';
+	if ($first < $pkey) {
+		echo '<a href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $first . '"><img src="/sark-common/buttons/arrow-leftd.png" border=0 title = "First" /></a>';
+	}
+	else {
+		echo '<img src="/sark-common/buttons/arrow-leftlgd.png" border=0 title = "First" />';
+	}
+	echo '</td>' . PHP_EOL;
+	echo '<td class=center>';
+	if (isset($prev)) {
+		echo '<a href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $prev . '"><img src="/sark-common/buttons/arrow-left.png" border=0 title = "Previous" /></a>';
+	}
+	else {
+		echo '<img src="/sark-common/buttons/arrow-leftlg.png" border=0 title = "Previous" />';
+	}
+	echo '</td>' . PHP_EOL;
+/*
+	echo '<td class=center><a href="/php/' . $url[2] . '/main.php"><img src="/sark-common/buttons/list.png" border=0 title = "Show All" /></a></td>' . PHP_EOL;
+*/
+	echo '<td class=center>';
+	if (isset($next)) {	
+		echo '<a href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $next . '"><img src="/sark-common/buttons/arrow-right.png" border=0 title = "Next" /></a>';
+	}
+	else {
+		echo '<img src="/sark-common/buttons/arrow-rightlg.png" border=0 title = "Next" />';
+	}
+	
+	echo '</td>' . PHP_EOL;
+	echo '<td class=center>';
+	if ($last > $pkey) {
+		echo '<a href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $last . '"><img src="/sark-common/buttons/arrow-rightd.png" border=0 title = "Last" /></a>';
+	}
+	else {
+		echo '<img src="/sark-common/buttons/arrow-rightlgd.png" border=0 title = "Last" />';
+	}
+	echo '</td>' . PHP_EOL;
+	echo '</tbody>' . PHP_EOL;
+	echo '</table>' . PHP_EOL;
+	echo "</div>";
+	echo "</div>";			
+	return 'OK';		
+}
+
+public function pageSwitch($key) {
+/*
+ *  Fast, simple page switch, used by the GoTo box 
+ */ 	
+	$relation = array (
+		"ipphone" 		=> "sarkextension",
+		"speed" 		=> "sarkcallgroup",
+		"cos"			=> "sarkcos",
+		"device"		=> "sarkdevice",
+		"cluster"		=> "sarkcluster",
+		"lineio"		=> "sarkddi",
+		"route"			=> "sarkroute",
+		"meetme"		=> "sarkconference",
+		"queue"			=> "sarkqueue",
+		"ivrmenu"		=> "sarkivr",
+		"greeting"		=> "sarkgreeting",
+		"agent"			=> "sarkagent",
+		"user"			=> "sarkuser",
+		"appl"			=> "sarkapp"
+	);
+			
+	if (!$key) {
+		return "NULLKEY";
+	}
+	$dbh = DB::getInstance();
+	
+	$sql = $dbh->prepare("SELECT pkey,relation FROM master_xref where pkey = ? COLLATE NOCASE");
+	$sql->execute(array($key));
+	$res = $sql->fetch();
+	$dbrelation = strtolower($res['relation']);
+	
+/*	
+	foreach ($relation as $table=>$srkClass) {
+//		$res = $dbh->query("SELECT pkey FROM $table where pkey = '" . $key . "'")->fetch(PDO::FETCH_ASSOC);
+		$sql = $dbh->prepare("SELECT pkey FROM $table where pkey = ?");
+		
+*/		
+		if ($res['pkey']) {
+/*
+ * deal with lineIO
+ */
+			if (strtolower($res['relation']) == "lineio") {
+//				$res = $dbh->query("SELECT pkey,technology FROM ' . $res['relation'] . ' where pkey = '" . $key . "'")->fetch(PDO::FETCH_ASSOC);
+				$sql = $dbh->prepare("SELECT pkey,technology FROM lineio where pkey = ? COLLATE NOCASE");
+				$sql->execute(array($key));
+				$res = $sql->fetch();
+				if ($res['technology'] == 'DiD' || $res['technology'] == 'CLID') {
+					 printf("<script>window.parent.location.href='/php/sarkddi/main.php?edit=yes&pkey=" . $res['pkey'] . "'</script>");
+				}
+				else {
+					 printf("<script>window.parent.location.href='/php/sarktrunk/main.php?edit=yes&pkey=" . $res['pkey']  . "'</script>");
+				}
+			}
+			else {
+//				printf("<script>window.parent.location.href='/php/" . $srkClass . "/main.php?edit=yes&pkey=" . $key . "'</script>");
+				if (array_key_exists($dbrelation, $relation )) {
+					printf("<script>window.parent.location.href='/php/" . $relation[$dbrelation] . "/main.php?edit=yes&pkey=" . $res['pkey']  . "'</script>");
+					die;
+				}
+			}	
+			
+		}
+//	}
+	if (preg_match('/\.conf$/', $key)) {
+		if (file_exists("/etc/asterisk/" . $key)) {
+			printf("<script>window.parent.location.href='/php/sarkedit/main.php?edit=yes&pkey=" . $key . "'</script>"); 
+			die;
+		}
+	}
+// print a banner
+	$this->msgDisplay('Couldn\'t find -> ' . $key);	
+/*
+	echo '<div class="notice">' . $key . ' -> Not Found in database<br/> (The key must be an exact match)';
+	echo "</div>";
+	echo "</div>";
+*/			
+	return false;
+}
+	
+public function printSysNotes ($wallboard=false) {
+#
+#   prints sysinfo Box
+#
+	$helper = new helper;
+	$dbh = DB::getInstance();
+	
+	$extcount = $dbh->query('select count(*) from ipphone')->fetchColumn();
+	$clusteroclo = $dbh->query("SELECT oclo FROM cluster where pkey = 'default'")->fetchColumn();  
+	$global = $dbh->query("SELECT EXTLIM,CLUSTER FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+    echo '<div  class="extnotes">' . PHP_EOL;
+
+	$distro=array();
+	$helper->qDistro($distro);
+    $localip = $helper->ret_localip ();
+	$updays=false;
+	$commip=NULL;
+	$virtualip=NULL;
+	$masteroclo = `/usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
+	$masteroclo = preg_replace( ' /^.*:\s/ ','',$masteroclo);
+	if (preg_match('/not\sfound/', $masteroclo)) {
+		$masteroclo = 'AUTO';
+	}
+	
+    if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+		$systemName		=  gethostname();
+	}
+	else {
+		$systemName = php_uname('n');
+	}
+
+    $free =  array();
+    $free = `/usr/bin/free`;
+    $uptime = `/usr/bin/uptime`;
+    if (preg_match( ' /up\s(\d+\sdays)/ ', $uptime,$matches)) {
+		$updays = $matches[1];
+	}
+	$disk = array();
+    $disk = `/bin/df -h`;
+    $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
+    $diskusage = $matches[1];
+    $systemMedia = 'disk';
+	if (preg_match( '/Mem:\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})/',$free,$matches )) {
+			$totmem = $matches[1];
+			$usedmem = $matches[2];
+			$freemem = $matches[3];
+			$sharedmem = $matches[4];
+			$buffers = $matches[5];
+    } 
+    $mac = strtoupper(`ip link show eth0 | awk '/ether/ {print $2}'`);  
+    	
+    if ( $helper->check_pid() ) {
+        $runstate = "RUNNING";
+    }
+    else {
+        $runstate = "STOPPED";
+    }
+    if ( file_exists ("/etc/corosync/corosync.conf")) { 
+		if  (`/bin/ps -e | /bin/grep corosync | /bin/grep -v grep`) {
+        	$harunstate = "RUNNING";
+        	$work = `/sbin/ip addr show eth0 | grep secondary`;    
+			if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
+				$virtualip = $matches[1]; 	 		
+			}
+			$work = `/sbin/ip addr show eth1 | grep inet`;
+			if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
+				$commip = $matches[1]; 	 		
+			}			
+    	}
+		else {
+        	$harunstate = "STOPPED";
+    	}
+    }
+	
+    echo '<span style="color: #696969;" >';
+    echo '<span style="font-weight:bold; font-size:small; ">Sysinfo</span><br />';
+//    $sno = $this->rets();
+    
+    $rlse=''; 
+    if ( $distro['rhel']  ) {	
+		$rlse = `/bin/rpm -q sail`;
+	}
+	else {
+		$rlse = `dpkg-query -W -f '\${version}\n' sail`;
+	}
+//	echo "Distro: <strong>" . $distro['name'] . "</strong><br/>";
+	if ( $helper->check_pid() ) {  
+		$astrelease = `/usr/sbin/asterisk -rx 'core show version'`;
+		$astarray = explode(" ", $astrelease);
+		$astrelnum = explode('~', $astarray[1]);
+		echo "PBX release: <strong>" . $astrelnum[0] . "</strong><br/>";
+	}
+// CHANGE FOR PRODUCTION ===============================================>		
+    echo "SAIL Release: <strong>$rlse</strong><br/>";
+
+//	echo "SAIL Release: <strong>V5.0(Alpha)</strong><br/>";
+    if ( $distro['debian'] ) {
+		$rlse = `dpkg-query -W -f '\${version}\n' sailhpe`;
+		echo "HPE Release: <strong>$rlse</strong><br/>";
+	}
+	if ($global['EXTLIM']) {
+		echo "Endpoints licenced: <strong>" .$global['EXTLIM'] . "</strong><br/>";
+	}
+	echo "Endpoints defined: <strong>$extcount</strong><br/>";
+	echo "Serial Num: <strong>" . $helper->rets() . "</strong><br/>";
+		    
+    preg_match ( '/^(\w*)\b/', $_SERVER['SERVER_SOFTWARE'], $matches);
+    $server = $matches[1];        
+//    echo "Web Server: <strong>$server</strong><br/>";
+    
+    echo '<span style="font-weight:bold; font-size:small; ">Network</span><br />';
+    echo "MAC: <strong>$mac</strong><br/>";
+    echo "hostname: <strong>$systemName</strong><br/>";
+    if ( $localip ) {
+		echo "LAN IPV4: <strong>$localip</strong><br/>";
+	}
+	
+    if ( $virtualip ) {
+        echo "Virtual IP: <strong>$virtualip</strong><br/>";
+	}
+	if ( $commip ) {
+		echo "Comms IP: <strong>$commip</strong><br/>";
+	}
+//    print "Netmask: <strong>$snmask</strong><br/>";
+
+	if (!$wallboard) {
+    	echo '<span style="font-weight:bold; font-size:small; ">Resource</span><br />';    
+    	echo "Disk Usage: <strong>$diskusage</strong><br/>";
+    	echo "RAM Size: <strong>$totmem</strong><br/>";
+    	echo "RAM Free: <strong>$freemem</strong><br/>";	
+    	echo '<span style="font-weight:bold; font-size:small; ">Status</span><br />';
+    	echo "PBX: <strong>$runstate</strong><br/>";
+   	 	echo "Master Timer: <strong>$masteroclo</strong><br/>";
+    	if ($global['CLUSTER'] == 'OFF') {
+			echo "Timer State: <strong>$clusteroclo</strong><br/>";
+   	 	}
+    	echo "SysTime: <strong>" . `date '+%H:%M:%S'` . "</strong><br/>" . PHP_EOL;
+    	if ($updays) {
+    		echo "System Uptime: <strong>$updays</strong><br/>";
+    	}
+    }
+    echo '<span style="color: #696969;" >';
+    echo '<span style="font-weight:bold; font-size:small; ">Client</span><br />';
+	$client = $this->clientPlatform($_SERVER['HTTP_USER_AGENT']);
+	print "Client IP: <strong>" . $_SERVER['REMOTE_ADDR'] ."</strong><br/>";
+	print "Platform: <strong>" . $this->opSys . "</strong><br/>";
+	print "Browser: <strong>" . $client['browser'] . "</strong><br/>";
+    echo '</p></span></div>' . PHP_EOL;
+}
+
+private function clientPlatform($user_agent) {
+	
+    $platform_array =   array(
+							'browser' => 'unknown',
+							'os' => 'unknown'
+							);								
+
+    $os_array       =   array(
+                            '/windows nt 10/i'     =>  'Windows 10',
+                            '/windows nt 6.3/i'     =>  'Windows 8.1',
+                            '/windows nt 6.2/i'     =>  'Windows 8',
+                            '/windows nt 6.1/i'     =>  'Windows 7',
+                            '/windows nt 6.0/i'     =>  'Windows Vista',
+                            '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+                            '/windows nt 5.1/i'     =>  'Windows XP',
+                            '/windows xp/i'         =>  'Windows XP',
+                            '/windows nt 5.0/i'     =>  'Windows 2000',
+                            '/windows me/i'         =>  'Windows ME',
+                            '/win98/i'              =>  'Windows 98',
+                            '/win95/i'              =>  'Windows 95',
+                            '/win16/i'              =>  'Windows 3.11',
+                            '/macintosh|mac os x/i' =>  'Mac OS X',
+                            '/mac_powerpc/i'        =>  'Mac OS 9',
+                            '/linux/i'              =>  'Linux',
+                            '/ubuntu/i'             =>  'Ubuntu',
+                            '/iphone/i'             =>  'iPhone',
+                            '/ipod/i'               =>  'iPod',
+                            '/ipad/i'               =>  'iPad',
+                            '/android/i'            =>  'Android',
+                            '/blackberry/i'         =>  'BlackBerry',
+                            '/webos/i'              =>  'Mobile'
+                        );
+
+    foreach ($os_array as $regex => $value) { 
+
+        if (preg_match($regex, $user_agent)) {
+            $platform_array['os']    =   $value;
+        }
+
+    }
+/*
+Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
+*/   
+     $browser_array  =   array(
+                            '/msie/i'       =>  'Internet Explorer',
+                            '/Trident/i'    =>  'Internet Explorer',
+                            '/Edge/i'     	=>  'Internet Explorer',
+                            '/firefox/i'    =>  'Firefox',
+                            '/chrome/i'     =>  'Chrome',
+                            '/safari/i'     =>  'Safari',                            
+                            '/opera/i'      =>  'Opera',
+                            '/netscape/i'   =>  'Netscape',
+                            '/maxthon/i'    =>  'Maxthon',
+                            '/konqueror/i'  =>  'Konqueror',
+                            '/mobile/i'     =>  'Handheld Browser'
+                        );
+
+    foreach ($browser_array as $regex => $value) { 
+        if (preg_match($regex, $user_agent)) {
+            $platform_array['browser']    =   $value;
+            break;
+        }
+    }
+    return ($platform_array);
+	
+ } 	
+	
+}
+?>

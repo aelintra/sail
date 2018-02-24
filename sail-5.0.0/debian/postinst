@@ -37,8 +37,7 @@ usermod -a -G asterisk www-data
 
 # added in 5.0.0-21 for hotdesk 
 usermod -a -G www-data asterisk
-chmod 775 /opt/sark/db
-chmod 664 /opt/sark/db/sark.db
+
 
 [ -e /etc/dahdi ] && chown -R asterisk:asterisk /etc/dahdi
 [ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf
@@ -58,7 +57,6 @@ chown -R asterisk:asterisk /var/log/asterisk
 chown -R asterisk:asterisk /var/spool/asterisk
 
 chmod 664 -R /etc/asterisk/*
-chmod +x /etc/asterisk/ssl
 chmod +x /etc/asterisk/manager.d
 chmod 755 -R /opt/sark/www
 chmod 755 -R /opt/sark/generator
@@ -185,16 +183,11 @@ if [ ! -e /etc/asterisk/ssl ]; then
         -out /etc/asterisk/ssl/server.pem \
         -days 3650 > /dev/null 2>&1
 fi
+
 #sudoers
-
-if [ -e /opt/sark/cache/sailsudoers ]; then 
-	chmod 0440 /opt/sark/cache/sailsudoers
-	chown root:root /opt/sark/cache/sailsudoers
-	mv /opt/sark/cache/sailsudoers /etc/sudoers.d/sail
+if [ -e /etc/sudoers.d/sail ]; then 
+	chmod 0440 /etc/sudoers.d/sail
 fi
-#  remove old rssh sudoers file
-[ -e /etc/sudoers.d/sarkrssh ] && rm /etc/sudoers.d/sarkrssh
-
 # all moved to sudoers.d/sail in 5.0.0-30
 #if [ ! -e /etc/sudoers.d/sarkrssh ]; then
 #        echo asterisk ALL=NOPASSWD: /usr/bin/sv > /etc/sudoers.d/sarkrssh
@@ -236,24 +229,24 @@ if [ -d /etc/shorewall ]; then
                 [ ! -e /etc/shorewall/$file ] && cp -f /opt/sark/shorewall/one-interface/$file /etc/shorewall            
     done
     grep -q 'INCLUDE local.lan' /etc/shorewall/params
-        if [  "$?" -ne "0" ] ; then
-        	cp -f /opt/sark/shorewall/one-interface/params /etc/shorewall
-        fi
+    if [  "$?" -ne "0" ] ; then
+        cp -f /opt/sark/shorewall/one-interface/params /etc/shorewall
+    fi
+    [ ! -e /etc/shorewall/blrules ] && cp /usr/share/shorewall/configfiles/blrules /etc/shorewall
+    grep -q 'INCLUDE sark_blrules' /etc/shorewall/blrules
+    if [  "$?" -ne "0" ] ; then
+    	echo INCLUDE sark_blrules >> /etc/shorewall/blrules
+    fi
     sed -i 's/startup=0/startup=1/' /etc/default/shorewall
     chown www-data:www-data /etc/shorewall/sark_rules
-    if [ ! -e /etc/shorewall/blrules ] ; then
-    	cp /usr/share/shorewall/configfiles/blrules /etc/shorewall
-    fi
-    grep  -q 'INCLUDE sark_blrules' /etc/shorewall/blrules
-    if [  "$?" -ne "0" ] ; then
-     	echo 'INCLUDE sark_blrules' >> /etc/shorewall/blrules
-    fi
-    touch /etc/shorewall/sark_blrules
-    chown www-data:www-data /etc/shorewall/sark_blrules
 fi
+touch /etc/shorewall/sark_blrules
+chown www-data:www-data /etc/shorewall/sark_blrules
 
 #Rebuild the SARK database
 /bin/sh /opt/sark/scripts/srkV4reloader.sh
+chmod 775 /opt/sark/db
+chmod 664 /opt/sark/db/sark.db
 
 #Install date
 date --iso-8601=minutes > /opt/sark/db/.sail-install-date

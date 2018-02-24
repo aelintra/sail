@@ -10,18 +10,6 @@
 		$("#delblf").hide();
 	};
 	
-	$("a#inline").fancybox({
-
-		'openEffect'	:	'elastic',
-		'closeEffect '	:	'elastic',
-		'openSpeed'		:	200, 
-		'closeSpeed '	:	200
-/*
-		'afterClose' : 	function() {
-			$('[name=update]').click ();
-		}
-*/
-	});
 	
 
 	$('#connect').click(function() {
@@ -123,7 +111,7 @@
 //		"bStateSave": true,
 		"sDom": 'tfi',
 		"aoColumnDefs": [ 
-			{ "bSortable": false, "aTargets": [ 6,7,8,9,10,11,12,13 ] }
+			{ "bSortable": false, "aTargets": [ 6,7,8,9,10,11,12 ] }
 		],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
@@ -134,8 +122,7 @@
 			{ "sName": "ipaddr" },		
 			{ "sName": "location" },
 			{ "sName": "sndcreds"},
-			{ "sName": "boot"},
-			{ "sName": "trns"},		
+			{ "sName": "boot"},		
 			{ "sName": "connect"},
 			{ "sName": "active"},
 			{ "sName": "edit" },
@@ -171,7 +158,6 @@
 					data: "{ 'No':'No','Once':'Once','Always':'Always' }"
 				}, 		// sndcreds
 				null,	// boot
-				null,   // trns 
 				null,   // connect
 				{
 					tooltip: 'Click to edit',
@@ -186,7 +172,7 @@
             ]	
 	});
 	
-	$(".dataTables_scrollBody").find("tr").find('td:eq(10):not(:contains("OK"))').css('color', 'Red') ; 
+	$(".dataTables_scrollBody").find("tr").find('td:eq(9):not(:contains("OK"))').css('color', 'Red') ; 
 
 	if ( $('#cosflag').val() == 'OFF' || $('#sysuser').val() == 'NO' ) {
 		var mytable = $('#extensiontable').DataTable(); 

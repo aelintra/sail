@@ -35,7 +35,7 @@
         }   
 
 	} ).makeEditable({
-			sUpdateURL: "/php/sarkedsw/update.php",
+			sUpdateURL: "/php/sarkipblacklist/update.php",
 				fnOnEdited: function(status)
 				{ 	
 					$("#restfw").attr("src", "/sark-common/buttons/redo-red.png");

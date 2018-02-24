@@ -172,8 +172,7 @@ private function showNew() {
 	$this->myPanel->aLabelFor('callgroup');
 	echo '<input type="text" name="pkey" id="pkey" size="4"   />' . PHP_EOL;
 	$this->myPanel->aLabelFor('grouptype');
-//	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page','Alias'));
-	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page'));
+	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page','Alias'));
 	$this->myPanel->aLabelFor('cluster','cluster');
 	$this->myPanel->displayCluster();
 	$this->myPanel->aLabelFor('devicerec');
@@ -282,8 +281,7 @@ private function showEdit($key=False) {
 	echo '<input type="text" name="pkey" size="4" style = "background-color: lightgrey" readonly="readonly" id="pkey" value="' . $res['pkey'] . '"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('grouptype');
 	$this->myPanel->selected = $res['grouptype'];
-	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page'));
-//	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page','Alias'));
+	$this->myPanel->popUp('grouptype', array('Ring','Hunt','Page','Alias'));
 	
 	$dialparams = 'ciIkt';
 	if (isset($res['dialparamsring']) ) {

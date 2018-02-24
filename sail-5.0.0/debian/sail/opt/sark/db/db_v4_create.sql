@@ -97,7 +97,6 @@ blfkeys INTEGER,
 desc TEXT,
 device TEXT,
 fkeys INTEGER,
-imageurl TEXT,
 legacy TEXT,
 noproxy TEXT,
 pkeys INTEGER,
@@ -140,8 +139,8 @@ z_updater TEXT DEFAULT 'system'
 /* Extensions */
 CREATE TABLE IF NOT EXISTS IPphone (
 pkey TEXT PRIMARY KEY,
-abstimeout TEXT,
-active TEXT,							-- Active/inactive flag
+abstimeout TEXT,						-- not used
+active TEXT DEFAULT 'YES',				-- Active/inactive flag
 basemacaddr TEXT,                       -- not used             
 callerid TEXT,                          -- CLID
 cellphone TEXT,							-- cellphone twin
@@ -149,8 +148,7 @@ celltwin TEXT,							-- cell twin on/off
 channel TEXT,                           -- not used
 cluster TEXT,                           -- Tenant
 desc TEXT,                              -- asterisk username
-device TEXT,                            -- device vendor
-devicemodel TEXT,						-- Harvested model number
+device TEXT,                            -- device type
 devicerec TEXT,                         -- recopts
 dialstring TEXT,                        -- not used
 dvrvmail TEXT,                          -- mailbox
@@ -158,7 +156,6 @@ extalert TEXT,                          -- alert info
 externalip TEXT,                        -- not used
 location TEXT,                          -- local/remote
 macaddr TEXT,                           -- macaddr
-newformat TEXT,							-- set to YES for new format SIP entries
 openfirewall TEXT,                      -- not used
 passwd TEXT,                            -- asterisk password
 provision TEXT,                         -- provisioning string    
@@ -219,7 +216,7 @@ path2 TEXT,
 path3 TEXT,
 path4 TEXT,
 route TEXT, 
-strategy TEXT,
+strategy TEXT DEFAULT 'hunt',
 z_created datetime,
 z_updated datetime,
 z_updater TEXT DEFAULT 'system'
@@ -328,7 +325,7 @@ NUMGROUPS TEXT,                     -- not used in 4.x
 ONBOARDMENU TEXT,                   -- not used in 4.x 
 OPERATOR TEXT,                      -- sysop
 OPRT TEXT,                          -- not used in 4.x 
-PWDLEN TEXT,                        -- password length
+PWDLEN TEXT INTEGER DEFAULT 12,     -- password length
 PCICARDS TEXT,                      -- not used in 4.x 
 PLAYBEEP TEXT,                      -- play beep on failover
 PLAYBUSY TEXT,                      -- play busy message or tones

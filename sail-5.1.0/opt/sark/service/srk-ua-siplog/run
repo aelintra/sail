@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec 2>&1
+exec /usr/sbin/tcpdump -U -i eth0 port 5060 -s 0 -w  /var/log/sip.log

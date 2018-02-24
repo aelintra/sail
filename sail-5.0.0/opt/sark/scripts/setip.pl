@@ -45,7 +45,7 @@ else {
 	print "Setting local subnet as $netaddress/$cidr \n";
 	if ( -e "/etc/shorewall" ) {
 		`echo LAN=$netaddress/$cidr > /etc/shorewall/local.lan`;
-		`/usr/bin/dos2unix /etc/asterisk/sark_sip_localnet.conf`;
+		`[ -e /etc/asterisk/sark_sip_localnet.conf ] && /usr/bin/dos2unix /etc/asterisk/sark_sip_localnet.conf`;
 		`echo localnet=$netaddress/$msk >> /etc/asterisk/sark_sip_localnet.conf`;
 		`awk '!_[\$0]++'  /etc/asterisk/sark_sip_localnet.conf > /tmp/localnet.tmp`;
 		`mv /tmp/localnet.tmp /etc/asterisk/sark_sip_localnet.conf`;

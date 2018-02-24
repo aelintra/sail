@@ -263,6 +263,8 @@ private function doReset() {
 	if ( isset($_POST['firewall'] ) ) {
 			$this->helper->request_syscmd ("cp -a /opt/sark/cache/sark_rules_reset /etc/shorewall/sark_rules");
 			$this->helper->request_syscmd ("sed -i 's|^Ping/REJECT|Ping/ACCEPT|' /etc/shorewall/rules");
+			$sql = $this->dbh->prepare("DELETE from shorewall_blacklist");
+			$sql->execute();
 			$this->helper->request_syscmd ("shorewall restart");
 		$this->log .= "<p>firewall RESET</p>";
 		$this->log .= "<p>firewall RESTARTED</p>";

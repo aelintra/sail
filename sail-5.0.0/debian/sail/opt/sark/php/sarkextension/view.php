@@ -81,17 +81,9 @@ public function showForm() {
 		$this->sipNotify();
 		$this->message = " - Reboot request sent";
 //		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;			
-//		$this->showEdit();
-//		return;			
-	}
-	
-	if (isset($_POST['notify_x'])) { 
-		$this->sipNotify();
-		$this->message = " - Reboot request sent";
-//		echo '<input type="hidden" id="tabselect" name="tabselect" value="1" />' . PHP_EOL;			
 		$this->showEdit();
 		return;			
-	}	
+	}
 	
 	if (isset($_POST['reboot_x'])) { 
 		$this->sipNotify();
@@ -199,7 +191,6 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('headlocation');	
 	$this->myPanel->aHeaderFor('sndcreds');
 	$this->myPanel->aHeaderFor('bt');
-	$this->myPanel->aHeaderFor('trns');
 	$this->myPanel->aHeaderFor('tstate');
 	$this->myPanel->aHeaderFor('active');	
 	$this->myPanel->aHeaderFor('ed');
@@ -281,14 +272,7 @@ private function showMain() {
 		else {
 			echo '<td class="icons" >N/A</td>' . PHP_EOL;
 		}
-		
-		if ($row['tls'] == 'on') {
-			echo '<td class="icons">TLS</td>' . PHP_EOL;
-		}
-		else {
-			echo '<td class="icons">UDP</td>' . PHP_EOL;
-		}
-		
+
 		echo '<td class="icons" border=0 title = "Device State">' . $latency . '</td>' . PHP_EOL;
 		echo '<td class="icons" >' . $row['active'] . '</td>' . PHP_EOL;				
 
@@ -363,7 +347,7 @@ private function showNew() {
 	echo '<input type="text" name="vmailfwd" id="vmailfwd" size="30"  />' . PHP_EOL;
 	$this->myPanel->aLabelFor('macaddr');
 	echo '<input type="text" name="macaddr" id="macaddr" size="30" ';	
-	if (isset($_GET['mac'])) {
+	if ($_GET['mac']) {
 		echo 'value="' . $_GET['mac'] . '"';
 	}
 	echo ' />' . PHP_EOL;
@@ -448,13 +432,9 @@ private function saveNew() {
 		$tuple['sipiaxfriend'] 	= $resdevice['sipiaxfriend'];
 		if ($resdevice['technology'] == 'SIP') {
 		// special code to encapsulate cisco XML - not nice - should be data driven
-/*
 			if (preg_match( '/^[Cc]isco/',$tuple['device'])) {
-				$tuple['provision']	= "<?xml version="1.0" encoding="UTF-8"?>\n";
-				$tuple['provision']	.= "\n<device xsi:type="axl:XIPPhone" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n";
-				$tuple['provision']	.= "\n<flat-profile>\n";
+				$tuple['provision']	= "<flat-profile>\n";
 			}
-*/
 			$tuple['provision']	.= "#INCLUDE " . $tuple['device'];
 			
 			if (!preg_match('/^[Pp]olycom/', $tuple['device']) ) {
@@ -463,12 +443,9 @@ private function saveNew() {
 				}
 			}
 		// special code to encapsulate cisco XML - not nice - should be data driven
-
-			if (preg_match( '/^[Cc]isco/',$tuple['device'])) {	
-				$tuple['provision']	.= "\n</flat-profile>";
-				$tuple['provision']	.= "\n</device>";
-			}	
-		
+			if (preg_match( '/^[Cc]isco/',$tuple['device'])) {
+				$tuple['provision']	.= "\n</flat-profile>\n";
+			}			
 		}
 		$tuple['technology']	= $resdevice['technology'];			
 		$password 		= $this->helper->ret_password ($pwdlen);
@@ -656,12 +633,12 @@ private function showEdit() {
 		
 		$this->myPanel->buttonName["redo"]["title"] = "Send a reboot request to the endpoint";
 		$this->myPanel->Button("notify");
-		if (preg_match('/^[S|s]nom|Panasonic/',$extension['device'])) {
+		if (preg_match('/^Snom|Panasonic\sKX-HDV/',$extension['device'])) {
 			$this->myPanel->buttonName["upload"]["title"] = "Send config without reboot";
 			$this->myPanel->Button("upload");
 		}
 	} 
-	$this->myPanel->commitButton(); 
+	$this->myPanel->commitButton();
 	$this->myPanel->Button("delete");	
 	echo '</div>';	
 		
@@ -680,7 +657,7 @@ private function showEdit() {
 	echo '<li><a href="#general">General</a></li>'. PHP_EOL;
 	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
 		if (isset($extension['macaddr'])) {
-			if (preg_match(' /\.[FLP]key/m ', $extension['provision'])) {
+			if (preg_match(' /\.[FL]key/m ', $extension['provision'])) {
 				echo  '<li><a href="#blf">BLF/DSS Keys</a></li>' . PHP_EOL;
 			}
 		}
@@ -698,9 +675,9 @@ private function showEdit() {
 	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {		
 		if ( $_SESSION['user']['pkey'] == 'admin' ) {
 			echo  '<li><a href="#asterisk">Asterisk</a></li>' . PHP_EOL;
-//			if (isset($extension['macaddr'])) {
+			if (isset($extension['macaddr'])) {
 				echo  '<li><a href="#provisioning">Provisioning</a></li>' . PHP_EOL;
-//			}						
+			}						
 		}
 	}    
     echo '</ul>' . PHP_EOL;
@@ -710,23 +687,13 @@ private function showEdit() {
  */
     if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
 		if ( $_SESSION['user']['pkey'] == 'admin' ) {
-//			if (isset($extension['macaddr'])) {
+			if (isset($extension['macaddr'])) {
 				echo '<div id="provisioning" >';
-				echo '<textarea class="databox" name="provision" id="provision">' . htmlspecialchars($extension['provision']) . '</textarea>' . PHP_EOL;
-				if (!empty($extension['macaddr'])) {
-					echo '<br/><br/><a id="inline" href="#provgen">Expand</a>' . PHP_EOL;
-					$url = "http://localhost/provisioning/" . $extension['macaddr'];
-  					$ch = curl_init();
-  					curl_setopt($ch, CURLOPT_URL, $url);
-  					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  					$expand_prov = curl_exec($ch);
-				}		
+				echo '<textarea class="databox" name="provision" id="provision">' . htmlspecialchars($extension['provision']) . '</textarea>' . PHP_EOL;		
 				echo '</div>' . PHP_EOL;
-//			}
+			}
 		}
 	}
-
-	echo '<div style="display:none"><div id="provgen"><div class="fancybox"><pre>' . htmlentities($expand_prov) . '</pre></div></div></div>'  . PHP_EOL;	
 	
 /*
  *   TAB Asterisk
@@ -817,7 +784,7 @@ private function showEdit() {
  * 	TAB BLF/DSS Keys
  */  
 	if (isset($extension['macaddr'])) {
-		if (preg_match(' /\.[FLP]key/m ', $extension['provision'])) {
+		if (preg_match(' /\.[FL]key/m ', $extension['provision'])) {
 		echo '<div id="blf">' . PHP_EOL;
 
 		echo '<table id="blftable">' ;
@@ -961,7 +928,7 @@ private function saveEdit() {
     $this->validator->addValidation("vmailfwd","email","Invalid email address format");
     $this->validator->addValidation("callgroup","alnum","Call Group name must be alphanumeric(no spaces)");  
     $this->validator->addValidation("macaddr","regexp=/^[0-9a-fA-F]{12}|\s*$/","Mac address is invalid"); 
-    $this->validator->addValidation("desc","regexp=/^[0-9a-zA-Z_\-\s()]+$/","Caller name is invalid - must be [0-9a-zA-Z_-() ]"); 
+    $this->validator->addValidation("desc","regexp=/^[0-9a-zA-Z_\-\s()]+$/","Caller name is invalid - must be [0-9a-zA-Z_-() ]");
     $this->validator->addValidation("passwd","regexp=/^[0-9a-zA-Z]+$/","Password is invalid - must be [0-9a-zA-Z]"); 
     $this->validator->addValidation("cfim","num","Call forward must be numeric"); 
     $this->validator->addValidation("cfbs","num","Call forward must be numeric"); 
@@ -1007,9 +974,10 @@ private function saveEdit() {
 			$tuple['sipiaxfriend'] .= "\nnat=yes";
 		}
 		
-		//tls - we provide provisioning support for snom,Yealink,Panasonic with TLS
+		//tls - we provide provisioning support for snom, Yealink, Panasonic with TLS
 		
 		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.tls.*$/m ",'',$tuple['provision']);
+		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.udp.*$/m ",'',$tuple['provision']);
 		$tuple['provision'] = rtrim ($tuple['provision']);
 		if ( $tuple['tls'] == 'on' ) { 
 			$tuple['sipiaxfriend'] .= "\n#include sark_sip_tls.conf";
@@ -1023,12 +991,24 @@ private function saveEdit() {
 					$tuple['provision'] .= "\n#INCLUDE yealink.tls";
 				}
 				if (preg_match(' /^Panasonic/ ',$device)) {
-					$tuple['provision'] .= "\n#INCLUDE panasonic.tls";
-				}
-				if (preg_match(' /^Vtech/ ',$device)) {
-					$tuple['provision'] .= "\n#INCLUDE vtech.tls";
-				}								
+ 					$tuple['provision'] .= "\n#INCLUDE panasonic.tls";
+ 				}
 			}
+		}
+		else {
+			if (isset($_POST['macaddr'])) {
+                                $res = $this->dbh->query("SELECT device FROM ipphone where pkey = '" . $tuple['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
+                                $device = $res['device'];
+                                if (preg_match(' /^s|Snom/ ',$device)) {
+                                        $tuple['provision'] .= "\n#INCLUDE snom.udp";
+                                }
+                                if (preg_match(' /^y|Yealink/ ',$device)) {
+                                        $tuple['provision'] .= "\n#INCLUDE yealink.udp";
+                                }
+                                if (preg_match(' /^Panasonic/ ',$device)) {
+                                        $tuple['provision'] .= "\n#INCLUDE panasonic.udp";
+                                }
+                        }
 		}
 		
 /*	
@@ -1296,10 +1276,7 @@ private function sipNotify () {
 		if (preg_match ( " /Linksys/ ", $res['device'])) {	
 			$chk = 'sipura-check-cfg';
 		}
-		if (preg_match ( " /CiscoMP/ ", $res['device'])) {	
-			$chk = 'ciscoMP-reboot';
-		}
-		else if (preg_match ( " /Cisco/ ", $res['device'])) {	
+		if (preg_match ( " /Cisco/ ", $res['device'])) {	
 			$chk = 'cisco-check-cfg';
 		}
 		if (preg_match ( " /Panasonic/ ", $res['device'])) {	
@@ -1308,7 +1285,7 @@ private function sipNotify () {
 		if (preg_match ( " /Polycom/ ", $res['device'])) {	
 			$chk = 'polycom-check-cfg';
 		}	
-		if (preg_match ( " /[S|s]nom/ ", $res['device'])) {
+		if (preg_match ( " /Snom/ ", $res['device'])) {
 			$chk = 'snom-reboot';
 		}
 		if (preg_match ( " /Yealink/ ", $res['device'])) {
@@ -1317,9 +1294,6 @@ private function sipNotify () {
 		if (preg_match ( " /Grandstream/ ", $res['device'])) {
 			$chk = 'grandstream-check-cfg';
 		}
-		if (preg_match ( " /Vtech/ ", $res['device'])) {
-			$chk = 'vtech-check-cfg';
-		}		
 		if ( ! $chk ) {
 			$this->message = "No notify data available for ext";
 			return;
@@ -1347,19 +1321,16 @@ private function sipNotifyPush () {
 			return;
 		}
 #
-#	Only for Snoms....   and Panasonics 
+#	Only for Snoms....   and Panasonics now!
 #
 		$chk = false;
 	
-		if (preg_match ( " /[S|s]nom/ ", $res['device'])) {
+		if (preg_match ( " /Snom/ ", $res['device'])) {
 			$chk = 'snom-check-cfg';
 		}
 		if (preg_match ( " /Panasonic/ ", $res['device'])) {	
 			$chk = 'panasonic-check-cfg';
 		}			
-		if (preg_match ( " /CiscoMP/ ", $res['device'])) {	
-			$chk = 'ciscoMP-check-cfg';
-		}
 		if ( ! $chk ) {
 			$this->message = "No notify data available";
 			return;
@@ -1402,19 +1373,8 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
     echo '<span style="font-weight:bold; "></span><br/><br/>';
     echo 'Ext: <strong>' . $pkey . '</strong><br/>' . PHP_EOL;
     echo 'Name: <strong>' . $extension['desc'] . '</strong><br/>' . PHP_EOL;
-    echo 'Vendor: <strong>' . $extension['device'] . '</strong><br/>' . PHP_EOL;
-    if (!empty($extension['devicemodel'])) {
-    	echo 'Model: <strong>' . $extension['devicemodel'] . '</strong><br/>' . PHP_EOL;
-    }
-    if (!empty ($extension['macaddr'])) {
-			echo 'MAC: <strong>' . $extension['macaddr'] . '</strong><br/>' . PHP_EOL;
-	}
-	if (isset($sip_peers [$pkey]['Status'])) {
-		echo 'State: <strong>' . $sip_peers [$pkey]['Status'] . '</strong><br/>' . PHP_EOL; 
-	}
-	else {
-		echo 'State: <strong>UNKNOWN</strong><br/>' . PHP_EOL; 
-	}
+    echo 'Device: <strong>' . $extension['device'] . '</strong><br/>' . PHP_EOL;
+	echo 'State: <strong>' . $sip_peers [$pkey]['Status'] . '</strong><br/>' . PHP_EOL; 
 	
 	
 	if (preg_match(' /^OK/ ', $sip_peers [$pkey]['Status'])) {
@@ -1425,49 +1385,11 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
 			echo 'IP: <strong>' . $sip_peers [$pkey]['IPaddress'] . '</strong><br/>' . PHP_EOL;
 			echo '<input type="hidden" id="ipaddress" name="ipaddress" value="' . $sip_peers [$pkey]['IPaddress'] . '" />' . PHP_EOL;	 
 		}		
+		$mac = 'UNKNOWN';
+		if (isset ($extension['macaddr'])) {
+			echo 'MAC: <strong>' . $extension['macaddr'] . '</strong><br/>' . PHP_EOL;
+		}
 	}
-	if ($extension['tls'] == 'on') {
-    	$transport = 'TLS';
-    }
-    else {
-    	$transport = 'UDP';
-    }
-    echo 'Transport: <strong>' . $transport . '</strong><br/>' . PHP_EOL;
-    
-    $images='/sark-common/phoneimages/';
-    if (isset($extension['devicemodel'])) {
-
-		if (preg_match ( " /Aastra/ ", $extension['device'])) {
-			$images .= 'aastra';
-		}
-		if (preg_match ( " /Cisco/ ", $extension['device'])) {	
-			$images .= 'cisco';
-		}
-		if (preg_match ( " /Panasonic/ ", $extension['device'])) {	
-			$images .= 'panasonic';
-		}				
-		if (preg_match ( " /Polycom/ ", $extension['device'])) {	
-			$images .= 'polycom';
-		}	
-		if (preg_match ( " /[S|s]nom/ ", $extension['device'])) {
-			$images .= 'snom';
-		}
-		if (preg_match ( " /Vtech/ ", $extension['device'])) {
-			$images .= 'vtech';
-		}
-		if (preg_match ( " /Yealink/ ", $extension['device'])) {
-			$images .= 'yealink';
-		}
-		
-		$images .= '/' . $extension['devicemodel'] . '.jpg';		
-		    	
-		if (file_exists("/opt/sark/www" . $images)) {	
-			echo '<br/><br/><img src="' . $images . '" width="190px" />' . PHP_EOL;
-		}
-		else {
-			$this->helper->logit("Phone Image not found $images ",1 );
-		}
-	}	
     echo '</div>' . PHP_EOL;
 
 }
