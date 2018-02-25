@@ -13,12 +13,11 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public Licenseinterfaces
+// You should have received a copy of the GNU General Public Licenses
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_once 'Net/IPv4.php';
-
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
 
 Class sarknetwork {
 	
@@ -31,12 +30,15 @@ Class sarknetwork {
 	protected $error_hash = array();
 	protected $smtpconf = "/etc/ssmtp/ssmtp.conf";
 	protected $bindaddr;
+	protected $nethelper;
 	
 public function showForm() {
 	
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
+	$this->nethelper = new netHelper;
+	
 		
 	echo '<form id="sarknetworkForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;
 	
@@ -75,7 +77,8 @@ private function showMain() {
 	} 
 	
 	$dhcp=false;
-	if (`grep eth0 /etc/network/interfaces | grep -i dhcp` ) {
+	$interface = $this->nethelper->get_interfaceName();
+	if (`grep $interface /etc/network/interfaces | grep -i dhcp` ) {
 		$dhcp=true;
 	}
 	$dhcpsrvAvail=false;
@@ -108,13 +111,10 @@ private function showMain() {
 		$icmp='YES';
 	}
 	
-	$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'");
-	$ipaddr = preg_replace('/<<EOT>>$/', '', $ret);	
-	$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f4 | awk '{ print $1}'");
-	$netmask = preg_replace('/<<EOT>>$/', '', $ret);
-	$ret = $this->helper->request_syscmd ("ip route | grep default | cut -d' ' -f3 | awk '{ print $1}'");
-	$gatewayip = preg_replace('/<<EOT>>$/', '', $ret);		
-
+	$ipaddr = $this->nethelper->get_localIPV4();
+	$netmask = $this->nethelper->get_netMask();
+	$gatewayip = $this->nethelper->get_networkGw();	
+	
 	$hostname = `cat /etc/hostname`;
 	
 	$file = file("/etc/ntp.conf") or die("Could not read file ntp.conf!");	
@@ -125,7 +125,7 @@ private function showMain() {
 		}
 	}	
 	
-	$ret = $this->helper->request_syscmd ("grep Port /etc/ssh/sshd_config");
+	$ret = $this->helper->request_syscmd ("grep 'Port ' /etc/ssh/sshd_config");
 	$ret = preg_replace('/<<EOT>>$/', '', $ret);
 	if (preg_match (" /(\d{2,5})/ ",$ret,$matches)) {
 			$sshport=$matches[1];
@@ -190,6 +190,7 @@ private function showMain() {
 	fclose($handle);
 	if (empty($dns)) {
 		$dns[] = "8.8.8.8";
+		$dns[] = "8.8.4.4";
 	}
 	$domain = `hostname -d`;
 /* 
@@ -378,17 +379,21 @@ private function showMain() {
 private function saveEdit() {
 // save the data away
 //print_r ($_POST);
-	$network_string = "auto lo eth0\niface lo inet loopback\n";	
+
+	$interface = $this->nethelper->get_interfaceName();
+	$network_string = "auto lo " . $interface . "\niface lo inet loopback\n";	
 	$dhcp_on_string = 
-		"iface eth0 inet dhcp\n".
+		"iface $interface inet dhcp\n".
+/*
 		"allow-hotplug wlan0\n". 
 		"iface wlan0 inet manual\n". 
-		"wpa-roam /etc/wpa_supplicant.conf\n". 
+		"wpa-roam /etc/wpa_supplicant.conf\n".
+*/ 
 		"iface default inet dhcp\n" .
 		"source /etc/network/interfaces.d/*\n";
 
 	$cur_dhcp=false;
-	if (`grep eth0 /etc/network/interfaces | grep -i dhcp` ) {
+	if (`grep $interface /etc/network/interfaces | grep -i dhcp` ) {
 		$cur_dhcp=true;
 	}	
 
@@ -451,14 +456,11 @@ private function saveEdit() {
 		if (isset($_POST['dhcpend'])) {		
 			$dhcpend		= strip_tags($_POST['dhcpend']);
 		}
-		
-								
-		$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'");
-		$cur_ipaddr = trim(preg_replace('/<<EOT>>$/', '', $ret));	
-		$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f4 | awk '{ print $1}'");
-		$cur_netmask = trim(preg_replace('/<<EOT>>$/', '', $ret));
-		$ret = $this->helper->request_syscmd ("ip route | grep default | cut -d' ' -f3 | awk '{ print $1}'");
-		$cur_gatewayip = trim(preg_replace('/<<EOT>>$/', '', $ret));	
+			
+		$cur_ipaddr = $this->nethelper->get_localIPV4();
+		$cur_netmask = $this->nethelper->get_netMask();
+		$cur_gatewayip = $this->nethelper->get_networkGw();
+			
 		
 		$file = file("/etc/ntp.conf") or die("Could not read file $pkey !");	
 		$cur_astfile = null;
@@ -584,18 +586,11 @@ private function saveEdit() {
 			}
 		}
 		else {
-			if ($ipaddr != $cur_ipaddr || $netmask != $cur_netmask || $gatewayip != $cur_gatewayip || $cur_dhcp) {
-				$ip_calc = new Net_IPv4();
-				$ip_calc->ip = $ipaddr;
-				$ip_calc->netmask = $netmask;
-				$ipcalcret = $ip_calc->calculate();
-				if (is_object($ipcalcret)) {
-					die ("IP Calc failed");
-				}					
-				$network_string .= "iface eth0 inet static \n";
+			if ($ipaddr != $cur_ipaddr || $netmask != $cur_netmask || $gatewayip != $cur_gatewayip || $cur_dhcp) {				
+				$network_string .= "iface $interface inet static \n";
 				$network_string .= "\taddress " . $ipaddr . "\n";
 				$network_string .= "\tnetmask " . $netmask . "\n";
-				$network_string .= "\tbroadcast " . $ip_calc->broadcast . "\n";
+				$network_string .= "\tbroadcast " . $this->nethelper->get_networkBrd() . "\n";
 				$network_string .= "\tgateway " . $gatewayip . "\n";
 // Included for multiple NICs
 				$network_string .= "source /etc/network/interfaces.d/*\n";	
@@ -712,8 +707,8 @@ private function saveEdit() {
 			$myret = $this->helper->request_syscmd ("chmod 644 /etc/network/interfaces");
 //			echo "<strong> Resetting IP address now...</strong>";
 			if ( $this->bindaddr != 'ON' ) {
-				$myret = $this->helper->request_syscmd ("ifdown eth0 && ifup eth0");
-				$myret = $this->helper->request_syscmd ("perl /opt/sark/scripts/setip.pl");
+				$myret = $this->helper->request_syscmd ("ip addr flush dev $interface && ifdown $interface && ifup $interface");
+				$myret = $this->helper->request_syscmd ("php /opt/sark/generator/setip.php");
 				$myret = $this->helper->request_syscmd ("sv d srk-ua-responder");
 				$myret = $this->helper->request_syscmd ("sv u srk-ua-responder");
 				$this->doResolv();				

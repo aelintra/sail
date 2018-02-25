@@ -9,5 +9,6 @@
 # Description:       Configure the firewall LAN setting for SARK according to the rules specified in
 #                    /etc/shorewall
 ### END INIT INFO
-sh /opt/sark/scripts/setip.sh
+php /opt/sark/generator/setip.php
+
 

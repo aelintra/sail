@@ -14,6 +14,7 @@
 // | Author: CoCoSoft                                                           |
 // +-----------------------------------------------------------------------+
 // 
+include("../php/srkNetHelperClass");
 
 if ( ! `mount | grep "/dev/sda1 on /media/usb0 type"`) {
 	exit;
@@ -25,13 +26,17 @@ if (!file_exists($media . '/SARK')) {
 }
 
 $reboot=false;
+$nethelper = new netHelper;	
+$interface = $nethelper->get_interfaceName();
 $dhcp_on_string = 
-		"auto lo eth0\n".
+		"auto lo " . $interface . "\n".
 		"iface lo inet loopback\n".
-		"iface eth0 inet dhcp\n".
+		"iface $interface inet dhcp\n".
+/*
 		"allow-hotplug wlan0\n". 
 		"iface wlan0 inet manual\n". 
 		"wpa-roam /etc/wpa_supplicant.conf\n". 
+*/
 		"iface default inet dhcp\n" .
 		"source /etc/network/interfaces.d/*\n";
 
@@ -41,7 +46,7 @@ logIt("USB UTILS stick detected, Begin processing");
 
 if (file_exists($media."/SARK/MAC")) {
 	$usbmac = trim(file_get_contents($media."/SARK/MAC"));
-	$mac = trim(strtoupper(`ip link show eth0 | awk '/ether/ {print $2}'`)); 	
+	$mac = trim(strtoupper(`ip link show $interface | awk '/ether/ {print $2}'`)); 	
 	if ($usbmac != $mac) {
 		logIt("MAC address given but doesn't match system");
 		logIt("SYSMAC=".$mac);
@@ -52,9 +57,9 @@ if (file_exists($media."/SARK/MAC")) {
 		
 		if (file_exists($media."/SARK/RESETDHCP")) {
 			logIt("DHCP RESET REQUESTED");
-			logit("setting DHCP defaults for eth0");
+			logit("setting DHCP defaults for $interface");
 			file_put_contents("/etc/network/interfaces",$dhcp_on_string);
-			logit ("restarting eth0 - check NETWORK file for details");			
+			logit ("restarting $interface - check NETWORK file for details");			
 			unlink($media."/SARK/RESETDHCP");
 			$reboot=true;			
 		}

@@ -17,16 +17,14 @@
 [ ! -e /var/spool/asterisk/monstage ] && mkdir -p /var/spool/asterisk/monstage
 [ ! -e /var/spool/asterisk/monout ] && mkdir -p /var/spool/asterisk/monout
 [ ! -e /opt/sark/passwd/htpasswd ] && cp -f /opt/sark/cache/htpasswd /opt/sark/passwd/htpasswd
+[ ! -e /opt/sark/bkup ] && mkdir -p /opt/sark/bkup
+[ ! -e /opt/sark/snap ] && mkdir -p /opt/sark/snap
 #[ ! -e /opt/sark/www/header.htm ] && /bin/cp -f /opt/sark/cache/header.htm /opt/sark/www
 
 if [ ! -e /etc/asterisk/sark_customer_iax_header.conf ]; then 
         cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_iax_header.conf
         echo "language=en-gb" >> /etc/asterisk/sark_customer_iax_header.conf
 fi
-
-cp -f /opt/sark/cache/debsetlan /etc/init.d
-
-update-rc.d debsetlan defaults > /dev/null 2>&1
 
 if [ ! -e /etc/asterisk/sark_customer_sip_header.conf ]; then
         cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_sip_header.conf
@@ -79,22 +77,19 @@ if [  "$?" -ne "0" ] ; then
         echo "enable=no" > /etc/asterisk/sark_cdr.conf
 fi
 
-grep -q '#include sark_meetme.conf' /etc/asterisk/meetme.conf
-if [  "$?" -ne "0" ] ; then
+if [ -e /etc/asterisk/meetme.conf ] ; then
+	grep -q '#include sark_meetme.conf' /etc/asterisk/meetme.conf
+	if [  "$?" -ne "0" ] ; then
         echo "#include sark_meetme.conf" >> /etc/asterisk/meetme.conf
+	fi
 fi
 
-grep -q '#include sark_confbridge.conf' /etc/asterisk/confbridge.conf
-if [  "$?" -ne "0" ] ; then
+if [ -e /etc/asterisk/confbridge.conf ] ; then
+	grep -q '#include sark_confbridge.conf' /etc/asterisk/confbridge.conf
+	if [  "$?" -ne "0" ] ; then
         echo "#include sark_confbridge.conf" >> /etc/asterisk/confbridge.conf
+	fi
 fi
-
-
-# we enable asterisk in case this is an upgrade from a pre 3.1.1-98 release
-# pre 98 we used runit to manage asterisk.  Post 98 we use init.d
-# we don't enable asterisk if ASHA is installed because Pacemaker will handle
-
-[ ! -e /opt/asha/asha.conf ] && update-rc.d asterisk defaults 
  
 chmod +x /opt/sark/service/srk-ua-helper/run 
 chmod +x /opt/sark/service/srk-ua-responder/run
@@ -123,16 +118,6 @@ rm -rf /etc/apache2/sites-available/sark*
 
 # set links to the correct Vhost
 
-grep -q '^8\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
-# since we're checking for Jessie anyway, we can also turn on php short tags - Areski Stat needs them 
-	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php5/apache2/php.ini		
-else
-	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf /etc/apache2/sites-available/sark-ssl.conf
-fi
-
-
 #HTTPD
 a2enmod rewrite > /dev/null 2>&1
 a2enmod proxy > /dev/null 2>&1
@@ -151,9 +136,6 @@ if [ ! -e /etc/apache2/ssl ]; then
         -nodes \
         -subj "/O=Aelintra/OU=PBX/CN=sark.local" > /dev/null 2>&1
 fi
-
-a2ensite sark-ssl.conf > /dev/null 2>&1
-service apache2 reload > /dev/null 2>&1
 
 #SIP/TLS
 if [ ! -e /etc/asterisk/ssl ]; then
@@ -186,7 +168,7 @@ fi
 
 #sudoers
 if [ -e /etc/sudoers.d/sail ]; then 
-	chmod 0440 /etc/sudoers.d/sail
+	chmod 0440 /etc/sudoers.d/sailsudoers
 fi
 # all moved to sudoers.d/sail in 5.0.0-30
 #if [ ! -e /etc/sudoers.d/sarkrssh ]; then
@@ -202,20 +184,7 @@ if [ ! -e /etc/network/interfaces.d ]; then
 	mkdir -p /etc/network/interfaces.d
 	echo "source /etc/network/interfaces.d/*" >> /etc/network/interfaces
 fi
-
-#fail2ban
-grep -q '^8\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-#jessie
-	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
-	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
-else 
-#wheezy
-	[ ! -e /etc/fail2ban/filter.d/asterisk.conf ] && [ -e  /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf ] && ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
-	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-wheezy.local ] && ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
-fi
 	
-
 # set correct Asterisk dateformat in logger.conf
 sed -i 's/^;dateformat=%F %T /dateformat=%F %T/' /etc/asterisk/logger.conf
 # set security logging for Ast11 
@@ -224,24 +193,65 @@ sed -i '/^messages/c \messages => security,notice,warning,error' /etc/asterisk/l
 
 #Shorewall setup
 if [ -d /etc/shorewall ]; then
-    perl /opt/sark/scripts/setip.pl
-    for file in `ls /opt/sark/shorewall/one-interface` ; do
-                [ ! -e /etc/shorewall/$file ] && cp -f /opt/sark/shorewall/one-interface/$file /etc/shorewall            
-    done
-    grep -q 'INCLUDE local.lan' /etc/shorewall/params
-    if [  "$?" -ne "0" ] ; then
-        cp -f /opt/sark/shorewall/one-interface/params /etc/shorewall
-    fi
-    [ ! -e /etc/shorewall/blrules ] && cp /usr/share/shorewall/configfiles/blrules /etc/shorewall
-    grep -q 'INCLUDE sark_blrules' /etc/shorewall/blrules
-    if [  "$?" -ne "0" ] ; then
-    	echo INCLUDE sark_blrules >> /etc/shorewall/blrules
-    fi
     sed -i 's/startup=0/startup=1/' /etc/default/shorewall
+    echo 'INCLUDE local.lan' > /etc/shorewall/params
+    echo 'INCLUDE local.if1' >> /etc/shorewall/params
+    [ ! -e /etc/shorewall/sark_rules ] && cp /opt/sark/etc/shorewall/sark_rules /etc/shorewall
+    touch /etc/shorewall/sark_blrules
     chown www-data:www-data /etc/shorewall/sark_rules
 fi
-touch /etc/shorewall/sark_blrules
+
 chown www-data:www-data /etc/shorewall/sark_blrules
+
+#deal with the different debian releases. wheezy, jessie, stretch
+# disable apache2 defaults
+# jessie/stretch
+[ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
+# Wheezy
+[ -L /etc/apache2/sites-enabled/000-default ] && a2dissite 000-default > /dev/null 2>&1
+
+# stretch setup
+grep -q '^9\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
+	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
+	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php/7.0/apache2/php.ini
+	systemctl enable debsetlan.service
+	systemctl start debsetlan.service
+	[ -e  /etc/shorewall/routestopped ] && mv /etc/shorewall/routestopped /etc/shorewall/routestopped.bak
+	systemctl enable shorewall.service
+	systemctl stop apache2.service
+	systemctl start apache2.service
+fi	
+# jessie setup
+grep -q '^8\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
+	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
+	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php5/apache2/php.ini
+	cp -f /opt/sark/cache/debsetlan /etc/init.d
+	update-rc.d debsetlan defaults > /dev/null 2>&1	
+	service debsetlan start
+fi
+# wheezy setup
+grep -q '^7\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	[ ! -e /etc/fail2ban/filter.d/asterisk.conf ] && [ -e  /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf ] && ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
+	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-wheezy.local ] && ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
+	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf /etc/apache2/sites-available/sark-ssl.conf
+	cp -f /opt/sark/cache/debsetlan /etc/init.d
+	update-rc.d debsetlan defaults > /dev/null 2>&1
+	service debsetlan start
+# we enable asterisk in case this is an upgrade from a pre 3.1.1-98 release
+# pre -98 we used runit to manage asterisk.  Post 98 we use init.d
+# we don't enable asterisk if ASHA is installed because Pacemaker will handle	
+	[ ! -e /opt/asha/asha.conf ] && update-rc.d asterisk defaults 
+fi
+
+a2ensite sark-ssl.conf > /dev/null 2>&1
+service apache2 reload > /dev/null 2>&1
 
 #Rebuild the SARK database
 /bin/sh /opt/sark/scripts/srkV4reloader.sh

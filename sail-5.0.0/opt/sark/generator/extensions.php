@@ -14,21 +14,24 @@
 // | Author: CoCoSoft                                                      
 // +-----------------------------------------------------------------------+
 // 
-include("ip_helper_functions.php"); 
+//include("ip_helper_functions.php"); 
 include("generated_file_banner.php");
+include("/opt/sark/php/srkNetHelperClass");
+
 $release = `asterisk -rx 'core show version'`;
 $vers = '1.8';
 if (preg_match(' /Asterisk\s*(\d\d).*$/ ', $release,$matches)) {
 	$vers = $matches[1];
 }
-echo ';Asterisk version is ' . $vers . "\n";
-	
-    	$localIP = ret_localip ();
-    	$OUT .= "[general] \n";
-    	$OUT .= "static=yes \n";
-    	$OUT .= "writeprotect=yes \n";
-    	$OUT .= "[globals] \n";
-    	$OUT.="\tLOCALIP=" . $localIP ."\n";
+echo 'Asterisk version is ' . $vers . "\n";
+
+$OUT .= "[general] \n";
+$OUT .= "static=yes \n";
+$OUT .= "writeprotect=yes \n";
+$OUT .= "[globals] \n";
+
+$nethelper = new netHelper;	
+$OUT.="\tLOCALIP=" . $nethelper->get_localIPV4() ."\n";
 
 try {
     /*** connect to SQLite database ***/

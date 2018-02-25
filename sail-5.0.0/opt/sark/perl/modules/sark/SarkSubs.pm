@@ -220,8 +220,19 @@ sub routeClass($) {
 }
 
 sub ret_localip () {
-    $_ = `/sbin/ifconfig eth0`;
-    /inet addr:*?([\d.]+)/;
+	my $interface;
+	open(my $fh, '<', "/opt/sark/interface_name") or die "cannot open file $filename";
+    {
+        local $/;
+        $interface = <$fh>;
+    }
+    close($fh);
+    chomp $interface;
+    print STDERR "interface 1 is $interface\n";   
+    $_ = `/sbin/ifconfig $interface`;
+#    /inet addr:*?([\d.]+)/;
+    /inet *?([\d.]+)/;
+	print STDERR "IP address is $1\n";
     return ($1);
 }
 sub ret_subnet () {
@@ -241,11 +252,17 @@ sub ret_subnet () {
 	return ($netaddress);
 }
 
-
-
 sub ret_subnetmask () {
-    $_ = `/sbin/ifconfig eth0`;
-    /Mask:*?([\d\.]+)/;
+	my $interface;
+	open(my $fh, '<', "/opt/sark/interface_name") or die "cannot open file $filename";
+    {
+        local $/;
+        $interface = <$fh>;
+    }
+    close($fh);
+    chomp $interface;
+    $_ = `/sbin/ifconfig $interface`;
+    /netmask *?([\d\.]+)/;
     return ($1);
 }
 

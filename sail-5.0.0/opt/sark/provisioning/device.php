@@ -1,6 +1,7 @@
 <?php
 include "settings.php";
 include "commonFuncs.php";
+include "../php/srkNetHelperClass";
 
 global $haclusterip;
 global $hausecluster;
@@ -8,6 +9,7 @@ global $externip;
 global $ldapbase;
 global $blfKeys;
 global $local;
+global $localIPV4;
 
 //global $masterkey;
 
@@ -17,6 +19,10 @@ $mac=NULL;
 $frequest=NULL;
 $fname=NULL;
 $local=True;
+
+$nethelper = new netHelper;
+$localIPV4 = $nethelper->get_localIPV4();
+
 
 // ignore polycom logging requests
 if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
@@ -179,7 +185,7 @@ if (isset($thisConfig->location) && $thisConfig->location == 'remote') {
 }
 
 // substitute real values into the output	
-$retstring = preg_replace ( '/\$localip/', ret_localip(), $retstring);
+$retstring = preg_replace ( '/\$localip/', $localIPV4, $retstring);
 $retstring = preg_replace ( '/\$tlsport/', $tlsport, $retstring);
 $retstring = preg_replace ( '/\$ldapbase/', $ldapbase, $retstring);
 

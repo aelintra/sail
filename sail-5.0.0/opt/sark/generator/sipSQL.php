@@ -14,7 +14,7 @@
 // | Author: CoCoSoft                                                           |
 // +-----------------------------------------------------------------------+
 //
-include("ip_helper_functions.php"); 
+//include("ip_helper_functions.php"); 
 include("generated_file_banner.php");
 include("localvars.php");
 
@@ -47,12 +47,11 @@ try {
 	}
 	`/bin/echo $tlsport > /etc/asterisk/sark_sip_tlsbindaddr.conf`;
 	
-	$subnet = ret_subnet();
-    	$subnetmask = ret_subnetmask();
+
 	if (file_exists( '/etc/asterisk/sark_sip_localnet.conf' )) {
 		$OUT .= "#include sark_sip_localnet.conf \n";
 	}
-//    	$OUT .= 'localnet=' . $subnet ."/" . $subnetmask . "\n";
+	
 	$fh = fopen("/etc/asterisk/sark_sip_localnet_header.conf", 'w') or die('Could not open file!');
 	fwrite($fh,$OUT) or die('Could not write to file');
 	fclose($fh);

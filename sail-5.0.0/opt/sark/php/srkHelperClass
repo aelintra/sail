@@ -374,13 +374,6 @@ public function loopcheck ($key, $out) {
 	return False; // no loop detected
 }
 
-public function ret_localip () {
-    $work = `/sbin/ifconfig eth0`;    
-	if (preg_match(" /inet addr:*?([\d.]+)/",$work,$matches)) { 
-	 		return $matches[1]; 	 		
- 	}
-	return -1;   
-}
 
 public function rets() {
 	
@@ -401,19 +394,6 @@ public function rets() {
 	return ($flg);
 }
 
-
-//
-// don't use this subnet function - it is incorrect
-//
-public function ret_subnet () {
-    $work = `/sbin/ifconfig eth0`;
-        if (preg_match(" /inet addr:*?([\d\.]+)/",$work,$matches)) {
-             $subnet = preg_replace ( '/\d+$/','0', $matches[1] );
-             return $subnet;
-        }
-    return -1;
-}
-
 /*
  * not used as far as I can see
  */ 
@@ -423,16 +403,6 @@ public function ret_externip () {
 	 		return $matches[1]; 	 		
  	}
 	return -1; 
-}
-/*
- *  not used as far as I can see
- */ 
-public function ret_subnetmask () {
-    $work = `/sbin/ifconfig eth0`;    
-	if (preg_match(" /Mask:*?([\d\.]+)/",$work,$matches)) { 
-	 		return $matches[1]; 	 		
- 	}
-	return -1;
 }
 
 public function ret_password ($length = 8) {
@@ -863,7 +833,8 @@ public function getLc() {
 
 private function checkLc($lkey) {
 
-    $mac = strtoupper(`ip link show eth0 | awk '/ether/ {print $2}'`);	    
+    $interface = trim(file_get_contents("/opt/sark/interface_name"));
+    $mac = strtoupper(`ip link show $interface | awk '/ether/ {print $2}'`);	   
     $ciphertext_dec = base64_decode($lkey);
     $iv_dec = substr($ciphertext_dec, 0, $iv_size);
     $ciphertext_dec = substr($ciphertext_dec, $iv_size);

@@ -82,7 +82,10 @@ sub read_config {
 
 
 	$prov_scheme = 'http';
-	$prov_host = SarkSubs::ret_localip();
+	chomp(my $prov_interface = `ls /sys/class/net | grep -v lo | head -n1`);
+	$_ = `ip addr show dev $prov_interface`;
+	/inet\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/\d{1,2}/;
+    $prov_host = $1;
 	$prov_port = '80';
 	$prov_path = 'provisioning';
 	
@@ -629,49 +632,16 @@ sub createExten($$) {
     my $desc = "Ext".$pkey;
 	my $callerid = $pkey;
 	my $dvrvmail = $pkey;
-	my $ipaddr = SarkSubs::ret_localip();
-    my $ipbase = SarkSubs::ret_subnet();
-    my $nmask = SarkSubs::ret_subnetmask();
+	
+	chomp(my $prov_interface = `ls /sys/class/net | grep -v lo | head -n1`);
+	$_ = `ip addr show dev $prov_interface`;
+	/inet\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,2})/;
+    my $ipaddr = $1;
+    my $cidr = $1 . '/' . $2;
+    /brd\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/;
+    my $ipbase = $1;
     	
 # tailor the template
-
-#	
-#    if ($sipiaxfriend =~ /callerid=/) {
-#     		$sipiaxfriend =~ s/callerid=/callerid=\"\$desc\" <\$ext>/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\ncallerid=\"\$desc\" <\$pkey>";
-#    }
-#    if ($sipiaxfriend =~ /username=/) {
-#    		$sipiaxfriend =~ s/username=/username=\$desc/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\nusername=\$desc";
-#    }
-#   if ($sipiaxfriend =~ /secret=/) {
-#    		$sipiaxfriend =~ s/secret=/secret=\$password/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\nsecret=\$password";
-#    }
-#    if ($sipiaxfriend =~ /mailbox=/) {
-#		$sipiaxfriend =~ s/mailbox=/mailbox=\$ext/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\nmailbox=\$ext";
-#    }
-#    if ($sipiaxfriend =~ /pickupgroup=/) {
-#		$sipiaxfriend =~ s/pickupgroup=/pickupgroup=1 \ncallgroup=1/;
-#    }
-#    else {
-#		$sipiaxfriend .= "\npickupgroup=1\ncallgroup=1";
-#    }
-#    unless ($sipiaxfriend =~ /call-limit/) {
-#                $sipiaxfriend .= "\ncall-limit=3";
-#    }
-#    unless ($sipiaxfriend =~ /subscribecontext/) {
-#                $sipiaxfriend .= "\nsubscribecontext=extensions";
-#    }
     
 # set ACL
 	my $acl 		 = SarkSubs::SQLiteGet($dbh, "SELECT ACL FROM globals where pkey = 'global'") || 'NO'; 
@@ -680,7 +650,8 @@ sub createExten($$) {
 			$sipiaxfriend .= "\ndeny=0.0.0.0/0.0.0.0";
 		}
 		unless ($sipiaxfriend =~ /permit=/) {
-			$sipiaxfriend .= "\npermit=$ipbase/$nmask";
+			
+			$sipiaxfriend .= "\npermit=$cidr";
 		}
 	}
 	else {

@@ -18,6 +18,7 @@
 //
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkLDAPHelperClass";
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
 
 Class sarkfreset {
 	
@@ -184,14 +185,21 @@ private function doReset() {
 	);
 
 //	return;
+	$nethelper = new netHelper;	
+	$interface = $nethelper->get_interfaceName();	
 	$dhcp_reset_string = 
-		"auto lo eth0\niface lo inet loopback\n".
-		"iface eth0 inet dhcp\n".
+		"auto lo " . $interface . "\niface lo inet loopback\n".
+		"iface $interface inet dhcp\n".
+/*
 		"allow-hotplug wlan0\n". 
 		"iface wlan0 inet manual\n". 
-		"wpa-roam /etc/wpa_supplicant.conf\n". 
+		"wpa-roam /etc/wpa_supplicant.conf\n".
+*/ 
 		"iface default inet dhcp\n" .
 		"source /etc/network/interfaces.d/*\n";
+/*
+ * this doesn't get used
+ */				
 	$hosts_reset_string = 
 		"127.0.0.1 localhost\n" .
 		"127.0.1.1 s200" .
@@ -294,7 +302,7 @@ private function doReset() {
 		$this->log .= "<p>network PRESERVED</p>";	
 	}		
 	if ( isset($_POST['host'] ) ) {
-			$this->helper->request_syscmd ("echo s200 > /etc/hostname");
+			$this->helper->request_syscmd ("echo sark > /etc/hostname");
 		$this->log .= "<p>hostname RESET</p>";
 		$this->reboot = true;
 	}

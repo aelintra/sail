@@ -26,7 +26,7 @@
 # Please visit our web site www.selintra.com/ for details.
 #----------------------------------------------------------------------
 #
-include("ip_helper_functions.php"); 
+//include("ip_helper_functions.php"); 
 include("generated_file_banner.php");
 include("localvars.php");
 

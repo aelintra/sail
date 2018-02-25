@@ -1,0 +1,10 @@
+Source: sail
+Section: network
+Priority: extra
+Maintainer: CoCo <admin@aelintra.com>
+
+Package: sail
+Architecture: all
+Depends: ${misc:Depends}, sailhpe, asterisk, asterisk-mp3, asterisk-mysql, apache2, sqlite3, php7.0-gd, php7.0-sqlite3, php7.0-curl, php7.0-mysql, php-pear, libio-socket-multicast-perl, libapache2-mod-php7.0, libdbi-perl, libdbd-sqlite3-perl, runit-systemd, sox, mysql-server, net-tools, nmap, zip, ntp, libfile-readbackwards-perl, shorewall, fail2ban, sudo, dos2unix, dnsmasq, tshark, vim, debian-archive-keyring, less, hostname, ipcalc, php7.0-ldap, slapd, ldap-utils
+Description: SARK  Asterisk Integration Layer (SAIL) - A fast, lightweight switch for Asterisk
+ SARK  Asterisk Integration Layer (SAIL).  Admin and backend code to configure and build Asterisk dialplans on the fly.
