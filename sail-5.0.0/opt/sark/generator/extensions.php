@@ -412,7 +412,7 @@ try {
  */  
 	$OUT .= "\n[conferences]\n";	
 	if ($vers < 11) {
-		meetMe($OUT,$dbh);
+		meetMe($OUT,$global,$dbh);
 	}
 	else {
 		confBridge($OUT,$dbh);
@@ -831,7 +831,7 @@ catch(PDOException $e) {
     	echo $e->getMessage();
 }
 
-function meetMe(&$OUT,$dbh) {
+function meetMe(&$OUT,&$global,$dbh) {
 /*
  * conventional conferences in meetme -> these cannot be managed
  */

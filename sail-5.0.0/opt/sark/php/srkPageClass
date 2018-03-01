@@ -824,11 +824,19 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
     if (preg_match( ' /up\s(\d+\sdays)/ ', $uptime,$matches)) {
 		$updays = $matches[1];
 	}
+	
+	$arch = `uname -m`;
 	$disk = array();
-    $disk = `/bin/df -h`;
+	
+	if (preg_match( ' /^arm/ ', $arch)) {
+	    $disk = `/bin/df -h`;
+	}
+	else {
+		$disk = `/bin/df -h /dev/sda1`;
+	}
     $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
     $diskusage = $matches[1];
-    $systemMedia = 'disk';
+
 	if (preg_match( '/Mem:\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})/',$free,$matches )) {
 			$totmem = $matches[1];
 			$usedmem = $matches[2];
