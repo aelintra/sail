@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Copy Asterisk file fragents
+#Copy Asterisk file fragments
 [ ! -e /etc/asterisk/sark_customer_agents_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_agents_main.conf 
 [ ! -e /etc/asterisk/sark_customer_extensions_globals.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_extensions_globals.conf 
 [ ! -e /etc/asterisk/sark_customer_hints.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_hints.conf 
@@ -60,6 +60,9 @@ chmod 755 -R /opt/sark/www
 chmod 755 -R /opt/sark/generator
 chmod 755 -R /opt/sark/perl
 chmod 755 -R /opt/sark/scripts
+
+#FOP directory 
+[ ! -e /opt/sark/fop ] && mkdir /opt/sark/fop
 
 grep -q '#include sark_manager.conf' /etc/asterisk/manager.conf
 if [  "$?" -ne "0" ] ; then
@@ -224,6 +227,11 @@ if [  "$?" -eq "0" ] ; then
 	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
 	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
+	[ ! -e /etc/asterisk/res_parking.conf ] && touch /etc/asterisk/res_parking.conf
+	grep -q '#include sark_res_parking.conf' /etc/asterisk/res_parking.conf
+	if [  "$?" -ne "0" ] ; then
+        echo "#include sark_res_parking.conf" >> /etc/asterisk/res_parking.conf
+	fi
 	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php/7.0/apache2/php.ini
 	systemctl enable debsetlan.service
 	systemctl start debsetlan.service

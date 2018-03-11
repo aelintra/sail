@@ -723,6 +723,7 @@ INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T58','Yealink T58');
 
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('W52P','Yealink W52P');
 
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snomD120','Snom D120');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snomD305','Snom D305');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snomD315','Snom D315');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('snomD345','Snom D345');

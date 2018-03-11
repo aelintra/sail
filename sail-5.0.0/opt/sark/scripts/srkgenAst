@@ -12,12 +12,7 @@
 /usr/bin/php /opt/sark/generator/sipSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/featuresSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/vmailSQL.php >/dev/null
-# TFTP gone in 4.0.1 - whoopee!
-#/usr/bin/php /opt/sark/generator/tftpSQL.php >/dev/null
-# non-SME boxes  only
-#if [ ! -e "/etc/e-smith" ]; then
-#	/usr/bin/php /opt/sark/generator/edsw.php >/dev/null
-#fi
+
 # HA
 if [ -e "/etc/ha.d" ]; then
         /usr/bin/php /opt/sark/generator/sarkha.php >/dev/null

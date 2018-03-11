@@ -607,6 +607,28 @@ subscribecontext=extensions
 disallow=all 
 allow=alaw
 allow=ulaw','SIP','2018-02-24 12:49:23','2018-02-24 12:49:23','system');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology,z_created,z_updated,z_updater) values ('Snom D120','snom.Fkey','5','Snom D120 series','Snom D305','#INCLUDE snom.Common
+user_realname1$: $desc
+user_name1$: $ext
+user_pname1$: $ext
+user_pass1$: $password
+user_host1$: $localip
+#INCLUDE snom.Fkey','type=friend
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP','2018-02-24 12:49:23','2018-02-24 12:49:23','system');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,provision,sipiaxfriend,technology,z_created,z_updated,z_updater) values ('Snom D305','snom.Fkey','5','Snom D305 series','Snom D305','#INCLUDE snom.Common
 user_realname1$: $desc
 user_name1$: $ext
