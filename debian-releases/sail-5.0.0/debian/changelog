@@ -1,3 +1,81 @@
+sail (5.0.0-57) UNRELEASED; urgency=low
+  * Untagged
+  - temporary postinst mods for Deb9 cdr stat suppression
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 12  Mar 2018 18:00:00 +0000
+sail (5.0.0-56) UNRELEASED; urgency=low
+  * Untagged 
+  - postinst mods
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 9  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-55) UNRELEASED; urgency=low
+  * Untagged 
+  - bugfix
+  - issue with call parks in 13
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 7  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-54) UNRELEASED; urgency=low
+  * Untagged
+  - bugfix
+  - twoe minor bugs and a few packaging issues
+  - modified:   debian/postinst
+  - modified:   opt/sark/generator/extensions.php
+  - modified:   opt/sark/php/srkPageClass
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 1  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-53) UNRELEASED; urgency=low
+  * Untagged
+  - first attempt at an alpha
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 28  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-52) UNRELEASED; urgency=low
+  * Untagged
+  - changes to apache2 wheezy image
+  - fixed minor bug in srkPageClass side window display
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 28  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-51) UNRELEASED; urgency=low
+  * tagged as 5.0.0-51
+  - consolidated physical network inspection into a single class srkNetHelper
+  - removed all dependencies on net-tools
+  - all net ops now use the newer ip command
+  - new file:   ../etc/systemd/system/apache2.service
+  - new file:   ../etc/systemd/system/debsetlan.service
+  - modified:   ../opt/sark/cache/debsetlan
+  - modified:   ../opt/sark/cache/sailsudoers
+  - modified:   ../opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf
+  - modified:   ../opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf
+  - modified:   ../opt/sark/generator/daycall
+  - modified:   ../opt/sark/generator/edsw.php
+  - modified:   ../opt/sark/generator/extensions.php
+  - modified:   ../opt/sark/generator/iaxSQL.php
+  - deleted:    ../opt/sark/generator/ip_helper_functions.php
+  - modified:   ../opt/sark/generator/meetmeSQL.php
+  - new file:   ../opt/sark/generator/netTest.php
+  - new file:   ../opt/sark/generator/setip.php
+  - modified:   ../opt/sark/generator/sipSQL.php
+  - modified:   ../opt/sark/generator/srkusb.php
+  - modified:   ../opt/sark/perl/modules/sark/SarkSubs.pm
+  - modified:   ../opt/sark/php/sarkdiscover/view.php
+  - modified:   ../opt/sark/php/sarkextension/view.php
+  - modified:   ../opt/sark/php/sarkfreset/view.php
+  - modified:   ../opt/sark/php/sarknetwork/view.php
+  - modified:   ../opt/sark/php/srkHelperClass
+  - new file:   ../opt/sark/php/srkNetHelperClass
+  - modified:   ../opt/sark/php/srkPageClass
+  - modified:   ../opt/sark/provisioning/commonFuncs.php
+  - modified:   ../opt/sark/provisioning/device.php
+  - modified:   ../opt/sark/scripts/responder.pl
+  - deleted:    ../opt/sark/scripts/setip.pl
+  - deleted:    ../opt/sark/scripts/setip.sh  
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 26  Feb 2018 18:00:00 +0000
+
 sail (5.0.0-50) UNRELEASED; urgency=low
   * tagged as 5.0.0-50
   - added support for stretch

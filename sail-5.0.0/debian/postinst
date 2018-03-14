@@ -238,11 +238,9 @@ if [  "$?" -eq "0" ] ; then
 	[ -e  /etc/shorewall/routestopped ] && mv /etc/shorewall/routestopped /etc/shorewall/routestopped.bak
 	systemctl enable shorewall.service
 	systemctl stop apache2.service
-	systemctl start apache2.service	
-#===>	
-# remove CDR tab for this release
-#===> REMOVE THIS LINE WHEN STATS PACK SORTED
-	sed -i '/300/d' /opt/sark/always/1400788134.db_v4_admin_perms	
+	systemctl start apache2.service
+# suppress CDR menu generation for Deb 9	
+	[ -e /opt/sark/cache/1520813339.db_v4_admin_perms2 ] && mv /opt/sark/cache/1520813339.db_v4_admin_perms2 /opt/sark/always/
 fi	
 # jessie setup
 grep -q '^8\.' /etc/debian_version 
