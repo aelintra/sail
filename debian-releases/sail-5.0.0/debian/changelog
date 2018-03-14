@@ -1,8 +1,15 @@
+sail (5.0.0-58) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-58
+  - fixed minor bug in list.php when serving endpoints to non admin users
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 14  Mar 2018 18:00:00 +0000
+
 sail (5.0.0-57) UNRELEASED; urgency=low
   * Untagged
   - temporary postinst mods for Deb9 cdr stat suppression
 
  -- CoCoSoft <admin@aelintra.com>  Mon, 12  Mar 2018 18:00:00 +0000
+
 sail (5.0.0-56) UNRELEASED; urgency=low
   * Untagged 
   - postinst mods
