@@ -21,7 +21,7 @@
 	}
 	else {
 		$res = $dbh->query("SELECT cluster from user where pkey='" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);		
-		$wherestring = "ORDER BY pkey WHERE cluster='" . $res['cluster'] . "' OR cluster='default'" ;
+		$wherestring = "WHERE cluster='" . $res['cluster'] . "' OR cluster='default' ORDER BY pkey" ;
 	}
 	
 	$handle = fopen("/etc/asterisk/sark_meetme.conf", "r") or die('Could not read file!');

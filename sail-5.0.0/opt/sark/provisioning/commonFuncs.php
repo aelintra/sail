@@ -80,6 +80,7 @@ function cleanConfig($phonepkey,$rawConfig,&$db,&$retstring,&$loopCheck,$sndcred
 function genFkeys($phonepkey,$devpkey,$db,&$inline) {
 
 	global $blfKeys;
+	global $localIPV4;
 	
 	$xLateType = Array (
 		"aastra" => Array (
@@ -112,7 +113,7 @@ function genFkeys($phonepkey,$devpkey,$db,&$inline) {
 	);
 	$xLateTypeValue = Array (
 		"snom" => Array (
-			"blf" => '<sip:$value@' . ret_localip() . ';user=phone>|*8'		
+			"blf" => '<sip:$value@' . $localIPV4 . ';user=phone>|*8'	
 		)	
 	);	
 
@@ -164,7 +165,7 @@ function genFkeys($phonepkey,$devpkey,$db,&$inline) {
 			$blfKeys[$seq] = preg_replace ( '/\$seq/m', $seq, $blfKeys[$seq]);
 			$blfKeys[$seq] = preg_replace ( '/\$type/m', $row['type'], $blfKeys[$seq]);			
 			$blfKeys[$seq] = preg_replace ( '/\$label/m', $row['label'], $blfKeys[$seq]);
-			$blfKeys[$seq] = preg_replace ( '/\$localip/m', ret_localip(), $blfKeys[$seq]);
+			$blfKeys[$seq] = preg_replace ( '/\$localip/m', $localIPV4, $blfKeys[$seq]);
 /*
  * Cisco BLFs have to be handled differently; we need to build the fnc variable 
  * for each fkey type.
@@ -194,6 +195,7 @@ function polycomSubConfig($mac,$fname,$db) {
 	global $haclusterip;
 	global $hausecluster;
 	global $local;
+	global $localIPV4;
 	
 	$retstring = NULL;		
 	$fname = preg_replace('/^-/','',$fname);
@@ -266,7 +268,7 @@ function polycomSubConfig($mac,$fname,$db) {
 	$hausecluster = $global['HAUSECLUSTER'];
 
 // substitute real values into the output	
-	$retstring = preg_replace ( '/\$localip/', ret_localip(), $retstring);
+	$retstring = preg_replace ( '/\$localip/', $localIPV4, $retstring);
 	$retstring = preg_replace ( '/\$desc/', $thisextConfig->desc, $retstring);
 	$retstring = preg_replace ( '/\$password/', $thisextConfig->passwd, $retstring);
 	$retstring = preg_replace ( '/\$ext/', $thisextConfig->pkey, $retstring);
@@ -337,33 +339,6 @@ function getBlf() {
 	return $keystring;	 
 }	  
 
-/*
- * get the IP
- */	
-function ret_localip() {
-	
-  global $haclusterip;
-  global $hausecluster;
-  global $local;
-  global $externip;
-  
-  if (!$local) {
-	  return $externip;
-  }
-	  
-
-  if ($haclusterip) {
-	if ( $hausecluster == "YES" ) {
-	  return $haclusterip;
-	}
-  }
-  
-  $work = `/sbin/ifconfig eth0`;
-  if (preg_match(" /inet addr:*?([\d.]+)/",$work,$matches)) {
-    return $matches[1];
-  }
-  return -1;
-}
 
 function logIt($someText) {
   syslog(LOG_WARNING, $_SERVER["REMOTE_ADDR"] . " " . $someText . "\n");	

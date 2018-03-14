@@ -18,6 +18,7 @@
 //
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
 
 
 Class sarkdiscover {
@@ -91,8 +92,9 @@ private function showMain() {
 		
 /*
  *  Do network discovery malarky
- */		
-	$myip = $this->helper->ret_localip();
+ */	
+ 	$nethelper = new netHelper;	
+	$myip = $nethelper->get_localIPV4();
 	$fvar = filter_var($myip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE |  FILTER_FLAG_NO_RES_RANGE);
 	if ($fvar) {
 		echo '<h2>Cannot perform search from a public IP address - ' . $fvar . '!</h2>' . PHP_EOL;

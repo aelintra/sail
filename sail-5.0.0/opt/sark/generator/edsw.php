@@ -14,7 +14,7 @@
 // | Author: CoCoSoft                                                           |
 // +-----------------------------------------------------------------------+
 //
-include("ip_helper_functions.php"); 
+//include("ip_helper_functions.php"); 
 include("generated_file_banner.php");
 include("localvars.php");
 

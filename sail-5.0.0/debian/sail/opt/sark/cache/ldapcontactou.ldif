@@ -1,4 +1,0 @@
-dn: ou=contacts,dc=sark,dc=local
-objectClass: organizationalUnit
-objectClass: top
-ou: contacts

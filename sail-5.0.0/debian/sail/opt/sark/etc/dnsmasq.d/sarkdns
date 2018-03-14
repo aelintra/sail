@@ -1,2 +1,0 @@
-resolv-file=/etc/resolv.dnsmasq
-address=/nodomain.local/127.0.0.1

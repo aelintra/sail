@@ -16,11 +16,21 @@
 //
    $fh = fopen("/etc/asterisk/features.conf", 'w') or die('Could not open file!');
 // write the Master file
-   include("generated_file_banner.php");
-   fwrite($fh, $OUT. " \n" .
-   	"#include sark_features_general.conf \n" .
-   	"#include sark_features_featuremap.conf  \n" .
-   	"#include sark_features_applicationmap.conf  \n")
+   include("generated_file_banner.php");  
+
+   $rlse = file_get_contents("/etc/debian_version");
+   
+// Ast 13 does parking differently	
+   if(preg_match( '/^9/', $rlse)) {
+   		$OUT .= "[general] \n\n\n";
+   }
+   else {
+       	$OUT .= "#include sark_features_general.conf  \n";
+   } 
+   $OUT .= "#include sark_features_featuremap.conf  \n";
+   $OUT .= 	"#include sark_features_applicationmap.conf  \n";
+   fwrite($fh, $OUT. " \n")
    	or die('Could not write to file');
+   	
    fclose($fh);
 ?>

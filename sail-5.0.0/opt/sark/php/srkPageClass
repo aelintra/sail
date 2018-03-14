@@ -788,7 +788,10 @@ public function printSysNotes ($wallboard=false) {
 #
 #   prints sysinfo Box
 #
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
+
 	$helper = new helper;
+	$netHelper = new netHelper;
 	$dbh = DB::getInstance();
 	
 	$extcount = $dbh->query('select count(*) from ipphone')->fetchColumn();
@@ -798,11 +801,11 @@ public function printSysNotes ($wallboard=false) {
 
 	$distro=array();
 	$helper->qDistro($distro);
-    $localip = $helper->ret_localip ();
+    $localip = $netHelper->get_localIPV4();
 	$updays=false;
 	$commip=NULL;
 	$virtualip=NULL;
-	$masteroclo = `/usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
+	$masteroclo = `sudo /usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
 	$masteroclo = preg_replace( ' /^.*:\s/ ','',$masteroclo);
 	if (preg_match('/not\sfound/', $masteroclo)) {
 		$masteroclo = 'AUTO';
@@ -821,11 +824,19 @@ public function printSysNotes ($wallboard=false) {
     if (preg_match( ' /up\s(\d+\sdays)/ ', $uptime,$matches)) {
 		$updays = $matches[1];
 	}
+	
+	$arch = `uname -m`;
 	$disk = array();
-    $disk = `/bin/df -h`;
+	
+	if (preg_match( ' /^arm/ ', $arch)) {
+	    $disk = `/bin/df -h`;
+	}
+	else {
+		$disk = `/bin/df -h /dev/sda1`;
+	}
     $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
     $diskusage = $matches[1];
-    $systemMedia = 'disk';
+
 	if (preg_match( '/Mem:\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})/',$free,$matches )) {
 			$totmem = $matches[1];
 			$usedmem = $matches[2];
@@ -833,7 +844,8 @@ public function printSysNotes ($wallboard=false) {
 			$sharedmem = $matches[4];
 			$buffers = $matches[5];
     } 
-    $mac = strtoupper(`ip link show eth0 | awk '/ether/ {print $2}'`);  
+    $macstr = "ip link show " . $netHelper->get_interfaceName() . " | awk '/ether/ {print $2}'";
+    $mac = strtoupper(`$macstr`);
     	
     if ( $helper->check_pid() ) {
         $runstate = "RUNNING";
@@ -871,7 +883,7 @@ public function printSysNotes ($wallboard=false) {
 	}
 //	echo "Distro: <strong>" . $distro['name'] . "</strong><br/>";
 	if ( $helper->check_pid() ) {  
-		$astrelease = `/usr/sbin/asterisk -rx 'core show version'`;
+		$astrelease = `sudo /usr/sbin/asterisk -rx 'core show version'`;
 		$astarray = explode(" ", $astrelease);
 		$astrelnum = explode('~', $astarray[1]);
 		echo "PBX release: <strong>" . $astrelnum[0] . "</strong><br/>";

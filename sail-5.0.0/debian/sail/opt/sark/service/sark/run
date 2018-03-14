@@ -1,4 +1,0 @@
-#!/bin/sh
-exec 2>&1
-logger Starting Asterisk
-exec nice -n 0 /usr/sbin/asterisk -f -U asterisk -G asterisk > /dev/null 2>&1

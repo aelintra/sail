@@ -18,9 +18,7 @@
 //
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkAmiHelperClass";
-//require_once $_SERVER["DOCUMENT_ROOT"] . "../php/AsteriskManager.php";
-
-require_once 'Net/IPv4.php';
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
 
 
 Class sarkextension {
@@ -453,20 +451,13 @@ private function saveNew() {
 			
 
 		if ($acl == 'YES' && $tuple['location'] == 'local') {
-			$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'");
-			$ipaddr = trim(preg_replace('/<<EOT>>$/', '', $ret));	
-			$ret = $this->helper->request_syscmd ("ifconfig eth0 | grep 'inet addr:' | cut -d: -f4 | awk '{ print $1}'");
-			$netmask = trim(preg_replace('/<<EOT>>$/', '', $ret));
-			$ip_calc = new Net_IPv4();
-			$ip_calc->ip = $ipaddr;
-			$ip_calc->netmask = $netmask;
-			$ipcalcret = $ip_calc->calculate();
-			$network = $ip_calc->network;
+			$netHelper = new nethelper;
+
 			if ( !preg_match(' /deny=/ ',$tuple['sipiaxfriend'])) {
 				$tuple['sipiaxfriend'] .= "\ndeny=0.0.0.0/0.0.0.0";
 			}
 			if ( !preg_match(' /permit=/ ',$tuple['sipiaxfriend'])) {
-				$tuple['sipiaxfriend'] .= "\npermit=" . $network. '/' . $netmask;
+				$tuple['sipiaxfriend'] .= "\npermit=" . $netHelper->get_networkIPV4() . '/' . $netHelper->get_networkCIDR();
 			}				
 		}
 
