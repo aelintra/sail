@@ -1,8 +1,0 @@
-#!/bin/sh
-
-config=/opt/sark/etc/httpd/httpd.conf
-
-[ -e $config ] || exit 1
-
-exec 2>&1
-exec chpst -P /usr/sbin/httpd -f $config -D FOREGROUND

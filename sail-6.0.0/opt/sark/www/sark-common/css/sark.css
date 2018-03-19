@@ -1,0 +1,659 @@
+* {
+	margin:0;
+}
+
+table.dataTable tr {
+/*    min-height: 2em;  */
+}
+
+
+blftable, tr, td, th {
+    padding-right: 10px; 
+    padding-left: 5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+
+table.dataTable tr.odd { background-color: #e5e5e5; }
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 10px !important;
+}
+
+/* IVR visual keys chooser table */
+#viskeystable {
+    margin: auto;
+    margin-top: 1.5em;
+}
+
+
+.icons {
+	text-align: center;
+}
+
+.nag {
+margin: auto;
+    width: 40%;
+    border: 3px solid #73AD21;
+    padding: 2px; 
+	color: red;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+}
+
+html, body {
+/*    background: #FEF1E1; */
+    color: #781351;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 0.8em; 
+    border-width: 0;
+    height: 98%; 
+}
+
+.loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('../../sark-common/loader.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+iframe {
+    width: 100%;
+	margin: auto;    
+    height: 80em;
+    display: block;
+    border-width: 0;
+}
+
+textarea {
+/*    background: #ffffff; */
+	color: #781351;    
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-width: 1px;
+}
+
+
+p {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+form {
+    display: block; 
+/*    margin-top: 4em; */ 
+}
+
+form div {
+  position:relative;
+  clear: left;
+  display: block;
+  zoom: 1;
+  margin: 0;
+  padding: 0;
+  border-style: none;
+}
+
+#sarknavForm {
+	margin-top: 0em;
+}
+
+.extform {
+	margin-top: 0em;
+}
+
+span {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+/*    font-size: 10px; */
+}
+
+#search {
+	font-size: 12px;
+	float: right;
+	border: none;
+	margin-right: .5em;
+	margin-left: .5em;
+	background-color: #999999;
+    color: #781351;
+}
+
+#searchkey {
+/*	font-size: 20px; */
+    float: right;
+/*    text-align: right; */
+    width: 15em;
+    margin-bottom: 5px;
+	
+}
+
+.titlebar {
+	height: 4em;
+/*	margin-top: 2em; */
+}
+
+#errorhash {
+	font-size: 18px;
+}
+
+.heading {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #006699;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 5em; 
+	width: 30em;
+    margin-top: .5em;
+    display: inline-block;
+}
+
+.banner {
+	margin: 0 -9999rem;
+  /* add back negative margin value */
+  	padding: 0.0rem 9999rem;
+  	background-color: #969c9c;
+}
+
+.banner img {
+	width: 1000px;
+}
+
+.chooser {
+  position: relative;
+  z-index: 1000; 
+  float:left;
+  width: 1000px;
+  border-style: none;
+  border-width: 1px;
+  margin: 0 -9999rem;
+  /* add back negative margin value */
+  	padding: 0.0rem 9999rem;
+  background-color:#969c9c; 
+}
+
+h1, .h1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #006699;
+    font-size: 18px;
+    margin-left: 5em; 
+	width: 30em;
+    margin-top: 2em;
+}
+
+h2, .h2 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #333333;
+    font-size: 14px;
+    margin-bottom: 3px;
+    margin-top: 12px;
+}
+
+h3, .h3 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #333333;
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-top: 12px;
+}
+
+label {
+   width: 19em;
+   font-size: 1em;
+   float: left;
+   text-align: right;
+/*   vertical-align: middle; */
+   margin-right: 2em;
+   margin-top: 6px;
+/*   margin-bottom: 2px; */
+   display: block;
+}
+
+label.error { 
+  float: none; color: red; padding-left: .5em; vertical-align: top; 
+}
+
+input, select {
+color: #781351;
+/*color: #555555;*/
+border-color: LightGrey;
+/*font-size: 10px;*/
+margin-top: 3px;
+padding-left: 2px;
+}
+
+input {
+background: White;
+}
+
+/* used everywhere */
+.buttons {
+  float: right; 
+  margin-right: 20px;
+  padding: 0;
+  border-style: none;
+  background-color: #ffffff; 
+  margin-top: .5em;
+}
+
+button {
+  
+  border-style: none;
+/*  background-color: #ffffff; */
+  margin-left: 0.5em;
+  padding-right: 0;
+}
+/* iFrame close button */
+#closebutton {
+/*  float: right; */
+  margin-right: 20px;
+  padding: 0;
+  border-style: none;
+  background-color: #ffffff; 
+  margin-top: .5em;
+  margin-left: 0.5em;
+  background-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+/* container for extensions iguest */
+div.guest {
+  float: left;
+  width: 100%;
+}
+
+.buttons input {
+	margin-left: 0.5em;
+	background-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+}
+
+/* fancybox buttons */
+
+#fbnewbutton {
+    width: 24px !important;
+    margin-left: 0.5em;
+}
+
+#upimg, #connect, #pdfprint {
+    width: 24px !important;
+    margin-left: 0.5em;
+}
+
+#fbcancelbutton {
+    width: 24px !important;
+    margin-left: 0.5em;
+}
+
+#inlinebutton  {
+    width: 24px !important;
+}
+
+/* end fancybox buttons */
+
+.blfbuttons {
+  margin-top: 1.5em;
+}
+
+.blfbuttons input {
+	margin-left: 0.5em;
+	background-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+}
+form div.notes {
+	float: right;
+    margin-right: 17em;
+    margin-top: 1em;
+    width: 158px;
+    height: auto;
+    padding: 5px;
+    border: 1px solid #666666;
+/*    background-color: #ffffff; */
+    color: #666666;
+}
+
+form div.extnotes {
+	float: right;
+/*	font-size: 12px; */
+    margin-right: 1em;
+    margin-top: 1em;
+    width: 180px;
+/*    height: auto; */
+    padding: 5px;
+/*    border: 1px solid #666666; */
+/*    background-color: #ffffff; */
+/*    color: #666666; */
+}
+
+/* used by password */
+form div.pswd {
+  float: right;
+  width: 210px;
+  height: auto;
+  margin: 0 100px 10px 10px;
+  padding: 5px;
+/*  border: 1px solid #696969; */
+/*  background-color: #ffffff; */
+  color: #696969;
+}
+
+div.sitediv {
+	position: relative;
+    margin: 0 auto -4em;
+    width: 1000px;
+    min-height: 100%;
+    height: auto;
+    height: 100%;
+    border:none;
+}
+.footer .push {
+	float:right;
+	height: 4em;
+    margin-right: 7em;
+    width: 1000px;
+}
+
+.copyright {
+	float: right;
+	color: #cccccc;
+	font-size:x-small;
+	margin-right: 7em;
+}
+	
+
+/* set blue color on ajax updateable cells */
+.bluetags {
+  color: #006699;
+ 
+}
+
+/* vmail checkboxes in extensions */
+
+#vdelete,#vreset {
+	margin-top: .7em;
+}
+
+/* used by extensions table */
+div.datadivmax {
+/*  margin-top: 10px; */ 
+/*  width: 95%; */
+
+}
+
+/* used by most main tables */
+div.datadivwide {
+  width: 90%;
+  margin: auto;
+}
+
+.messagebox {
+	margin: auto;
+	width: 100%;
+	height: 500px;
+}
+
+.message {
+	padding-top: 5em;
+    font-size: 4em;
+    color: red;
+}
+	
+	
+/* used for the player buttons  */
+.notice {
+text-align: center;
+    font-size: 1.5em;
+    margin: auto;
+    width: 60%;
+    min-height: 4em
+}
+
+.noticeAction {
+	width: 60%;
+    margin: auto;
+/*
+    border: solid;
+    border-color: lightgray;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-width: 1px;
+*/
+}
+
+.noticeAction td img {
+    height: 24px !important;
+}
+
+
+/* used by narrow main tables (device, backup, queues) */
+div.datadivnarrow {
+  width: 65%;
+  margin: auto;
+}
+
+/* used by narrow main tables (device, backup, queues) */
+div.datadivtiny {
+  font-size: 1.2em;
+  width: 40%;
+  margin: auto;
+}
+
+/* used by sarkedit (only one column in the table) */
+/* used by sarkuser */
+div.datadivedit {
+  margin: auto;
+  width: 90%;
+  height: 400px;
+  font-size: 1.5em;
+}
+
+div.login {
+  margin: auto;
+  width: 90%;
+  font-size: 3em;
+}
+
+.mytabs .ui-tabs-nav li { font-size: 0.8em; }
+
+/* used by tabbed edit panels */
+div.datadivtabedit {
+  margin: auto;
+  margin-top: 3em; 
+  font-size: 1.2em;
+  width: 80%;
+  height: 420px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  
+}
+
+/* used by Globals */
+/* used by sarkpassword */
+div.globaltabedit {  
+   margin-left: 15em;
+   font-size: 1.2em;
+   display: inline-block;
+   width: 60%;
+}
+
+div.statustabedit {  
+   margin-top: 2em;
+   margin-left: 8em;
+   width: 70%;
+}
+
+div.statusdiv {  
+   height: 500px;
+}
+table#statustable{width:100%;}
+#statustable tr td{
+	font-size: 1.6em;
+    height: 1em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#statusframe {
+	height: 650px;
+}
+
+.statusnotice {
+/* text-align: center; */
+	margin-left: 10px;
+    font-size: 1.5em;
+    min-height: 4em
+}
+
+
+/* used by Extensions */
+div.exttabedit {  
+   margin-left: 15em;
+   font-size: 1.2em;
+   height: 440px;
+   display: inline-block;
+   width: 60%;   
+}
+/* used by edit and insert panels */
+div.editinsert {
+  margin: auto;
+  height: 400px;
+  width: 90%;
+  margin-top: 3em;
+  font-size: 1.5em;
+}
+
+div.editinsert select {
+  height: 24px;
+  padding-bottom: 2px;
+  margin: 2px;
+}
+div.editinsert input {
+  height: 20px;
+  margin: 2px;
+}
+
+/* freeform databox used by queues */
+.qbox {
+  margin: auto;
+  font-size: 1em;
+  width: 90%;
+  height: 350px;
+  border-style: solid;
+  border-width: 2px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; 
+}
+
+/* freeform databox used for freeform text */
+.databox {
+  margin: auto;
+  font-size: 1.6em;
+  width: 90%;
+  height: 250px;
+  border-style: solid;
+  border-width: 2px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; 
+}
+
+/* freeform databox used by edit */
+.longdatabox {
+margin: auto;
+    margin-right: 2em;
+    font-size: 1em;
+    width: 80%;
+    height: 350px;
+    border-style: solid;
+    border-width: 2px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+}
+
+/* freeform databox used for freeform APP text */
+.appbox {
+  margin: auto;
+  width: 100%;
+  height: 390px;
+  font-size: 2em;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 5px;
+}
+
+/* fancybox touchkey IVR elements */
+.touchkeys {
+	display: none;
+}
+
+/* set height for table rows in the blftable */
+#blftable tr {
+  height: 18px;  
+}
+
+div.function {
+  float: left;
+  width: 100%;
+  margin-right: auto;
+}
+
+/* navigation bar */
+
+.myMenu {
+	margin:0;
+	padding:0;
+	font-size: 12px;
+}
+
+.myMenu li {
+	list-style:none;
+	float:left;
+/*	font:12px Arial, Helvetica, sans-serif #781351; */
+}
+
+.myMenu li a:link, .myMenu li a:visited {
+	display:block;
+	text-decoration:none;
+	background-color:#999999;
+	padding: 0.5em 2em;
+	margin:0;
+/*	border-right: 1px solid #fff; */
+	color:#781351;
+}
+
+.myMenu li a:hover {
+	background-color:#cff;	
+}
+
+/*style the sub menu*/
+.myMenu li ul {
+	position:absolute;
+	visibility:hidden;
+/*	border-top:1px solid #fff; */
+	margin:0;
+	padding:0;
+}
+
+.myMenu li ul li {
+	display:inline;
+	float:none;
+}
+
+.myMenu li ul li a:link, .myMenu li ul li a:visited {
+	background-color:#cccccc;
+	width:auto;
+}
+
+.myMenu li ul li a:hover {
+	background-color:#cff;	
+}
+
+  
+
