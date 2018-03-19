@@ -1,0 +1,19 @@
+#
+# Shorewall - Stopped Rules File
+#
+# For information about entries in this file, type "man shorewall-stoppedrules"
+#
+# The manpage is also online at
+# http://www.shorewall.net/manpages/shorewall-stoppedrules.html
+#
+# See http://shorewall.net/starting_and_stopping_shorewall.htm for additional
+# information.
+#
+###############################################################################
+#ACTION         SOURCE                  DEST            PROTO   DEST    SOURCE
+#                                                               PORT(S) PORT(S)
+#
+# Rules generated from routestopped file /etc/shorewall/routestopped by Shorewall 5.0.15.6 - Tue 27 Feb 15:17:44 GMT 2018
+#
+ACCEPT  $IF1:$LAN      $FW     -       -       -
+

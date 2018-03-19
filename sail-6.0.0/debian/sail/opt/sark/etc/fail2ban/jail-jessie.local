@@ -1,0 +1,10 @@
+[DEFAULT]
+ignoreip = 127.0.0.1 
+banaction = shorewall
+
+[asterisk-tcp]
+enabled  = true
+
+[asterisk-udp]
+enabled  = true
+

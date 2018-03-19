@@ -1,0 +1,2 @@
+INLINE(ACCEPT) net $FW tcp 5060 ; -m string --algo bm --to 100 --string "sip:$FQDN"
+INLINE(ACCEPT) net $FW udp 5060 ; -m string --algo bm --to 100 --string "sip:$FQDN"
