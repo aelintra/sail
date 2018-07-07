@@ -1,0 +1,14 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          debsetlan
+# Required-Start:    $network $remote_fs
+# Required-Stop:     $network $remote_fs
+# Default-Start:     S
+# Default-Stop:      0 6
+# Short-Description: Configure the firewall LAN variable at boot time
+# Description:       Configure the firewall LAN setting for SARK according to the rules specified in
+#                    /etc/shorewall
+### END INIT INFO
+php /opt/sark/generator/setip.php
+
+

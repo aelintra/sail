@@ -1,0 +1,2044 @@
+<?php
+// SARK page class
+// Developed by CoCo
+// Copyright (C) 2012 CoCoSoFt
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+Class page {
+
+	
+	/*** Button Array ***/
+	public $faprefix = "fas ";
+
+	/**
+	 * [$buttonName description]
+	 * Array of permissable buttons and tyheir attributes
+	 * @var array
+	 */
+	public $buttonName = array (
+				'adopt' => array(
+								'src' =>'redo.png',
+                                'alt' =>'Adopt',
+                                'title' =>'Scan the local network for phones to adopt'
+                                ),
+ 				'arrow-right' => array(
+ 								'faclass' => 'arrow-right',
+								'src' =>'arrow-right.png',
+                                'alt' =>'Next',
+                                'title' =>'Next',                              
+                                ),
+				'arrow-rightd' => array(
+								'src' =>'arrow-rightd.png',
+                                'alt' =>'last',
+                                'title' =>'last'
+                                ),
+ 				'arrow-left' => array(
+ 								'faclass' => 'arrow-left',
+								'src' =>'arrow-left.png',
+                                'alt' =>'Previous',
+                                'title' =>'Previous'
+                                ),
+				'arrow-leftd' => array(
+								'src' =>'arrow-leftd.png',
+                                'alt' =>'First',
+                                'title' =>'First'
+                                ),                                                                                                                              
+ 				'back' => array (
+ 								'faclass' => 'undo-right',
+								'src' => 'back.png',
+                                'alt' => 'Back',
+                                'title' => 'Back',
+                                ),                                 
+				'cancel' => array (
+								'faclass' => 'times',
+								'src' => 'cancel.png',
+                                'alt' => 'Cancel',
+                                'title' => 'Cancel & Return'
+                                ),
+				'commit' => array (
+//								'faclass' => 'check',
+								'src' => 'commit.png',
+                                'class' => 'buttonUpdate',
+								'colour' => 'w3-text-green',
+                                'alt' => 'Commit',
+                                'title' => 'COMMIT (Generate Asterisk objects)',
+                                'onClick' => "return confirmOK('Commit - Confirm?')",
+                                ),
+				'commitClick' => array (
+								'src' => 'commitClick.png',
+                                'class' => 'buttonUpdate',
+								'colour' => 'w3-text-red',
+                                'alt' => 'Commit',
+                                'title' => 'COMMIT (Generate Asterisk objects)',
+                                'onClick' => "return confirmOK('Commit - Confirm?')",
+                                ),
+                'delblf' => array (
+//                              'faclass' => 'trash',
+                                'src' => 'delete.png',
+                                'alt' => 'Delete',
+                                'title' => 'Delete last blf',
+//                                'onClick' => "return confirmOK('Delete - Confirm?')",
+                                ),                                                                  
+				'delete' => array (
+//								'faclass' => 'trash',
+                                'class' => 'buttonCreate',  
+								'src' => 'delete.png',
+                                'alt' => 'Delete',
+                                'title' => 'Delete this Object',
+                                'onClick' => "return confirmOK('Delete - Confirm?')",
+                                ),
+                'dialbutton' => array (
+//                              'faclass' => 'trash',
+                                'type' => 'button',
+                                'alt' => 'Dial',
+                                'title' => 'Click Dialler',
+                                'onClick' => "document.getElementById('dial01').style.display='block';document.getElementById('keyboardDial').focus();",
+                                ),
+ 				'gokey' => array (
+//								'faclass' => 'camera',
+								'src' => 'screenshot-red.png',
+								'colour' => ' w3-text-green',
+                                'alt' => 'goKey',
+                                'title' => 'Jump to a key',
+                                ),                                                                                                     
+				'initialise' => array (
+								'faclass' => 'redo',
+								'src' => 'redo.png',
+                                'alt' => 'Resolve',
+                                'title' => 'Initialize & Regenerate the PCI card settings',
+                                'onClick' => "return confirmOK('Regenerate - Confirm?')",
+                                ),
+ 				'list' => array (
+ 								'faclass' => 'list',
+								'src' => 'list.png',
+                                'alt' => 'Resolve',
+                                'title' => 'Show all',
+                                ),                                
+				'minus' => array (
+								'faclass' => 'minus',
+								'src' => 'minus.png',
+                                'alt' => 'delete',
+                                'title' => 'delete',
+                                ),                                                  
+				'new' => array (
+//								'faclass' => 'plus',
+                                'class' => 'buttonCreate',
+								'src' => 'new.png',
+                                'alt' => '+Add',
+                                'title' => 'New',
+                                ), 
+                'newblf' => array (
+//                              'faclass' => 'plus',
+                                'src' => 'new.png',
+                                'alt' => '+Add',
+                                'title' => 'New',
+                                ),                 
+				'pdf' => array (
+								'faclass' => 'filepdf',
+								'src' => 'pdf.png',
+                                'alt' => 'PDF',
+                                'title' => 'PDF',
+                                ),                                   
+				'plus' => array (
+								'faclass' => 'plus',
+								'src' => 'plus.png',
+                                'alt' => 'Add BLF',
+                                'title' => 'Add BLF',
+                                ), 
+				'print' => array (
+								'faclass' => 'print',
+								'src' => 'print.png',
+                                'alt' => 'Print',
+                                'title' => 'Print',
+                                ),                                                                                           
+ 				'resolve' => array (
+ 								'faclass' => 'redo',
+								'src' => 'redo.png',
+                                'alt' => 'Restart',
+                                'title' => 'Restart the Firewall',
+                                'onClick' => "return confirmOK('Restart the Firewall - Confirm?')",
+                                ),                                
+ 				'reboot' => array (
+// 								'faclass' => 'power-off',
+								'src' => 'reboot.png',
+                                'class' => 'buttonCreate',
+								'colour' => ' w3-text-yellow',
+                                'alt' => 'Reboot',
+                                'title' => 'Reboot the server',
+                                'onClick' => "return confirmOK('Reboot - Confirm?')",
+                                ),
+                'refresh' => array (
+                                'class' => 'refresher',
+                                'alt' => 'Refresh',
+                                'title' => 'Refresh Table',
+                                'type' => 'button'
+                                ),                
+                'resetpass' => array (
+//                                'faclass' => 'redo',
+                                'src' => 'redo.png',
+                                'alt' => 'Reset PWD',
+                                'title' => 'Reset password',
+                                'onClick' => "return confirmOK('Reset Password to default - Confirm?')",
+                                ),                      
+                'restore' => array (
+//                                'faclass' => 'redo',
+                                'src' => 'redo.png',
+                                'alt' => 'Restore',
+                                'title' => 'Restore backup',
+                                'onClick' => "return confirmOK('Restore from backup - Confirm?')",
+                                ),                 
+  				'notify' => array (
+//  								'faclass' => 'redo',
+//								'src' => 'redo.png',
+                                'alt' => 'Restart',
+                                'class' => 'buttonUpdate',
+                                'title' => 'Reboot the Endpoint',
+                                'onClick' => "return confirmOK('Reboot - Confirm?')",
+                                ),                               
+ 				'restfw' => array (
+// 								'faclass' => 'redo',
+								'src' => 'redo.png',
+                                'alt' => 'Restart Firewall',
+                                'title' => 'Restart the Firewall',
+                                'onClick' => "return confirmOK('Restart the Firewall - Confirm?')",
+                                ),
+                'return' => array (
+//                              'faclass' => 'times',
+//                                'src' => 'cancel.png',
+                                'alt' => 'Return',
+                                'title' => 'Return'
+                                ),                                                
+ 				'save' => array (
+// 								'faclass' => 'save',
+								'class' => 'buttonUpdate',
+                                'src' => 'save.png',
+                                'alt' => 'Save',
+                                'title' => 'Save',
+                                'type' => 'submit'
+                                ),
+  				'sipcapIsOff' => array (
+//  							'faclass' => 'camera',
+								'src' => 'screenshot.png',
+                                'alt' => 'Siplog Start',
+
+                                'title' => 'Turn on SIP logging',
+                                ), 
+ 				'sipcapIsOn' => array (
+//								'faclass' => 'camera',
+								'src' => 'screenshot-red.png',
+								'colour' => ' w3-text-red',
+                                'alt' => 'Siplog Stop',
+                                'title' => 'Turn off SIP logging',
+                                ), 
+                'snap' => array (
+//                                'faclass' => 'database',
+                                'src' => 'spin.png',
+                                'alt' => 'Snapshots',
+                                'title' => 'View Snapshots',
+                                'type' => 'button',
+                                'onClick' => "backsnap('snapshots')",
+                                ),                                  				
+ 				'spin' => array (
+// 								'faclass' => 'database',
+								'src' => 'spin.png',
+                                'alt' => 'Backups',
+                                'title' => 'View Backups',
+                                'type' => 'button',
+                                'onClick' => "backsnap('backups')",
+                                ), 
+ 				'start' => array (
+// 								'faclass' => 'play',
+								'src' => 'start.png',
+                                'class' => 'buttonCreate',
+								'colour' => ' w3-text-green',
+                                'alt' => 'PBX Start',
+                                'title' => 'START the PBX',
+                                'onClick' => "return confirmOK('START the PBX - Confirm?')",
+                                ), 
+                'step-right' => array(
+                                'faclass' => 'step-forward',
+                                'alt' =>'Next',
+                                'title' =>'Next',                              
+                                ),
+                'step-last' => array(
+                                'faclass' => 'forward',
+                                'alt' =>'last',
+                                'title' =>'last'
+                                ),
+                'step-left' => array(
+                                'faclass' => 'step-backward',
+                                'alt' =>'Previous',
+                                'title' =>'Previous'
+                                ),
+                'step-first' => array(
+                                'faclass' => 'backward',
+                                'alt' =>'First',
+                                'title' =>'First'
+                                ),                                                                             
+ 				'stop' => array (
+// 								'faclass' => 'stop',
+								'src' => 'stop.png',
+                                'class' => 'buttonCreate',
+								'colour' => ' w3-text-red',
+                                'alt' => 'PBX Stop',
+                                'title' => 'STOP the PBX',
+                                'onClick' => "return confirmOK('STOP the PBX - Confirm?')",
+                                ), 
+                'sync' => array (
+//                                'faclass' => 'upload',
+                                'src' => 'upload.png',
+                                'class' => 'buttonUpdate',
+                                'alt' => 'Sync',
+                                'title' => 'Push config to phone (Snom and Panasonic only)'
+                                ),                                              
+                'update' => array (
+//                                'faclass' => 'update',
+                                'src' => 'upload.png',
+                                'class' => 'buttonUpdate',
+                                'alt' => 'Update',
+                                'title' => 'Update'
+                                ),
+                'upload' => array (
+                                'faclass' => 'upload',
+                                'src' => 'upload.png',
+                                'class' => 'buttonCreate',
+                                'alt' => 'Upload',
+                                'title' => 'Upload a saved snapshot'
+                                ), 
+                'xref' => array (
+//                                'faclass' => 'upload',
+//                                'src' => 'upload.png',
+//                                'onmouseover' => 'CF-ROLLOVER.png',
+                                'alt' => 'Xref',
+                                'title' => 'Xref',
+                                'onClick="document.getElementById(\'xref\').style.display=\'block\'"',
+                                ) 
+	);
+
+/**
+ * [$booleanArray description]
+ * Array of elements which should be handled as Booleans 
+ * by the view
+ * @var array
+ */
+	private $booleanArray = array (
+				'acl' => array(
+								'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'active' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'allday' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                
+                'auth' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                 
+                'callprogress' => array(
+                                'checked' =>'ON',
+                                'unchecked' => 'OFF'
+                                ),                                                 
+				'camponqonoff' => array(
+								'checked' =>'ON',
+                                'unchecked' => 'OFF'
+                                ),
+                'celltwin'       => array(
+                                'checked' =>'ON',
+                                'unchecked' => 'OFF'
+                                ),                                				
+				'cluster' => array(
+								'checked' =>'ON',
+                                'unchecked' => 'OFF'
+                                ),	  
+				'cosstart' => array(
+								'checked' =>'ON',
+                                'unchecked' => 'OFF'
+                                ),	                                	
+ 				'cfwdanswer' => array(
+								'checked' =>'enabled',
+                                'unchecked' => 'disabled'
+                                ),
+ 				'cfwdextrnrule' => array(
+								'checked' =>'enabled',
+                                'unchecked' => 'disabled'
+                                ), 
+ 				'cfwdprogress' => array(
+								'checked' =>'enabled',
+                                'unchecked' => 'disabled'
+                                ),
+                'defaultopen'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'defaultclosed'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'edomainsend'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'fqdnprov'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresetdb'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresetbackups'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),
+                'fresetsnaps'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),   
+                'fresetusergreets'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),
+                'fresetvmail'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),
+                'fresetvrec'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresetcdrs'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),
+                'fresetlogs'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresetfirewall'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),                                                      
+                'fresetdhcp'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresethost'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresetsshport'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'fresetldap'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ), 
+                'icmp'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'ivrAct'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                                                  
+                'location'   => array(
+                                'checked' =>'remote',
+                                'unchecked' => 'local'
+                                ),
+                'listenforext' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                         
+                'lterm' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                                                                                                             
+                'moh' => array(
+                                'checked' =>'ON',
+                                'unchecked' => 'OFF'
+                                ),
+                'orideopen'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'orideclosed'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+
+ 				'playbeep'   => array(
+								'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'privileged'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'provisionwith'      => array(
+                                'checked' =>'FQDN',
+                                'unchecked' => 'IP'
+                                ),                                                 
+ 				'proxy'      => array(
+								'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'resetdb'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'resetasterisk'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'resetvmail'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),  
+                'resetusergreets'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),  
+                'resetldap'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                                                               
+                'routeable'      => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                 
+                'regthistrunk' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'stategy' => array(
+                                'checked' =>'balance',
+                                'unchecked' => 'hunt'
+                                ),                                                                                                      				
+                'striptags' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'swoclip' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'toggleDhcpElement' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                
+                'usercreate'    => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                 
+
+                'vdelete'    => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ), 
+                'voiceinstr' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                  
+                'vreset'    => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                                                                                     
+ 				'ztp' => array(
+								'checked' =>'enabled',
+                                'unchecked' => 'disabled'
+                                ),
+                'PhoneKey0' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey1' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey2' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey3' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey4' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey5' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey6' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),   
+                'PhoneKey7' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey8' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey9' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey10' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey*' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'PhoneKey#' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+
+    );
+  
+    
+	
+	/*** vars ***/
+
+	protected $buttonpath = '/sark-common/buttons/';
+	protected $iconpath = '/sark-common/icons/';
+	protected $jspath = "javascript:this.src='/sark-common/buttons/commitClick.png/";
+	public $inputClass = 'class="w3-input w3-border w3-round"';
+
+
+	public $msg;
+	public $pagename;
+	public $override;
+	public $overrideClick;
+	public $selected;
+	public $opSys;
+	public $tableClass = 'w3-table w3-card-4 w3-text-gray w3-striped w3-hoverable';
+    public $tableHeaderClass = 'w3-red w3-text-white';
+    public $bgColorClass = 'w3-light-gray';
+	
+	
+
+	function __construct(){			
+	   $client = $this->clientPlatform($_SERVER['HTTP_USER_AGENT']);
+	   $this->opSys = $client['os'];
+        $i = 1;
+	}
+
+    public function prg($message) {
+        header("Location: " . $_SERVER['REQUEST_URI'] . '?msg=' . $message);
+    }
+
+	/**
+	 * [Heading description]
+	 * generate a heading
+	 * @param boolean $uname [description] hostname
+	 */
+	public function Heading ($head,$msg) {
+
+	    echo '<h3 class="w3-container w3-padding w3-text-blue-grey ' . $this->bgColorClass . '" style="margin:0;">' . $head , ' ';
+        echo '</h3>' . PHP_EOL;
+        if (isset($msg)) {
+            $this->showMsg($msg);
+        }
+	}
+	
+	public function searchBox() {
+		echo '<input type="text" name="searchkey" placeholder="GoTo Key, e.g. 401" id="searchkey" />' . PHP_EOL; 	
+	}
+
+    public function subjectBar ($subject) {
+       echo '<h3 class="w3-bar w3-padding w3-margin-bottom ' . $this->tableHeaderClass . '">' . $subject . '</h3>';
+    }
+			
+	public function commitButton () {
+	/*** handle special case of commit buttons ***/
+		$dbh = DB::getInstance();		
+		$res = $dbh->query("SELECT MYCOMMIT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+		$commit = $res['MYCOMMIT'];		
+		if ($commit == "YES") {
+				$this->override="commit";
+				$this->Button("commitClick");
+		}
+		else {
+				$this->Button("commit");
+		}   
+    }
+/**
+ * [showErrors description]
+ * Build html box for error display
+ * @param  [array] $errorHash [error messages]
+ * @return [null]            
+ */
+    public function showErrors($errorHash) {
+		echo '<div class="emessage" id="id01" >';
+		echo '<div class="w3-card w3-margin w3-padding w3-round-large w3-red"';
+    	echo '<span onclick="document.getElementById(\'id01\').style.display=\'none\'" class="w3-button w3-tiny w3-display-topleft">&times&nbsp;close</span>';
+    	foreach ($errorHash as $msg) {
+    		echo '<p>' . $msg . '</p>';
+    	}
+		echo '</div>';
+		echo '</div>';
+	}
+
+/**
+ * [showMsg description]
+ * Build html box for error display
+ * @param  [array] $errorHash [error messages]
+ * @return [null]            
+ */
+    public function showMsg($msg) {
+        echo '<div class="message" id="id02" >';
+        echo '<div class="w3-light-grey w3-padding">';
+        echo '<div class="w3-card w3-pale-yellow w3-padding" >';
+        echo '<span onclick="document.getElementById(\'id02\').style.display=\'none\'" class="w3-button w3-tiny w3-right">X Close</span>';
+        echo '<p>' . $msg . '</p>';
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+    }    
+
+    public function internalEditBoxStart($bg=null) {
+        echo '<div class="w3-card-2 w3-padding w3-margin-bottom w3-border ' . $bg . '">';
+    }
+
+/**
+ * [xlateBooleans translates boolean page values to their DB values, which aren't always the same.
+ * @param  Array of boolean names
+ * @return NULL  
+ */
+    public function xlateBooleans($pageBooleanArray) {
+    	foreach ($pageBooleanArray as $key) {
+    		if (isset($_POST[$key])) {
+//debug    			echo "Found key " . $key . "<br/>";
+    			$_POST[$key] = $this->booleanArray[$key]['checked'];
+    		}
+    		else {
+//debug    			echo "Unsetting key " . $key . "<br/>";
+    			$_POST[$key] = $this->booleanArray[$key]['unchecked'];
+    		}
+    	}
+	}
+
+/**
+ * Sets up CSS grid
+ * @return NULL
+ */
+    public function responsiveSetup($cols=1) {
+        echo '<div class="w3-row-padding ' . $this->bgColorClass . '" style="min-height:50em;">' . PHP_EOL;
+        switch ($cols) {
+            case 1:     // one wide column
+                echo '<div class="w3-col w3-container w3-hide-small m1 l1">&nbsp;</div>' . PHP_EOL;
+                echo '<div class="w3-col w3-container m10 l10">' . PHP_EOL;
+                break;
+
+            case 2:     // One centered midsize column
+                echo '<div class="w3-col w3-container w3-hide-small m1 l2">&nbsp;</div>' . PHP_EOL;
+                echo '<div class="w3-col w3-container m10 l8">' . PHP_EOL;        
+
+            default:
+        }
+    }
+
+    public function responsiveTwoCol() {
+        echo '<div id="twocol" class="w3-row-padding ' . $this->bgColorClass . '" style="min-height:50em;">' . PHP_EOL;
+        echo '<div class="w3-col w3-container m6 l6">' . PHP_EOL;       
+    }
+
+    public function responsiveTwoColRight() {
+        echo '</div>' . PHP_EOL;
+        echo '<div class="w3-col w3-container m6 l6">' . PHP_EOL;       
+    }    
+
+    public function responsiveClose($cols=1) {
+//        echo '<br/>';
+        if ($cols > 1) {
+           echo '</div>' . PHP_EOL; 
+        }
+        echo '</div>' . PHP_EOL;      
+        echo '</div>' . PHP_EOL;
+        
+    }
+
+    public function beginResponsiveTable($tname,$tclass=null) {
+
+        echo '<div >';
+        echo '<table class="' . $this->tableClass . $tclass . '" id="' . $tname . '" style="width:100%">';
+        
+    }
+
+     public function endResponsiveTable() {
+
+        echo '</table>' . PHP_EOL;
+        echo '</div>';
+        
+    }       
+
+    public function endBar ($buttonArray) {
+
+        echo '<div class="w3-container w3-bar w3-padding ' . $this->bgColorClass . '" >' . PHP_EOL;
+        foreach ($buttonArray as $key => $id) {        
+            echo '<button class="w3-button w3-right w3-margin-left w3-blue w3-round-xxlarge ';
+            if ($key == 'update') {
+                echo 'buttonUpdate';
+            }
+            if ($key == 'save') {
+                echo 'buttonCreate';
+            }            
+            echo '"';
+            echo ' id="' . $id . '"';
+            echo ' name="' . $id . '"';
+            echo ' value="' . $key . '"';
+            echo ' type="submit">';
+            echo $key;
+            echo '</button>' . PHP_EOL; 
+        }
+        echo '</div>';
+    }
+
+/**
+ * actionBar Outputs the main navbar
+ * @param  Array button names
+ * @param  var  formname
+ * @param  boolean $showSave -> show Save button?
+ * @param  boolean $showCommit -> show Commit button?
+ * @return Null  
+ */
+  	public function actionBar ($buttonArray,$form,$showSave=true,$showCommit=true,$showUpdate=false,$pKey=false) {
+	/*** display an action bar ***/
+		$dbh = DB::getInstance();		
+		$res = $dbh->query("SELECT MYCOMMIT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+		$commit = $res['MYCOMMIT'];		
+		if ($commit == "YES") {
+				$commitColour = "w3-text-red";
+		}
+		else {
+				$commitColour = "w3-text-green";
+		} 
+		echo '<div class="w3-bar w3-black" >' . PHP_EOL;
+
+		echo '<a href="javascript:void(0)" class=" w3-button w3-black w3-text-blue  w3-left w3-hide-large" onclick="srkMenuFunction(' . "'srkMobileMenu'" . ')"><span class="fas fa-bars" style="margin-top:4px"></span></a>' . PHP_EOL;
+
+// ToDo  rationalise this		
+        if (count($buttonArray) <= 1) {
+            if (isset($buttonArray['new'])) {
+                echo '<button class="buttonCreate w3-button w3-right w3-hide-large w3-hide-medium" form="' . $form . '" type="submit" name="new" title="New">+Add</button>' . PHP_EOL;
+            }
+            elseif (isset($buttonArray['cancel'])) {
+                echo '<button class="w3-button w3-right w3-hide-large w3-hide-medium" form="' . $form . '" type="submit" name="cancel" title="Cancel">Cancel</button>' . PHP_EOL;
+            }
+            elseif (isset($buttonArray['reboot'])) {
+                echo '<button class="buttonCreate w3-button w3-right w3-hide-large w3-hide-medium" form="' . $form . '" type="submit" name="reboot" title="Reboot">Reboot</button>' . PHP_EOL;
+            } 
+            elseif (isset($buttonArray['dialbutton'])) {
+                echo '<button class="w3-button w3-right w3-hide-large w3-hide-medium" form="' . $form . '" type="button" name="dialbutton" title="ClickDial" onclick="document.getElementById(\'dial01\').style.display=\'block\'">Dial</button>' . PHP_EOL;
+            }                    
+        }
+        else {
+            echo '<a href="javascript:void(0)" class="w3-bar-item w3-button w3-black w3-text-blue w3-right w3-hide-large w3-hide-medium" onclick="srkMenuFunction(' . "'srkMobileRight'" . ')"><span class="fas fa-bars" style="margin-top:4px"></span></a>' . PHP_EOL;
+            if (isset($buttonArray['new'])) {
+                echo '<button class="buttonCreate w3-button w3-right w3-hide-large w3-hide-medium" form="' . $form . '" type="submit" name="new" title="New">+Add</button>' . PHP_EOL;
+            }
+        }
+
+//        echo '<a href="javascript:void(0)" class="w3-button w3-left" onclick="srkMenuFunction(' . "'srkSearchKey'" . ')"><i class="fas fa-key" style="margin-top:4px"></i></a>' . PHP_EOL;
+        echo '<a href="/php/sarkreception/main.php" target="_parent" class="w3-button w3-text-light-blue w3-left"><i class="fas fa-home" style="margin-top:4px"></i></a>' . PHP_EOL;
+        echo '<a href="/php/srksessions/logout.php" target="_parent" class="w3-button w3-text-light-blue w3-hide-small w3-hide-medium">Logout</a>' . PHP_EOL;
+        
+        if ($showSave) {
+		  echo '<button class="buttonUpdate w3-button w3-text-green" form="' . $form . '" type="submit" name="save" value="save" id="save" title="Save">Save</button>' . PHP_EOL;
+        }
+        if ($showUpdate) {
+          echo '<button class="buttonUpdate w3-button w3-text-green" form="' . $form . '" type="submit" name="update" value="update" id="update" title="Update">Update</button>' . PHP_EOL;
+        }        
+        if ($showCommit) {
+		  echo '<button class="buttonUpdate w3-button ' . $commitColour . '" form="' . $form . '" type="submit" name="commit" value="commit" id="commit" title="Commit">Commit</button>' . PHP_EOL;
+	    }
+/*
+ *	Large and mediumm screens common right menu 
+ */
+		echo '<span class="w3-hide-small">' . PHP_EOL;
+		foreach ($buttonArray as $key => $aColour) {	
+			$colour = null;
+			if (isset($aColour)) {
+				$colour = $aColour;
+			}
+			elseif (isset ($this->buttonName[$key]['colour'])) {
+				$colour = $this->buttonName[$key]['colour'];
+			}		
+			echo '<button class="w3-button w3-right ' . $colour . ' ';
+
+            if (isset($this->buttonName[$key]['class'])) {
+                echo $this->buttonName[$key]['class'];
+            }
+            echo '"';
+
+			if (isset ($this->buttonName[$key]['type'])) {
+				echo ' type="' . $this->buttonName[$key]['type'] . '"';
+			}
+            else {
+                echo ' type="submit"';
+            }
+			echo ' form="' . $form . '"';
+			echo ' name="' . $key . '"';
+//			echo ' id="' . $key . '"';
+ 			echo ' title="' . $this->buttonName[$key]['title'] . '"';
+			if (isset ($this->buttonName[$key]['onClick']) ) {
+				if ( ! isset ($this->overrideClick)) { 
+					echo ' onclick="' . $this->buttonName[$key]['onClick'] . '" ';
+				}
+			}
+			if (isset($this->buttonName[$key]['faclass'])) {			
+				echo '><i class="' . $this->faprefix . ' fa-' . $this->buttonName[$key]['faclass'] . ' fa-lg"></i></button>' . PHP_EOL;
+			}
+			else {
+				echo '>' . $this->buttonName[$key]['alt'] . '</button>' . PHP_EOL;				
+			}			
+		}
+
+        echo '</span>';
+/*
+ *		Now add the drop down items
+ */
+
+		$dbh = DB::getInstance();
+		$CDR = false; 
+	
+		$arch = 'x86';
+		if (preg_match( " /armv/ ", `uname -a`)) {
+			$arch = 'arm';
+		}
+	
+		$res = $dbh->query("SELECT VCL,PKTINSPECT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	
+		$sql =  "SELECT un.pkey, up.panel_pkey, p.classname, p.displayname, p.active, pg.groupname from user un " .
+			"INNER JOIN UserPanel up on up.user_pkey = un.pkey " . 
+			"INNER JOIN panel p on up.panel_pkey = p.pkey ".
+			"INNER JOIN panelgrouppanel pgp on p.pkey = pgp.panel_pkey " .
+			"INNER JOIN panelgroup pg on pgp.panelgroup_pkey = pg.pkey " . 
+			"WHERE un.pkey='" .
+			$_SESSION['user']['pkey'] .  
+			"' AND p.active='yes' ORDER BY pgp.panelgroup_pkey,p.displayname ";			
+
+		$nogen=false;
+		$path = '/php/';
+
+		foreach ($dbh->query($sql) as $row) {			
+			if (!isset($endpoint) ) {
+//			echo '<a href="/php/sarkglobal/main.php" class="w3-bar-item w3-button w3-hide-small w3-hide-medium"><i class="fas fa-home"></i></a>' . PHP_EOL;
+				echo '<div class="w3-dropdown-hover w3-hide-small w3-hide-medium"> <!-- BEGIN MENU BLOCK -->' . PHP_EOL;
+				echo '<button class="w3-button w3-text-light-blue" style="background-color:#000;">' . $row['groupname'] . '</button>' . PHP_EOL;	
+				echo '<div class="w3-dropdown-content w3-bar-block w3-card-4"> <!-- BEGIN MENU BLOCK -->' . PHP_EOL;			
+			}	
+			else if ($endpoint != $row['groupname']) {
+				echo '</div> <!-- END OF DROPDOWNS -->' . PHP_EOL;
+				echo '</div> <!-- END OF MENU BLOCK -->' . PHP_EOL;
+				echo '<div class="w3-dropdown-hover w3-hide-small w3-hide-medium"> <!-- BEGIN MENU BLOCK -->' . PHP_EOL;
+				echo '<button class="w3-button w3-text-light-blue">' . $row['groupname'] . '</button>' . PHP_EOL;	
+				echo '<div class="w3-dropdown-content w3-bar-block w3-card-4">' . PHP_EOL;
+			}		
+			if (preg_match(" /^sarkldap/ ",$row['classname'])) {
+			exec( "ps aux | grep slapd | grep -v grep", $out, $retcode );
+				if ($retcode) {
+				$nogen=true;
+				}
+			}			
+			if (preg_match(" /^sarkpci/ ",$row['classname']) && $arch == 'arm') {
+				$nogen=true;
+			}
+			if (preg_match(" /^sarkpci/ ",$row['classname']) && $res['VCL'] == true ) {
+				$nogen=true;
+			}
+			if (preg_match(" /^sarkpci/ ",$row['classname']) ) {
+				if ( !file_exists("/etc/dahdi/system.conf")) {
+					$nogen=true;
+				}
+			}					
+			if (preg_match(" /^sarkthreat/ ",$row['classname']) && $res['PKTINSPECT'] == false ) {
+				$nogen=true;
+			}
+			if (preg_match(" /^sarkdiscover/ ",$row['classname']) && $res['VCL'] == true ) {
+				$nogen=true;
+			}
+			if (preg_match(" /^sarkmcast/ ",$row['classname']) && $res['VCL'] == true ) {
+				$nogen=true;
+			}			
+			if (!$nogen) {						
+				echo '<a class="w3-block w3-button w3-border-bottom w3-border-light-gray w3-left-align w3-white" style="width:15em;" href="' . $path . $row['classname'] . '">' . $row['displayname'] .  
+				'<i class="fas fa-chevron-right w3-text-grey w3-right"></i></a>' .  PHP_EOL;
+			}						
+				
+			$endpoint = $row['groupname'];
+			$nogen=false;	
+		}
+
+		echo '</div> <!-- END OF DROPDOWNS -->' . PHP_EOL;
+	
+		$dbh = NULL;
+
+
+		
+		echo '</div>';
+        echo '</div>' . PHP_EOL;
+        echo '</div>' . PHP_EOL;
+
+//      space filler for the TOP header
+        echo '<div style="height:6.5em">&nbsp;</div>';  
+
+        $this->smallLeftNavigation();
+        $this->smallRightNavigation($buttonArray,$form);
+//        $this->searchKeyNavigation();
+	}
+
+/**
+ * Hamburger left menu for small screens
+ * @return [null] 
+ */
+    public function smallLeftNavigation() {
+
+    $dbh = DB::getInstance();
+    $CDR = false; 
+
+    $arch = 'x86';
+    if (preg_match( " /armv/ ", `uname -a`)) {
+        $arch = 'arm';
+    }
+    
+    $res = $dbh->query("SELECT VCL,PKTINSPECT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+    
+    $sql =  "SELECT un.pkey, up.panel_pkey, p.classname, p.displayname, p.active, pg.groupname from user un " .
+            "INNER JOIN UserPanel up on up.user_pkey = un.pkey " . 
+            "INNER JOIN panel p on up.panel_pkey = p.pkey ".
+            "INNER JOIN panelgrouppanel pgp on p.pkey = pgp.panel_pkey " .
+            "INNER JOIN panelgroup pg on pgp.panelgroup_pkey = pg.pkey " . 
+            "WHERE un.pkey='" .
+            $_SESSION['user']['pkey'] .  
+            "' AND p.active='yes' ORDER BY pgp.panelgroup_pkey,p.displayname ";         
+
+
+    echo '<div id="srkMobileMenu" class="w3-border w3-round w3-margin w3-hide w3-hide-large ' . $this->bgColorClass . '" > <!-- BEGIN NAVBAR -->' . PHP_EOL;
+    $endpoint=NULL;
+    $nogen=false;
+    $path = '/php/';
+
+    echo '<a href="javascript:void(0)" class="w3-bar-item w3-margin w3-button w3-right w3-tiny" onclick="srkMenuFunction(' . "'srkMobileMenu'" . ')">X close</a>' . PHP_EOL;
+    
+    echo '<div class="w3-container w3-margin-top w3-round-xlarge">';
+    echo '<a href="/php/srksessions/logout.php" target="_parent" class="w3-block w3-button w3-border-bottom w3-border-light-gray w3-left-align w3-white">Logout<span class="fas fa-chevron-right w3-text-grey w3-right"></span></a>' .  PHP_EOL;
+    echo '</div>';
+    foreach ($dbh->query($sql) as $row) {           
+        if (!isset($endpoint) ) {
+            echo '<div> <!-- BEGIN BLOCK -->' . PHP_EOL;
+            echo '<p class="w3-center w3-block">' . $row['groupname'] . '</p>' . PHP_EOL;   
+            echo '<div class="w3-container w3-round-xlarge"> <!-- BEGIN MENU BLOCK -->' . PHP_EOL;          
+        }   
+        else if ($endpoint != $row['groupname']) {
+            echo '</div> <!-- END OF Block -->' . PHP_EOL;
+            echo '<p class="w3-center w3-block">' . $row['groupname'] . '</p>' . PHP_EOL;       
+            echo '<div id="' . $row['groupname'] . '" class="w3-container w3-round-xlarge"> <!-- BEGIN MENU BLOCK -->' . PHP_EOL;
+        }       
+        if (preg_match(" /^sarkldap/ ",$row['classname'])) {
+            exec( "ps aux | grep slapd | grep -v grep", $out, $retcode );
+            if ($retcode) {
+                $nogen=true;
+            }
+        }           
+        if (preg_match(" /^sarkpci/ ",$row['classname']) && $arch == 'arm') {
+            $nogen=true;
+        }
+        if (preg_match(" /^sarkpci/ ",$row['classname']) && $res['VCL'] == true ) {
+            $nogen=true;
+        }
+        if (preg_match(" /^sarkpci/ ",$row['classname']) ) {
+            if ( !file_exists("/etc/dahdi/system.conf")) {
+                $nogen=true;
+            }
+        }                   
+        if (preg_match(" /^sarkthreat/ ",$row['classname']) && $res['PKTINSPECT'] == false ) {
+            $nogen=true;
+        }
+        if (preg_match(" /^sarkdiscover/ ",$row['classname']) && $res['VCL'] == true ) {
+            $nogen=true;
+        }
+        if (preg_match(" /^sarkmcast/ ",$row['classname']) && $res['VCL'] == true ) {
+            $nogen=true;
+        }  
+        if (preg_match(" /^sarkshell/ ",$row['classname']) ) {
+            $nogen=true;
+        }                  
+        if (!$nogen) {                      
+            echo '<a class="w3-block w3-button w3-border-bottom w3-border-light-gray w3-left-align w3-white" href="' . $path . $row['classname'] . '">' . $row['displayname'] .  
+            '<span class="fas fa-chevron-right w3-text-grey w3-right"></span></a>' .  PHP_EOL;
+        }                       
+                
+        $endpoint = $row['groupname'];
+        $nogen=false;   
+    }
+    echo '</div> <!-- END OF DROPDOWNS -->' . PHP_EOL;
+    $dbh = NULL;
+
+    echo '</div> <!-- END OF MENU BLOCK -->';
+//    echo '<p class="w3-center w3-block">&nbsp;</p>' . PHP_EOL;
+    echo '</div>  <!-- END OF NAVBAR -->';
+    }
+
+	public function smallRightNavigation($buttonArray,$form) {
+
+        if (!count($buttonArray)) {
+            return;
+        }
+/*
+ * 		small screens right Hamburger detail
+ * 		
+ */
+		echo '<div id="srkMobileRight" class="w3-border w3-round w3-margin w3-hide w3-hide-large w3-hide-medium ' . $this->bgColorClass . '" >' . PHP_EOL;
+        echo '<div class="w3-container w3-round-xlarge">';
+
+        echo '<a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-tiny" onclick="srkMenuFunction(' . "'srkMobileRight'" . ')">X close</a><br/>' . PHP_EOL;
+
+ //       echo '<p class="w3-center w3-block">Actions</p>' . PHP_EOL;
+ //		echo '<a href="/php/srksessions/logout.php" target="_parent" class="w3-block w3-button w3-border-bottom w3-border-light-gray w3-right-align w3-white">Logout&nbsp;&nbsp;<i class="fas fa-chevron-right w3-text-light-grey"></i></a>';
+
+		foreach ($buttonArray as $key => $aColour) {
+
+            if ($key=='new') {
+                continue;
+            }
+
+            echo '<button class="w3-block w3-button w3-border-bottom w3-border-light-gray w3-right-align w3-white ';
+            if (isset($this->buttonName[$key]['class'])) {
+                echo $this->buttonName[$key]['class'];
+            }
+            echo '"';
+
+			if (isset ($this->buttonName[$key]['type'])) {
+				echo ' type="' . $this->buttonName[$key]['type'] . '"';
+			}
+			echo ' form="' . $form . '"';
+			echo ' name="' . $key . '"';
+			echo ' id="' . $key . '"';
+			echo ' title="' . $this->buttonName[$key]['title'] . '"';
+			if (isset ($this->buttonName[$key]['onClick']) ) {
+				if ( ! isset ($this->overrideClick)) { 
+					echo ' onclick="' . $this->buttonName[$key]['onClick'] . '" ';
+				}
+			}
+			if (isset($this->buttonName[$key]['faclass'])) {			
+				echo '><i class="' . $this->faprefix . ' fa-' . $this->buttonName[$key]['faclass'] . ' fa-lg"></i>';
+			}
+			else {
+				echo '>' . $this->buttonName[$key]['alt'];				
+			}
+            echo '&nbsp;&nbsp;<i class="fas fa-chevron-right w3-text-grey"></i>';
+            echo '</button>' . PHP_EOL;		
+		}
+        echo '<p class="w3-center w3-block">&nbsp;</p>' . PHP_EOL;
+		echo '</div>' . PHP_EOL;
+        echo '</div>' . PHP_EOL;
+	}
+	
+	public function Button ($button) {
+	/*** display a button ***/
+		echo '<input type="image" ';
+
+		if (isset($this->override)) {
+				$name = $this->override; 
+				unset($this->override);
+		}
+		else { 
+			$name = $button;
+		} 
+//		if ($button == 'cancel') {
+//			echo 'class="cancel"' . PHP_EOL;
+//		}
+		if (isset ($this->buttonName[$button]['class']) ) {
+				echo 'class="' . $this->buttonName[$button]['class'] . '" ';
+		} 	
+			
+		echo 'name="' . $name . '"';
+		echo ' id="' . $name . '"';
+		echo ' src="' . $this->buttonpath . $this-> buttonName[$button]['src'] . '"'; 
+//		echo 'onmouseover="' . $this->jspath . $this->buttonName[$button]['onmouseover'] . '\';"' . PHP_EOL; 
+
+//		echo 'onmouseout="' . $this->jspath . $this->buttonName[$button]['src'] . '\';"' . PHP_EOL;
+//		echo 'style="border-style: none; "' .  PHP_EOL;
+		if (isset ($this->buttonName[$button]['onClick']) ) {
+			if ( ! isset ($this->overrideClick)) { 
+				echo ' onclick="' . $this->buttonName[$button]['onClick'] . '" ';
+			}
+		} // don't send titles to touch devices
+		
+		if (!preg_match('/^(A|B|i)/',$this->opSys)) {
+			echo ' title="' . $this->buttonName[$button]['title'] . '"';
+		}
+		echo ' >' . PHP_EOL;		
+	}
+
+	public function displayPopupFor($name,$selected,$array) {
+		echo '<div class="w3-margin-bottom">';
+		$this->aLabelFor($name);
+		echo '</div>';    
+    	$this->selected = $selected;
+		$this->popUp($name,$array);     	
+		$this->aHelpBoxFor($name);
+	}
+
+    public function displayFile($file,$name,$readonly=false) {
+
+        $background=NULL;
+        if ($readonly) {
+            $readonly=' readonly="readonly"';
+            $background=' ' . $this->bgColorClass;
+        }
+        else {
+            $readonly=NULL;
+        }
+        echo '<p><textarea class="w3-padding w3-margin-bottom w3-small w3-card-4 longdatabox' . $background . '"';
+        echo $readonly; 
+        echo ' name="';
+        echo $name;
+        echo '" id="';
+        echo $name;
+        echo '" >' . $file . '</textarea></p>' . PHP_EOL;
+    }
+
+    public function displayXref($xref) {
+        echo '<p class="w3-panel w3-small"';
+        echo $xref;
+        echo '</p>' . PHP_EOL;
+    }
+
+	public function displayInputFor($name,$type,$val=null,$dbname=null,$placeholder=null,$readonly=null) {
+		echo '<div class="w3-margin-bottom">';
+		$this->aLabelFor($name);
+		echo '</div>';
+        $dname=$name;
+        if ($dbname) {
+            $dname=$dbname;
+        }    
+    	echo '<input ' . $this->inputClass . ' type="' . $type . '" name="' . $dname .'" id="' . $dname . '"';
+         if ($val) {
+            echo ' value="' . $val . '"';
+        }
+        if ($readonly) {
+            echo ' readonly';
+        }
+        if ($placeholder) {
+            echo ' placeholder="' . $placeholder . '"';
+        } 
+        echo '/>' . PHP_EOL;
+    	$this->aHelpBoxFor($name);
+	}
+
+	public function displayBooleanFor ($var,$val,$class=null) {
+		echo '<div class="w3-margin-bottom">';
+    	$this->aLabelFor($var);
+    	$this->aBooleanFor($var,$val,$class);
+    	echo '</div>';
+    	$this->aHelpBoxFor($var);
+	}
+
+	public function aBooleanFor ($var,$val,$class=null) {
+		/*** display a label ***/
+		$checked=false;
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$var'")->fetch(PDO::FETCH_ASSOC);
+
+		if (isset($this->booleanArray[$var])) {
+			if ($val == $this->booleanArray[$var]['checked']) {
+				$checked=true;
+			}
+		}
+		echo '<label class="switch-light switch-ios w3-right" style="width:3.5em;" onclick="">';
+        $myClass=null;
+        if ($class) {
+            $myClass=' class="' . $class . '"';
+        }
+		echo '<input type="checkbox"' . $myClass . ' name="' . $var . '" id="' . $var . '"'; 
+		if ($checked) {
+			echo ' checked';
+		}
+//		echo '><strong></strong><span><span>OFF</span><span>ON</span><a></a></span></label>';
+		echo '><strong></strong><span><span></span><span></span><a></a></span></label>';		
+	}
+		
+	public function aLabelFor ($label,$class=false) {
+		/*** display a label ***/
+		
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$label'")->fetch(PDO::FETCH_ASSOC);
+		
+		echo '<label'; 
+	
+		if (isset($row['htext'])) {
+			echo ' title="' . $row['htext'] . '"';
+		}
+		echo '>'; 
+						
+        if (isset($row['displayname'])) {
+			echo $row['displayname'];
+		}
+		else {
+			echo  $label;
+		}
+		echo '</label>'; 
+	}
+
+	public function aHelpBoxFor ($label,$class=false) {
+		/*** display a label ***/
+		
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$label'")->fetch(PDO::FETCH_ASSOC);
+		
+		echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
+		echo '<p>'; 
+		
+		if (isset($row['htext'])) {
+			echo $row['htext'];
+		}				
+		echo '</p>'; 
+		echo '</div>'; 
+	}
+
+
+
+	public function aHeaderFor ($header, $help=true,$class=null) {		
+		/*** display a column header ***/
+		
+		/* Create a div to style it */
+
+        $classColor=' class=" ' . $this->tableHeaderClass . ' ';
+
+		$dbh = DB::getInstance();
+		$row = $dbh->query("SELECT * FROM tt_help_core where pkey='$header'")->fetch(PDO::FETCH_ASSOC);
+        echo '<th';
+		if ( $help ) {				
+			if (isset($row['htext'])) {
+				echo ' title="' . $row['htext'] , '"';
+			}
+        }
+        echo $classColor;
+	    if ($class) {
+            echo $class;
+        }
+        echo '">';
+		if (isset($row['displayname'])) {      
+			echo $row['displayname'];
+		}
+		else {
+			echo $header;
+		}		
+        echo '</th>';
+        echo "\n";
+	}
+
+	public function aRadioSlideFor() {
+
+	} 
+
+	public function radioSlide($name,$val,$options) {
+	   echo '<div class="w3-margin-bottom">';
+	   $this->aLabelFor($name);
+	   echo '</div>';  
+	   echo '<div class="switch-toggle switch-ios ">';
+	   $rnd = mt_rand(1000,10000);
+	   foreach ($options as $id) {
+  		    echo '<input id="' . $id . $rnd . '" name="' . $name . '" type="radio"';
+  		    echo ' value="' . $id , '"';
+  		    if (strpos($val,$id) !== false) {
+  			   echo ' checked';
+  		    }
+  		    echo '>';
+  		    echo '<label for="' . $id . $rnd . '" onclick="">' . $id . '</label>';
+  	   }
+  	   echo '<a></a>';
+	   echo '</div>';
+	   $this->aHelpBoxFor($name);
+	}
+
+	public function popUp($name = '', $options = array()) {
+		/*** display a selection ***/
+		
+		if ($options) {
+			$html = '<select class = "w3-select w3-border w3-round w3-white" style="background:url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat right 2px center;-moz-appearance: none; -webkit-appearance: none; appearance: none; padding-left:8px;" name="'. $name . '" id="' . $name . '">';		
+			foreach ($options as $option => $value) {
+				$html = $this->genHtml($value,$html);
+			}
+			$html .= '</select>';
+		}
+		else {
+			$html = "LERROR!";
+		}
+		echo $html;
+		echo "\n";
+	}	
+
+	public function displayCluster($rel = null) {
+		$dbh = DB::getInstance();
+						
+		If ($_SESSION['user']['pkey'] == 'admin') { 
+			$res = $dbh->query("SELECT pkey from cluster");  
+			$res->setFetchMode(PDO::FETCH_COLUMN, 0);   
+			$clusters = $res->fetchAll(); 
+            $this->selected = 'default';
+			$this->popUp('cluster', $clusters); 
+		}
+		else {
+			$res = $dbh->query("SELECT cluster FROM user where pkey = '" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
+			$mycluster = $res['cluster'];
+			if ( $rel == null ) {
+				echo '<input type="text" readonly="readonly" style = "background-color: lightgrey" id="cluster" value="' . $mycluster . '"  />' . PHP_EOL;		
+			}
+			else {
+				echo '<input type="text" readonly="readonly" style = "background-color: lightgrey" id="cluster" rel="' .$rel . '" value="' . $mycluster . '"  />' . PHP_EOL;		
+			}
+		}
+	}
+	
+	public function sysSelect($name = '', $none=false, $short=false, $trunk=false ) {
+		/*** display the special "endpoint" selection ***/
+		
+		$helper = new helper;
+		$conferences = array();
+		$handle = fopen("/etc/asterisk/sark_meetme.conf", "r") or die('Could not read file!');
+// get conference room list
+		while (!feof($handle)) {		
+			$row = trim(fgets($handle));		
+			if (preg_match (" /^;/ ", $row)) {
+				continue;
+			}		
+			if (preg_match (" /^conf\s*=>\s*(\d{3,4})/ ",$row,$matches)) {
+				array_push ($conferences,$matches[1]);
+			}				
+		}
+	 
+		$html = '<select class = "w3-select w3-border w3-round w3-white keyoption" style="background:url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat right 2px center;-moz-appearance: none; -webkit-appearance: none; appearance: none; padding-left:8px;" name="'. $name . '" id="' . $name . '">' . PHP_EOL;
+		
+	
+		if ($none) {
+			$html = $this->genHtml("None",$html);
+		}
+				
+		if (!$short) {				
+			$html = $this->genHtml("Operator",$html);
+			$html = $this->genHtml("Hangup",$html);
+			
+			$ivr = $helper->getTable("ivrmenu", "SELECT pkey from ivrmenu");   
+			$html .= '<optgroup label="IVRs">' . PHP_EOL; 
+			foreach ($ivr as $ivr => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+			
+			$queue = $helper->getTable("queue", "SELECT pkey from queue");  
+			$html .= '<optgroup label="QUEUES">' . PHP_EOL; 
+			foreach ($queue as $queue => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+		}
+		
+		$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone");	 		
+		$html .= '<optgroup label="EXTENSIONS">' . PHP_EOL; 		
+		foreach ($ipphone as $ipphone => $value)  {
+			$html = $this->genHtml($value['pkey'],$html);
+			if (!$short) {	
+				$html = $this->genHtml("*".$value['pkey'],$html);
+			}
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		 
+		$speed = $helper->getTable("speed", "SELECT pkey from speed");		
+		$html .= '<optgroup label="RING GROUPS">' . PHP_EOL; 
+		foreach ($speed as $speed => $value)  {
+			$html = $this->genHtml($value['pkey'],$html);
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		
+		if (!$short) {	
+			$html .= '<optgroup label="DISA">' . PHP_EOL; 
+			$html = $this->genHtml('DISA',$html);
+			$html = $this->genHtml('CALLBACK',$html);
+			$html .= '</optgroup>' . PHP_EOL;
+		}		
+
+		if ($trunk) {
+			$trunk = $helper->getTable("lineio", "SELECT pkey,technology from lineio");		
+			$html .= '<optgroup label="TRUNKS">' . PHP_EOL; 
+			foreach ($trunk as $trunk => $value)  {
+				if ($value['technology'] != 'DiD' AND $value['technology'] != 'CLID' AND $value['technology'] != 'Class') {
+					$html = $this->genHtml($value['pkey'],$html);
+				}
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+		}
+				
+		if (!$short) {
+			$html .= '<optgroup label="GET VOICEMAIL">' . PHP_EOL; 
+			$html = $this->genHtml("Retrieve Voicemail",$html);
+			$html .= '</optgroup>' . PHP_EOL; 
+
+			$appl = $helper->getTable("appl", "SELECT pkey from appl"); 		
+			$html .= '<optgroup label="Custom Apps">' . PHP_EOL; 
+			foreach ($appl as $appl => $value)  {
+				$html = $this->genHtml($value['pkey'],$html);
+			}
+		
+			$html .= '</optgroup>' . PHP_EOL;
+			if (is_array($conferences)) {
+				$html .= '<optgroup label="CONF ROOMS">' . PHP_EOL;
+				foreach ($conferences as $value)  {
+					$html = $this->genHtml($value,$html);	
+					
+				}
+				$html .= '</optgroup>' . PHP_EOL;
+			}
+		}
+		
+			
+		$html .= '</select>';
+		
+		echo $html;
+	}
+	
+	private function genHtml($value,&$html) {
+/*
+ * generate selection html (used by popUp and sysSelect)
+ */ 		
+		$html .= '<option ';
+		if ($value == $this->selected) {
+			$html .= 'selected = "selected" ';
+		}
+		$html .= 'value="' . $value . '">' . $value . '</option>';
+		return $html;	
+	}
+	
+	public function editClick ($callback, $get) {
+	
+		echo '<td class="icons editcol"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="' . $this->iconpath . 'edit.png" alt = "Click to Edit" title = "Click to Edit"></a></td>';
+		echo "\n";
+	}
+
+	public function notifyClick ($callback, $get) {
+	
+		echo '<td class="icons"><a href="';
+		echo $callback;
+		echo $get;
+		echo '"><img src="' . $this->iconpath . 'redo.png" alt = "Reboot this endpoint" title =  "Reboot this endpoint"';
+		echo ' onclick = "return confirmOK(\'Reboot this extension - Confirm?\')"></a></td>';
+		echo "\n";
+	}
+	
+	public function notifypushClick ($callback, $get) {
+	
+		echo '<td class="icons"><a href="';
+		echo $callback;
+		echo $get;
+		echo '">><img src="' . $this->iconpath . 'upload.png" alt = "Reprovision this endpoint" title =  "Reprovision this endpoint"';
+		echo ' onclick = "return confirmOK(\'Reprovision this extension - Confirm?\')"></a></td>';
+		echo "\n";
+	}	
+	
+	public function ajaxdeleteClick ($get) {
+
+		echo '<td><a class="table-action-deletelink" href="delete.php'; 
+		echo $get;
+		echo '"><img src="' . $this->iconpath . 'delete.png" alt = "Click to Delete" title = "Click to Delete"></a></td>';
+		echo "\n";
+	}	
+	
+	public function deleteClick ($callback, $pkey) {
+	
+		echo '<td><a href="'; 
+		echo $callback;
+		echo '?delete=yes&amp;pkey=';
+		echo $pkey;
+		echo '"><img src="' . $this->iconpath . 'delete.png" alt = "Click to Delete" title = "Click to Delete"></a></td>';
+	}
+	
+	public function lockState ($lock=true) {
+		
+		$lockicon = "locked.png";		
+		if ($lock) {
+			echo '<td class="icons"><img src="' . $this->iconpath . $lockicon . ' alt = "locked"></a></td>';
+		}
+		else {
+			echo '<td class="icons">&nbsp;</td>';
+		}	
+		
+	}
+		
+	public function fancyBoxAnchor ($name, $value) {
+		echo '<td><a href="#';
+		echo $name;
+		echo '"  id="fbox">';
+//		echo '" style=" color: black; text-decoration: none;" id="';
+//		echo $name; 
+//		echo '">';
+		echo $value;
+		echo '</a></td>'; 
+	}
+	
+	public function fancyBoxText ($id, $name, $value) {
+		echo '<div style="display:none"><div id="' . $id . '">';
+		echo "\n";
+		echo '<input type="text" name="' . $name . '" value="' . $value . '" /><br/>'; 
+		echo "\n";  
+		echo '</div>';
+	}
+	
+public function msgDisplay($msg) {
+/*
+ * flash message
+ */
+	echo '<div class="messagebox"><div class="message" align="center">' . $msg . '</div></div>';
+	return;
+}
+
+public function navRowDisplay($pkey) {
+/*
+ * Display "where to next?" panel after a delete from an edit panel
+ */	
+	
+	$dbh = DB::getInstance();
+    $tab = "ipphone";
+
+
+// Get next higher key	
+	$querystring = "SELECT pkey FROM $tab WHERE pkey > ? ORDER BY pkey COLLATE NOCASE LIMIT 1";		
+	$sql = $dbh->prepare ($querystring);	
+	$sql->execute(array($pkey));
+	$res = $sql->fetch();
+	$next = $res['pkey'];
+	
+// Get next lower key	
+	$querystring = "SELECT pkey FROM $tab WHERE pkey < ? ORDER BY pkey COLLATE NOCASE DESC LIMIT 1";		
+	$sql = $dbh->prepare ($querystring);	
+	$sql->execute(array($pkey));
+	$res = $sql->fetch();
+	$prev = $res['pkey'];
+	
+// Get first key
+
+	$querystring = "SELECT pkey FROM $tab ORDER BY pkey COLLATE NOCASE LIMIT 1";			
+	$sql = $dbh->prepare ($querystring);
+	$sql->execute();
+	$res = $sql->fetch();
+	$first = $res['pkey'];
+	
+// Get last key
+	$querystring = "SELECT pkey from $tab ORDER BY pkey COLLATE NOCASE DESC LIMIT 1";	
+	$sql = $dbh->prepare ($querystring);
+	$sql->execute();
+	$res = $sql->fetch();
+	$last = $res['pkey'];	
+		
+// print it
+	$url = explode('/', $_SERVER['SCRIPT_URL']);	
+	echo '<div class="w3-right">';
+
+	if ($first < $pkey) {
+		echo '<a class="w3-button" href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $first . '" alt = "First" title = "First"><i class="fa fa-backward"></i></a>';
+	}
+/*
+	else {
+		echo '<span><i class="w3-text-light-grey fa fa-backward"></i></span>';
+	}
+*/
+	if (isset($prev)) {
+		echo '<a class="w3-button" href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $prev . '" alt = "Previous" title = "Previous"><i class="fa fa-step-backward"></i></a>';
+        echo '<input id="prevKey" type="hidden" value="' . $prev . '">';
+	}
+/*
+	else {
+		echo '<img src="/sark-common/buttons/arrow-leftlg.png" alt = "Previous" title = "Previous" />';
+	}
+*/
+	if (isset($next)) {	
+		echo '<a class="w3-button" href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $next . '" alt = "Next" title = "Next"><i class="fa fa-step-forward"></i></a>';
+        echo '<input id="nextKey" type="hidden" value="' . $next . '">';
+	}
+/*
+	else {
+		echo '<img src="/sark-common/buttons/arrow-rightlg.png" alt = "Next" title = "Next" />';
+	}
+*/	
+	if ($last > $pkey) {
+		echo '<a class="w3-button" href="/php/' . $url[2] . '/main.php?edit=yes&amp;pkey=' . $last . '" alt = "Last" title = "Last"><i class="fa fa-forward"></i></a>';
+	}
+/*
+	else {
+		echo '<span><i class="w3-text-light-grey fa fa-forward"></i></span>';
+	}
+*/    
+	echo "</div>" . PHP_EOL;
+			
+	return 'OK';		
+}
+
+public function pageSwitch($key) {
+/*
+ *  Fast, simple page switch, used by the GoTo box 
+ */ 	
+	$relation = array (
+		"ipphone" 		=> "sarkextension",
+		"speed" 		=> "sarkcallgroup",
+		"cos"			=> "sarkcos",
+		"device"		=> "sarkdevice",
+		"cluster"		=> "sarkcluster",
+		"lineio"		=> "sarkddi",
+		"route"			=> "sarkroute",
+		"meetme"		=> "sarkconference",
+		"queue"			=> "sarkqueue",
+		"ivrmenu"		=> "sarkivr",
+		"greeting"		=> "sarkgreeting",
+		"agent"			=> "sarkagent",
+		"user"			=> "sarkuser",
+		"appl"			=> "sarkapp"
+	);
+			
+	if (!$key) {
+		return "NULLKEY";
+	}
+
+    $shortKey = explode(' ',$key);
+
+    $navKey = $shortKey[0];
+
+	$dbh = DB::getInstance();
+	
+	$sql = $dbh->prepare("SELECT pkey,relation FROM master_xref where pkey = ? COLLATE NOCASE");
+	$sql->execute(array($navKey));
+	$res = $sql->fetch();
+	$dbrelation = strtolower($res['relation']);
+	
+/*	
+	foreach ($relation as $table=>$srkClass) {
+//		$res = $dbh->query("SELECT pkey FROM $table where pkey = '" . $key . "'")->fetch(PDO::FETCH_ASSOC);
+		$sql = $dbh->prepare("SELECT pkey FROM $table where pkey = ?");
+		
+*/		
+		if ($res['pkey']) {
+/*
+ * deal with lineIO
+ */
+			if (strtolower($res['relation']) == "lineio") {
+//				$res = $dbh->query("SELECT pkey,technology FROM ' . $res['relation'] . ' where pkey = '" . $key . "'")->fetch(PDO::FETCH_ASSOC);
+				$sql = $dbh->prepare("SELECT pkey,technology FROM lineio where pkey = ? COLLATE NOCASE");
+				$sql->execute(array($navKey));
+				$res = $sql->fetch();
+				if ($res['technology'] == 'DiD' || $res['technology'] == 'CLID') {
+					 printf("<script>window.parent.location.href='/php/sarkddi/main.php?edit=yes&pkey=" . $res['pkey'] . "'</script>");
+				}
+				else {
+					 printf("<script>window.parent.location.href='/php/sarktrunk/main.php?edit=yes&pkey=" . $res['pkey']  . "'</script>");
+				}
+			}
+			else {
+//				printf("<script>window.parent.location.href='/php/" . $srkClass . "/main.php?edit=yes&pkey=" . $key . "'</script>");
+				if (array_key_exists($dbrelation, $relation )) {
+					printf("<script>window.parent.location.href='/php/" . $relation[$dbrelation] . "/main.php?edit=yes&pkey=" . $res['pkey']  . "'</script>");
+					die;
+				}
+			}	
+			
+		}
+//	}
+	if (preg_match('/\.conf$/', $navKey)) {
+		if (file_exists("/etc/asterisk/" . $navKey)) {
+			printf("<script>window.parent.location.href='/php/sarkedit/main.php?edit=yes&pkey=" . $navKey . "'</script>"); 
+			die;
+		}
+	}
+// print a banner
+	$this->msgDisplay('Couldn\'t find -> ' . $navKey);	
+/*
+	echo '<div class="notice">' . $key . ' -> Not Found in database<br/> (The key must be an exact match)';
+	echo "</div>";
+	echo "</div>";
+*/			
+	return false;
+}
+	
+public function printSysNotes ($wallboard=false) {
+#
+#   prints sysinfo Box
+#
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
+
+	$helper = new helper;
+	$nethelper = new nethelper;
+	$dbh = DB::getInstance();
+	
+	$extcount = $dbh->query('select count(*) from ipphone')->fetchColumn();
+	$clusteroclo = $dbh->query("SELECT oclo FROM cluster where pkey = 'default'")->fetchColumn();  
+	$global = $dbh->query("SELECT EXTLIM,CLUSTER FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+    echo '<div  class="extnotes">' . PHP_EOL;
+
+	$distro=array();
+	$helper->qDistro($distro);
+    $localip = $nethelper->get_localIPV4();
+    $ipv6lla = $nethelper->get_IPV6LLA();
+    $ipv6gua = $nethelper->get_IPV6GUA();
+	$updays=false;
+	$commip=NULL;
+	$virtualip=NULL;
+	$masteroclo = `sudo /usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
+	$masteroclo = preg_replace( ' /^.*:\s/ ','',$masteroclo);
+	if (preg_match('/not\sfound/', $masteroclo)) {
+		$masteroclo = 'AUTO';
+	}
+	
+    if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+		$systemName		=  gethostname();
+	}
+	else {
+		$systemName = php_uname('n');
+	}
+
+    $free =  array();
+    $free = `/usr/bin/free`;
+    $uptime = `/usr/bin/uptime`;
+    if (preg_match( ' /up\s(\d+\sdays)/ ', $uptime,$matches)) {
+		$updays = $matches[1];
+	}
+	
+	$arch = `uname -m`;
+	$disk = array();
+	
+	if (preg_match( ' /^arm/ ', $arch)) {
+	    $disk = `/bin/df -h`;
+	}
+	else {
+		$disk = `/bin/df -h`;
+	}
+	if ($disk) {
+    	$diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
+    	$diskusage = $matches[1];
+    }
+    else {
+    	$diskusage = 'unknown';	
+    }
+
+	if (preg_match( '/Mem:\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})/',$free,$matches )) {
+			$totmem = $matches[1];
+			$usedmem = $matches[2];
+			$freemem = $matches[3];
+			$sharedmem = $matches[4];
+			$buffers = $matches[5];
+    } 
+    $macstr = "ip link show " . $nethelper->get_interfaceName() . " | awk '/ether/ {print $2}'";
+    $mac = strtoupper(`$macstr`);
+    	
+    if ( $helper->check_pid() ) {
+        $runstate = "RUNNING";
+    }
+    else {
+        $runstate = "STOPPED";
+    }
+    if ( file_exists ("/etc/corosync/corosync.conf")) { 
+		if  (`/bin/ps -e | /bin/grep corosync | /bin/grep -v grep`) {
+        	$harunstate = "RUNNING";
+        	$work = `/sbin/ip addr show eth0 | grep secondary`;    
+			if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
+				$virtualip = $matches[1]; 	 		
+			}
+			$work = `/sbin/ip addr show eth1 | grep inet`;
+			if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
+				$commip = $matches[1]; 	 		
+			}			
+    	}
+		else {
+        	$harunstate = "STOPPED";
+    	}
+    }
+	
+    echo '<h3>System Info</h3>';
+//    $sno = $this->rets();
+    
+    $rlse=''; 
+    if ( $distro['rhel']  ) {	
+		$rlse = `/bin/rpm -q sail`;
+	}
+	else {
+		$rlse = `dpkg-query -W -f '\${version}\n' sail`;
+	}
+//	echo "Distro: <strong>" . $distro['name'] . "</strong><br/>";
+	if ( $helper->check_pid() ) {  
+		$astrelease = `sudo /usr/sbin/asterisk -rx 'core show version'`;
+		$astarray = explode(" ", $astrelease);
+		$astrelnum = explode('~', $astarray[1]);
+		echo "PBX release: <strong>" . $astrelnum[0] . "</strong><br/>";
+	}	
+    echo "SAIL Release: <strong>$rlse</strong><br/>";
+
+    if ( $distro['debian'] ) {
+		$rlse = `dpkg-query -W -f '\${version}\n' sailhpe`;
+		echo "HPE Release: <strong>$rlse</strong><br/>";
+	}
+	if ($global['EXTLIM']) {
+		echo "Endpoints licenced: <strong>" .$global['EXTLIM'] . "</strong><br/>";
+	}
+	echo "Endpoints defined: <strong>$extcount</strong><br/>";
+	echo "Serial Num: <strong>" . $helper->rets() . "</strong><br/>";
+	echo "MAC: <strong>$mac</strong><br/>";
+		    
+    preg_match ( '/^(\w*)\b/', $_SERVER['SERVER_SOFTWARE'], $matches);
+    $server = $matches[1];        
+//    echo "Web Server: <strong>$server</strong><br/>";
+    
+    echo '<h4>Network</h4>';
+    echo "hostname: <strong>$systemName</strong><br/>";
+    $ipdig = $nethelper->get_externip();
+    if ( $ipdig ) {
+		echo "Public IP: <strong>$ipdig</strong><br/>";
+	}
+	else {
+		echo "Public IP: <strong>NO INTERNET</strong><br/>";
+	}
+	if ( $localip ) {
+		echo "Local IP: <strong>$localip</strong><br/>";
+	}
+//	if ( $ipv6gua ) {
+//		echo "IPV6: <strong>$ipv6gua</strong><br/>";
+//	}
+    
+    if ( $virtualip ) {
+        echo "Virtual IP: <strong>$virtualip</strong><br/>";
+	}
+	if ( $commip ) {
+		echo "Comms IP: <strong>$commip</strong><br/>";
+	}
+//    print "Netmask: <strong>$snmask</strong><br/>";
+
+	if (file_exists("/opt/sark/cache/speedtest")) {
+		$downlink = `/bin/grep Down /opt/sark/cache/speedtest`;
+		$uplink = `/bin/grep Up /opt/sark/cache/speedtest`;
+		if ($downlink) {
+			$speed = explode(':',$downlink); 
+			echo 'Inet Downlink: <strong>' . $speed [1] . '</strong><br/>';
+		}
+		if ($uplink) {
+			$speed = explode(':',$uplink); 
+			echo 'Inet Uplink: <strong>' . $speed [1] . '</strong><br/>';
+		} 
+	}
+
+	if (!$wallboard) {
+    	echo '<h4>Resource</h4>';    
+    	echo "Disk Usage: <strong>$diskusage</strong><br/>";
+    	echo "RAM Size: <strong>$totmem</strong><br/>";
+    	echo "RAM Free: <strong>$freemem</strong><br/>";	
+    	echo '<h4>Status</h4>';
+    	echo "PBX: <strong>$runstate</strong><br/>";
+   	 	echo "Master Timer: <strong>$masteroclo</strong><br/>";
+    	if ($global['CLUSTER'] == 'OFF') {
+			echo "Timer State: <strong>$clusteroclo</strong><br/>";
+   	 	}
+    	echo "SysTime: <strong>" . `date '+%H:%M:%S'` . "</strong><br/>" . PHP_EOL;
+    	if ($updays) {
+    		echo "System Uptime: <strong>$updays</strong><br/>";
+    	}
+    }
+    echo '<h4>Client</h4>';
+	$client = $this->clientPlatform($_SERVER['HTTP_USER_AGENT']);
+	print "Client IP: <strong>" . $_SERVER['REMOTE_ADDR'] ."</strong><br/>";
+	print "Platform: <strong>" . $this->opSys . "</strong><br/>";
+	print "Browser: <strong>" . $client['browser'] . "</strong><br/>";
+    echo '</span></div>' . PHP_EOL;
+}
+
+public function clientPlatform($user_agent) {
+	
+    $platform_array =   array(
+							'browser' => 'unknown',
+							'os' => 'unknown'
+							);								
+
+    $os_array       =   array(
+                            '/windows nt 10/i'     =>  'Windows 10',
+                            '/windows nt 6.3/i'     =>  'Windows 8.1',
+                            '/windows nt 6.2/i'     =>  'Windows 8',
+                            '/windows nt 6.1/i'     =>  'Windows 7',
+                            '/windows nt 6.0/i'     =>  'Windows Vista',
+                            '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+                            '/windows nt 5.1/i'     =>  'Windows XP',
+                            '/windows xp/i'         =>  'Windows XP',
+                            '/windows nt 5.0/i'     =>  'Windows 2000',
+                            '/windows me/i'         =>  'Windows ME',
+                            '/win98/i'              =>  'Windows 98',
+                            '/win95/i'              =>  'Windows 95',
+                            '/win16/i'              =>  'Windows 3.11',
+                            '/macintosh|mac os x/i' =>  'Mac OS X',
+                            '/mac_powerpc/i'        =>  'Mac OS 9',
+                            '/linux/i'              =>  'Linux',
+                            '/ubuntu/i'             =>  'Ubuntu',
+                            '/iphone/i'             =>  'iPhone',
+                            '/ipod/i'               =>  'iPod',
+                            '/ipad/i'               =>  'iPad',
+                            '/android/i'            =>  'Android',
+                            '/blackberry/i'         =>  'BlackBerry',
+                            '/webos/i'              =>  'Mobile'
+                        );
+
+    foreach ($os_array as $regex => $value) { 
+
+        if (preg_match($regex, $user_agent)) {
+            $platform_array['os']    =   $value;
+        }
+
+    }
+/*
+Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
+*/   
+     $browser_array  =   array(
+                            '/msie/i'       =>  'Internet Explorer',
+                            '/Trident/i'    =>  'Internet Explorer',
+                            '/Edge/i'     	=>  'Internet Explorer',
+                            '/firefox/i'    =>  'Firefox',
+                            '/chrome/i'     =>  'Chrome',
+                            '/safari/i'     =>  'Safari',                            
+                            '/opera/i'      =>  'Opera',
+                            '/netscape/i'   =>  'Netscape',
+                            '/maxthon/i'    =>  'Maxthon',
+                            '/konqueror/i'  =>  'Konqueror',
+                            '/mobile/i'     =>  'Handheld Browser'
+                        );
+
+    foreach ($browser_array as $regex => $value) { 
+        if (preg_match($regex, $user_agent)) {
+            $platform_array['browser']    =   $value;
+            break;
+        }
+    }
+    return ($platform_array);
+	
+ } 	
+	
+}
+?>

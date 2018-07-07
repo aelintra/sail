@@ -1,0 +1,5 @@
+BEGIN TRANSACTION;
+
+DELETE FROM userpanel WHERE User_pkey='admin' AND Panel_pkey='300';
+
+COMMIT;

@@ -1,0 +1,2 @@
+# accept all TCP handshakes from SIP
+INLINE(ACCEPT) net $FW tcp 5060 ; --tcp-flags SYN,ACK,FIN,RST SYN
