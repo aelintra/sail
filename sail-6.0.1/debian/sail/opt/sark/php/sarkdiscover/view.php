@@ -36,7 +36,6 @@ Class sarkdiscover {
 public function showForm() {
 
 	$this->myPanel = new page;
-	$this->dbh = DB::getInstance();
 	$this->helper = new helper;	
 	if ( $this->helper->check_pid() ) {	
 		$this->astrunning = true;
@@ -122,17 +121,6 @@ private function showMain() {
 	$bigTable=true;
 	$this->myPanel->responsiveSetup(2);
 	echo '<form id="sarkdiscoverForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;
-		
-/*
- *  Do network discovery malarky
- */		
-	$nethelper = new netHelper;	
-	$myip = $nethelper->get_localIPV4();
-	$fvar = filter_var($myip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE |  FILTER_FLAG_NO_RES_RANGE);
-	if ($fvar) {
-		echo '<h2>Cannot perform search from a public IP address - ' . $fvar . '!</h2>' . PHP_EOL;
-		return;
-	}
 
 /*
  * output results
@@ -153,7 +141,7 @@ private function showMain() {
 	echo '<tbody>' . PHP_EOL;
 		
 /*** table rows ****/
-
+	$this->dbh = DB::getInstance();
 	foreach ($file as $row ) {
 
 		$columns = explode(" ",$row,3);
@@ -166,12 +154,17 @@ private function showMain() {
 		if ( ! empty($short_vendor_cols[1]) ) {
 			$short_vendor = $short_vendor_cols[1];
 		}
-		if (preg_match('/(Snom|Panasonic|Yealink|Polycom|Cisco|Gigaset|Aastra|Grandstream|2N|Vtech)/i',$short_vendor_cols[2],$matches)) {
-				$short_vendor = $matches[1];
+		if (preg_match('/(Snom|Panasonic|Yealink|Polycom|Cisco|Gigaset|Aastra|Grandstream|2N|Vtech)/i',$short_vendor,$matches)) {
+			$short_vendor = $matches[1];
 		}
 		else {
-			if (preg_match('/(Snom|Panasonic|Yealink|Polycom|Cisco|Gigaset|Aastra|Grandstream|2N|Vtech)/i',$short_vendor,$matches)) {
-				$short_vendor = $matches[1];
+			if (!empty($short_vendor_cols[2])) {
+				if (preg_match('/(Snom|Panasonic|Yealink|Polycom|Cisco|Gigaset|Aastra|Grandstream|2N|Vtech)/i',$short_vendor_cols[2],$matches)) {
+					$short_vendor = $matches[1];
+				}
+				else {
+					continue;
+				}
 			}
 			else {
 				continue;
@@ -180,14 +173,16 @@ private function showMain() {
 			
 		$model = '';
 		$cleanmac = preg_replace('/:/','' ,$columns[1]);	
-		echo '<tr>' . PHP_EOL;				
-		echo '<td  >' . $columns[0] . '</td>' . PHP_EOL;			
+		echo '<tr>' . PHP_EOL;	
+		$ip = '<a href="http://' . $columns[0] . '" target="_blank">' . $columns[0] . '</a>';				
+		echo '<td class="icons">' . $ip . '</td>' . PHP_EOL;			
 		echo '<td  >' . $cleanmac . '</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small">' . $short_vendor . '</td>' . PHP_EOL;				
 		
 		$sql = $this->dbh->prepare("SELECT pkey FROM ipphone where macaddr = ? COLLATE NOCASE");
 		$sql->execute(array($cleanmac));
 		$res = $sql->fetch();
+		$sql = NULL;
 		if (isset($res['pkey'])) {
 			$target = '<a href="/php/sarkextension/main.php?edit=yes&pkey=' . $res['pkey'] . '">' . $res['pkey'] . '</a>';	
 		}

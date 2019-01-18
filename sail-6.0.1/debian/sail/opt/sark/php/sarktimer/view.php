@@ -300,7 +300,7 @@ private function showEdit() {
 }
 
 private function saveEdit() {
-print_r($_REQUEST);
+//print_r($_REQUEST);
 	$tuple = array();
 	$custom = array (
 			'sclose' => True,

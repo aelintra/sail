@@ -113,9 +113,8 @@ private function showMain() {
 
 	$this->myPanel->aHeaderFor('tenantname');
 	$this->myPanel->aHeaderFor('tenantoperator');
-	$this->myPanel->aHeaderFor('include',false); 
-    $this->myPanel->aHeaderFor('localarea');    
-    $this->myPanel->aHeaderFor('localdplan');        	
+	$this->myPanel->aHeaderFor('include',false);  
+    $this->myPanel->aHeaderFor('clusterclid');      	
 	$this->myPanel->aHeaderFor('ato');	
 	$this->myPanel->aHeaderFor('chanmax');
 	$this->myPanel->aHeaderFor('masterclose');
@@ -148,8 +147,7 @@ private function showMain() {
 */
 		echo '<td >' . $row['operator'] . '</td>' . PHP_EOL;
 		echo '<td >' . $row['include'] . '</td>' . PHP_EOL;
-		echo '<td >' . $row['localarea'] . '</td>' . PHP_EOL;
-		echo '<td >' . $row['localdplan'] . '</td>' . PHP_EOL;				
+		echo '<td >' . $row['clusterclid'] . '</td>' . PHP_EOL;				
 		echo '<td >' . $row['abstimeout'] . '</td>' . PHP_EOL;		
 		echo '<td >' . $row['chanmax'] . '</td>' . PHP_EOL;
 		echo '<td >' . $masterclose . '</td>' . PHP_EOL;
@@ -292,6 +290,7 @@ private function showEdit($pkey=false) {
 	$this->myPanel->aHelpBoxFor('clustersysop');
 
 	$this->myPanel->displayInputFor('include','text',$res['include']);
+	$this->myPanel->displayInputFor('clusterclid','text',$res['clusterclid']);
 	$this->myPanel->displayInputFor('localarea','text',$res['localarea']);
 	$this->myPanel->displayInputFor('localdplan','text',$res['localdplan']);
 	$this->myPanel->displayInputFor('abstimeout','number',$res['abstimeout']);
@@ -324,6 +323,7 @@ private function saveEdit() {
 	$this->validator = new FormValidator();
 	$this->validator->addValidation("pkey","req","Please fill in Tenant name");
     $this->validator->addValidation("localarea","num","Local Area Code must be numeric"); 
+    $this->validator->addValidation("clusterclid","num","CLID must be numeric");
     $this->validator->addValidation("localdplan","regexp=/^[_0-9XNZxnz!#\s\*\.\-\[\]]+$/","Local Dialplan must be a valid Asterisk dialplan");
     $this->validator->addValidation("abstimeout","num","Absolute Timeout must be numeric");
     $this->validator->addValidation("chanmax","num","Channels must be numeric");

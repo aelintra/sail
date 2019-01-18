@@ -54,7 +54,7 @@ function print_ipphone($pdf,$dbh,$helper,&$header,&$data,&$w,&$layout) {
 	$sip_peers = $amiHelper->get_peer_array();
 	
 	$header = array('Ext', 'User', 'Tenant', 'Device','MAC','IP Addr', 'L/R', 'RECOPTS', 'Active');
-	$w = array(20, 30, 40, 35, 25, 30, 15, 20, 10);
+	$w = array(10, 30, 40, 20, 25, 70, 15, 20, 10);
 	$data = $helper->getTable("ipphone","select pkey,desc,cluster,device,macaddr,externalip,location,devicerec,active from ipphone");
 	
 	foreach ($data as $key=>$row) {
@@ -199,8 +199,8 @@ function print_ldap($pdf,$dbh,$helper,&$header,&$data,&$w) {
 
 function print_shorewall($pdf,$dbh,$helper,&$header,&$data,&$w,&$layout) {
 
-	$header = array('Policy', 'Source', 'target', 'Proto', 'Port(s)', 'ConnRate','Comments');
-	$w = array(20,50,10,10,35,25,70);
+	$header = array('Policy', 'Source', 'Proto', 'Port(s)', 'ConnRate','Comments');
+	$w = array(20,50,10,35,25,70);
 	$file="/etc/shorewall/sark_rules";
 	$rec = file($file, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES) or die('Could not read file!');
 	foreach ($rec as $row) {
@@ -217,7 +217,9 @@ function print_shorewall($pdf,$dbh,$helper,&$header,&$data,&$w,&$layout) {
 		}
 
 		for($i=0;$i<5;$i++) {
-			array_push($nl, $cols[$i]);
+			if ($i != 2) {
+				array_push($nl, $cols[$i]);
+			}
 		}
 		if (! empty($cols[8])) {
 			array_push($nl, $cols[8]);
@@ -239,8 +241,56 @@ function print_shorewall($pdf,$dbh,$helper,&$header,&$data,&$w,&$layout) {
 	}
 
 	$layout='L';
-	$pdf->pageHeading='Firewall Rules';
+	$pdf->pageHeading='IPV4 Firewall Rules';
 	$pdf->leftMargin=40;
 	
 }
-?>
+
+function print_shorewall6($pdf,$dbh,$helper,&$header,&$data,&$w,&$layout) {
+
+	$header = array('Policy', 'Source', 'Proto', 'Port(s)', 'ConnRate','Comments');
+	$w = array(20,60,10,35,25,70);
+	$file="/etc/shorewall6/sark_rules6";
+	$rec = file($file, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES) or die('Could not read file!');
+	foreach ($rec as $row) {
+		$nl=array();
+		if (preg_match(" /^#|^\s*$/ ", $row)) {
+			continue;
+		}
+		if (preg_match(" /#/ ", $row)) {
+			$splitComments = explode("#",$row,2);
+			$cols = explode(" ",$splitComments[0]);
+		}
+		else {
+			$cols = explode(" ",$row);
+		}
+
+		for($i=0;$i<5;$i++) {
+			if ($i != 2) {
+				array_push($nl, $cols[$i]);
+			}
+		}
+		if (! empty($cols[8])) {
+			array_push($nl, $cols[8]);
+		}
+		else {
+			array_push($nl, 'Unrestricted');
+		}
+		if (!empty($splitComments[1])) {			
+			array_push($nl, trim($splitComments[1]));
+		}
+		else {
+			array_push($nl, '-- none --');
+		}
+//		print_r($nl); 
+		array_push($data,$nl);
+		unset ($nl);
+//		unset ($cols);	
+		unset ($splitComments);	
+	}
+
+	$layout='L';
+	$pdf->pageHeading='IPV6 Firewall Rules';
+	$pdf->leftMargin=40;
+	
+}

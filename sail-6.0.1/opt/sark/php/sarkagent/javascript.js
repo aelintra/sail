@@ -35,7 +35,10 @@
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"sDom": 'fti',
-		"bSort": false,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [3,7,8]
+		}],
         "drawCallback": function() {
 			$(".dataTables_scrollBody").scrollTop(scrollPosition);
 		}   

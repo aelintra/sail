@@ -1,0 +1,101 @@
+<?php
+// SARK LDAP Helper class
+// Developed by CoCo
+// Copyright (C) 2012 CoCoSoFt
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+ 
+Class nethelper {
+	
+	protected $interfaceName;
+	protected $localIPV4;
+	protected $networkCIDR;
+	protected $networkBrd;
+	protected $networkIPV4;
+	protected $netMask;
+	protected $networkGw;
+	
+
+function __construct() {
+
+// interface name
+	$this->interfaceName = trim(`ls /sys/class/net | grep -v lo | head -n1`);
+
+// localIPV4
+	$iprets = shell_exec( "ip addr show dev " . $this->interfaceName);
+	preg_match ( '/inet\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/\d{1,2}/', $iprets, $matches);
+    $this->localIPV4 = $matches[1];
+    
+ // Broadcast
+ 	preg_match ( '/brd\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/', $iprets, $matches); 
+	$this->networkBrd = $matches[1];
+	   
+// network address
+	$iprets = shell_exec( "ip route | grep " . $this->interfaceName);
+	preg_match ( '/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,2})/', $iprets, $matches);
+	$this->networkIPV4 = $matches[1];
+	
+// CIDR
+	$this->networkCIDR = $matches[2];		
+
+// gateway address
+	$iprets = shell_exec( "ip route | grep default | grep " . $this->interfaceName);
+	preg_match ( '/via\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/', $iprets, $matches);
+	$this->networkGw = $matches[1];		
+	    
+// network mask
+	$netmask = str_split(str_pad(str_pad('', $this->networkCIDR, '1'), 32, '0'), 8);
+    foreach ($netmask as &$element) $element = bindec($element);
+    $this->netMask = join('.', $netmask);
+/* 
+Old ifconfig way of doing stuff.   
+	$iprets = shell_exec( "/sbin/ifconfig " . $this->interfaceName);	
+	preg_match ( '/[M|m]ask:?\s*([\d\.]+)/', $iprets, $matches);
+    $this->netMask = $matches[1]; 
+*/    
+   
+}
+ 	
+	
+public function get_interfaceName() {
+	return $this->interfaceName;
+}
+
+public function get_localIPV4() {
+	return $this->localIPV4;
+}
+
+public function get_networkCIDR() {
+	return $this->networkCIDR;
+}
+
+public function get_networkBrd() {
+	return $this->networkBrd;
+}
+
+public function get_networkIPV4() {
+	return $this->networkIPV4;
+}
+
+public function get_networkGw() {
+	return $this->networkGw;
+}
+
+public function get_netMask() {
+	return $this->netMask;
+}
+
+}
+

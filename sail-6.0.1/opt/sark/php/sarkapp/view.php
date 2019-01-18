@@ -181,7 +181,7 @@ private function showEdit() {
 	$this->myPanel->displayInputFor('context','text',$pkey);
 	$this->myPanel->displayInputFor('description','text',$app['desc'],"desc");
 	$this->myPanel->radioSlide('span',$app['span'],array('Internal','External','Both','Neither'));		
-    $this->myPanel->displayBooleanFor('striptags',$app['striptags']);
+//    $this->myPanel->displayBooleanFor('striptags',$app['striptags']);
 
 	echo '</div>' . PHP_EOL;
 
@@ -303,7 +303,7 @@ private function showNew() {
    	$this->myPanel->displayInputFor('context','text',$pkey);
    	$this->myPanel->displayInputFor('description','text',$app['desc'],"desc");
 	$this->myPanel->radioSlide('span',$app['span'],array('Internal','External','Both','Neither'));		
-    $this->myPanel->displayBooleanFor('striptags','YES');
+//    $this->myPanel->displayBooleanFor('striptags','YES');
     $this->myPanel->subjectBar("Code");
     $this->myPanel->displayFile($app['extcode'],"extcode");
     echo '<input type="hidden" name="pkey" id="pkey" value="' . $pkey . '"  />' . PHP_EOL;

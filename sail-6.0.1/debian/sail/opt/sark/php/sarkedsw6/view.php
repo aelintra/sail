@@ -367,11 +367,11 @@ private function restartFirewall() {
 private function copyFirewallTemplates() {
 
 // check the rulesets exist 
-
+/*
   	$rc = $this->helper->request_syscmd ("ipset -N voipbl iphash");
 	$rc = $this->helper->request_syscmd ("ipset -N fqdntrust iphash");
 	$rc = $this->helper->request_syscmd ("ipset -N fqdndrop iphash");
-
+*/
 	$this->dbh = DB::getInstance();
 	$res = $this->dbh->query("SELECT EXTBLKLST,FQDN,FQDNINSPECT,FQDNTRUST,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	
@@ -391,7 +391,10 @@ private function copyFirewallTemplates() {
 	}
 	else {
 		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_inline_limit");
-	}		
+	}	
+		
+/*
+ *  Tested and working but never used 
 	
 	$file = '/opt/sark/templates/shorewall/sark_ipset_blist';
 	if (file_exists($file) && $res['EXTBLKLST'] == 'YES') {
@@ -413,7 +416,7 @@ private function copyFirewallTemplates() {
 	else {
 		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_ipset_fqdndrop");
 	}	
- 			
+*/ 			
 }
 
 

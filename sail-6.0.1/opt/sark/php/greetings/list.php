@@ -2,12 +2,9 @@
 	require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srksessions/session.php";
 	require_once ($_SERVER["DOCUMENT_ROOT"] . "../php/srkDbClass");
 	require_once ($_SERVER["DOCUMENT_ROOT"] . "../php/srkHelperClass");
-   
-    $distro = array();  
         
 	$dbh = DB::getInstance();
 	$helper = new helper;
-	$helper->qDistro($distro);
 	
 	$helper->logit( "I'm sending greetings ",3 );
 	
@@ -20,7 +17,7 @@
 		}
 	}
 	
-	$search = $distro['soundroot'] . "asterisk/sounds/" . $dir;
+	$search = "/usr/share/asterisk/sounds/" . $dir;
 	$helper->logit("I'm searching $search for greetings ",3 );
 	echo "{" . PHP_EOL;	
 	echo "'None':'None'," . PHP_EOL;

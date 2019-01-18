@@ -1,0 +1,16 @@
+#!/bin/bash          
+ CHANNEL=$1
+ CLUSTER=$2
+ CALLER=$3
+ BUILD="/var/spool/asterisk/"
+ QUEUE="/var/spool/asterisk/outgoing"
+ NOW=`date +%s` 
+# TOUCH_TMSP=`date -d "1970-01-01 $NOW sec GMT" +%Y%m%d%H%M.%S` 
+ TARGET="callfile.$NOW"
+ touch  $BUILD$TARGET
+ echo channel: $CHANNEL > $BUILD$TARGET
+ echo context: $CLUSTER-callback >> $BUILD$TARGET
+ echo extension: $CALLER >> $BUILD$TARGET
+ echo priority: 1 >> $BUILD$TARGET
+ sleep 10
+ mv $BUILD$TARGET $QUEUE

@@ -31,14 +31,13 @@ Class support {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $distro = array();
+
 
 public function showForm() {
 	
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
-	$this->helper->qDistro($distro);
 
 	
 	echo '<body>';

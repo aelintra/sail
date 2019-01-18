@@ -34,7 +34,10 @@
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"sDom": 'fti',
-		"bSort": false
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [3,4,5,7,8,9,10]
+		}],
 	});	
 
 

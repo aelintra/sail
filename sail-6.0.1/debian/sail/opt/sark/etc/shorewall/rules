@@ -12,10 +12,11 @@
 #  The rules below can be set to suit your installation.  
 #
 ?SECTION ALL
-INCLUDE sark_ipset_blist 
+## commented out includes were tested in 6.0 but never used
+#INCLUDE sark_ipset_blist 
 INCLUDE sark_inline_limit
-INCLUDE sark_ipset_fqdn
-INCLUDE sark_ipset_fqdndrop 
+#INCLUDE sark_ipset_fqdn
+#INCLUDE sark_ipset_fqdndrop 
 #?SECTION ESTABLISHED
 #?SECTION RELATED
 ?SECTION NEW

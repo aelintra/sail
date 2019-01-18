@@ -89,9 +89,11 @@ function Header() {
     $this->SetTextColor(255);
     $this->SetDrawColor(128,0,0);
     $this->SetLineWidth(.2);
-    $this->SetFont('Arial','',8);   
-    for($i=0;$i<count($this->pageHeader);$i++)
-        $this->Cell($this->colWidths[$i],7,$this->pageHeader[$i],1,0,'C',true);
+    $this->SetFont('Arial','',8);  
+    if (isset($this->pageHeader)) { 
+    	for($i=0;$i<count($this->pageHeader);$i++)
+        	$this->Cell($this->colWidths[$i],7,$this->pageHeader[$i],1,0,'C',true);
+    }
     $this->Ln();       
 }
 

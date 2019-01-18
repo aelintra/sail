@@ -36,8 +36,11 @@ Class sarknetwork {
 	protected $myBooleans = array(
 		'toggleDhcpElement',
 		'edomainsend',
+		'fqdninspect',
 		'fqdnprov',
-		'icmp'	
+		'icmp',
+		'smtpusetls',
+		'smtpusestrttls'	
 	);
 	
 public function showForm() {
@@ -47,9 +50,7 @@ public function showForm() {
 	$this->helper = new helper;
 	$this->nethelper = new netHelper;
 	
-		
-	
-	
+
 	$this->myPanel->pagename = 'Network Settings';
 	
 	if (isset($_POST['save']) || isset($_POST['endsave'])) { 
@@ -67,6 +68,11 @@ public function showForm() {
 				$this->message = "Rebooting Now, Back shortly";
 			}
 		}
+	}
+
+	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
+		$this->helper->sysCommit();
+		$this->message = "Updates Committed";	
 	}	
 				
 	$this->showMain();
@@ -81,7 +87,7 @@ private function showMain() {
 	if (isset($this->message)) {
 		$this->myPanel->msg = $this->message;
 	} 
-	$sql = $this->dbh->prepare("SELECT fqdn,fqdnprov,bindaddr,edomain,sendedomain,vcl FROM globals where pkey = ?");
+	$sql = $this->dbh->prepare("SELECT fqdn,fqdninspect,fqdnprov,bindaddr,edomain,sendedomain,vcl FROM globals where pkey = ?");
 	$sql->execute(array('global'));
 	$global = $sql->fetchObject();
 		
@@ -125,15 +131,16 @@ private function showMain() {
 	$gatewayip = $this->nethelper->get_networkGw();	
 	
 	$hostname = `cat /etc/hostname`;
-	
+
+/*	
 	$file = file("/etc/ntp.conf") or die("Could not read file ntp.conf!");	
 	$astfile = null;
 	foreach ($file as $rec) {
-		if ( preg_match (" /^server\s*(.*)$/ ",$rec,$matches)) {
-			$astfile .=  $matches[1]."\n";
+		if ( preg_match (" /^(server|pool)\s*(.*)$/ ",$rec,$matches)) {
+			$astfile .=  $matches[2]."\n";
 		}
 	}	
-	
+*/	
 	$ret = $this->helper->request_syscmd ("grep 'Port ' /etc/ssh/sshd_config");
 	$ret = preg_replace('/<<EOT>>$/', '', $ret);
 	if (preg_match (" /(\d{2,5})/ ",$ret,$matches)) {
@@ -194,7 +201,7 @@ private function showMain() {
  */
   
 	$buttonArray['reboot'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarknetworkForm",true,false);
+	$this->myPanel->actionBar($buttonArray,"sarknetworkForm");
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -264,6 +271,7 @@ private function showMain() {
     $this->myPanel->displayInputFor("fqdn",'text',$global->FQDN); 
     if (!empty($global->FQDN)) {
     	$this->myPanel->displayBooleanFor('fqdnprov',$global->FQDNPROV);
+    	$this->myPanel->displayBooleanFor('fqdninspect',$global->FQDNINSPECT);
     }
 	echo '</div>';
 
@@ -347,7 +355,7 @@ private function showMain() {
 		$this->myPanel->displayInputFor("smtpuser",'text',$smtpuser);    
 		$this->myPanel->displayInputFor("smtppwd",'text',$smtppwd); 
 		$this->myPanel->displayBooleanFor('smtpusetls',$smtpusetls);
-		$this->myPanel->displayBooleanFor('smtpusetrttls',$smtpusestrttls);  
+		$this->myPanel->displayBooleanFor('smtpusestrttls',$smtpusestrttls);  
 		echo '</div>';
 	}
 /*
@@ -363,9 +371,12 @@ private function showMain() {
 
 	echo '<input type="hidden" name="oldtz" id="oldtz" size="20"  value="' . $timezone . '"  />' . PHP_EOL; 
 
+// Removed jan 2019
+/*
 	$this->myPanel->aLabelFor('ntp-servers');
  	$this->myPanel->displayFile($astfile,"astfile"); 
 	$this->myPanel->aHelpBoxFor('ntp-servers'); 
+*/
 	echo '</div>';
 
 //	echo '<br/>' . PHP_EOL; 
@@ -447,6 +458,7 @@ private function saveEdit() {
 		$sendedomain	= strip_tags($_POST['edomainsend']);
 		$bindaddr 		= strip_tags($_POST['bindaddr']);
 		$fqdn 			= strip_tags($_POST['fqdn']);
+		$fqdninspect 	= strip_tags($_POST['fqdninspect']);
 		$fqdnprov 		= strip_tags($_POST['fqdnprov']);
 		$sshport		= strip_tags($_POST['sshport']);
 		$smtpuser		= strip_tags($_POST['smtpuser']);
@@ -454,7 +466,7 @@ private function saveEdit() {
 		$smtphost		= strip_tags($_POST['smtphost']);
 		$smtpusetls		= strip_tags($_POST['smtpusetls']);
 		$smtpusestrttls = strip_tags($_POST['smtpusestrttls']);
-		$astfile		= strip_tags($_POST['astfile']);
+//		$astfile		= strip_tags($_POST['astfile']);
 		$dns1			= strip_tags($_POST['dns1']);
 		$dns2			= strip_tags($_POST['dns2']);
 		$timez 			= strip_tags($_POST['timez']);
@@ -464,19 +476,21 @@ private function saveEdit() {
 		$tuple = array();
 		$tuple['pkey'] = "global";
 		$tuple['edomain'] = null;
-		if ( ! empty($edomain) ) {
+
+		if (filter_var($edomain, FILTER_VALIDATE_IP)) {
 			$tuple['edomain'] = $edomain;
 		}
+		$tuple['fqdnprov'] = 'NO';
+		$tuple['fqdninspect'] = 'NO';
 		if (isset($fqdn)) {		
 			$tuple['fqdn'] = $fqdn;
 			$tuple['sendedomain'] = $sendedomain;
 			if (isset($fqdnprov)) {
 				$tuple['fqdnprov'] = $fqdnprov;
 			}
-			else {
-				$tuple['fqdnprov'] = 'NO';
-			}
-			
+			if (isset($fqdninspect)) {
+				$tuple['fqdninspect'] = $fqdninspect;
+			}						
 		}
 		$ret = $this->helper->setTuple("globals",$tuple);
 		
@@ -490,8 +504,9 @@ private function saveEdit() {
 		$cur_ipaddr = $this->nethelper->get_localIPV4();
 		$cur_netmask = $this->nethelper->get_netMask();
 		$cur_gatewayip = $this->nethelper->get_networkGw();
-			
-		
+
+// Removed Jan 2019			
+/*		
 		$file = file("/etc/ntp.conf") or die("Could not read file $pkey !");	
 		$cur_astfile = null;
 		foreach ($file as $rec) {
@@ -499,7 +514,7 @@ private function saveEdit() {
 				$cur_astfile .=  $matches[1]."\n";
 			}
 		}		
-	
+*/	
 		$ret = $this->helper->request_syscmd ("grep Port /etc/ssh/sshd_config");
 		$ret = preg_replace('/<<EOT>>$/', '', $ret);
 		if (preg_match (" /(\d{2,5})/ ",$ret,$matches)) {
@@ -709,7 +724,9 @@ private function saveEdit() {
 			fclose($fh);
 			$this->helper->request_syscmd ("chmod 664 /etc/ssmtp/ssmtp.conf");
 		}				
-		
+
+// Removed Jan 2019.  
+/*		
 		$ntpservers = explode("\n", $astfile);
 		if (!empty($ntpservers)) {
 			$this->helper->request_syscmd ("sed -i '/^server/d' /etc/ntp.conf");
@@ -720,10 +737,18 @@ private function saveEdit() {
 				}
 			}
 		}
-		
+*/		
 		if ($timez !=  $oldtz ) {
-			$myret=$this->helper->request_syscmd ("echo $timez > /etc/timezone");
-			$myret=$this->helper->request_syscmd ("dpkg-reconfigure -f noninteractive tzdata");	
+			$distro = trim(`lsb release -si`);
+			$rlse = trim(`lsb_release -sr`);
+			if ($distro == 'Ubuntu' || $rlse > 9.0) {
+				$this->helper->request_syscmd('rm -rf /etc/localtime');
+				$this->helper->request_syscmd('ln -s /usr/share/zoneinfo/' . $timez . ' /etc/localtime');
+			}
+			else  {
+				$myret=$this->helper->request_syscmd ("echo $timez > /etc/timezone");
+			}
+			$this->helper->request_syscmd ("dpkg-reconfigure -f noninteractive tzdata");	
 		}
 				
 		if ($rewrite) {

@@ -28,7 +28,6 @@ Class sarkreception {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $distro = array(); 
 	protected $HA;
 
 
@@ -36,9 +35,8 @@ Class sarkreception {
 public function showForm() {
 
 	$this->myPanel = new page;
-	$this->dbh = DB::getInstance();
+//	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
-	$this->helper->qDistro($this->distro);
 			
 	$this->myPanel->pagename = 'SARK PBX';
  
@@ -66,7 +64,7 @@ private function showMain() {
 		$this->myPanel->msg = $this->message;
 	}
 	$buttonArray=array();
-  	$this->myPanel->actionBar($buttonArray,"sarkForm",false,false);
+  	$this->myPanel->actionBar($buttonArray,"sarkForm",false,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -82,17 +80,18 @@ private function showMain() {
 	if ( $_SESSION['user']['pkey'] == 'admin' ) {
 		echo '<div class="w3-container">';
 		echo '<form id="sarkForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;         
-		echo '<input class=" w3-input w3-border w3-round" type="text" name="searchkey">';
+		echo '<input class=" w3-input w3-card-4 w3-round-large" type="text" name="searchkey">';
 		echo '</form>';	
 		$this->myPanel->aHelpBoxFor('searchkey');
+		
 		echo '</div>' . PHP_EOL;
+
+		$this->myPanel->printSysNotes();
 //		echo '</div>' . PHP_EOL;
 	}
 
 	
 	echo '</div>';
-
-	
     $this->myPanel->responsiveClose();
     
 }

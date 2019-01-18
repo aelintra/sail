@@ -25,7 +25,7 @@ try {
     /*** set the error reporting attribute ***/
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $Agents = "SELECT * FROM Agent order by pkey";    
+//    $Agents = "SELECT * FROM Agent order by pkey";    
 	$Queues = "SELECT * FROM Queue order by pkey";
 
     foreach ($dbh->query($Queues) as $row) {

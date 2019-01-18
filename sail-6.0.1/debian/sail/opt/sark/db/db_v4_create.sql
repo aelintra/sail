@@ -71,6 +71,7 @@ z_updater TEXT DEFAULT 'system'
 CREATE TABLE IF NOT EXISTS Cluster (
 pkey TEXT PRIMARY KEY,
 abstimeout TEXT, 					-- absolute timeout (in seconds)
+clusterclid TEXT,					-- cluster main CLID
 callgroup TEXT,   					-- asterisk callgroup number (1-63)
 chanmax TEXT,     					-- maximum active calls
 description TEXT, 					-- freeform description
@@ -78,11 +79,11 @@ include TEXT,     					-- whitespace separated list of clusters OR, the keyword 
 localarea TEXT,   					-- local area code
 localdplan TEXT,  					-- local dialplan
 masteroclo TEXT,  					-- master day/night throw
-name TEXT,							-- V2; not used
+name TEXT,						-- V2; not used
 oclo TEXT,        					-- calculated day/night throw
 operator TEXT,    					-- tenant sysop
 pickupgroup TEXT,  					-- asterisk pickupgroup number (1-63)
-routeclassoverride TEXT,			-- Holiday scheduler route class override
+routeclassoverride TEXT,				-- Holiday scheduler route class override
 routeoverride TEXT,					-- Holiday scheduler route override
 z_created datetime,
 z_updated datetime,
@@ -340,7 +341,7 @@ MYCOMMIT TEXT,                      -- commit outstanding
 NATDEFAULT TEXT DEFAULT local, 		-- V6 NAT defaiult local/remote
 NUMGROUPS TEXT,                     -- not used in 4.x 
 ONBOARDMENU TEXT,                   -- not used in 4.x 
-OPERATOR TEXT,                      -- sysop
+OPERATOR TEXT DEFAULT 0,            -- sysop
 OPRT TEXT,                          -- not used in 4.x 
 PWDLEN TEXT,                        -- password length
 PCICARDS TEXT,                      -- not used in 4.x 
@@ -560,6 +561,7 @@ desc TEXT,
 devicerec TEXT,
 dialparamshunt TEXT,
 dialparamsring TEXT,
+divert TEXT,
 greeting TEXT,
 grouptype TEXT,
 longdesc TEXT,

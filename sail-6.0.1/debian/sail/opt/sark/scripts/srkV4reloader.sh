@@ -18,6 +18,7 @@ CUSTDATA=last_data.sql				#customer data previous release
 LASTDEVICE=last_device.sql			#device table previous release
 CUSTDEVICE=last_custdevice.sql	#customer devices previous release
 DUMPER=/generator/srkdumper.php 	#loc. of the dumper
+SIPFIX=/generator/srksipiaxfix.php 	#loc. of the V6 sipiaxfixup routine
 GENAST=/scripts/srkgenAst			#loc. of the generator
 HTTPOWNER=www-data:www-data			#default apache user/group (Debian/Ubuntu)
 
@@ -115,6 +116,10 @@ sqlite3 $DBROOT/$SARKDB 'PRAGMA journal_mode=DELETE;' >/dev/null 2>&1
 
 # save a copy of the original installed database (for factory reset)
 [ "$NEWINSTALL" = true ] && cp $DBROOT/$SARKDB $DBROOT/$CLEANDB
+
+#patch sipiaxfrend for nat and transport here using sipiaxfix
+echo Running V6 extension fixup
+php $SARKROOT$SIPFIX
 
 # run the generator
 echo Running the Generator

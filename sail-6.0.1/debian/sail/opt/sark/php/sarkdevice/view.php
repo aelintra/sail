@@ -224,13 +224,13 @@ private function saveNew() {
 	$tuple = array();
 	
 	$this->validator = new FormValidator();
-	$this->validator->addValidation("pkey","req","Please fill in device name");
+	$this->validator->addValidation("devicename","req","Please fill in device name");
 
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
 		
 		$tuple['pkey'] 			= strip_tags($_POST['devicename']);
-		$tuple['desc'] 			= strip_tags($_POST['desc']);
+		$tuple['desc'] 			= strip_tags($_POST['description']);
 		$tuple['owner'] 		= 'cust';
 		if ($_POST['copy'] != 'New') {
 			$resdevice = $this->dbh->query("SELECT sipiaxfriend,provision,technology FROM device WHERE pkey = '" . $_POST['copy'] . "'")->fetch(PDO::FETCH_ASSOC);
@@ -325,8 +325,8 @@ private function showEdit() {
 
     $this->myPanel->internalEditBoxStart();
     $this->myPanel->displayInputFor('device','text',$device['pkey'],'pkey',null,'readonly');    
-    $this->myPanel->displayInputFor('technology','text', $device['technology'],null,null,'readonly');
-	$this->myPanel->displayInputFor('description','text', $device['desc'],'desc',null,'readonly');
+    $this->myPanel->displayInputFor('devtech','text', $device['technology'],null,null,'readonly');
+	$this->myPanel->displayInputFor('description','text', $device['desc'],'desc');
 	echo '</div>' . PHP_EOL;
 
 
@@ -417,16 +417,21 @@ private function saveEdit() {
 
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
+    	$custom = array (
+						'devtech' => True
+		);
+
 /*
  * 	call the tuple builder to create a table row array 
  */  
-		$this->helper->buildTupleArray($_POST,$tuple);
+		$this->helper->buildTupleArray($_POST,$tuple,$custom);
 
 /*
  * update the SQL database
  */
  
-// remove any escaped quotes 			
+// remove any escaped quotes 
+		$tuple['technology'] 	= $_POST['devtech'];			
 		$tuple['provision'] = preg_replace ( "/\\\/", '', $tuple['provision']);
 		$tuple['provision'] = preg_replace ( "/&type/", '&amp;type', $tuple['provision']);
 		if (isset($tuple['sipiaxfriend'])) {

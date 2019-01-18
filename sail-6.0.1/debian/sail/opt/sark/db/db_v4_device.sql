@@ -20,7 +20,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,device,owner,provision,sipiaxfriend,technology) values ('Aastra VXT','Aastra Hot Desk Template','AastraVXT','system','download protocol: HTTP
 sip outbound proxy: $localip
 sip registrar ip: $localip
@@ -42,12 +45,49 @@ directory 1: seldir
 defaultuser=$desc
 secret=$password
 mailbox=$ext
-callerid="$desc"
+host=dynamic
+qualify=yes
+context=internal
 call-limit=3
+callerid="$desc" <$ext>
 canreinvite=no
 pickupgroup=1
-callgroup=1','SIP');
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,device,owner,technology,zapdevfixed) values ('AnalogFXS','Analogue FXS','AnalogFXS','system','Analogue','context=internal caller_id=01 signalling=fxo_ks');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Cisco','ciscoMP.Fkey','Cisco 7800 8800 Multiplatform Series ','system','#INCLUDE ciscoMP.Common
+<!-- Subscriber Information -->
+<Display_Name_1_>$desc</Display_Name_1_>
+<Station_Display_Name>$desc($ext)</Station_Display_Name>
+<User_ID_1_>$ext</User_ID_1_>
+<Password_1_>$password</Password_1_>
+<Auth_ID_1_>$ext</Auth_ID_1_>
+
+$fkey','type=peer
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,device,legacy,owner,provision,sipiaxfriend,technology) values ('Cisco/Linksys(SPA)','Cisco/Linksys(SPA)','Cisco/linksys(SPA)','1','system','<flat-profile>
 <Proxy_1_> $localip
 </Proxy_1_>
@@ -74,30 +114,6 @@ call-limit=3
 canreinvite=no
 pickupgroup=1
 callgroup=1','SIP');
-INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Cisco','ciscoMP.Fkey','Cisco 7800 8800 Multiplatform Series ','system','#INCLUDE ciscoMP.Common
-<!-- Subscriber Information -->
-<Display_Name_1_>$desc</Display_Name_1_>
-<Station_Display_Name>$desc($ext)</Station_Display_Name>
-<User_ID_1_>$ext</User_ID_1_>
-<Password_1_>$password</Password_1_>
-<Auth_ID_1_>$ext</Auth_ID_1_>
-
-$fkey','type=peer
-defaultuser=$desc
-secret=$password
-mailbox=$ext
-host=dynamic
-qualify=yes
-context=internal
-call-limit=3
-callerid="$desc" <$ext>
-canreinvite=no
-pickupgroup=1
-callgroup=1
-subscribecontext=extensions
-disallow=all 
-allow=alaw
-allow=ulaw','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('CiscoMP','ciscoMP.Fkey','Cisco 7800 8800 Multiplatform Series ','system','#INCLUDE ciscoMP.Common
 <!-- Subscriber Information -->
 <Display_Name_1_>$desc</Display_Name_1_>
@@ -121,7 +137,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,device,owner,provision,sipiaxfriend,technology) values ('CiscoSPA','cisco.Fkey','Cisco/Linksys(SPA)','Cisco/linksys(SPA)','system','#INCLUDE cisco.Common
 $fkey
 <User_ID_1_>$ext</User_ID_1_>
@@ -142,17 +161,30 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,device,legacy,owner,technology) values ('General IAX','General IAX definition','General IAX','1','system','IAX2');
 INSERT OR IGNORE INTO Device(pkey,desc,device,noproxy,owner,sipiaxfriend,technology) values ('General SIP','General SIP definition','General SIP','1','system','type=peer
 defaultuser=$desc
 secret=$password
 mailbox=$ext
-callerid="$desc"
+host=dynamic
+qualify=yes
+context=internal
 call-limit=3
+callerid="$desc" <$ext>
 canreinvite=no
 pickupgroup=1
-callgroup=1','SIP');
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,legacy,owner,provision,sipiaxfriend,technology) values ('Gigaset','Gigaset SIP XML ','1','system','<?xml version="1.0" encoding="ISO-8859-1"?>
 <ProviderFrame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="actc_provider.xsd">
 <Provider>
@@ -191,11 +223,18 @@ INSERT OR IGNORE INTO Device(pkey,desc,device,owner,sipiaxfriend,technology) val
 defaultuser=$desc
 secret=$password
 mailbox=$ext
-callerid="$desc"
+host=dynamic
+qualify=yes
+context=internal
 call-limit=3
+callerid="$desc" <$ext>
 canreinvite=no
 pickupgroup=1
-callgroup=1','SIP');
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,legacy,owner,technology) values ('PIKAFXS','PIKA fxs extension','1','system','Custom');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Panasonic','panasonicHDV.Fkey','Panasonic KX-HDV range','system','# Panasonic SIP Phone Standard Format File #
 # This is a simplified sample configuration file.
@@ -307,7 +346,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,legacy,owner,provision,sipiaxfriend,technology) values ('Panasonic KX','panasonic.Fkey','Panasonic KX-UT range','1','system','# Panasonic SIP Phone Standard Format File #
 # This is a simplified sample configuration file.
 ############################################################
@@ -402,7 +444,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Polycom','polycom.Fkey','Polycom','system','<?xml version="1.0" standalone="yes"?>
 <!-- $Revision: 1.14 $  $Date: 2005/07/27 18:43:30 $ -->
 <APPLICATION APP_FILE_PATH="sip.ld" CONFIG_FILES="[MACADDRESS]-polycom-locals.cfg, [MACADDRESS]-polycom-phone1.cfg" />
@@ -421,7 +466,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,device,legacy,owner,provision,sipiaxfriend,technology) values ('Polycom IP320/330','Polycom POE deskphones','Polycom IP320/330','1','system','["$mac.cfg"
 <?xml version="1.0" standalone="yes"?>
 <!-- $Revision: 1.14 $  $Date: 2005/07/27 18:43:30 $ -->
@@ -517,28 +565,6 @@ INSERT OR IGNORE INTO Device(pkey,desc,device,owner,provision,sipiaxfriend,techn
 defaultuser=$desc
 secret=$password
 mailbox=$ext
-callerid="$desc"
-call-limit=3
-canreinvite=no
-pickupgroup=1
-callgroup=1','SIP');
-INSERT OR IGNORE INTO Device(pkey,desc,device,legacy,owner,sipiaxfriend,technology) values ('SipStack','Local H/S Stack','SipStack','1','system','type=peer
-defaultuser=$desc
-secret=$password
-mailbox=$ext
-callerid="$desc"
-call-limit=3
-canreinvite=no
-pickupgroup=1
-callgroup=1','SIP');
-INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Snom','snom.Fkey','snom SIP phone','system','#INCLUDE snom.Common
-user_name1$: $ext
-user_pname1$: $ext
-user_pass1$: $password
-user_host1$: $localip','type=peer
-defaultuser=$desc
-secret=$password
-mailbox=$ext
 host=dynamic
 qualify=yes
 context=internal
@@ -550,7 +576,19 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
+INSERT OR IGNORE INTO Device(pkey,desc,device,legacy,owner,sipiaxfriend,technology) values ('SipStack','Local H/S Stack','SipStack','1','system','type=peer
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+callerid="$desc"
+call-limit=3
+canreinvite=no
+pickupgroup=1
+callgroup=1','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,blfkeys,desc,device,legacy,owner,provision,sipiaxfriend,technology) values ('Snom 300','snom.Fkey','5','Snom 300 series','Snom 300','1','system','#INCLUDE snom.Common
 #INCLUDE snom.Extension','type=peer
 defaultuser=$desc
@@ -770,7 +808,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Vtech','vtech.Fkey','Vtech SIP Phone','system','#INCLUDE vtech.Common
 
 sip_account.1.sip_account_enable = 1
@@ -794,7 +835,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,noproxy,owner,provision,sipiaxfriend,technology) values ('Yealink','yealink SIP phone','1','system','#INCLUDE yealink.Common
 account.1.label = $ext
 account.1.auth_name = $ext
@@ -819,7 +863,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,legacy,noproxy,owner,provision,sipiaxfriend,technology) values ('Yealink CP860','Yealink CP860 phone','1','1','system','#INCLUDE yealink.Extension','type=peer
 defaultuser=$desc
 secret=$password
@@ -1050,7 +1097,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,legacy,noproxy,owner,provision,sipiaxfriend,technology) values ('Yealink W52P','None','Yealink W52P DECT','1','1','system','#INCLUDE yealink.Extension','type=peer
 defaultuser=$desc
 secret=$password
@@ -1201,6 +1251,15 @@ LDAP_ROOT_CERT_PATH=""
 LDAP_CLIENT_CERT_PATH=""
 LDAP_PKEY_PATH=""
 ','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('panasonic.ipv4','panasonic ipv4 fragment','system','IP_ADDR_MODE="0"','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('panasonic.ipv6','panasonic ipv6 fragment','system','IP_ADDR_MODE="2"
+CONNECTION_TYPE_IPV6="2"','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('panasonic.tcp','panasonic tcp fragment','system','SIP_RGSTR_PORT_1="5060"
+SIP_PRXY_PORT_1="5060"
+SIP_SRC_PORT_1="5060"
+SIP_TRANSPORT_1="1"
+SIP_TLS_MODE_1="0"
+SRTP_CONNECT_MODE_1="1"','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('panasonic.tls','panasonic tls fragment','system','SIP_RGSTR_PORT_1="$tlsport"
 SIP_PRXY_PORT_1="$tlsport"
 SIP_PRSNC_PORT_1="$tlsport"
@@ -1248,14 +1307,14 @@ INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('poly
   <reg reg.1.displayName="$desc" reg.1.address="$ext" reg.1.label="$desc" reg.1.auth.userId="$ext" reg.1.auth.password="$password" />
 </userinfo>','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('polycom.Fkey','Polycom Fkey','system','attendant.resourceList.$seq.address="sip:$value@$localip" attendant.resourceList.$seq.label="$label"  attendant.resourceList.$seq.type="normal"','BLF Template');
-INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,legacy,owner,provision,sipiaxfriend,technology) values ('snom','snom.Fkey','snom SIP phone','1','system','#INCLUDE snom.Common
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('snom','snom.Fkey','snom SIP phone','system','#INCLUDE snom.Common
 user_name1$: $ext
 user_pname1$: $ext
 user_pass1$: $password
 user_host1$: $localip','type=peer
 defaultuser=$desc
 secret=$password
-mailbox=
+mailbox=$ext
 host=dynamic
 qualify=yes
 context=internal
@@ -1267,7 +1326,10 @@ callgroup=1
 subscribecontext=extensions
 disallow=all 
 allow=alaw
-allow=ulaw','SIP');
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.Common','Snom common config','system','setting_server: http://$localip/provisioning?mac={mac}
 update_policy$: 
 
@@ -1362,11 +1424,23 @@ http_pass!: 1111
 admin_mode_password!: 2222','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.Fkey','Snom BLF template','system','fkey$seq$: $type $value
 fkey_label$seq$: $label','BLF Template');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.ipv4','snom ipv4 fragment','system','dhcp_v6$: off','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.ipv6','snom ipv6 fragment','system','dhcp_v6$: autoconfiguration','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.tcp','snom tcp fragment','system','user_outbound1$:$localip;transport=tcp
+user_srtp1$: off
+user_srtp2$: off
+user_auth_tag1$: off
+user_savp1$: off','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.tls','snom tls fragment','system','user_outbound1$: $localip:$tlsport;transport=tls
 user_srtp1$: on
 user_auth_tag1$: off
 user_savp1$: mandatory
 ','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.udp','snom udp fragment','system','user_outbound1$:
+user_srtp1$: off
+user_srtp2$: off
+user_auth_tag1$: off
+user_savp1$: off','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('vtech.Common','Vtech Common cfg','system','# Model Number = VSP735A
 # SW Version = 1.1.4.0-0
 time_date.date_format = DD/MM/YY
@@ -2188,8 +2262,20 @@ linekey.$seq.value = $value
 linekey.$seq.pickup_value = *8
 linekey.$seq.type =  $type
 linekey.$seq.label =  $label','BLF Template');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('yealink.ipv4','yealink ipv4 fragment','system','static.network.ip_address_mode = 0
+static.network.ipv6_internet_port.type = 0','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('yealink.ipv6','yealink ipv6 fragment','system','static.network.ip_address_mode = 2
+static.network.ipv6_internet_port.type = 2','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('yealink.tcp','yealink tcp fragment','system','account.1.transport = 1
+account.1.outbound_port = 5060
+account.1.srtp_encryption = 0
+security.trust_certificates = 0','Descriptor');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('yealink.tls','Yealink tls fragment','system','account.1.outbound_port = $tlsport
 account.1.transport = 2
 account.1.srtp_encryption = 2
+security.trust_certificates = 0','Descriptor');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('yealink.udp','yealink udp fragment','system','account.1.transport = 0
+account.1.outbound_port = 5060
+account.1.srtp_encryption = 0
 security.trust_certificates = 0','Descriptor');
 COMMIT;

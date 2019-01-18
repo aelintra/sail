@@ -22,7 +22,10 @@
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"sDom": 'fti',
-		"bSort": false,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [3,5,6,7]
+		}],
 	} ).makeEditable({
 //			sUpdateURL: "/php/sarkivr/update.php",				
 //			sReadOnlyCellClass: "read_only",

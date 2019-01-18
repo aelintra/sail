@@ -55,6 +55,7 @@ private function showMain() {
 		$this->myPanel->msg = $this->message;
 	} 
 		
+	$buttonArray=array();
 	$this->myPanel->actionBar($buttonArray,"sarkextensionForm",false,false,true);
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

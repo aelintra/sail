@@ -89,7 +89,10 @@ function cleanConfig($phonepkey,$rawConfig,&$db,&$retstring,&$loopCheck,$sndcred
 			$configs->execute(array($devpkey));
 			$thisConfig = $configs->fetchObject();
 		} catch (Exception $e) {
-			logIt("SQL error retrieving Descriptor $devpkey");
+			$errorMsg = $e->getMessage();
+  			logIt("Could not retrieve Descriptor $devpkey  - DB error $errorMsg");
+  			send404();
+  			exit;			
 		}
 		if (!is_object($thisConfig)) {
 			logIt("Unable send Descriptor file for $devpkey - skipping");
@@ -116,18 +119,25 @@ function genFkeys($phonepkey,$devpkey,$db,&$inline) {
 logIt("BLF iteration for phonepkey=$phonepkey, devpkey=$devpkey");
 	global $blfKeys;
 
+	try {
+		$extConfig = $db->prepare('select protocol,provisionwith from ipphone where pkey = ?');
+		$extConfig->execute(array($phonepkey));
+		$thisextConfig = $extConfig->fetchObject();
 
-	$extConfig = $db->prepare('select protocol,provisionwith from ipphone where pkey = ?');
-	$extConfig->execute(array($phonepkey));
-	$thisextConfig = $extConfig->fetchObject();
-
-	$template = $db->prepare('select provision from Device where pkey = ?');
-	$template->execute(array($devpkey));
-	$thistemplate = $template->fetchObject();
+		$template = $db->prepare('select provision from Device where pkey = ?');
+		$template->execute(array($devpkey));
+		$thistemplate = $template->fetchObject();
 	
-	$phoneFKeys = $db->prepare('select * from IPphone_FKEY where pkey = ?');
-	$phoneFKeys->execute(array($phonepkey));
-	$fKeys = $phoneFKeys->fetchAll();
+		$phoneFKeys = $db->prepare('select * from IPphone_FKEY where pkey = ?');
+		$phoneFKeys->execute(array($phonepkey));
+		$fKeys = $phoneFKeys->fetchAll();
+
+	} catch (Exception $e){
+  		$errorMsg = $e->getMessage();
+  		logIt("Unable to iterate BLF for $phonepkey  - DB error $errorMsg");
+  		send404();
+  		exit;		
+	}
 	
 	
 	$xLateType = Array (
@@ -367,7 +377,7 @@ function polycomSubConfig($mac,$fname,$db) {
 				$update = $db->prepare("update ipphone set sndcreds='No' where  pkey = '" . $thisextConfig->pkey . "'");
 				$update->execute();
 			} catch (Exception $e) {
-				logIt("Unable to update extension sndcreds");
+				logIt("Unable to update extension sndcreds - DB error $errorMsg");
 			}
 		}
 	}		
@@ -445,7 +455,7 @@ function ret_localip($provisionwith, $protocol) {
     
   $ipv6gua = NULL;
   if ($protocol == 'IPV6') {
-  		$query = 'ip addr show dev ' . $nethelper->get_interfaceName() . " | grep inet6 | grep -v fe80 | grep -v fd84 | tr -s ' ' | cut -d ' ' -f 3";
+  		$query = 'ip addr show dev ' . $nethelper->get_interfaceName() . " | grep inet6 | tr -s ' ' | cut -d ' ' -f 3 | grep -v '^fe80' | grep -v '^fd'";
     	$ipv6gua = `$query`;
     	$ipv6gua = preg_replace('/\/64$/','',$ipv6gua);
     	$ipv6gua = trim($ipv6gua);
@@ -495,6 +505,7 @@ function logUA() {
   	"polycom" => 'PolycomVVX-(VVX_\w+)\-UA',
   	"snom" => '(snom\w+)\-SIP',
   	"yealink" => 'Yealink\sSIP-([\w-]+)\s',
+  	"yealinkDECT" => 'Yealink\s([\w-]+)\s',
   	"panasonic" => 'Panasonic_(KX-\w+)\/',
   	"aastra" => 'Aastra(\d{4}i)\s'
   );
@@ -518,6 +529,12 @@ function logUA() {
   	logit ("Found phone model $model from UA");
   	return $model;
   }
+  $useragent = null;
+  if (isset($_SERVER["HTTP_USER_AGENT"])) {
+  	$useragent = $_SERVER["HTTP_USER_AGENT"];
+  }
+  logit ("UA not found or unknown $useragent" );
+//  send404();
 }   
 
 function logIt($someText,$userloglevel=0) {

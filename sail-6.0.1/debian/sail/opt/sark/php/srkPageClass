@@ -310,6 +310,13 @@ Class page {
                                 'alt' => 'Update',
                                 'title' => 'Update'
                                 ),
+                'upimg' => array (
+//                                'faclass' => 'upload',
+                                'src' => 'upload.png',
+                                'class' => 'buttonCreate',
+                                'alt' => 'Upload',
+                                'title' => 'Upload a greeting'
+                                ),                 
                 'upload' => array (
                                 'faclass' => 'upload',
                                 'src' => 'upload.png',
@@ -362,7 +369,7 @@ Class page {
                                 'checked' =>'ON',
                                 'unchecked' => 'OFF'
                                 ),                                				
-				'cluster' => array(
+				'clusterstart' => array(
 								'checked' =>'ON',
                                 'unchecked' => 'OFF'
                                 ),	  
@@ -382,6 +389,10 @@ Class page {
 								'checked' =>'enabled',
                                 'unchecked' => 'disabled'
                                 ),
+		        'closedcos'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
                 'defaultopen'   => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
@@ -394,6 +405,10 @@ Class page {
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
                                 ), 
+                'fqdninspect'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),                
                 'fqdnprov'   => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO',
@@ -457,11 +472,13 @@ Class page {
                 'ivrAct'   => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
-                                ),                                                                  
+                                ),
+/*                                                                                                  
                 'location'   => array(
                                 'checked' =>'remote',
                                 'unchecked' => 'local'
                                 ),
+*/
                 'listenforext' => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
@@ -473,6 +490,10 @@ Class page {
                 'moh' => array(
                                 'checked' =>'ON',
                                 'unchecked' => 'OFF'
+                               ),
+                'opencos'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
                                 ),
                 'orideopen'   => array(
                                 'checked' =>'YES',
@@ -491,10 +512,12 @@ Class page {
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
                                 ),
+/*                
                 'provisionwith'      => array(
                                 'checked' =>'FQDN',
                                 'unchecked' => 'IP'
-                                ),                                                 
+                                ), 
+*/                                                
  				'proxy'      => array(
 								'checked' =>'YES',
                                 'unchecked' => 'NO'
@@ -527,7 +550,19 @@ Class page {
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
                                 ),
-                'stategy' => array(
+                'sipmulticast' => array(
+                                'checked' =>'enabled',
+                                'unchecked' => 'disabled'
+                                ),                
+                'smtpusetls' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),
+                'smtpusestrttls' => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                
+                'strategy' => array(
                                 'checked' =>'balance',
                                 'unchecked' => 'hunt'
                                 ),                                                                                                      				
@@ -675,10 +710,8 @@ Class page {
 			
 	public function commitButton () {
 	/*** handle special case of commit buttons ***/
-		$dbh = DB::getInstance();		
-		$res = $dbh->query("SELECT MYCOMMIT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
-		$commit = $res['MYCOMMIT'];		
-		if ($commit == "YES") {
+
+        if (file_exists('/opt/sark/cache/commitflag')) {   
 				$this->override="commit";
 				$this->Button("commitClick");
 		}
@@ -693,8 +726,8 @@ Class page {
  * @return [null]            
  */
     public function showErrors($errorHash) {
-		echo '<div class="emessage" id="id01" >';
-		echo '<div class="w3-card w3-margin w3-padding w3-round-large w3-red"';
+		echo '<div class="emessage " id="id01" >';
+		echo '<div class="w3-card w3-padding w3-pale-yellow"';
     	echo '<span onclick="document.getElementById(\'id01\').style.display=\'none\'" class="w3-button w3-tiny w3-display-topleft">&times&nbsp;close</span>';
     	foreach ($errorHash as $msg) {
     		echo '<p>' . $msg . '</p>';
@@ -710,11 +743,11 @@ Class page {
  * @return [null]            
  */
     public function showMsg($msg) {
-        echo '<div class="message" id="id02" >';
-        echo '<div class="w3-light-grey w3-padding">';
-        echo '<div class="w3-card w3-pale-yellow w3-padding" >';
-        echo '<span onclick="document.getElementById(\'id02\').style.display=\'none\'" class="w3-button w3-tiny w3-right">X Close</span>';
-        echo '<p>' . $msg . '</p>';
+        echo '<div class="message w3-modal " id="id02" style="display:block; z-index:9999">';
+        echo '<div class="w3-modal-content w3-card-4 w3-animate-zoom">';      
+        echo '<div class="w3-card w3-pale-yellow w3-round w3-padding w3-center" >';
+//        echo '<span onclick="document.getElementById(\'id02\').style.display=\'none\'" class="w3-button w3-tiny w3-right">X Close</span>';
+        echo '<p class="w3-large ">' . $msg . '</p>';
         echo '</div>';
         echo '</div>';
         echo '</div>';
@@ -828,10 +861,8 @@ Class page {
  */
   	public function actionBar ($buttonArray,$form,$showSave=true,$showCommit=true,$showUpdate=false,$pKey=false) {
 	/*** display an action bar ***/
-		$dbh = DB::getInstance();		
-		$res = $dbh->query("SELECT MYCOMMIT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
-		$commit = $res['MYCOMMIT'];		
-		if ($commit == "YES") {
+	
+		if (file_exists('/opt/sark/cache/commitflag')) {  
 				$commitColour = "w3-text-red";
 		}
 		else {
@@ -880,7 +911,18 @@ Class page {
  *	Large and mediumm screens common right menu 
  */
 		echo '<span class="w3-hide-small">' . PHP_EOL;
-		foreach ($buttonArray as $key => $aColour) {	
+        
+		foreach ($buttonArray as $key => $aColour) {
+
+/*
+ *  Special case of the upload button.   It is javascript triggered and not a true button   
+ */
+            if ($key == 'upimg') {
+                echo '<span class="w3-right w3-padding" name="upimg" style="cursor:pointer" title="Upload a greeting">Upload</span>';
+                continue;
+            }
+
+
 			$colour = null;
 			if (isset($aColour)) {
 				$colour = $aColour;
@@ -1100,7 +1142,7 @@ Class page {
     $dbh = NULL;
 
     echo '</div> <!-- END OF MENU BLOCK -->';
-//    echo '<p class="w3-center w3-block">&nbsp;</p>' . PHP_EOL;
+    echo '<p class="w3-center w3-block">&nbsp;</p>' . PHP_EOL;
     echo '</div>  <!-- END OF NAVBAR -->';
     }
 
@@ -1154,7 +1196,7 @@ Class page {
             echo '&nbsp;&nbsp;<i class="fas fa-chevron-right w3-text-grey"></i>';
             echo '</button>' . PHP_EOL;		
 		}
-        echo '<p class="w3-center w3-block">&nbsp;</p>' . PHP_EOL;
+//        echo '<p class="w3-center w3-block">&nbsp;</p>' . PHP_EOL;
 		echo '</div>' . PHP_EOL;
         echo '</div>' . PHP_EOL;
 	}
@@ -1242,12 +1284,13 @@ Class page {
          if ($val) {
             echo ' value="' . $val . '"';
         }
-        if ($readonly) {
-            echo ' readonly';
-        }
         if ($placeholder) {
             echo ' placeholder="' . $placeholder . '"';
-        } 
+        }
+        if ($readonly) {
+            echo ' readonly style="background-color:#f1f1f1"';
+        }
+         
         echo '/>' . PHP_EOL;
     	$this->aHelpBoxFor($name);
 	}
@@ -1260,7 +1303,7 @@ Class page {
     	$this->aHelpBoxFor($var);
 	}
 
-	public function aBooleanFor ($var,$val,$class=null) {
+	public function aBooleanFor ($var,$val,$class=null,$htmlValue=null) {
 		/*** display a label ***/
 		$checked=false;
 		$dbh = DB::getInstance();
@@ -1276,7 +1319,12 @@ Class page {
         if ($class) {
             $myClass=' class="' . $class . '"';
         }
-		echo '<input type="checkbox"' . $myClass . ' name="' . $var . '" id="' . $var . '"'; 
+        $myhtmlValue=null;
+        if ($htmlValue) {
+//            $myhtmlValue=' value="' . $htmlValue . '"';
+            $var = $htmlValue;
+        }
+		echo '<input type="checkbox"' . $myClass  . ' name="' . $var . '" id="' . $var . '"'; 
 		if ($checked) {
 			echo ' checked';
 		}
@@ -1402,7 +1450,8 @@ Class page {
 			$res = $dbh->query("SELECT pkey from cluster");  
 			$res->setFetchMode(PDO::FETCH_COLUMN, 0);   
 			$clusters = $res->fetchAll(); 
-            $this->selected = 'default';
+//  removed Jan 2019 - 6.0.1-32
+//            $this->selected = 'default';
 			$this->popUp('cluster', $clusters); 
 		}
 		else {
@@ -1785,76 +1834,73 @@ public function pageSwitch($key) {
 	return false;
 }
 	
-public function printSysNotes ($wallboard=false) {
+public function printSysNotes () {
 #
 #   prints sysinfo Box
 #
 require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
 
-	$helper = new helper;
-	$nethelper = new nethelper;
-	$dbh = DB::getInstance();
-	
-	$extcount = $dbh->query('select count(*) from ipphone')->fetchColumn();
-	$clusteroclo = $dbh->query("SELECT oclo FROM cluster where pkey = 'default'")->fetchColumn();  
-	$global = $dbh->query("SELECT EXTLIM,CLUSTER FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
-    echo '<div  class="extnotes">' . PHP_EOL;
+    $helper = new helper;
+    $nethelper = new nethelper;
+    $dbh = DB::getInstance();
+    
+    $extcount = $dbh->query('select count(*) from ipphone')->fetchColumn();
+    $clusteroclo = $dbh->query("SELECT oclo FROM cluster where pkey = 'default'")->fetchColumn();  
+    $global = $dbh->query("SELECT EXTLIM,CLUSTER FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 
-	$distro=array();
-	$helper->qDistro($distro);
     $localip = $nethelper->get_localIPV4();
     $ipv6lla = $nethelper->get_IPV6LLA();
     $ipv6gua = $nethelper->get_IPV6GUA();
-	$updays=false;
-	$commip=NULL;
-	$virtualip=NULL;
-	$masteroclo = `sudo /usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
-	$masteroclo = preg_replace( ' /^.*:\s/ ','',$masteroclo);
-	if (preg_match('/not\sfound/', $masteroclo)) {
-		$masteroclo = 'AUTO';
-	}
-	
+    $updays=false;
+    $commip=NULL;
+    $virtualip=NULL;
+    $masteroclo = `sudo /usr/sbin/asterisk -rx 'database get STAT OCSTAT'`;
+    $masteroclo = preg_replace( ' /^.*:\s/ ','',$masteroclo);
+    if (preg_match('/not\sfound/', $masteroclo)) {
+        $masteroclo = 'AUTO';
+    }
+    
     if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-		$systemName		=  gethostname();
-	}
-	else {
-		$systemName = php_uname('n');
-	}
+        $systemName     =  gethostname();
+    }
+    else {
+        $systemName = php_uname('n');
+    }
 
     $free =  array();
     $free = `/usr/bin/free`;
     $uptime = `/usr/bin/uptime`;
     if (preg_match( ' /up\s(\d+\sdays)/ ', $uptime,$matches)) {
-		$updays = $matches[1];
-	}
-	
-	$arch = `uname -m`;
-	$disk = array();
-	
-	if (preg_match( ' /^arm/ ', $arch)) {
-	    $disk = `/bin/df -h`;
-	}
-	else {
-		$disk = `/bin/df -h`;
-	}
-	if ($disk) {
-    	$diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
-    	$diskusage = $matches[1];
+        $updays = $matches[1];
+    }
+    
+    $arch = `uname -m`;
+    $disk = array();
+    
+    if (preg_match( ' /^arm/ ', $arch)) {
+        $disk = `/bin/df -h`;
     }
     else {
-    	$diskusage = 'unknown';	
+        $disk = `/bin/df -h`;
+    }
+    if ($disk) {
+        $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
+        $diskusage = $matches[1];
+    }
+    else {
+        $diskusage = 'unknown'; 
     }
 
-	if (preg_match( '/Mem:\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})\s+(\d{1,7})/',$free,$matches )) {
-			$totmem = $matches[1];
-			$usedmem = $matches[2];
-			$freemem = $matches[3];
-			$sharedmem = $matches[4];
-			$buffers = $matches[5];
+    if (preg_match( '/Mem:\s+(\d{1,8})\s+(\d{1,8})\s+(\d{1,8})\s+(\d{1,8})\s+(\d{1,8})/',$free,$matches )) {
+            $totmem = $matches[1];
+            $usedmem = $matches[2];
+            $freemem = $matches[3];
+            $sharedmem = $matches[4];
+            $buffers = $matches[5];
     } 
     $macstr = "ip link show " . $nethelper->get_interfaceName() . " | awk '/ether/ {print $2}'";
     $mac = strtoupper(`$macstr`);
-    	
+        
     if ( $helper->check_pid() ) {
         $runstate = "RUNNING";
     }
@@ -1862,115 +1908,163 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
         $runstate = "STOPPED";
     }
     if ( file_exists ("/etc/corosync/corosync.conf")) { 
-		if  (`/bin/ps -e | /bin/grep corosync | /bin/grep -v grep`) {
-        	$harunstate = "RUNNING";
-        	$work = `/sbin/ip addr show eth0 | grep secondary`;    
-			if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
-				$virtualip = $matches[1]; 	 		
-			}
-			$work = `/sbin/ip addr show eth1 | grep inet`;
-			if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
-				$commip = $matches[1]; 	 		
-			}			
-    	}
-		else {
-        	$harunstate = "STOPPED";
-    	}
+        if  (`/bin/ps -e | /bin/grep corosync | /bin/grep -v grep`) {
+            $harunstate = "RUNNING";
+            $work = `/sbin/ip addr show eth0 | grep secondary`;    
+            if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
+                $virtualip = $matches[1];           
+            }
+            $work = `/sbin/ip addr show eth1 | grep inet`;
+            if (preg_match(" /inet *?([\d.]+)/",$work,$matches)) { 
+                $commip = $matches[1];          
+            }           
+        }
+        else {
+            $harunstate = "STOPPED";
+        }
     }
-	
-    echo '<h3>System Info</h3>';
-//    $sno = $this->rets();
-    
-    $rlse=''; 
-    if ( $distro['rhel']  ) {	
-		$rlse = `/bin/rpm -q sail`;
-	}
-	else {
-		$rlse = `dpkg-query -W -f '\${version}\n' sail`;
-	}
-//	echo "Distro: <strong>" . $distro['name'] . "</strong><br/>";
-	if ( $helper->check_pid() ) {  
-		$astrelease = `sudo /usr/sbin/asterisk -rx 'core show version'`;
-		$astarray = explode(" ", $astrelease);
-		$astrelnum = explode('~', $astarray[1]);
-		echo "PBX release: <strong>" . $astrelnum[0] . "</strong><br/>";
-	}	
+    echo '<div class="w3-card-4 w3-round-large ' . $this->bgColorClass . '">';
+    echo '<div class="w3-row w3-small ">';
+
+    echo '<div class="w3-third">';
+//    echo '<div class="w3-card">';
+    echo '<div class="w3-container ">';
+    echo '<h4>System</h4>';    
+
+    $rlse = `dpkg-query -W -f '\${version}\n' sail`;
+
+    if ( $helper->check_pid() ) {  
+        $astrelease = `sudo /usr/sbin/asterisk -rx 'core show version'`;
+        $astarray = explode(" ", $astrelease);
+        $astrelnum = explode('~', $astarray[1]);
+        echo "PBX release: <strong>" . $astrelnum[0] . "</strong><br/>";
+    }   
     echo "SAIL Release: <strong>$rlse</strong><br/>";
 
-    if ( $distro['debian'] ) {
-		$rlse = `dpkg-query -W -f '\${version}\n' sailhpe`;
-		echo "HPE Release: <strong>$rlse</strong><br/>";
-	}
-	if ($global['EXTLIM']) {
-		echo "Endpoints licenced: <strong>" .$global['EXTLIM'] . "</strong><br/>";
-	}
-	echo "Endpoints defined: <strong>$extcount</strong><br/>";
-	echo "Serial Num: <strong>" . $helper->rets() . "</strong><br/>";
-	echo "MAC: <strong>$mac</strong><br/>";
-		    
+
+    $rlse = `dpkg-query -W -f '\${version}\n' sailhpe`;
+    echo "HPE Release: <strong>$rlse</strong><br/>";
+
+    if ($global['EXTLIM']) {
+        echo "Endpoints licenced: <strong>" .$global['EXTLIM'] . "</strong><br/>";
+    }
+    echo "Endpoints defined: <strong>$extcount</strong><br/>";
+    echo "Serial Num: <strong>" . $helper->rets() . "</strong><br/>";
+            
     preg_match ( '/^(\w*)\b/', $_SERVER['SERVER_SOFTWARE'], $matches);
-    $server = $matches[1];        
-//    echo "Web Server: <strong>$server</strong><br/>";
-    
+    $server = $matches[1];
+//    echo '<br/>'; 
+    echo '</div>'; 
+    echo '</div>';        
+//  echo '</div>';
+//  echo '</div>';
+
+ 
+    echo '<div class="w3-third">';
+//    echo '<div class="w3-card">';
+    echo '<div class="w3-container">';
     echo '<h4>Network</h4>';
+    echo "MAC: <strong>$mac</strong><br/>";
     echo "hostname: <strong>$systemName</strong><br/>";
     $ipdig = $nethelper->get_externip();
     if ( $ipdig ) {
-		echo "Public IP: <strong>$ipdig</strong><br/>";
-	}
-	else {
-		echo "Public IP: <strong>NO INTERNET</strong><br/>";
-	}
-	if ( $localip ) {
-		echo "Local IP: <strong>$localip</strong><br/>";
-	}
-//	if ( $ipv6gua ) {
-//		echo "IPV6: <strong>$ipv6gua</strong><br/>";
-//	}
+        echo "Public IP: <strong>$ipdig</strong><br/>";
+    }
+    else {
+        echo "Public IP: <strong>Unknown</strong><br/>";
+    }
+    if ( $localip ) {
+        echo "Local IP: <strong>$localip</strong><br/>";
+    }
+//  if ( $ipv6gua ) {
+//      echo "IPV6: <strong>$ipv6gua</strong><br/>";
+//  }
     
     if ( $virtualip ) {
         echo "Virtual IP: <strong>$virtualip</strong><br/>";
-	}
-	if ( $commip ) {
-		echo "Comms IP: <strong>$commip</strong><br/>";
-	}
-//    print "Netmask: <strong>$snmask</strong><br/>";
-
-	if (file_exists("/opt/sark/cache/speedtest")) {
-		$downlink = `/bin/grep Down /opt/sark/cache/speedtest`;
-		$uplink = `/bin/grep Up /opt/sark/cache/speedtest`;
-		if ($downlink) {
-			$speed = explode(':',$downlink); 
-			echo 'Inet Downlink: <strong>' . $speed [1] . '</strong><br/>';
-		}
-		if ($uplink) {
-			$speed = explode(':',$uplink); 
-			echo 'Inet Uplink: <strong>' . $speed [1] . '</strong><br/>';
-		} 
-	}
-
-	if (!$wallboard) {
-    	echo '<h4>Resource</h4>';    
-    	echo "Disk Usage: <strong>$diskusage</strong><br/>";
-    	echo "RAM Size: <strong>$totmem</strong><br/>";
-    	echo "RAM Free: <strong>$freemem</strong><br/>";	
-    	echo '<h4>Status</h4>';
-    	echo "PBX: <strong>$runstate</strong><br/>";
-   	 	echo "Master Timer: <strong>$masteroclo</strong><br/>";
-    	if ($global['CLUSTER'] == 'OFF') {
-			echo "Timer State: <strong>$clusteroclo</strong><br/>";
-   	 	}
-    	echo "SysTime: <strong>" . `date '+%H:%M:%S'` . "</strong><br/>" . PHP_EOL;
-    	if ($updays) {
-    		echo "System Uptime: <strong>$updays</strong><br/>";
-    	}
     }
-    echo '<h4>Client</h4>';
-	$client = $this->clientPlatform($_SERVER['HTTP_USER_AGENT']);
-	print "Client IP: <strong>" . $_SERVER['REMOTE_ADDR'] ."</strong><br/>";
-	print "Platform: <strong>" . $this->opSys . "</strong><br/>";
-	print "Browser: <strong>" . $client['browser'] . "</strong><br/>";
-    echo '</span></div>' . PHP_EOL;
+    if ( $commip ) {
+        echo "Comms IP: <strong>$commip</strong><br/>";
+    }
+//    print "Netmask: <strong>$snmask</strong><br/>";
+/*
+    if (file_exists("/opt/sark/cache/speedtest")) {
+        $downlink = `/bin/grep Down /opt/sark/cache/speedtest`;
+        $uplink = `/bin/grep Up /opt/sark/cache/speedtest`;
+        if ($downlink) {
+            $speed = explode(':',$downlink); 
+            $num  = explode(' ',$speed[1]);
+            echo 'Inet Down: <strong>' . $num [1] . ' Mbps</strong><br/>';
+        }
+        if ($uplink) {
+            $speed = explode(':',$uplink); 
+            $num  = explode(' ',$speed[1]); 
+            echo 'Inet Up: <strong>' . $num [1] . ' Mbps</strong><br/>';
+        } 
+    }
+*/
+//  echo '<br/>'; 
+//    echo '</div>'; 
+    echo '</div>';        
+    echo '</div>';
+
+        echo '<div class="w3-third">';
+//      echo '<div class="w3-card">';
+        echo '<div class="w3-container">';
+        echo '<h4>Resource</h4>';    
+        echo "Disk Usage: <strong>$diskusage</strong><br/>";
+        echo "RAM Size: <strong>$totmem</strong><br/>";
+        echo "RAM Free: <strong>$freemem</strong><br/>";
+        echo "PBX: <strong>$runstate</strong><br/>";
+        echo "Master Timer: <strong>$masteroclo</strong><br/>";
+        if ($global['CLUSTER'] == 'OFF') {
+            echo "Timer State: <strong>$clusteroclo</strong><br/>";
+        }
+//      echo '<br/>'; 
+//          echo '</div>'; 
+        echo '</div>';  
+        echo '<br/><br/>';      
+        echo '</div>';
+        echo '</div>';
+
+        echo '</div>';
+
+/*
+        echo '<div class="w3-row w3-padding ' . $this->myPanel->bgColorClass . '">';
+        echo '<div class="w3-third">';
+//      echo '<div class="w3-card">';
+//      
+        echo '<div class="w3-container">';
+        echo '<h4>Status</h4>';
+        echo "PBX: <strong>$runstate</strong><br/>";
+        echo "Master Timer: <strong>$masteroclo</strong><br/>";
+        if ($global['CLUSTER'] == 'OFF') {
+            echo "Timer State: <strong>$clusteroclo</strong><br/>";
+        }
+        echo "SysTime: <strong>" . `date '+%H:%M:%S'` . "</strong><br/>" . PHP_EOL;
+        if ($updays) {
+            echo "System Uptime: <strong>$updays</strong><br/>";
+        }
+//      echo '<br/>';
+//      echo '</div>';        
+        echo '</div>';
+        echo '</div>'; 
+
+        echo '<div class="w3-third">';
+//      echo '<div class="w3-card">';
+        echo '<div class="w3-container">';
+        echo '<h4>Client</h4>';
+        $client = $this->myPanel->clientPlatform($_SERVER['HTTP_USER_AGENT']);
+        print "Client IP: <strong>" . $_SERVER['REMOTE_ADDR'] ."</strong><br/>";
+        print "Platform: <strong>" . $this->myPanel->opSys . "</strong><br/>";
+        print "Browser: <strong>" . $client['browser'] . "</strong>";
+//          echo '</span>' . PHP_EOL;
+//      echo '<br/>'; 
+//          echo '</div>'; 
+        echo '</div>';        
+        echo '</div>';
+        echo '</div>'; 
+*/          
 }
 
 public function clientPlatform($user_agent) {

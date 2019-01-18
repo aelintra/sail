@@ -39,10 +39,10 @@ Class sarkextension {
 	protected $myBooleans = array(
 		'active',
 		'celltwin',
-		'closedcos',
-		'location',
-		'opencos',
-		'provisionwith',
+//		'closedcos',
+//		'location',
+//		'opencos',
+//		'provisionwith',
 		'vdelete',
 		'vreset'	
 	);
@@ -210,8 +210,6 @@ private function showMain() {
 	}
 */	
 	
-//	echo '<div class="w3-container">';
-//	echo '<table class="' . $this->myPanel->tableClass . ' w3-tiny" id="extensiontable" style="width:100%">';
 
 	$this->myPanel->beginResponsiveTable('extensionstable',' w3-tiny');
 
@@ -399,11 +397,7 @@ private function showNew() {
 	echo '<div id="divdevice">' . PHP_EOL;
 	$this->myPanel->displayPopupFor('device','General SIP',$devices);
 	echo '</div>' . PHP_EOL;
-/*
-	echo '<div id="divlocation">' . PHP_EOL;
-	$this->myPanel->displayBooleanFor('location','local');
-	echo '</div>' . PHP_EOL;
-*/
+
 	echo '<div class="cluster">';
 	echo '<div class="cluster w3-margin-bottom">';
     $this->myPanel->aLabelFor('cluster','cluster');
@@ -425,7 +419,7 @@ private function showNew() {
 
 private function saveNew() {
 // save the data away
-//print_r($_REQUEST); 
+
 	$this->myPanel->xlateBooleans($this->myBooleans);
 
 	$tuple = array();
@@ -525,7 +519,7 @@ private function saveNew() {
 			$tuple['device'] = 'General SIP';
 			$this->addNewExtension($tuple);
 			break;
-		case 'Provisioned block':
+		case 'Provisioned batch':
 			$macArray=array();
 			$macArray = preg_split('/[\s]+/', $_POST['txtmacblock'] );
 			if ( empty ($macArray) ) {
@@ -565,7 +559,7 @@ private function saveNew() {
 			return;
 			break;
 
-		case 'Unprovisioned block':
+		case 'Unprovisioned batch':
 			if ($this->checkHeadRoom($_POST['blksize'],$pkey)) {
 				$this->error_hash['blksize'] = "Insufficient extension slots for block operation";
 				$this->invalidForm = True;
@@ -632,11 +626,11 @@ private function addNewExtension ($tuple) {
 	}
 	$tuple['technology'] = $resdevice['technology'];			
 	$tuple['passwd'] = $this->helper->ret_password ($this->passwordLength);
-	$tuple['dvrvmail'] = $pkey;
+	$tuple['dvrvmail'] = $tuple['pkey'];
 			
 // ToDo permit ipv6 acl
 
-	if ($acl == 'YES' && $tuple['location'] == 'local') {
+	if ($tuple['acl'] == 'YES' && $tuple['location'] == 'local') {
 		if ( !preg_match(' /deny=/ ',$tuple['sipiaxfriend'])) {
 			$tuple['sipiaxfriend'] .= "\ndeny=0.0.0.0/0.0.0.0";
 		}
@@ -645,11 +639,16 @@ private function addNewExtension ($tuple) {
 		}			
 	}
 
-	if ($tuple['location'] == 'remote') {
-		$tuple['sipiaxfriend'] .= "\nnat=yes";	
-	}
 	$tuple['sipiaxfriend'] = trim($tuple['sipiaxfriend']);
 
+/*
+ * 	Adjust the Asterisk and provisioning boxes
+ */
+	$this->adjustAstProvSettings($tuple);
+
+/*
+ *	Add the row
+ */
 	$ret = $this->helper->createTuple("ipphone",$tuple);
 	if ($ret == 'OK') {
 		$this->createCos(); 
@@ -697,9 +696,9 @@ private function blfKeys($extension) {
 			}
 			echo '<div class="w3-margin-top w3-margin-bottom">';
 			$this->myPanel->aLabelFor("blfhead");
+			$this->myPanel->aHelpBoxFor("blfhead");
 			echo '</div>';
 
-//			echo '<div id="blf" class="w3-padding w3-margin-top w3-card-4 w3-small w3-white">' . PHP_EOL;
 
 			echo '<table class="' . $this->myPanel->tableClass . ' w3-small" id="blftable">';
 			echo '<thead>' . PHP_EOL;	
@@ -735,7 +734,7 @@ private function blfKeys($extension) {
 			}
 			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="newblf">+Add</button>';
 			echo '</div>' . PHP_EOL;
-			$this->myPanel->aHelpBoxFor("blfhead");
+			
 			
 		}
 	}	
@@ -828,7 +827,7 @@ private function showEdit() {
 	if (!empty($ipv6gua)) {
 // see ifphone can do IPV6
 		$shortdevice = substr($extension['device'],0,4);
-		if ($shortdevice == 'Snom' || $shortdevice == 'Yeal' || $shortdevice == 'Pana'  || $shortdevice == 'Vtec') {
+		if ($shortdevice == 'snom' || $shortdevice == 'Yeal' || $shortdevice == 'Pana'  || $shortdevice == 'Vtec') {
 			array_push($protocol,'IPV6');
 		}
 	}	
@@ -848,12 +847,12 @@ private function showEdit() {
 	
 	$xref = $this->xRef($pkey);
 	$buttonArray['cancel'] = true;
-	if (preg_match(' /^OK/ ', $latency)) {
+	if (preg_match(' /^OK/ ', $latency) && $extension['device'] != 'General SIP') {
 //		$buttonArray['redo'] = true;
 		$buttonArray['notify'] = true;
-			if (preg_match('/^[S|s]nom|Panasonic/',$extension['device'])) {
-				$buttonArray['sync'] = true;
-			}
+		if (preg_match('/^[S|s]nom|Panasonic/',$extension['device'])) {
+			$buttonArray['sync'] = true;
+		}
 	}
 	$buttonArray['delete'] = true;
 
@@ -873,17 +872,20 @@ private function showEdit() {
 	$this->myPanel->navRowDisplay($pkey);
 	echo '<span class="w3-text-blue-grey" style="margin:0;font-size:24px;">';
 	echo $this->head;
-        if (isset($msg)) {
-            $this->showMsg($msg);
-        }
+    if (isset($this->message)) {
+       $this->myPanel->showMsg($this->message);
+    }
     echo '</span>';
     echo '</div>';
+
+//    print_r($_REQUEST);
 
 	$this->myPanel->responsiveTwoCol();
 
 	$subject = $extension['technology'] . "/" . $extension['pkey'];
 	if (isset($extension['macaddr'])) {
 		$subject .= " (" . $extension['macaddr'] . ")";
+
 	}
 	else {
 		$subject .= " General SIP";
@@ -909,6 +911,16 @@ private function showEdit() {
     $this->myPanel->internalEditBoxStart();
     $this->myPanel->displayBooleanFor('active',$extension['active']);
 	$this->myPanel->displayInputFor('rule','text',$extension['pkey'],'newkey');
+
+	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $extension['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
+	echo '</div>';  
+	  	
 	$this->myPanel->displayInputFor('callerid','text',$extension['callerid']);	
 	$this->myPanel->displayInputFor('calleridname','text',$extension['desc'],'desc');
 	$this->myPanel->displayInputFor('password','text',$extension['passwd'],'passwd');	
@@ -935,6 +947,78 @@ private function showEdit() {
 	echo '</div>' . PHP_EOL;
 
 	$this->myPanel->internalEditBoxStart();
+//	$this->myPanel->displayBooleanFor('location',$extension['location']);
+	$this->myPanel->radioSlide('location',$extension['location'],array('local','remote'));
+
+	if (isset($extension['macaddr'])) {
+		if (isset($fqdn)) {
+			$this->myPanel->radioSlide('provisionwith',$extension['provisionwith'],array('IP','FQDN'));
+		}
+		$this->myPanel->radioSlide('sndcreds',$extension['sndcreds'],array('No','Once','Always'));	
+	}	
+	if (count($protocol) > 1)	{
+		$this->myPanel->aLabelFor('protocol');
+		$this->myPanel->selected = $extension['protocol'];
+		$this->myPanel->popUp('protocol', $protocol);
+		$this->myPanel->aHelpBoxFor('protocol');
+	}
+	$transportArray=array('udp','tcp','tls');
+	if (preg_match(" /[Cc]isco/ ", $extension['device'])) {
+		$transportArray=array('udp','tcp');
+	}
+	$this->myPanel->radioSlide('transport',$extension['transport'],$transportArray);
+
+	$this->myPanel->displayPopupFor('devicerec',$extension['devicerec'],array('default','None','OTR','OTRR','Inbound','Outbound','Both'));	
+
+	if ($extension['technology'] == 'SIP' ) {
+		$this->myPanel->displayInputFor('extalert','text',$extension['extalert']);
+	}	
+	if ($extension['technology'] == 'Custom' ) {
+		$this->myPanel->displayInputFor('cdialstring','text',$extension['cdialstring']);
+	}
+
+	echo '</div>';
+
+/*
+ *
+ */	
+		
+
+	echo '<input type="hidden" name="pkey" id="pkey" size="20"  value="' . $pkey . '"  />' . PHP_EOL;
+	if (preg_match(' /^OK/ ', $latency)) {
+		echo '<input type="hidden" name="latency" id="latency" size="20"  value="' . $latency . '"  />' . PHP_EOL;
+	} 
+	
+	echo '<div class="w3-left w3-padding w3-container"></div>' . PHP_EOL;
+
+
+	$this->myPanel->responsiveTwoColRight();
+
+	echo '<div class="w3-padding w3-margin-bottom w3-card-4 w3-white w3-hide-small">';   
+    $this->printEditNotes($pkey,$extension,$sip_peers);
+    echo '</div>';
+
+    $this->blfkeys($extension);
+
+
+/*
+ * 	TAB XREF 
+ */ 
+	$this->myPanel->internalEditBoxStart();
+	echo '<div class="w3-margin-bottom">';	
+	$this->myPanel->aLabelFor("xref");
+	echo '</div>';	
+//    $xref = $this->helper->xRef($pkey,"Extension");
+    $xref = $this->xRef($pkey);
+
+
+    $this->myPanel->displayXref($xref);
+
+
+	echo '</div>' . PHP_EOL;    
+
+
+	$this->myPanel->internalEditBoxStart();
     $this->myPanel->displayInputFor('ringdelay','number',$ringdelay);		
 
 /*
@@ -947,43 +1031,6 @@ private function showEdit() {
 
 	echo '</div>' . PHP_EOL;
 
-	$this->myPanel->internalEditBoxStart();
-//	$this->myPanel->displayBooleanFor('location',$extension['location']);
-	$this->myPanel->radioSlide('location',$extension['location'],array('local','remote'));
-
-	if (isset($extension['macaddr'])) {
-		if (isset($fqdn)) {
-			$this->myPanel->radioSlide('provisionwith',$extension['provisionwith'],array('IP','FQDN'));
-		}
-		$this->myPanel->radioSlide('sndcreds',$extension['sndcreds'],array('No','Once','Always'));	
-	}	
-	$this->myPanel->aLabelFor('protocol');
-	$this->myPanel->selected = $extension['protocol'];
-	$this->myPanel->popUp('protocol', $protocol);
-	$this->myPanel->aHelpBoxFor('protocol');		
-	$this->myPanel->radioSlide('transport',$extension['transport'],array('udp','tcp','tls'));
-	
-
-	echo '<div class="cluster">';
-	echo '<div class="cluster w3-margin-bottom">';
-    $this->myPanel->aLabelFor('cluster','cluster');
-    echo '</div>';
-	$this->myPanel->selected = $extension['cluster'];
-	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
-	echo '</div>';
-
-	$this->myPanel->displayPopupFor('devicerec',$extension['devicerec'],array('default','None','OTR','OTRR','Inbound','Outbound','Both'));	
-
-	if ($extension['technology'] == 'SIP' ) {
-		$this->myPanel->displayInputFor('extalert','text',$extension['extalert']);
-	}	
-	if ($extension['technology'] == 'Custom' ) {
-		$this->myPanel->displayInputFor('cdialstring','text',$extension['cdialstring']);
-	}
-
-	echo '</div>';
-    			
 
 /*
  * 	TAB COS
@@ -1003,11 +1050,11 @@ private function showEdit() {
 			$this->myPanel->aLabelFor($cos['pkey']);
 			if (is_array($cosrec) && array_key_exists('IPphone_pkey',$cosrec)) {
 //				echo '<input type="checkbox" checked="yes" name="opencos[]" value="' . $cos['pkey'] . '" />&nbsp' . $cos['pkey'] . '<br/>' . PHP_EOL;
-				$this->myPanel->aBooleanFor('opencos','YES');	 
+				$this->myPanel->aBooleanFor('opencos','YES','','opencos' . $cos['pkey']);	 
 			}
 			else {
 //				echo '<input type="checkbox" name="opencos[]" value="' . $cos['pkey'] . '" />&nbsp' . $cos['pkey'] . '<br/>' . PHP_EOL;	
-				$this->myPanel->aBooleanFor('opencos','NO');		
+				$this->myPanel->aBooleanFor('opencos','NO','','opencos' . $cos['pkey']);		
 			}
 			echo '</div>' . PHP_EOL;
 		}
@@ -1022,44 +1069,17 @@ private function showEdit() {
 			echo '<div class="w3-margin-bottom">';	
 			$this->myPanel->aLabelFor($cos['pkey']);		
 			if (is_array($cosrec) && array_key_exists('IPphone_pkey',$cosrec)) {
-				$this->myPanel->aBooleanFor('closedcos','YES');	
+				$this->myPanel->aBooleanFor('closedcos','YES','','closedcos' . $cos['pkey']);	
 			}
 			else {
-				$this->myPanel->aBooleanFor('closedcos','NO');			
+				$this->myPanel->aBooleanFor('closedcos','NO','','closedcos' . $cos['pkey']);			
 			}
 			echo '</div>' . PHP_EOL;
 		}
 		echo '</div>' . PHP_EOL;
 	}	
 	
-/*
- * 	TAB XREF 
- */ 
-	$this->myPanel->internalEditBoxStart();
-	echo '<div class="w3-margin-bottom">';	
-	$this->myPanel->aLabelFor("xref");
-	echo '</div>';	
-    $xref = $this->helper->xRef($pkey,"Extension");
-    $this->myPanel->displayXref($xref);
 
-	echo '</div>' . PHP_EOL;
-		
-
-	echo '<input type="hidden" name="pkey" id="pkey" size="20"  value="' . $pkey . '"  />' . PHP_EOL;
-	if (preg_match(' /^OK/ ', $latency)) {
-		echo '<input type="hidden" name="latency" id="latency" size="20"  value="' . $latency . '"  />' . PHP_EOL;
-	} 
-	
-	echo '<div class="w3-left w3-padding w3-container"></div>' . PHP_EOL;
-
-
-	$this->myPanel->responsiveTwoColRight();
-
-	echo '<div class="w3-padding w3-margin-bottom w3-card-4 w3-white w3-hide-small">';   
-    $this->printEditNotes($pkey,$extension,$sip_peers);
-    echo '</div>';
-
-    $this->blfkeys($extension);
 	
 /*
  *   TAB Asterisk
@@ -1107,7 +1127,9 @@ private function showEdit() {
 	echo '</div>' . PHP_EOL;
   	echo '</div>';
 
-  	
+  	if (isset($extension['macaddr'])) {
+  		echo '<input type="hidden" id="macaddr" name="macaddr" value="' . $extension['macaddr'] . '" />' . PHP_EOL;	
+	}	
 
 	echo '</div>';
  	echo '</form>' . PHP_EOL; // close the form 
@@ -1116,7 +1138,6 @@ private function showEdit() {
 
 private function saveEdit() {
 // save the data away
-
 	$tuple = array();
 
 	$this->myPanel->xlateBooleans($this->myBooleans);
@@ -1155,6 +1176,16 @@ private function saveEdit() {
 						'ipaddress' => True,
 						'provisioning' => True,
 		);
+
+		$cosSetArray = array();
+
+// suppress update of concatenated COS names
+		foreach ($_POST as $key => $val) {
+			if (preg_match( '/^(opencos|closedcos)(.*)$/', $key, $matches)) {
+				$custom[$key] = True;
+				$cosSetArray[$key] = True; // scavenge for later
+			}
+		}
 		
 		$this->helper->buildTupleArray($_POST,$tuple,$custom);
 /*		
@@ -1168,33 +1199,135 @@ private function saveEdit() {
 		$newkey =  trim(strip_tags($_POST['newkey']));
 
 /*
+ * 	Adjust the Asterisk and provisioning boxes
+ */
+
+	$this->adjustAstProvSettings($tuple);
+			
+/*	
+ * update the asterisk internal database (callforwards and ringdelay)
+ */  
+ 		if ($this->astrunning) {
+			$amiHelper = new amiHelper();
+			$amiHelper->put_database($newkey);			
+		}
+ 		
+/*
+ * reset/empty voicemail if requested
+ */
+
+	if (isset($_POST['vdelete'])) { 
+		$rc = $this->helper->request_syscmd ("/bin/rm -rf /var/spool/asterisk/voicemail/default/" . $_POST['pkey']."/*");	
+		$this->message = "Voicemail deleted";
+	}	
+	
+	if (isset($_POST['vreset'])) { 
+		$skey = $_POST['pkey'];
+		$rc = $this->helper->request_syscmd ("/bin/sed -i 's/^$skey => [0-9]*\(.*\)/$skey => $skey\\1/' /etc/asterisk/voicemail.conf");	
+		$this->message = "Voicemail password reset";	
+	}
+		
+/*
+ * update the SQL database
+ */
+ 
+// remove any escaped quotes 
+		$this->removeQuotes($tuple['provision']);
+		$this->removeQuotes($tuple['sipiaxfriend']);
+// do COS			
+		$this->doCos($cosSetArray);
+		
+/*
+ * check for keychange
+ */
+		if ($newkey != $tuple['pkey']) {
+			$sql = $this->dbh->prepare("SELECT pkey FROM ipphone WHERE pkey=?");
+			$sql->execute(array($newkey));
+			$res = $sql->fetch();	
+			if ( isset($res['pkey']) ) { 
+				$this->invalidForm = True;
+				$this->message = "<B>  --  Validation Errors!</B>";	
+				$this->error_hash['extensave'] = " " . $newkey . " already exists!";	
+			}
+			else {
+				// signal a key change to the editor
+				$this->keychange = $newkey;
+				// set the mailbox to the new extension
+				$tuple['dvrvmail'] = $newkey;
+				$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend']);
+				
+				$ret = $this->helper->setTuple("ipphone",$tuple,$newkey);
+				if ($ret == 'OK') {
+					$this->message = "Updated extension " . $tuple['pkey'];
+					// move any mail
+					$maildir = '/var/spool/asterisk/voicemail/default/'.$tuple['pkey'];
+					if (is_dir($maildir)) {
+						$oldmail = '/var/spool/asterisk/voicemail/default/'.$tuple['pkey'];
+						$newmail = '/var/spool/asterisk/voicemail/default/'.$newkey;
+						$this->helper->request_syscmd ("/bin/mv $oldmail $newmail");
+					}
+					// delete the old COS entries
+					$this->helper->predDelTuple("IPphoneCOSopen","IPphone_pkey",$tuple['pkey']);
+	 				$this->helper->predDelTuple("IPphoneCOSclosed","IPphone_pkey",$tuple['pkey']);
+				}
+				
+				else {
+					$this->invalidForm = True;
+					$this->message = "Validation Errors!";	
+					$this->error_hash['extensave'] = $ret;	
+				}
+			}
+		}
+		else {
+			$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend']);		
+			$ret = $this->helper->setTuple("ipphone",$tuple,$newkey);
+			if ($ret == 'OK') {
+				$this->message = "Updated extension " . $tuple['pkey'];
+			}
+			else {
+				$this->invalidForm = True;
+				$this->message = "Validation Errors!";	
+				$this->error_hash['extensave'] = $ret;	
+			}
+		}			
+	}
+    else {
+		$this->invalidForm = True;
+		$this->error_hash = $this->validator->GetErrors();
+		$this->message = "Validation Errors!";		
+    }
+    unset ($this->validator);
+}
+
+private function adjustAstProvSettings(&$tuple) {
+/*
  * local/remote processing
  */ 
-		$tuple['sipiaxfriend'] = preg_replace( " /nat=yes/ ",'',$tuple['sipiaxfriend']);
+//		$tuple['sipiaxfriend'] = preg_replace( " /nat=yes/ ",'',$tuple['sipiaxfriend']);		
 		$tuple['sipiaxfriend'] = preg_replace( " /^\#include\s*sark_sip_tls.conf.*$/m ",'',$tuple['sipiaxfriend']);	
+		$tuple['sipiaxfriend'] = preg_replace( " /^\#include\s*sark_sip_tcp.conf.*$/m ",'',$tuple['sipiaxfriend']);	
 		$tuple['sipiaxfriend'] = rtrim($tuple['sipiaxfriend']);	
-		
-		if ($tuple['location'] == 'remote') {
-			$tuple['sipiaxfriend'] .= "\nnat=yes";
-		}
-		
+
+
 		//tls - we provide provisioning support for snom,Yealink,Panasonic with TCP
 		
-		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.tcp.*$/m ",'',$tuple['provision']);		
+		if (isset($tuple['provision'])) {
+			$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.tcp.*$/m ",'',$tuple['provision']);		
 		
 		//tls - we provide provisioning support for snom,Yealink,Panasonic with TLS
 		
-		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.tls.*$/m ",'',$tuple['provision']);
+			$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.tls.*$/m ",'',$tuple['provision']);
 		
-		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.udp.*$/m ",'',$tuple['provision']);
+			$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.udp.*$/m ",'',$tuple['provision']);
 		
 		//ipv6 - we provide provisioning support for snom,Yealink,Panasonic with ipv6
 		
-		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.ipv6.*$/m ",'',$tuple['provision']);
+			$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.ipv6.*$/m ",'',$tuple['provision']);
 		
-		$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.ipv4.*$/m ",'',$tuple['provision']);
+			$tuple['provision'] = preg_replace( " /^\#INCLUDE.*\.ipv4.*$/m ",'',$tuple['provision']);
 		
-		$tuple['provision'] = rtrim ($tuple['provision']);
+			$tuple['provision'] = rtrim ($tuple['provision']);
+		}
 		
 		
 		
@@ -1204,7 +1337,8 @@ private function saveEdit() {
 			$shortdevice = substr($device,0,4);
 
 			switch ($shortdevice) {			
-				case 'Snom':					
+				case 'Snom':
+				case 'snom':					
 					switch ($tuple['transport']) {						
 						case 'tcp':
 							$tuple['provision'] .= "\n#INCLUDE snom.tcp";
@@ -1263,7 +1397,9 @@ private function saveEdit() {
 							$tuple['provision'] .= "\n#INCLUDE panasonic.ipv4";
 					}
 					break;					
-			
+/*
+	Cisco tcp not done yet
+	Cisco tls needs cisco certs		
 				case 'Cisc':					
 					switch ($tuple['transport']) {						
 						case 'tcp':
@@ -1275,15 +1411,9 @@ private function saveEdit() {
 						default: 
 							$tuple['provision'] .= "\n#INCLUDE cisco.udp";
 					}
-					switch ($tuple['protocol']) {
-						case 'IPV6':
-							$tuple['provision'] .= "\n#INCLUDE cisco.ipv6";
-							break;
-						default:
-							$tuple['provision'] .= "\n#INCLUDE cisco.ipv4";
-					}
 					break;		
-
+*/
+/*					
 				case 'Vtec':					
 					switch ($tuple['transport']) {						
 						case 'tcp':
@@ -1301,141 +1431,46 @@ private function saveEdit() {
 							break;
 						default:
 							$tuple['provision'] .= "\n#INCLUDE vtech.ipv4";
-					}		
-			}
-		}
-			
-/*	
- * update the asterisk internal database (callforwards and ringdelay)
- */  
- 		if ($this->astrunning) {
-			$amiHelper = new amiHelper();
-			$amiHelper->put_database($newkey);			
-		}
- 		
-/*
- * reset/empty voicemail if requested
- */
-
-	if (isset($_POST['vdelete'])) { 
-		$rc = $this->helper->request_syscmd ("/bin/rm -rf /var/spool/asterisk/voicemail/default/" . $_POST['pkey']."/*");	
-		$this->message = "Voicemail deleted";
-	}	
-	
-	if (isset($_POST['vreset'])) { 
-		$skey = $_POST['pkey'];
-		$rc = $this->helper->request_syscmd ("/bin/sed -i 's/^$skey => [0-9]*\(.*\)/$skey => $skey\\1/' /etc/asterisk/voicemail.conf");	
-		$this->message = "Voicemail password reset";	
-	}
-		
-/*
- * update the SQL database
- */
- 
-// remove any escaped quotes 
-		$this->removeQuotes($tuple['provision']);
-		$this->removeQuotes($tuple['sipiaxfriend']);
-// do COS			
-		$this->doCos();
-		
-/*
- * check for keychange
- */
-		if ($newkey != $tuple['pkey']) {
-			$sql = $this->dbh->prepare("SELECT pkey FROM ipphone WHERE pkey=?");
-			$sql->execute(array($newkey));
-			$res = $sql->fetch();	
-			if ( isset($res['pkey']) ) { 
-				$this->invalidForm = True;
-				$this->message = "<B>  --  Validation Errors!</B>";	
-				$this->error_hash['extensave'] = " " . $newkey . " already exists!";	
-			}
-			else {
-				// signal a key change to the editor
-				$this->keychange = $newkey;
-				// set the mailbox to the new extension
-				$tuple['dvrvmail'] = $newkey;
-				$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend']);
-				
-				$ret = $this->helper->setTuple("ipphone",$tuple,$newkey);
-				if ($ret == 'OK') {
-					$this->message = "Updated extension ";
-					// move any mail
-					$maildir = '/var/spool/asterisk/voicemail/default/'.$tuple['pkey'];
-					if (is_dir($maildir)) {
-						$oldmail = '/var/spool/asterisk/voicemail/default/'.$tuple['pkey'];
-						$newmail = '/var/spool/asterisk/voicemail/default/'.$newkey;
-						$this->helper->request_syscmd ("/bin/mv $oldmail $newmail");
 					}
-					// delete the old COS entries
-					$this->helper->predDelTuple("IPphoneCOSopen","IPphone_pkey",$tuple['pkey']);
-	 				$this->helper->predDelTuple("IPphoneCOSclosed","IPphone_pkey",$tuple['pkey']);
-				}
-				
-				else {
-					$this->invalidForm = True;
-					$this->message = "Validation Errors!";	
-					$this->error_hash['extensave'] = $ret;	
-				}
+*/			
 			}
+
 		}
-		else {
-			$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend']);		
-			$ret = $this->helper->setTuple("ipphone",$tuple,$newkey);
-			if ($ret == 'OK') {
-				$this->message = "Updated extension ";
-			}
-			else {
-				$this->invalidForm = True;
-				$this->message = "Validation Errors!";	
-				$this->error_hash['extensave'] = $ret;	
-			}
-		}			
-	}
-    else {
-		$this->invalidForm = True;
-		$this->error_hash = $this->validator->GetErrors();
-		$this->message = "Validation Errors!";		
-    }
-    unset ($this->validator);
+
+
 }
 
-private function doCOS() {
+private function doCOS($cosSetArray) {
 # Do the Booleans
 	$tuple = array();
 
 /*
  * delete the existing rows (if any)
  */ 
-	 $this->helper->predDelTuple("IPphoneCOSopen","IPphone_pkey",$_POST['pkey']);
-	 $this->helper->predDelTuple("IPphoneCOSclosed","IPphone_pkey",$_POST['pkey']);
+	$this->helper->predDelTuple("IPphoneCOSopen","IPphone_pkey",$_POST['pkey']);
+	$this->helper->predDelTuple("IPphoneCOSclosed","IPphone_pkey",$_POST['pkey']);
 /*
- * add these rows
- */ 	
-	if ( isset ($_POST['opencos']) && is_array($_POST['opencos'])) {
-		foreach ( $_POST['opencos'] as $ocos ) {
+ * add the new rows
+ */ 
+	if (!empty($cosSetArray)) {
+		foreach ($cosSetArray as $key=>$val) {			
+			preg_match( '/^(opencos|closedcos)(.*)$/', $key, $matches);
+			$this->helper->logit("COS considering $key " . $_POST['pkey'] . " " . $matches[2],1 );
 			$tuple['IPphone_pkey'] = $_POST['pkey'];
-			$tuple['COS_pkey'] = $ocos;
-			$ret = $this->helper->createTuple("IPphoneCOSopen",$tuple,false);
+			$tuple['COS_pkey'] = $matches[2];
+			$target = 'IPphoneCOSclosed';
+			if ($matches[1] == 'opencos') {
+				$target = 'IPphoneCOSopen';
+			} 
+			$ret = $this->helper->createTuple($target,$tuple,false);
 			if ($ret != 'OK') {
 				$this->invalidForm = True;
 				$this->message = "Validation Errors!";	
-				$this->error_hash['opencos'] = $ret;	
+				$this->error_hash[$matches[2]] = $ret;	
 			}
 		}
 	}
-	if ( isset($_POST['closedcos']) && is_array($_POST['closedcos'])) {
-		foreach ( $_POST['closedcos'] as $ccos ) {
-			$tuple['IPphone_pkey'] = $_POST['pkey'];
-			$tuple['COS_pkey'] = $ccos;
-			$ret = $this->helper->createTuple("IPphoneCOSclosed",$tuple,false);
-			if ($ret != 'OK') {
-				$this->invalidForm = True;
-				$this->message = "Validation Errors!";	
-				$this->error_hash['opencos'] = $ret;	
-			}
-		}
-	}		
+	
 }
 
 private function xRef($pkey) {
@@ -1475,7 +1510,7 @@ private function xRef($pkey) {
         $tref = "";
     }
     else {
-    	$xref .= "No Trunks reference this extension<br/>" . PHP_EOL;
+    	$xref .= "No DDI's reference this extension<br/>" . PHP_EOL;
     }  
     
  	$sql = $this->dbh->prepare("SELECT * FROM speed WHERE outcome LIKE ? OR out LIKE ? ORDER BY pkey");
@@ -1483,7 +1518,7 @@ private function xRef($pkey) {
  	$result = $sql->fetchall();	
 	foreach ($result as $row) {
 		if ($row['pkey'] != 'RINGALL') {
-			$tref .= "Callgroup <a href='javascript:window.top.location.href=" . '"/php/sarkcallgroup/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
+			$tref .= "Ring Group <a href='javascript:window.top.location.href=" . '"/php/sarkcallgroup/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
 
 		}
 	}
@@ -1783,6 +1818,10 @@ private function getVendorFromMac($mac) {
 //				print_r($findmac);
 				return 0;
 			}
+		}
+// Not all Yealinks advertise themselvs as Yealink, someties it's YEALINK
+		if (strcasecmp($short_vendor, 'yealink') == 0) {
+			$short_vendor = "Yealink";
 		}
 		$this->helper->logit("GETV shortv is $short_vendor  ",5 );
 		return $short_vendor;

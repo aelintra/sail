@@ -28,16 +28,28 @@ Class sarkivr {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $distro = array();
-	protected $soundir = '/var/lib/asterisk/sounds'; // set for rhel (see below)	
+	protected $greetings = array();
+	protected $soundir = '/usr/share/asterisk/sounds/'; // set for Debian/Ubuntu	
+
+function __construct() {
+
+	if ($handle = opendir($this->soundir)) {
+		while (false !== ($entry = readdir($handle))) {
+			if (preg_match("/^usergreeting(\d*)/",$entry,$matches)) {
+				array_push($this->greetings, $matches[1]);
+			}
+		}
+		closedir($handle);
+		asort($this->greetings);
+	}
+
+}
 
 public function showForm() {
 //print_r($_POST);	
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
-	$this->helper->qDistro($this->distro);
-	$this->soundir = $this->distro['soundroot'] . 'asterisk/sounds';
 			
 
 	$this->myPanel->pagename = 'IVRs';
@@ -83,11 +95,12 @@ private function showMain() {
 		$this->myPanel->msg = $this->message;
 	} 
 
+
 /* 
  * start page output
  */
   
-$buttonArray['new'] = true;
+	$buttonArray['new'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkivrForm",false);
 
 	if ($this->invalidForm) {
@@ -237,9 +250,13 @@ private function showEdit($pkey=false) {
 /*
  * get a list of greeting numbers
  */
+
+/*
 	$greetings = array();
 	$root = $this->soundir;
 	$dir = "";
+*/
+/*
 	$user =  $_SESSION['user']['pkey'];
 	if ($_SESSION['user']['pkey'] != 'admin') {
 		$res = $this->dbh->query("SELECT cluster FROM user where pkey = '" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
@@ -247,6 +264,8 @@ private function showEdit($pkey=false) {
 			$dir = $res['cluster'] . "/";
 		}
 	}
+*/
+/*	
 	$search = $root . "/" . $dir;
 	if ($handle = opendir($search)) {
 		while (false !== ($entry = readdir($handle))) {
@@ -255,8 +274,9 @@ private function showEdit($pkey=false) {
 			}
 		}
 		closedir($handle);
+		asort($greetings);
 	}
-								   	
+*/								   	
 
 /*
  * pkey could be POST or GET, depending upon the iteration
@@ -290,15 +310,18 @@ private function showEdit($pkey=false) {
 
     
 //    $this->myPanel->aLabelFor('ivrname'); 		
-	echo '<input type="hidden" name="newkey" size="20" id="newkey" value="' . $pkey . '"  />' . PHP_EOL;	
-
-	if (!empty($greetings)) {
-		$this->myPanel->aLabelFor('greeting'); 	
-		$this->myPanel->selected = $ivrmenu['greetnum'];
-		$this->myPanel->popUp('greetnum',$greetings);
-	}
+	echo '<input type="hidden" name="newkey" size="20" id="newkey" value="' . $pkey . '"  />' . PHP_EOL;
 
 	$this->myPanel->internalEditBoxStart();
+
+	if (!empty($this->greetings)) {
+		$this->myPanel->aLabelFor('greeting'); 	
+		echo '<br/><br/>';
+		$this->myPanel->selected = $ivrmenu['greetnum'];
+		$this->myPanel->popUp('greetnum',$this->greetings);
+	}
+	echo '<br/><br/>';
+	
 //	echo '<div class="w3-container">';
 //	echo '<div class="w3-margin">';
 	$this->myPanel->aLabelFor('Action on IVR Timeout');

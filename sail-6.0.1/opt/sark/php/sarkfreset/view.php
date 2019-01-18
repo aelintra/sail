@@ -98,6 +98,7 @@ private function showMain() {
 	} 
 	
 
+	$buttonArray=array();
 	$this->myPanel->actionBar($buttonArray,"sarkfresetForm",false,false);
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

@@ -6,6 +6,7 @@
 #/usr/bin/php /opt/sark/generator/agentSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/cdr_mysql.php >/dev/null
 /usr/bin/php /opt/sark/generator/extensions.php
+#/usr/bin/php /opt/sark/generator/paging.php
 /usr/bin/php /opt/sark/generator/iaxSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/meetmeSQL.php >/dev/null
 /usr/bin/php /opt/sark/generator/queuesSQL.php >/dev/null
@@ -17,9 +18,9 @@
 if [ -e "/etc/ha.d" ]; then
         /usr/bin/php /opt/sark/generator/sarkha.php >/dev/null
 fi
-/usr/bin/sqlite3 /opt/sark/db/sark.db "UPDATE globals SET MYCOMMIT='NO' WHERE pkey='global';"
 # copy the DB
 /bin/cp /opt/sark/db/sark.db /opt/sark/db/sark.copy.db
 /bin/mv /opt/sark/db/sark.copy.db /opt/sark/db/sark.rdonly.db
 #
 /usr/bin/logger Regenerating Asterisk Finished
+#/usr/bin/sqlite3 /opt/sark/db/sark.db "UPDATE globals SET MYCOMMIT='NO' WHERE pkey='global';"

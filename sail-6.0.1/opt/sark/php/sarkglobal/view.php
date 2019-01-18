@@ -28,7 +28,6 @@ Class sarkglobal {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $distro = array(); 
 	protected $HA;
 	protected $myBooleans = array(
 		'acl',
@@ -37,7 +36,7 @@ Class sarkglobal {
 		'cfwdanswer',
 		'cfwdextrnrule',
 		'cfwdprogress',
-		'cluster',
+		'clusterstart',
 		'cosstart',		
 		'playbeep',
 		'proxy',
@@ -52,7 +51,6 @@ public function showForm() {
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
-	$this->helper->qDistro($this->distro);
 			
 	$this->myPanel->pagename = 'Globals';
  
@@ -131,8 +129,13 @@ private function showMain() {
 
 // 	fetch the global tuple 	
 	$global = $this->dbh->query("SELECT * FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
-	
 
+	// set OTP if required
+
+ 	if ( empty($global['USEROTP'] )) {
+ 		$global['USEROTP'] = $this->helper->ret_password (6);
+ 	}
+	
 /*
  * get countrycode from indications.conf
  */ 
@@ -316,6 +319,7 @@ private function saveEdit() {
 // print_r($_POST);
 
 	$tuple = array();
+
 /*	
 	if (isset($_POST['EURL'])) {
 		$fvar = filter_var($_POST['EURL'], FILTER_VALIDATE_URL);
@@ -375,9 +379,10 @@ private function saveEdit() {
 /*
  * 	call the tuple builder to create a table row array 
  */		
-		$custom = array ('LINUXTZ' => True);		
+		$custom = array ('LINUXTZ' => True,'clusterstart' => True);		
 		$this->helper->buildTupleArray($_POST,$tuple,$custom);
 		$tuple['pkey'] = 'global';
+		$tuple['cluster'] = $_POST['clusterstart'];
 //		print_r($tuple);
 		
 /*
@@ -392,6 +397,7 @@ private function saveEdit() {
 /*
  * deal with multi tenant
  */
+			
 			$active = 'yes';
 			$ldap = 'no';
 			if ($tuple['cluster'] == 'OFF') {
@@ -430,22 +436,11 @@ private function goodEditOutcome($tuple) {
  */
 		
 	if ($tuple['sipmulticast'] == "enabled" ) {
-		$this->helper->request_syscmd ( "/usr/bin/sv u  srk-ua-responder" );	
-		if ( $this->distro['rhel']  ) {					
-			$this->helper->request_syscmd ( "/bin/rm -f  /service/srk-ua-responder/down" ); 
-		}
-		if ( $this->distro['debian'] ) {
 			$this->helper->request_syscmd ( "/bin/rm -f  /etc/service/srk-ua-responder/down" ); 
-		}
 	}			
 	else {
 		$this->helper->request_syscmd ( "/usr/bin/sv d  srk-ua-responder" );
-		if ( $this->distro['rhel'] ) {							
-			$this->helper->request_syscmd ( "/bin/touch  /service/srk-ua-responder/down" );
-		}
-		if ( $this->distro['debian'] ) {
-			$this->helper->request_syscmd ( "/bin/touch  /etc/service/srk-ua-responder/down" );
-		}							
+		$this->helper->request_syscmd ( "/bin/touch  /etc/service/srk-ua-responder/down" );							
     }
     $this->helper->request_syscmd ( "/usr/bin/sv k  srk-ua-responder" );
 }
@@ -456,13 +451,10 @@ private function goodEditOutcome($tuple) {
 
 private function sark_stop () {
 	
-	if ( $this->distro['debian'] ) {
-		`/usr/bin/sudo /etc/init.d/asterisk stop`;
-	}
-	else {
-		$ret = ($this->helper->request_syscmd ('/usr/bin/sv d sark')); 
-   		$ret = ($this->helper->request_syscmd ('/usr/bin/sv k sark')); 
-	}
+
+	`/usr/bin/sudo /etc/init.d/asterisk stop`;
+
+
 	return ("PBX stopped");
 }
 
@@ -472,12 +464,8 @@ private function sark_stop () {
 
 private function sark_start () {
 
-	if ( $this->distro['debian'] ) {	
-		`/usr/bin/sudo /etc/init.d/asterisk start`;
-	}
-	else {
-		$ret = ($this->helper->request_syscmd ('/usr/bin/sv u sark'));
-	}
+	`/usr/bin/sudo /etc/init.d/asterisk start`;
+
 	return ("PBX started");	
 }
 

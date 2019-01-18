@@ -27,7 +27,7 @@
 	}, "Invalid IP/Mask");	
 	
 	$.validator.addMethod("domaincheck",function(value,element) {
-		return this.optional(element) || /^([\da-z\.-]+)\.([a-z\.]{2,6})$/i.test(value); 
+		return this.optional(element) || /^([\da-z\.-]+)\.([a-z\.]{2,63})$/i.test(value); 
 	},"This domain looks wrong");	
 	
 	$.validator.addMethod("hostcheck",function(value,element) {

@@ -36,7 +36,7 @@ try {
 	
     
     $aoh_array = parse_ini_file("/etc/pika/aohscan.new", true);
-#	print_r($aoh_array);
+//	print_r($aoh_array);
 	
 	$digital = false;
 	$route = 'PIKAFXO_G0';

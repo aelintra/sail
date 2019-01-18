@@ -73,28 +73,30 @@ try {
 //  IAX peers (Lines)
 //					       
 	$sql = "SELECT * FROM lineIO order by pkey";
-    	foreach ($dbh->query($sql) as $row) {
-    	if ($row['active'] == "YES") {    
-			$cquery = "select * from Carrier where pkey='" . $row['carrier'] . "'";
-			$carrier = $dbh->query($cquery)->fetch();
+    foreach ($dbh->query($sql) as $row) {
+		if ($row['active'] == "YES") {    
+       		$cquery = "select * from Carrier where pkey='" . $row['carrier'] . "'";
+ 			$carrier = $dbh->query($cquery)->fetch();
 			if ($carrier['technology'] == "IAX2"  || $carrier['technology'] == "Gateway") {
-				if ($row['privileged'] == "NO") {
-					if (!preg_match(" /context=mainmenu/",$row['sipiaxuser'])) { 
-						$row['sipiaxuser'] = preg_replace ( '/context=internal/','/context=mainmenu', $row['sipiaxuser'] );
+				if ($row['carrier'] == "InterSARK"  || $row['carrier'] == "SailToSail") {
+					if ($row['privileged'] == "NO") {
+						if (!preg_match(" /context=mainmenu/",$row['sipiaxuser'])) { 
+							$row['sipiaxuser'] = preg_replace ( '/context=internal/','context=mainmenu', $row['sipiaxuser'] );
+ 						}
+						else {
+							$row['sipiaxuser'] = preg_replace ( '/\n\s*$/','context=mainmenu', $row['sipiaxuser'] );
+						}
 					}
-					else {
-						$row['sipiaxuser'] = preg_replace ( '/\n\s*$/','/context=mainmenu/', $row['sipiaxuser'] );
-					}
-				}	 	
+				}               
 				$OUT .= "[" . $row['peername'] . "]\n";
 				$OUT .= $row['sipiaxpeer'] . "\n";
 				if (isset($row['sipiaxuser'])) {
 					$OUT .= "[" . $row['desc'] . "]\n";
 					$OUT .= $row['sipiaxuser'] . "\n\n";;
 				}
-			}	
+			}       
 		}
-	}
+    }
     /*** close the database connection ***/
     	$dbh = null;
 // write the generated include file 

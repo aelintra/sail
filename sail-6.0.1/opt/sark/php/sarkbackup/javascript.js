@@ -14,7 +14,7 @@
 		},
 	});
 */	
-	$('#upimg').click(function() {
+	$("[name='upimg']").click(function() {
 		$('#file').click();
 	});
 	

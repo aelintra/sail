@@ -19,7 +19,7 @@ include("generated_file_banner.php");
 include("/opt/sark/php/srkNetHelperClass");
 include("/opt/sark/php/srkHelperClass");
 
-$release = `asterisk -rx 'core show version'`;
+$release = `sudo /usr/sbin/asterisk -rx 'core show version'`;
 $vers = '1.8';
 if (preg_match(' /Asterisk\s*(\d\d).*$/ ', $release,$matches)) {
 	$vers = $matches[1];
@@ -61,12 +61,6 @@ try {
  		} 
 		$OUT .= "\t" . $k . "=" . $v . "\n";
  	} 
-// set OTP
- 	if ( ! $global['USEROTP'] ) {
- 		$otp = $helper->ret_password (6);
- 		$res = $dbh->prepare("UPDATE globals SET USEROTP = ?");
- 		$res->execute(array($otp));
- 	}
 
 //
 //  globals required for Hot Desk
@@ -137,6 +131,9 @@ try {
 	else {
 		$OUT .= "\tinclude => qrxvtmny \n";	
 	}
+	if (empty($global['OPERATOR'])) {
+		$global['OPERATOR'] = "0";
+	}
 	$OUT .= "\n\texten => " . $global['OPERATOR'] . ",1,Goto(extensions,\${SYSOP},1)\n\n";
 
 
@@ -156,6 +153,7 @@ try {
 		else {
 			$OUT .= "[" . $row['pkey'] . "]\n"; 
 		}
+		$OUT .= "\tinclude => parkedcalls\n";
 		$OUT .= "\tinclude => internal-presets\n";
     	$OUT .= "\tinclude => extensions\n";
 //    	$OUT .= "\tinclude => conferences\n"; 
@@ -540,33 +538,37 @@ THERE;
 //
 //  Internal presets
 //
-
 //  build pageall/ringall group 
 
     $dialstr = '';
     $ringall = '';
+    $count = 1;
 	$sql = "select * from IPphone order by pkey"; 
-    foreach ($dbh->query($sql) as $row) {    
+    foreach ($dbh->query($sql) as $row) { 
+    	if ($count > 30) {
+    		break;
+    	}    
 		$dialstr .= "SIP/" . $row['pkey'] .'&';
-		$ringall .= $row['pkey'] .' ';
+		$ringall .= "SIP/" . $row['pkey'] .'&';
+		$count++;
     } 
-
-/*            
-
 //  strip trailing space and generate ringall
-	$ringall = preg_replace ( '/\s*$/',"", $ringall );
+	$ringall = preg_replace ('/&/'," ", $ringall );
+	$ringall = preg_replace ( '/\s*$/',"", $ringall ); 
+
 	if ($ringall != '') {
-//		$OUT .= "\texten => SYSALL,1,agi(sarkhpe,Alias,$ringall,\${EXTEN})\n"; 
-		$count = $dbh->exec("UPDATE speed SET out = '". $ringall . "' WHERE pkey = 'RINGALL'" );  
+		$OUT .= "\texten => RINGALL,1,agi(sarkhpe,Alias,$ringall,\${EXTEN},)\n"; 
+//		$count = $dbh->exec("UPDATE speed SET out = '". $ringall . "' WHERE pkey = 'RINGALL'" );  
 	}
 //  strip last & and save pageall
-    $dialstr = preg_replace ( '/&$/',"", $dialstr );  
-	$count = $dbh->exec("UPDATE page SET pagegroup = '". $dialstr . "' WHERE pkey = 'pageall'" );   
+    $dialstr = preg_replace ( '/&$/',"", $dialstr ); 
+//    $res = $dbh->prepare("UPDATE page SET pagegroup = '". $dialstr . "' WHERE pkey = ?");
+// 	$res->execute(array('pageall')); 
+//	$count = $dbh->exec("UPDATE page SET pagegroup = '". $dialstr . "' WHERE pkey = 'pageall'" );   
 	
 //  done with pageall/ringall
 
-*/
- 
+
 	$speedflag = false;
 	$sql = "select * from speed";
 	$dialstr = "";
@@ -597,14 +599,46 @@ THERE;
 			}
 		}
 		$dialstr = preg_replace ( '/\s*$/',"", $dialstr );
-		if ($row['grouptype'] != "Page") {
+		if ($row['grouptype'] != "Page" && $row['pkey'] != 'RINGALL') {
+	/*
+		This stanza looks redundant.  
+		It may have been an old optimization to handle single extension call groups but the preg_match can't succeed.
+		The else will always be taken. 
+	 */			
 			if (preg_match(' /^\d{4}$/ ',$dialstr) && $row['grouptype'] != "Alias") {
 				$OUT .= "\texten => " . $row['pkey'] . ",1,agi(sarkhpe,InCall," . $row['out'] . ",,)\n";
                 $OUT .= "\texten => *" . $row['pkey'] . ",1,GoTo(extensions,*" . $row['out'] . ",1)\n";
                 $OUT .= "\texten => **" . $row['pkey'] . ",1,GoTo(extensions,**" . $row['out'] . ",1)\n";
 			}
 			else {
-				$OUT .= "\texten => " . $row['pkey'] . ",1,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n"; 
+				
+				if (empty($row['divert'])) {
+					$OUT .= "\texten => " . $row['pkey'] . ",1,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n";
+				}
+				else {
+					$OUT .= "\texten => **" . $row['pkey'] . ",hint,Custom:**" . $row['pkey'] . "\n"; 
+					$OUT .= "\texten => **" . $row['pkey'] . ",1,NoOp()\n";
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,GoToIf($["${DEVICE_STATE(Custom:${EXTEN})}" = "NOT_INUSE"]?set' . $row['pkey'] . ':free' . $row['pkey'] . ")\n";
+
+					$OUT .= "\texten => **" . $row['pkey'] . ',n(set' . $row['pkey'] . '),NoOp()' ."\n";
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,Set(DEVICE_STATE(Custom:${EXTEN})=BUSY)' . "\n";
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,Playback(activated)' . "\n";
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,Hangup()' . "\n";
+
+					$OUT .= "\texten => **" . $row['pkey'] . ',n(free' . $row['pkey'] . '),NoOp()' ."\n";					
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,Set(DEVICE_STATE(Custom:${EXTEN})=NOT_INUSE)' . "\n";
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,Playback(de-activated)' . "\n";
+					$OUT .= "\texten => **" . $row['pkey'] . ',n,Hangup()' . "\n";
+
+					$OUT .= "\texten => " . $row['pkey'] . ',1,NoOp(Custom:**${EXTEN} state is ${DEVICE_STATE(Custom:**${EXTEN})}))' . "\n";
+					$OUT .= "\texten => " . $row['pkey'] . ',n,GoToIf($["${DEVICE_STATE(Custom:**${EXTEN})}"="BUSY"]?divert' . $row['pkey'] . ":normal" . $row['pkey'] . ")\n"; 
+					$OUT .= "\texten => " . $row['pkey'] . ',n(normal' . $row['pkey'] . '),NoOp()' . "\n";
+					$OUT .= "\texten => " . $row['pkey'] . ",n,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n";
+					$OUT .= "\texten => " . $row['pkey'] . ',n,Hangup()' . "\n";
+					$OUT .= "\texten => " . $row['pkey'] . ',n(divert' . $row['pkey'] . '),NoOp()' . "\n";
+					$OUT .= "\texten => " . $row['pkey'] . ',n,GoTo(internal,' . $row['divert'] . ",1)\n";
+				}
+
 			}
 		}
 		else {
@@ -614,13 +648,13 @@ THERE;
 		} 
 		$dialstr = "";
 	}
-
 // insert page group dialstrings into their tables 
-	
+/*	
 	foreach ($pagearray as $pkey=>$dialstr) {
 		$count = $dbh->exec("UPDATE speed SET pagegroup = '". $dialstr . "' WHERE pkey = '" . $pkey . "'" );
- 	}  
-	
+ 	}
+*/  
+	syslog(LOG_WARNING, "Done ring groups" . "\n");
 	
 // V4 open/closed lamps
 	
@@ -845,7 +879,9 @@ ANDTHERE;
 }
 catch(PDOException $e) {
 
-    	echo $e->getMessage();
+//    	echo $e->getMessage();
+    	$errorMsg = $e->getMessage();
+    	syslog(LOG_WARNING, "DB error in extension generate - $errorMsg" );
 }
 
 function meetMe(&$OUT,&$global,$dbh) {

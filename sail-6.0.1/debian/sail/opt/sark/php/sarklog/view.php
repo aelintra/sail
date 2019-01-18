@@ -67,11 +67,9 @@ private function showMain() {
  * start page output
  */
 	
- 	$this->myPanel->actionBar($buttonArray,"sarklogForm",false,false);
+	$buttonArray=array();
+	$this->myPanel->actionBar($buttonArray,"sarklogForm",false,false);
 	
-	if ($this->invalidForm) {
-		$this->myPanel->showErrors($this->error_hash);
-	}
 	$this->myPanel->Heading($this->head,$this->message);
 
 	$this->myPanel->responsiveSetup(2);
@@ -92,8 +90,8 @@ private function showMain() {
 	foreach ($this->logFiles as $key => $file ) {
 		if (file_exists("/var/log/" . $key)) {
 			echo '<tr title = "Click to View">' . PHP_EOL;		
-			echo '<td style="text-align:left; "><a href="' . $_SERVER['PHP_SELF'] . '?edit=yes&amp;pkey=' . $key . '">/var/log/' . $key . '</a></td>';
-			echo '<td class="w3-hide-small w3-hide-medium"><a href="/php/downloadg.php?dfile=/var/log/' . $key . '"><img src="/sark-common/icons/download.png" alt="Download" title = "Click to Download" ></a></td>' . PHP_EOL;	
+			echo '<td style="text-align:left; "><a href="' . $_SERVER['PHP_SELF'] . '?edit=yes&amp;pkey=' . $key . '" style="text-decoration:none" >/var/log/' . $key . '</a></td>';
+			echo '<td class="w3-hide-small w3-hide-medium"><a href="/php/downloadg.php?dfile=/var/log/' . $key . '"><img src="/sark-common/icons/download.png" alt="Download" title = "Click to Download"></a></td>' . PHP_EOL;	
 			echo '</tr>'. PHP_EOL;	
 		}
 	}

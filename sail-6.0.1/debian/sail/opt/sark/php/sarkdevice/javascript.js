@@ -24,7 +24,9 @@
 			}	
 		}, 		
 	});	 
-*/		  
+*/
+
+
 	var scrollPosition;	
 	var tab = $('#devicetable').dataTable;
 	$('#devicetable').dataTable ( {

@@ -174,7 +174,7 @@ private function showNew() {
 
 	$this->myPanel->displayInputFor('cosname','text',null,'pkey');		
 	$this->myPanel->displayBooleanFor('active','NO');
-    $this->myPanel->displayInputFor('cosdialplan','text',$tuple['dialplan'],'dialplan');
+    $this->myPanel->displayInputFor('cosdialplan','text',null,'dialplan');
     $this->myPanel->displayBooleanFor('defaultopen','NO');
     $this->myPanel->displayBooleanFor('orideopen','NO');
     $this->myPanel->displayBooleanFor('defaultclosed','NO');

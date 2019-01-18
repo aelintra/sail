@@ -283,17 +283,30 @@ private function showEdit($key=False) {
 	
 	
 
-	$this->myPanel->displayInputFor('callgroup','text',$res['pkey'],'pkey');	
+//	$this->myPanel->displayInputFor('callgroup','text',$res['pkey'],'pkey');	
 	$this->myPanel->radioSlide('grouptype',$res['grouptype'],array('Ring','Hunt','Page','Alias'));
 	$dialparams = 'ciIkt';
 	if (isset($res['dialparamsring']) ) {
 		$dialparams = $res['dialparamsring'];
 
 	}
-		
+
+	$this->myPanel->displayInputFor('groupstring','text',$res['out'],'out');
+	echo '<div class="w3-margin-bottom">';
+	$this->myPanel->aLabelFor('outcome');
+	echo '</div>';
+	$this->myPanel->selected = $res['outcome'];
+	$this->myPanel->sysSelect('outcome') . PHP_EOL;
+	$this->myPanel->aHelpBoxFor('outcome');
+	$this->myPanel->displayInputFor('description','text',$res['longdesc'],'longdesc');
+
+	$this->myPanel->displayInputFor('divert','text',$res['divert']);
+
 	echo '<div id="divringname">' . PHP_EOL;
 	$this->myPanel->displayInputFor('dialparams','text',$dialparams,"dialparamsring");
 	echo '</div>' . PHP_EOL;
+
+	
 
 	$dialparams = 'cIkt';
 	if (isset($res['dialparamshunt']) ) {
@@ -310,7 +323,7 @@ private function showEdit($key=False) {
 	echo '<div class="cluster w3-margin-bottom">';
     $this->myPanel->aLabelFor('cluster','cluster');
     echo '</div>';
-	$this->myPanel->selected = $extension['cluster'];
+	$this->myPanel->selected = $res['cluster'];
 	$this->myPanel->displayCluster();
 	$this->myPanel->aHelpBoxFor('cluster');
 	echo '</div>';
@@ -319,19 +332,11 @@ private function showEdit($key=False) {
 	$this->myPanel->radioSlide('devicerec','default',array('default','None','OTR','OTRR','Inbound'));
 	$this->myPanel->displayInputFor('ringdelay','number',$res['ringdelay']);
 	$this->myPanel->displayInputFor('alphatag','text',$res['calleridname'],'calleridname');
-
-	echo '<div class="w3-margin-bottom">';
-	$this->myPanel->aLabelFor('outcome');
-	echo '</div>'; 
-	$this->myPanel->sysSelect('outcome') . PHP_EOL;
-	$this->myPanel->aHelpBoxFor('outcome');
-
-	$this->myPanel->displayInputFor('groupstring','text',$res['out'],'out');
 	$this->myPanel->displayInputFor('alertinfo','text',$res['speedalert'],'speedalert');
-	$this->myPanel->displayInputFor('description','text',$res['descriptopn'],'longdesc');
+	
 
 	echo '</div>';
-//	echo '<input type="hidden" name="pkey" id="pkey" size="20"  value="' . $tuple['pkey'] . '"  />' . PHP_EOL; 
+	echo '<input type="hidden" name="pkey" id="pkey" size="20"  value="' . $res['pkey'] . '"  />' . PHP_EOL; 
 
 	$endButtonArray['cancel'] = true;
 	$endButtonArray['update'] = "endupdate";	
@@ -348,7 +353,8 @@ private function saveEdit() {
 
 	$this->validator = new FormValidator();
     $this->validator->addValidation("pkey","req","Please fill in Call Group name");
-    $this->validator->addValidation("pkey","alnum","Call Group name must be alphanumeric(no spaces)");    
+    $this->validator->addValidation("pkey","alnum","Call Group name must be alphanumeric(no spaces)"); 
+    $this->validator->addValidation("divert","alnum","Divert must be alphanumeric(no spaces)");   
 //	$this->validator->addValidation("ringdelay","num","Ringtime must be numeric"); 
     $this->validator->addValidation("longdesc","alnum_s","Description must be alphanumeric (no special characters)"); 
     $this->validator->addValidation("out","regexp=/^[@A-Za-z0-9-_\/\s]{2,1024}$/","Target must be number or number/channel strings separated by whitespace");     

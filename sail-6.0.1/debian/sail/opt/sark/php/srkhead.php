@@ -38,8 +38,8 @@ else {
 
 $(document).ready(function() {
 
-  $('.message').delay(3000).fadeOut(400);
-  $('.emessage').delay(10000).fadeOut(400);
+  $('.message').delay(2000).fadeOut(600);
+//  $('.emessage').delay(10000).fadeOut(600);
 
 });
 
@@ -221,6 +221,21 @@ $(window).load(function() {
 
 <?php
 	$url = explode('/', $_SERVER['SCRIPT_URL']);
+/*
+  check for an incomplete URL, which can sometimes happen if the user has cancelled or backed up
+  or manually messed with uri
+  If we find one, end the session and resend a login screen
+*/
+
+  if (empty($url[2])) {
+    // We remove the user's data from the session 
+    unset($_SESSION['user']); 
+     
+    // We redirect them to the login page 
+    header("Location: ../sarklogin/main.php"); 
+    die("Redirecting to: login.php");
+  }
+
 	if (file_exists($_SERVER["DOCUMENT_ROOT"] . "../php/" . $url[2] . '/javascript.js')) {
 		echo '<script  src="/php/' . $url[2] . '/javascript.js" ></script>' . PHP_EOL;
 	}

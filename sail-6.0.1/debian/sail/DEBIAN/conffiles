@@ -14,6 +14,7 @@
 /etc/asterisk/sark_jabber.conf
 /etc/asterisk/sark_manager.conf
 /etc/asterisk/sark_mcstcnf.conf
+/etc/asterisk/sark_meetme.conf
 /etc/asterisk/sark_queues_header.conf
 /etc/asterisk/sark_queues_main.conf
 /etc/asterisk/sark_recurse.conf
@@ -39,8 +40,8 @@
 /etc/dnsmasq.d/sarkdns
 /etc/logrotate.d/shorewall_log
 /etc/logrotate.d/siplog
+/etc/resolv.dnsmasq
 /etc/rsyslog.d/40-shorewall.conf
-/etc/shorewall/blrules
 /etc/shorewall/interfaces
 /etc/shorewall/policy
 /etc/shorewall/routestopped

@@ -1,4 +1,4 @@
- <?php
+<?php
 //
 // Developed by CoCo
 // Copyright (C) 2012 CoCoSoft
@@ -36,7 +36,7 @@ public function showForm() {
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
 	
-	$release = `/usr/sbin/asterisk -rx 'core show version'`;
+	$release = `sudo /usr/sbin/asterisk -rx 'core show version'`;
 	$this->rlse = '1.8';
 	if (preg_match(' /Asterisk\s*(\d\d).*$/ ', $release,$matches)) {
 		$this->rlse = $matches[1];
@@ -88,8 +88,7 @@ private function showMain() {
 	if (isset($this->message)) {
 		$this->myPanel->msg = $this->message;
 	}
-	
-	$confarray = `/usr/sbin/asterisk -rx 'meetme list concise' | grep $search`; 
+	$confarray = array(); 	
 
 /* 
  * start page output
@@ -139,14 +138,14 @@ private function showMain() {
 		$search = $row['pkey'];
 		$status = 'free';
 		if ($this->rlse < 11) {
-			$statusrow = `/usr/sbin/asterisk -rx 'meetme list concise' | grep $search`;
+			$statusrow = `sudo /usr/sbin/asterisk -rx 'meetme list concise' | grep $search`;
 			if ($statusrow) {
 				$roomarray = (explode('!', $statusrow));
 				$status = $roomarray[1] . " users";
 			}
 		}
 		else {
-			$statusrow = `/usr/sbin/asterisk -rx 'confbridge list' | grep $search`;
+			$statusrow = `sudo /usr/sbin/asterisk -rx 'confbridge list' | grep $search`;
 			if ($statusrow) {
 				$numusers = preg_match(' /^\d{3,4}\s*(\d{1,2})/ ',$statusrow,$matches);
 				$status = $matches[1] . " users";

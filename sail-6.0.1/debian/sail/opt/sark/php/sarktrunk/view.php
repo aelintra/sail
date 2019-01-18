@@ -586,7 +586,9 @@ private function showEdit() {
 	else {
 		$this->myPanel->displayInputFor('description','text',$tuple['trunkname']); 
 	}
-    
+
+// removed Jan 2019 - trunks are shared common    
+/*
 	echo '<div class="cluster">';
 	echo '<div class="cluster w3-margin-bottom">';
     $this->myPanel->aLabelFor('cluster','cluster');
@@ -595,7 +597,7 @@ private function showEdit() {
 	$this->myPanel->displayCluster();
 	$this->myPanel->aHelpBoxFor('cluster');
 	echo '</div>';
-
+*/
 	$this->myPanel->subjectBar('Line Settings');
 	
 	if ( $tuple['technology'] != 'DiD' && $tuple['technology'] != 'Class' )  {
@@ -685,7 +687,7 @@ private function saveEdit() {
  */ 	
 	if ($ret == 'OK') {
 //		$this->helper->commitOn();	
-		$this->message = " Updated Trunk " . $startkey . "!";
+		$this->message = " Updated Trunk " . $tuple['pkey'] . "!";
 	}
 	else {
 		$this->invalidForm = True;
@@ -700,7 +702,7 @@ private function deleteRow() {
 	$this->message = "Deleted extension " . $pkey;
 	$this->myPanel->msgDisplay('Deleted trunk ' . $pkey);
 	$this->myPanel->navRowDisplay("lineio", $pkey);
-	$this->helper->commitOn();	
+//	$this->helper->commitOn();	
 }
 
 private function copyTemplates (&$tuple) {

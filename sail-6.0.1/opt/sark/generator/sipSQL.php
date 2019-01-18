@@ -34,12 +34,14 @@ try {
 //
 	$global = $dbh->query("select * from globals")->fetch();
 	if ($global['SENDEDOMAIN'] = "YES") {
-    	$edomaindig = $nethelper->get_externip();
-		$OUT .= 'externip=' . $edomaindig . "\n";	   
-	}
-    else {
-    	if ($global['EDOMAIN'] != "") { 
+		if ($global['EDOMAIN'] != "") { 
 			$OUT .= 'externip=' . $global['EDOMAIN'] . "\n";	   
+		}	
+		else {
+			$edomaindig = $nethelper->get_externip();
+			if ($edomaindig) {
+                        	$OUT .= 'externip=' . $edomaindig . "\n";
+                	}
 		}
 	}
 	if ($global['BINDADDR'] == "ON") {
@@ -47,6 +49,7 @@ try {
 			$OUT .= 'bindaddr=' . $global['HACLUSTERIP'] . "\n";
 		}	   
 	}
+	
 //  deal with TLS
 	$tlsport = 'tlsbindaddr=0.0.0.0';
 	if (isset($global['TLSPORT'])) {
@@ -96,6 +99,17 @@ try {
 				$row['sipiaxfriend'] = preg_replace ( '/\$desc/', $row['desc'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$password/', $row['passwd'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$ext/', $row['pkey'], $row['sipiaxfriend']);
+				$nat='no';
+				if ($row['location'] == 'remote') {
+					$nat='yes';
+				}
+				$row['sipiaxfriend'] = preg_replace ( '/\$nat/', $nat, $row['sipiaxfriend']);
+				$row['sipiaxfriend'] = preg_replace ( '/\$transport/', $row['transport'], $row['sipiaxfriend']);
+				$encryption='no';
+				if ($row['transport'] == 'tls') {
+					$encryption='yes';
+				}
+				$row['sipiaxfriend'] = preg_replace ( '/\$encryption/', $encryption, $row['sipiaxfriend']);				
 				$OUT .= $row['sipiaxfriend'] . "\n\n";
 			} 
 		}

@@ -99,7 +99,7 @@ public function showForm() {
 		$this->viewstate=true;	
 	}
 	
-	if (!empty($_POST['upimgclick'])) { 
+	if (!empty($_FILES['file']['name'])) { 
 		$dir=NULL;
 		$filename = strip_tags($_FILES['file']['name']);
 		if (preg_match (' /^sark\.db\.\d{10}$/ ', $filename) ) {
@@ -192,15 +192,11 @@ private function showMain() {
 	echo '</div>' . PHP_EOL;
 */
 
-	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;
-	echo '<input type="hidden" id="upimgclick" name="upimgclick" />'. PHP_EOL;
-  	
-	
+	$buttonArray = array();
+	$buttonArray['upimg'] = true;
 	$buttonArray['snap'] = true;
 	$buttonArray['spin'] = true;
 	
-
-
 	$this->myPanel->actionBar($buttonArray,"sarkbackupForm",false);
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -311,6 +307,8 @@ private function showMain() {
 	$this->myPanel->endBar($snapButtonArray);
 	echo '<br/>' . PHP_EOL; 
 	echo '</div>';
+	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;
+	echo '<input type="hidden" id="upimgclick" name="upimgclick" />'. PHP_EOL;
 	echo '</form>';
 	$this->myPanel->responsiveClose();
    	
@@ -420,15 +418,17 @@ private function doRestore() {
  */
 
 	$this->myPanel->pagename = 'Restore ' . $rfile;
-	$this->myPanel->Heading();
-	if (isset($this->message)) {
-		foreach ($this->error_hash as $inpname => $inp_err) {
-			echo "<p>$inpname : $inp_err</p>\n";
-		}       
+	$buttonArray['cancel'] = true;
+
+	$this->myPanel->actionBar($buttonArray,"sarkbackupForm",false,false);
+
+	if ($this->invalidForm) {
+		$this->myPanel->showErrors($this->error_hash);
 	}
-	echo '<div class="buttons">';	
-	$this->myPanel->Button("cancel");
-	echo '</div>' . PHP_EOL;
+	$this->myPanel->Heading($this->head,$this->message);
+
+	$this->myPanel->responsiveSetup(2);
+	echo '<form id="sarkbackupForm" action="' . $_SERVER['PHP_SELF'] . '" method="post" enctype="multipart/form-data">' . PHP_EOL;
 	
 	$this->printRestoreNotes ($rfile);
 	
@@ -445,7 +445,7 @@ private function doRestore() {
  * now we can begin the restore
  */   	
 	
-	if ( isset($_POST['resetdb'] ) ) {
+	if ( isset($_POST['resetdb'] ) && $_POST['resetdb'] == 'YES') {
 		if (file_exists($tempDname . '/opt/sark/db/sark.db')) {
 			$this->helper->request_syscmd ("cp -f $tempDname/opt/sark/db/sark.db  /opt/sark/db/sark.db");
 			$this->helper->request_syscmd ("chown www-data:www-data  /opt/sark/db/sark.db");
@@ -461,7 +461,7 @@ private function doRestore() {
 		$this->log .= "<p>Database PRESERVED</p>";	
 	}
 
-	if ( isset($_POST['resetasterisk'] ) ) {
+	if ( isset($_POST['resetasterisk'] ) && $_POST['resetasterisk'] == 'YES') {
 		if (file_exists($tempDname . '/etc/asterisk')) {
 			$this->helper->request_syscmd ("rm -rf /etc/asterisk/*");
 			$this->helper->request_syscmd ("cp -a  $tempDname/etc/asterisk/* /etc/asterisk");
@@ -477,7 +477,7 @@ private function doRestore() {
 		$this->log .= "<p>Asterisk Files PRESERVED</p>";	
 	}	
 			 			
-	if ( isset($_POST['resetusergreets'] ) ) {
+	if ( isset($_POST['resetusergreets'] ) && $_POST['resetusergreets'] == 'YES') {
 		if (glob($tempDname . '/usr/share/asterisk/sounds/usergreeting*')) {
 			$this->helper->request_syscmd ("rm -rf /usr/share/asterisk/sounds/usergreeting*");
 			$this->helper->request_syscmd ("cp -a  $tempDname/usr/share/asterisk/sounds/usergreeting* /usr/share/asterisk/sounds");
@@ -493,7 +493,7 @@ private function doRestore() {
 		$this->log .= "<p>Greeting files PRESERVED</p>";	
 	}
 		
-	if ( isset($_POST['resetvmail'] ) ) {
+	if ( isset($_POST['resetvmail'] ) && $_POST['resetvmail'] == 'YES') {
 		if (file_exists($tempDname . '/var/spool/asterisk/voicemail/default')) {
 			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/voicemail/default");
 			$this->helper->request_syscmd ("cp -a $tempDname/var/spool/asterisk/voicemail/default /var/spool/asterisk/voicemail");
@@ -509,7 +509,7 @@ private function doRestore() {
 		$this->log .= "<p>Voicemail files PRESERVED</p>";	
 	}
 	
-	if ( isset($_POST['resetldap'] ) ) {
+	if ( isset($_POST['resetldap'] ) && $_POST['resetldap'] == 'YES') {
 		if (file_exists($tempDname . '/tmp/sark.local.ldif')) {
 			$this->helper->request_syscmd ("/etc/init.d/slapd stop");
 			$this->helper->request_syscmd ("rm -rf /var/lib/ldap/*");
@@ -531,11 +531,18 @@ private function doRestore() {
 	$this->log .= "<p>Temporary work files deleted</p>";
 	$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reload");
 	$this->log .= "<p>System Regen complete</p>";
-	echo '<div class="messagebox" >';
-	echo '<div class="message" style="font-size: 2em;padding-left:10em;padding-top:2em;">';
+
+
+//	echo '<div class="messagebox" >';
+//	echo '<div class="message" style="font-size: 2em;padding-left:10em;padding-top:2em;">';
+
+	echo '<p class="w3-container w3-small w3-margin w3-white">';
 	echo $this->log;
-	echo '</div>';
-	echo '</div>';
+	
+	echo '</p>' . PHP_EOL; 
+//	echo '</div>';
+	echo '</form>';
+    $this->myPanel->responsiveClose();	
 	return;	
 }	
 

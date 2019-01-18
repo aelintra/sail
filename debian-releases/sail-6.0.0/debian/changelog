@@ -1,0 +1,1282 @@
+sail (6.0.1-12) UNRELEASED; urgency=low
+  * tagged as 6.0.1-12
+  - removed some extraneous debugging code
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 15  Aug 2018 18:00:00 +0000
+
+sail (6.0.1-11) UNRELEASED; urgency=low
+  * tagged as 6.0.1-11
+  - fixed apache startup in deb 8
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 14  Aug 2018 18:00:00 +0000
+
+sail (6.0.1-10) UNRELEASED; urgency=low
+  * tagged as 6.0.1-10
+  - fixed provisioned and unprovisioned block bug
+  - cleaned up discover and added new-page link to harvested phone addresses
+  - IPV6 change for provisioning in commonFuncs
+  - added missing dependency for cURL
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 13  Aug 2018 18:00:00 +0000
+
+sail (6.0.1-9) UNRELEASED; urgency=low
+  * tagged as 6.0.1-9
+  - added new device fragments for ipv6 and tcp/tls
+  - added pageClass added greyout on readonly
+  - moved nat,transport and encryption to symbolic parms
+  - removed nat fixups from extensions/view
+  - added net,transport and encryption symbolics to generator/sipSQL
+  - added fixup module to generator to add the new symbolics to existing extensions
+  - responder now takes asterisk parms from General SIP template in devices 
+  - Removed Snom/snom ambiguity. The name is snom(lower case)
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 23  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-8) UNRELEASED; urgency=low
+  * tagged as 6.0.1-8
+  - w3.css reskin cut
+  - added setup for manager originate
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 9  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-7) UNRELEASED; urgency=low
+  * tagged as 6.0.1-7
+  - w3.css reskin cut
+  - added initial setup for shellinabox
+  - removed unwanted backup and snap images
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 9  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-6) UNRELEASED; urgency=low
+  * Untagged
+  - w3.css reskin cut
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 3  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-5) UNRELEASED; urgency=low
+  * Untagged
+  - w3.css reskin cut
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 3  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-4) UNRELEASED; urgency=low
+  * Untagged
+  - w3.css reskin cut
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 3  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-3) UNRELEASED; urgency=low
+  * Untagged
+  - w3.css reskin cut
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 3  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-2) UNRELEASED; urgency=low
+  * Untagged
+  - w3.css reskin cut
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 1  Jul 2018 18:00:00 +0000
+
+sail (6.0.1-1) UNRELEASED; urgency=low
+  * Untagged
+  - w3.css reskin
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 19  Mar 2018 18:00:00 +0000
+
+sail (6.0.0-5) UNRELEASED; urgency=low
+  * Untagged
+  - Initial packaging of 6.0
+  - fixes to network, extension and nethelper
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 19  Mar 2018 18:00:00 +0000
+
+sail (6.0.0-4) UNRELEASED; urgency=low
+  * Untagged
+  - Initial packaging of 6.0
+  - merge of 5.1.0-3 (unreleased) and 5.0.0-58 (stable)
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 18  Mar 2018 18:00:00 +0000
+
+sail (6.0.0-3) UNRELEASED; urgency=low
+  * Untagged
+  - Initial packaging of 6.0
+  - sudoers.d missing nmap
+  - device file backlevel.  Used 5.1 version
+  - db system file brought forward
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 16  Mar 2018 18:00:00 +0000
+
+sail (6.0.0-1) UNRELEASED; urgency=low
+  * Untagged 
+  - Initial packaging of 6.0
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 15  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-58) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-58
+  - fixed minor bug in list.php when serving endpoints to non admin users
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 14  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-57) UNRELEASED; urgency=low
+  * Untagged
+  - temporary postinst mods for Deb9 cdr stat suppression
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 12  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-56) UNRELEASED; urgency=low
+  * Untagged 
+  - postinst mods
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 9  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-55) UNRELEASED; urgency=low
+  * Untagged 
+  - bugfix
+  - issue with call parks in 13
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 7  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-54) UNRELEASED; urgency=low
+  * Untagged
+  - bugfix
+  - twoe minor bugs and a few packaging issues
+  - modified:   debian/postinst
+  - modified:   opt/sark/generator/extensions.php
+  - modified:   opt/sark/php/srkPageClass
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 1  Mar 2018 18:00:00 +0000
+
+sail (5.0.0-53) UNRELEASED; urgency=low
+  * Untagged
+  - first attempt at an alpha
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 28  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-52) UNRELEASED; urgency=low
+  * Untagged
+  - changes to apache2 wheezy image
+  - fixed minor bug in srkPageClass side window display
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 28  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-51) UNRELEASED; urgency=low
+  * tagged as 5.0.0-51
+  - consolidated physical network inspection into a single class srkNetHelper
+  - removed all dependencies on net-tools
+  - all net ops now use the newer ip command
+  - new file:   ../etc/systemd/system/apache2.service
+  - new file:   ../etc/systemd/system/debsetlan.service
+  - modified:   ../opt/sark/cache/debsetlan
+  - modified:   ../opt/sark/cache/sailsudoers
+  - modified:   ../opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf
+  - modified:   ../opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf
+  - modified:   ../opt/sark/generator/daycall
+  - modified:   ../opt/sark/generator/edsw.php
+  - modified:   ../opt/sark/generator/extensions.php
+  - modified:   ../opt/sark/generator/iaxSQL.php
+  - deleted:    ../opt/sark/generator/ip_helper_functions.php
+  - modified:   ../opt/sark/generator/meetmeSQL.php
+  - new file:   ../opt/sark/generator/netTest.php
+  - new file:   ../opt/sark/generator/setip.php
+  - modified:   ../opt/sark/generator/sipSQL.php
+  - modified:   ../opt/sark/generator/srkusb.php
+  - modified:   ../opt/sark/perl/modules/sark/SarkSubs.pm
+  - modified:   ../opt/sark/php/sarkdiscover/view.php
+  - modified:   ../opt/sark/php/sarkextension/view.php
+  - modified:   ../opt/sark/php/sarkfreset/view.php
+  - modified:   ../opt/sark/php/sarknetwork/view.php
+  - modified:   ../opt/sark/php/srkHelperClass
+  - new file:   ../opt/sark/php/srkNetHelperClass
+  - modified:   ../opt/sark/php/srkPageClass
+  - modified:   ../opt/sark/provisioning/commonFuncs.php
+  - modified:   ../opt/sark/provisioning/device.php
+  - modified:   ../opt/sark/scripts/responder.pl
+  - deleted:    ../opt/sark/scripts/setip.pl
+  - deleted:    ../opt/sark/scripts/setip.sh  
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 26  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-50) UNRELEASED; urgency=low
+  * tagged as 5.0.0-50
+  - added support for stretch
+  - new file:   ../etc/systemd/system/apache2.service
+  - new file:   ../etc/systemd/system/debsetlan.service
+  - modified:   ../opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf
+  - modified:   ../opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf
+  - modified:   ../opt/sark/generator/ip_helper_functions.php
+  - modified:   ../opt/sark/generator/srkusb.php
+  - modified:   ../opt/sark/perl/modules/sark/SarkSubs.pm
+  - modified:   ../opt/sark/php/sarkextension/view.php
+  - modified:   ../opt/sark/php/sarkfreset/view.php
+  - modified:   ../opt/sark/php/sarknetwork/view.php
+  - modified:   ../opt/sark/php/srkHelperClass
+  - modified:   ../opt/sark/scripts/setip.pl
+  - modified postinst to cope with stretch 
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 25  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-46) UNRELEASED; urgency=low
+  * tagged as 5.0.0-46
+  - bkup and snap creation moved to postinst 
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 23  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-45) UNRELEASED; urgency=low
+  * tagged as 5.0.0-45
+  - minor fix to setip to check presence of asterisk localnet file
+  - fix for incorrect blrules creation in postinst
+  - fix to Freset to clear any blrules on FW reset
+  - DB recover runs srkV4reloader after recovery
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 23  Feb 2018 18:00:00 +0000
+ 
+sail (5.0.0-43) UNRELEASED; urgency=low
+  * untagged - development
+  - this was just a data sync between R5 copies
+ -- CoCoSoft <admin@aelintra.com>  Fri, 23  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-42) UNRELEASED; urgency=low
+  * untagged - development
+  - bumped to -40 to avoid clash with deb9 testing releases -33 thru -36
+  - this is the runout and bug fix branch for 5.0.0
+  - fixed the Yealink .boot issue in Yealink V80 
+  - added bkup and snap in the correct folder
+  - fixed download bug where ldap entries not being captured
+  - changed provisioning to supply yealink.Commom on any Y file request
+  - added latest T series Yealink phones
+  - fix for Yealink V80 firmware
+  - fix for incorrect blrules creation in postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 19  Feb 2018 18:00:00 +0000
+
+sail (5.0.0-34) UNRELEASED; urgency=low
+  * tagged as 5.0.0-34
+  - Mod srkV4reloader to create oncedone on demand 
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 12  Aug 2017 18:00:00 +0000
+
+sail (5.0.0-32) UNRELEASED; urgency=low
+  * tagged as 5.0.0-32
+  - Fix bug in ipblacklist update
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 21  May 2017 18:00:00 +0000
+
+sail (5.0.0-31) UNRELEASED; urgency=low
+  * tagged as 5.0.0-31
+  - Fix permissions bug in greetings upload
+  - change greetings playback feature to include MP3 greetings
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 6  Dec 2016 18:00:00 +0000
+
+sail (5.0.0-30) UNRELEASED; urgency=low
+  * tagged as 5.0.0-30
+  - Fix bad data line in device load data
+  - Amalgamated sudoers.d files
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 29  Nov 2016 18:00:00 +0000
+
+sail (5.0.0-29) UNRELEASED; urgency=low
+  * tagged as 5.0.0-29
+  - Fix bug in wav downloads
+  - Fix bug in wav/mp3 playback.
+  - fix minor javascript bug in srkheader
+  - change message text in extensions for in-flight provisioning
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 13 Nov 2016 18:00:00 +0000
+
+sail (5.0.0-28) UNRELEASED; urgency=low
+  * tagged as 5.0.0-28
+  - Fix bug in sarkgreeting - download of mp3 fails.
+  - Enhance download.php to handle snaps, bkups and greetings. 
+  - Greetings will no longer upload wav files.  mp3 only.
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 09 Nov 2016 18:00:00 +0000
+
+sail (5.0.0-27) UNRELEASED; urgency=low
+  * tagged as 5.0.0-27
+  - Fix buffer overflow bug in sarkbackup. Fails when the backup set contains too many files
+  - Fix to Asterisk start/stop logic in globals
+  - Greetings will no longer upload wav files.  mp3 only.
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 08 Nov 2016 18:00:00 +0000
+
+sail (5.0.0-26) UNRELEASED; urgency=low
+  * tagged as 5.0.0-26
+  - Fix bug in sarkapp js regex.  It wasn't allowing hyphens in the name field.
+  - Fix bug in globals.  It was removing tags from the bounce alertinfo
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 23 Oct 2016 18:00:00 +0000
+
+sail (5.0.0-25) UNRELEASED; urgency=low
+  * tagged as 5.0.0-25
+  - Fix bug in factory reset.  Database refresh not done correctly.  Force logoff at reboot.
+  - Force logoff at reboot in globals and network
+  - sarkphone and sarkgreeting now use general purpose download.php
+  - backup page no longer shows find box (unnecessary)
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 23 Oct 2016 18:00:00 +0000
+
+sail (5.0.0-24) UNRELEASED; urgency=low
+  * tagged as 5.0.0-24
+  - Fix to selmix for old selmx/selmixd problem
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 22 Sep 2016 18:00:00 +0000
+
+sail (5.0.0-23) UNRELEASED; urgency=low
+  * tagged as 5.0.0-23
+  - Turn on noproxy for general SIP extensions
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 1 Sep 2016 18:00:00 +0000
+
+sail (5.0.0-22) UNRELEASED; urgency=low
+  * tagged as 5.0.0-22
+  - Added VXT templates for snom and yealink
+  - fixed perms issue in the V4reloader
+  - fixed issue with sibling peer/user names
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 31 Aug 2016 18:00:00 +0000
+
+sail (5.0.0-21) UNRELEASED; urgency=low
+  * tagged as 5.0.0-21
+  - Added cust app stubs for hotdesk
+  - added hotdesk support - aelhdlon and snom_rereg.php
+  - added sudo support for asterisk -rx
+  - fixed 12 digit password default
+  - added Vcloud variables VCL and VCLFULL to Globals
+  
+ -- CoCoSoft <admin@aelintra.com>  Mon, 8 Aug 2016 18:00:00 +0000
+ 
+sail (5.0.0-20) UNRELEASED; urgency=low
+  * tagged as 5.0.0-20
+  - fixed corrupt download for zip backups
+  - fixed display error after restore in backup panel
+  - fixed COS error after extension number change
+  - added master checkbox to factory reset
+  - fixed/modified ldap reset function
+  - added 'Clean()' function to ldapHelper 
+  - fixed spelling error in sip_header.conf (defaultexpiry)
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 24 July 2016 18:00:00 +0000
+
+sail (5.0.0-19) UNRELEASED; urgency=low
+  * tagged as 5.0.0-19
+  - added templates for Snom D series phones
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 6 Jun 2016 18:00:00 +0000
+
+sail (5.0.0-18) UNRELEASED; urgency=low
+  * tagged as 5.0.0-18
+  - fixed bug in srkIVR.  Adding description in create panel causes blank screen to be rendered
+  - updated Vtech templates after input from Vtech
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 6 Jun 2016 18:00:00 +0000
+
+sail (5.0.0-17) UNRELEASED; urgency=low
+  * tagged as 5.0.0-17
+  - fixed bug in srkbackup.  Screen not rendering after bkup/snap delete
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 25 May 2016 18:00:00 +0000
+
+sail (5.0.0-16) UNRELEASED; urgency=low
+  * tagged as 5.0.0-16
+  - modified srkusb to support usbmount for S200
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 25 May 2016 18:00:00 +0000
+
+sail (5.0.0-15) UNRELEASED; urgency=low
+  * tagged as 5.0.0-15
+  - Fixed minor bug in descriptions in Firewall
+  - Added LDAP objects for Panasonic KX-HDV phones
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 24 May 2016 18:00:00 +0000
+
+sail (5.0.0-14) UNRELEASED; urgency=low
+  * tagged as 5.0.0-14
+  - Added Vtech objects for provisioning
+  - Added new Panasonic objects for KX-HDV phones
+  - Added hot reprovision support for KX-HDV phones
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 16 May 2016 18:00:00 +0000
+
+sail (5.0.0-12) UNRELEASED; urgency=low
+  * tagged as 5.0.0-12
+  - exposed dial params in callgroups
+  - fixed typo in postinst
+  - fixed link glitch in postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 3 May 2016 18:00:00 +0000
+
+sail (5.0.0-11) UNRELEASED; urgency=low
+  * tagged as 5.0.0-10
+  - bumped after source recovery
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 18 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-10) UNRELEASED; urgency=low
+  * tagged as 5.0.0-10
+  - fix to snap/spin directory create on new install
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 12 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-9) UNRELEASED; urgency=low
+  * tagged as 5.0.0-9
+  - fixed confbridge support by adding the sark user
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 11 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-8) UNRELEASED; urgency=low
+  * tagged as 5.0.0-8
+  - added updated F2B support
+  - added dual F2b support for jessie/wheezy
+  - added IE11/12 and Edge to the browser recognition tables
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 10 Apr 2016 18:00:00 +0000
+
+sail (5.0.0-7) UNRELEASED; urgency=low
+  * tagged as 5.0.0-7
+  - fixed sudoers misspelling in postinst
+  - Moved the reloader to the last step in postinst
+  - added change to asterisk logger timeformat
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 30 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-6) UNRELEASED; urgency=low
+  * tagged as 5.0.0-6
+  - fixed bug in the new shorewall update.  It didn't handle old shorewall formats
+  - added shorewall verify routine to the reloader
+  - added FPDF Class
+  - added pdf option for admins to most of the big tables
+  - added a simple wallboard page to the Asterisk group
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 29 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-5) UNRELEASED; urgency=low
+  * tagged as 5.0.0-5
+  - fixed public directories for phone types
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 23 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-4) UNRELEASED; urgency=low
+  * tagged as 5.0.0-4
+  - fixed banner reference bug (sark/sail)
+  - force password change when password is the default
+  - changed firewall back to in-line
+  - added firewall throttling
+  - added wallboard
+  - cleaned up css on edit and insert screens
+  - fiddled banner out to full screen width
+  - updated copyright to 2016
+  - added Jessie support in postinst and prerm
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 11 Mar 2016 18:00:00 +0000
+
+sail (5.0.0-3) UNRELEASED; urgency=low
+  * tagged as 5.0.0-3
+  - updated sip default reg timeout to 3600
+  - added ssl keygens for Apache2 and Asterisk
+  - added firewall sync to postinst
+  - removed banner from login screen
+  - minor css change for edittab height
+  - added always rule to set noproxy in Yealink phones
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 Jan 2016 18:00:00 +0000
+
+sail (5.0.0-2) UNRELEASED; urgency=low
+  * tagged as 5.0.0-2
+  - added ssl keygens for Apache2 and Asterisk
+  - added firewall sync to postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 Jan 2016 18:00:00 +0000
+
+sail (5.0.0-1) UNRELEASED; urgency=low
+  * tagged as 5.0.0-1
+  - first out of new release.  New UI and Ast 11+
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 Jan 2016 18:00:00 +0000
+
+sail (4.1.0-10) UNRELEASED; urgency=low
+  * tagged as 4.1.0-10
+  - fixed trailing comma (I.E) bug in javascripts
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 22 Nov 2015 18:00:00 +0000
+
+sail (4.1.0-9) UNRELEASED; urgency=low
+  * tagged as 4.1.0-9
+  - added netphone table
+  - Fixed bug in cancel for sarkapp
+  - removed required from js validation in callback
+  - removed required from js validation in calloup
+  - removed required from js validation in cluster
+  - removed required from js validation in conference
+  - added pkey validation to conference
+  - removed required from js validation in COS
+  - added discover panel JS
+  - Changed JS validation on firewall
+  - added highlighter to firewall and added new rules at top
+  - fixed tabselect bug in extensions
+  - changed tab order in extensions
+  - fixed greeting delete bug and allowed mp3 files
+  - added ldap UID to addressbook structure
+  - changed validation for multicast
+  - added call forwards to sarkphone
+  - fixed cancel button on sarkqueue
+  - removed required from js validation in queue
+  - restricted text on timer JS
+  - changed USER JS validation
+  - enhanced USER panel
+  - added UID to LDAPHelper
+  - added harvest function to responder
+  - Added highlighter to agent add
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 29 Sep 2015 18:00:00 +0000
+
+sail (4.1.0-8) UNRELEASED; urgency=low
+  * tagged as 4.1.0-8
+  - fix to sarkedsw to handle port descriptions
+  - fix to sarkextension for incorrect tenant setting when default
+  - added 000000000000 files for new Yealink models
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 14 Sep 2015 18:00:00 +0000
+
+sail (4.1.0-7) UNRELEASED; urgency=low
+  * tagged as 4.1.0-7
+  - fix to setip for dnsmasq option66
+  - fix to discover to handle some phone types which return names
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 15 Jul 2015 18:00:00 +0000
+
+sail (4.1.0-6) UNRELEASED; urgency=low
+  * tagged as 4.1.0-6
+  - added missing dependency for php5-ldap
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 24 Jun 2015 18:00:00 +0000
+
+sail (4.1.0-5) UNRELEASED; urgency=low
+  * tagged as 4.1.0-5
+  - fix permissions on http sark_meetme display
+  - fix validation on firewall descriptions
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 24 Jun 2015 18:00:00 +0000
+
+sail (4.1.0-4) UNRELEASED; urgency=low
+  * tagged as 4.1.0-4
+  - fix permissions on sark_meetme and rssh port file
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 20 Jun 2015 18:00:00 +0000
+
+sail (4.1.0-3) UNRELEASED; urgency=low
+  * tagged as 4.1.0-3
+  - added templates for Yealink T21D
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 19 Jun 2015 18:00:00 +0000
+
+sail (4.1.0-2) UNRELEASED; urgency=low
+  * tagged as 4.1.0-2
+  - Bumped to 4.1
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 9 Jun 2015 18:00:00 +0000
+sail (4.1.0-1) UNRELEASED; urgency=low
+  * tagged as 4.1.0-1
+  - Bumped to 4.1
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 19 May 2015 18:00:00 +0000
+
+sail (4.0.1-20) UNRELEASED; urgency=low
+  * tagged as 4.0.1-20
+  - added dialout rssh support
+  - added icmp response support
+  - added firewall descriptions
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 May 2015 18:00:00 +0000
+
+sail (4.0.1-19) UNRELEASED; urgency=low
+  * tagged as 4.0.1-19
+  - fix to database structure
+  - fix to extension status
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 14 Apr 2015 18:00:00 +0000
+
+sail (4.0.1-18) UNRELEASED; urgency=low
+  * tagged as 4.0.1-18
+  - add sarkdiscover
+  - add sarkconference
+  - add timers for tenants
+  - message change on sarknet reboot
+  - sarkpci bugfix to tabs
+  - sarktrunk fix to handle unmonitored trunks
+  - srkhelper enhance for meetme table
+  - srkPageclass bug fix
+  - diskabs bugfix for potential loop
+  - setip now allows multiple local networks
+  - sarkhelper now permanently logs
+  - USB automount with autodump of IP
+  - require ipcalc in dependencies
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 12 Apr 2015 18:00:00 +0000
+
+sail (4.0.1-17) UNRELEASED; urgency=low
+  * tagged as 4.0.1-17
+  - fix bad regex in sarktimer/update.php
+ -- CoCoSoft <admin@aelintra.com>  Tue, 30 Sep 2014 18:00:00 +0000
+
+sail (4.0.1-16) UNRELEASED; urgency=low
+  * tagged as 4.0.1-15
+  - fixed device deletion bug in the db updater
+  - added new deleter for old 3.x/4.x devices
+ -- CoCoSoft <admin@aelintra.com>  Mon, 18 Aug 2014 18:00:00 +0000
+
+sail (4.0.1-15) UNRELEASED; urgency=low
+  * tagged as 4.0.1-15
+  - fixed sequence bug in the db updater (srkV4reloader.sh)
+ -- CoCoSoft <admin@aelintra.com>  Sun, 17 Aug 2014 18:00:00 +0000
+
+sail (4.0.1-14) UNRELEASED; urgency=low
+  * tagged as 4.0.1-14
+  - dropped commit sha logging in favour of tags
+  - fix timezone bug in yealink.common
+  - add ldapbase generation to provisioning
+ -- CoCoSoft <admin@aelintra.com>  Sat, 16 Aug 2014 18:00:00 +0000
+
+sail (4.0.1-13) UNRELEASED; urgency=low
+  * git commit 9ed9a91a06a63b4af7cdc526366949d227648489
+  - add initial user and cluster rows to initdata.sql
+ -- CoCoSoft <admin@aelintra.com>  Thu, 14 Aug 2014 18:00:00 +0000
+
+sail (4.0.1-12) UNRELEASED; urgency=low
+  * svn commit 2243
+  - Clean up sarkddi/view.php
+  - fix bug in stop/start routine (Globals)
+  - add network reboot message to network/view.php
+  - fix code error in srkHelper
+  - responder created devices default to Always for creds
+  - setip.pl cleaned up for SME
+ -- CoCoSoft <admin@aelintra.com>  Fri, 6 Jun 2014 18:00:00 +0000
+
+sail (4.0.1-11) UNRELEASED; urgency=low
+  * svn commit 2237
+  - Change to sarkPCI/view for new jquery-ui release
+  - moved user table from system to customer data in dumper array
+  - added always file to handle admin privileges in the event of damage
+  - updated ldap to handle forename/surname change
+  - updated devices and added new table device_aql to tag ATL owned devices
+  - cleaned up asterisk device definitions and in extensions and responder
+  - added slow-attack rule to F2B
+ -- CoCoSoft <admin@aelintra.com>  Thu, 22 May 2014 18:00:00 +0000
+
+sail (4.0.1-10) UNRELEASED; urgency=low
+  * svn commit 2231
+  - updated globals to handle ldap authentication
+  - updated navigation to handle the directory
+  - fixed recording overrun bug in S200
+  - fixed dnsmasq service on internet down
+ -- CoCoSoft <admin@aelintra.com>  Sun, 18 May 2014 18:00:00 +0000
+
+sail (4.0.1-9) UNRELEASED; urgency=low
+  * svn commit 2215
+  - fixed alertinfo bug
+  - fixed sorting issue in endpoints
+  - fixed missing html name in sarktrunk peername entry
+ -- CoCoSoft <admin@aelintra.com>  Sat, 10 May 2014 18:00:00 +0000
+
+sail (4.0.1-8) UNRELEASED; urgency=low
+  * svn commit 2212
+  - changed port 80 default to $LAN
+  - enabled http auth checking in F2B
+  - modified stock F2B http-auth REGEX
+ -- CoCoSoft <admin@aelintra.com>  Thu, 8 May 2014 18:00:00 +0000
+
+sail (4.0.1-7) UNRELEASED; urgency=low
+  * svn commit 2206
+  - added dedicated ldap directory panel called sarkldap
+  - added Panasonic KX-UT support
+  - added Panasonix KX-TGP5xx DECT support
+ -- CoCoSoft <admin@aelintra.com>  Mon, 5 May 2014 18:00:00 +0000
+
+sail (4.0.1-6) UNRELEASED; urgency=low
+  * svn commit 2198
+  - added dedicated user panel called sarkphone
+  - added extra jquery code into extensions and phone for sticky tabs
+  - added weighting value to the panels
+  - added public folder with mod_rewrite redirects for phone firmware
+  - added Gigaset provisioning (alpha)
+  - added opt 114 support for Gigaset
+  - simplified dnsmasq.d
+  - fixed minor bug in the apps panel
+  - added Snom 715 support
+ -- CoCoSoft <admin@aelintra.com>  Sun, 27 Apr 2014 18:00:00 +0000
+
+sail (4.0.1-5) UNRELEASED; urgency=low
+  * svn commit 2194
+  - change to fail2ban jain substitutions regex
+ -- CoCoSoft <admin@aelintra.com>  Tue, 22 Apr 2014 18:00:00 +0000
+
+sail (4.0.1-4) UNRELEASED; urgency=low
+  * svn commit 2191
+  - added blf GUI support for aastra,Cisco,Polycom,Snom,Yealink 
+  - added dnsmasq
+  - added dnsmasq DHCP server
+  - added opt 66 support for dnsmasq DHCP
+  - added night-time blf (MASTER)
+  - added multiple mailbox blf support (vm${EXTN})
+ -- CoCoSoft <admin@aelintra.com>  Tue, 22 Apr 2014 18:00:00 +0000
+
+sail (4.0.1-3) UNRELEASED; urgency=low
+  * svn commit 2183
+  - fixed $LAN setting on IP change
+  - added debian-archive-keyring to dependencies
+ -- CoCoSoft <admin@aelintra.com>  Mon, 14 Apr 2014 18:00:00 +0000
+
+sail (4.0.1-1) UNRELEASED; urgency=low
+  * svn commit 2163
+  - added new amacs
+  - point change due to replacement of AMACs with unload/reload
+  - rationalised Device table
+  - added new Yealink V70 provisioning
+ -- CoCoSoft <admin@aelintra.com>  Fri, 28 Feb 2014 18:00:00 +0000
+
+sail (4.0.0-115) UNRELEASED; urgency=low
+  * svn commit 2109
+  - fix regex bug in sarkddi js
+ -- CoCoSoft <admin@aelintra.com>  Tue, 11 Feb 2014 18:00:00 +0000
+
+sail (4.0.0-114) UNRELEASED; urgency=low
+  * svn commit 2108
+  - Suppress local IP display in globals if eth0 not present
+  - Change ASTDLIM to default to comma instead of pipe
+  - Fix error in js regex in trunks and ddi
+  - Add eth1 and virtual IPs to globals for Pacemaker
+  - Change AMACs syntax to generate fewer benign error messages
+  - Fix listenforext in IVR
+  
+  * svn commit 2102
+  - Modifications to callgroups to handle channel addresses
+  - changed the regex in view, update and js
+ -- CoCoSoft <admin@aelintra.com>  Thu, 06 Feb 2014 18:00:00 +0000
+
+sail (4.0.0-113) UNRELEASED; urgency=low
+
+  * svn commit 2101
+  - Modifications to sarknet for Pacemaker
+ -- CoCoSoft <admin@aelintra.com>  Thu, 23 Jan 2014 18:00:00 +0000
+
+sail (4.0.0-112) UNRELEASED; urgency=low
+
+  * svn commit 2100
+  - changed header generation (header.htm)
+ -- CoCoSoft <admin@aelintra.com>  Thu, 23 Jan 2014 18:00:00 +0000
+
+sail (4.0.0-111) UNRELEASED; urgency=low
+
+  * svn commit 2098
+  - changed header generation (header.htm)
+  - added hausecluster to provisioning
+  - fixed provisioning bug for Snom760
+ -- CoCoSoft <admin@aelintra.com>  Wed, 22 Jan 2014 18:00:00 +0000
+
+sail (4.0.0-110) UNRELEASED; urgency=low
+
+  * svn commit 2093
+  - Mod support for sipsak monitoring from the localhost (used in ASHA)
+  - Update f2b for shorewall in debian systems
+  - Update sipSQL for Pacemaker
+  - Add commit button to sarkedit
+  - Update Globals for Pacemaker
+  - Update responder for Pacemaker
+  - add selmixd for debian systems
+  - update shorewall.conf for debian systems
+ -- CoCoSoft <admin@aelintra.com>  Tue, 21 Jan 2014 18:00:00 +0000
+
+sail (4.0.0-109) UNRELEASED; urgency=low
+
+  * svn commit 2089
+  - added sipsak support for ASHA
+ -- CoCoSoft <admin@aelintra.com>  Sun, 12 Jan 2014 18:00:00 +0000
+
+sail (4.0.0-108) UNRELEASED; urgency=low
+
+  * svn commit 2088
+  - added /drbd to sites-available/sark
+  - added include for interfaces.d to networking
+ -- CoCoSoft <admin@aelintra.com>  Mon, 09 Jan 2014 18:00:00 +0000
+
+sail (4.0.0-107) UNRELEASED; urgency=low
+
+  * svn commit 2081
+  - Added call group maximum length of 1024 chars
+ -- CoCoSoft <admin@aelintra.com>  Mon, 09 Dec 2013 18:00:00 +0000
+
+sail (4.0.0-105) UNRELEASED; urgency=low
+
+  * svn commit 2072
+  - Fixed CLI hierarchy
+  - Fixed Custer allocation issues
+  - Fixed smartink bug
+  - Fixed leading zero on DDI
+  - Fixed dialplan / on route
+  - Fixed password save issue on User
+  - Added trunk active status to front panel
+  - Added extra validation to User panel
+  - Fixed benign Apache error log msg from sarkedit
+  - Changed release display mechanism in Globals
+  - Remove Asterisk and Provisioning tabs from User extension view
+  - Changed banner display mechanism
+  - Standardized alpha validation in js
+ -- CoCoSoft <admin@aelintra.com>  Mon, 25 Nov 2013 18:00:00 +0000
+
+sail (4.0.0-104) UNRELEASED; urgency=low
+
+  * svn commit 2067
+  - changed the postinstall to enable Asterisk correctly
+ -- CoCoSoft <admin@aelintra.com>  Tue, 19 Nov 2013 18:00:00 +0000
+
+sail (4.0.0-103) UNRELEASED; urgency=low
+
+  * svn commit 2067
+  - added a sark_customer hints include to extensions
+  - fixed Yealink T20 provisioning bug
+ -- CoCoSoft <admin@aelintra.com>  Wed, 13 Nov 2013 18:00:00 +0000
+
+sail (4.0.0-102) UNRELEASED; urgency=low
+
+  * svn commit 2064
+  - ssmtp tab not shown if ssmtp not installed 
+  - mailbox ageing enabled
+  - mailbox default age set to 60 days
+ -- CoCoSoft <admin@aelintra.com>  Tue, 05 Nov 2013 18:00:00 +0000
+
+sail (4.0.0-101) UNRELEASED; urgency=low
+
+  * svn commit 2059-60
+  - Trunk not correctly reporting IAX status
+  - fix to sarkpci for asterisk dahdi file permissions
+  - fix to srkHelper for trunk to trunk routing
+  - fix to sarkgreeting for non-admin user display of greetings
+ -- CoCoSoft <admin@aelintra.com>  Sun, 03 Nov 2013 18:00:00 +0000
+
+
+sail (4.0.0-100) UNRELEASED; urgency=low
+
+  * svn commit 2057
+  - Trunk not correctly reporting IAX status
+ -- CoCoSoft <admin@aelintra.com>  Wed, 16 Oct 2013 18:00:00 +0000
+
+
+sail (4.0.0-99) UNRELEASED; urgency=low
+
+  * svn commit 2056
+  - IVR not correctly setting cursor on greeting number select in edit
+  - Change to F2B tables
+ -- CoCoSoft <admin@aelintra.com>  Tue, 15 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-98) UNRELEASED; urgency=low
+
+  * svn commit 2054
+  - change to navigation to suppress PCI display for arm boards
+  - remove stop button in PCI
+  - make ssmtp.conf optional (some users may wish to use exim or whatever)
+ -- CoCoSoft <admin@aelintra.com>  Sun, 13 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-97) UNRELEASED; urgency=low
+
+  * svn commit 2052
+  - Clean up pre/post deb processors
+ -- CoCoSoft <admin@aelintra.com>  Sun, 13 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-96) UNRELEASED; urgency=low
+
+  * svn commit 2052
+  - remove proprietary code for open Debian based systems
+ -- CoCoSoft <admin@aelintra.com>  Sat, 12 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-95) UNRELEASED; urgency=low
+
+  * svn commit 2052
+  - change to setip processing for Debian based systems
+ -- CoCoSoft <admin@aelintra.com>  Thu, 10 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-94) UNRELEASED; urgency=low
+
+  * svn commit 2050
+  - change to debian control dependencies
+ -- CoCoSoft <admin@aelintra.com>  Thu, 10 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-93) UNRELEASED; urgency=low
+
+  * svn commit 2050
+  - fix to fail2ban post processing
+ -- CoCoSoft <admin@aelintra.com>  Sat, 05 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-92) UNRELEASED; urgency=low
+
+  * svn commit 2049
+  - correctly bumped release for globals
+  - modified postinst to handle sudoers
+  - modified postinst to handle fail2ban conf files
+  - modified preinst to remove asterisk stop
+  - modified prerm to handle sudoers 
+  - modified readydeb builder to handle sudoers
+  - added depends to control for sudo and ntp
+ -- CoCoSoft <admin@aelintra.com>  Sat, 05 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-91) UNRELEASED; urgency=low
+
+  * svn commit 2048
+  - removed asterisk from runit control
+  - correctly bumped release for globals
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 04 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-90) UNRELEASED; urgency=low
+
+  * svn commit r2047
+  - correctly bumped release for globals 
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 04 Oct 2013 18:00:00 +0000
+
+sail (4.0.0-89) UNRELEASED; urgency=low
+
+  * svn commit r2047
+  - upgraded deps (again)
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 04 Oct 2013 18:00:00 +0000
+sail (4.0.0-88) UNRELEASED; urgency=low
+
+  * svn commit r2047
+  - upgraded deps
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 04 Oct 2013 18:00:00 +0000
+sail (4.0.0-87) UNRELEASED; urgency=low
+
+  * svn commit r2047
+  - Using signed packages
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 26 Aug 2013 18:00:00 +0000
+
+sail (4.0.0-86) UNRELEASED; urgency=low
+
+  * svn commit r2047
+  - ssmtp,conf permissions  (S200)
+  - can't remove call forward from extensions screen
+  - call group as operator in a tenant
+  - if you choose voicemail as an IVR destination, it doesn't work
+  - no conf rooms defined by default, conf rooms not always picked up as destination list
+  - commit lamp turned on by Jquery after AJAX update
+  - Validation rules revised and augmented  
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 26 Aug 2013 18:00:00 +0000
+
+
+sail (4.0.0-84) UNRELEASED; urgency=low
+
+  * svn commit r2037
+  - changed defaults to set mailbox on when an extension is created
+
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 15 Aug 2013 18:00:00 +0000
+
+
+sail (4.0.0-83) UNRELEASED; urgency=low
+
+  * svn commit r2035
+  - Modified extensions, helper and responder for clf
+  * svn commit r2032
+  - Modified sarknet/view.php ssmtp handling for debian releases
+
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 15 Aug 2013 18:00:00 +0000
+
+
+sail (4.0.0-79) UNRELEASED; urgency=low
+
+  * svn commit r2030
+  - Added tag switch to custom apps to allow tags
+  - Extended wakeup call to include remote option (i.e hotel reception type use)
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 04 Aug 2013 18:00:00 +0000
+
+
+sail (4.0.0-76) UNRELEASED; urgency=low
+
+  * svn commit r2025
+  - Added *67* ChanSpyWhisper - does what it says on the tin
+  - Added *24* Wakeup call - changed readydeb to copy kwakeup agi to the right place
+  - trunks split so that DDIs are now in the routing section
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 26 Jun 2013 18:00:00 +0000
+
+
+sail (4.0.0-73) UNRELEASED; urgency=low
+
+  * svn commit r2010
+  - fix to extension delete for COS
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 25 Jun 2013 18:00:00 +0000
+
+
+sail (4.0.0-72) UNRELEASED; urgency=low
+
+  * svn commit r2009
+  - fix to responder - debug switch was left on in the release
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 25 Jun 2013 18:00:00 +0000
+
+sail (4.0.0-71) UNRELEASED; urgency=low
+
+  * svn commit r2008
+  - fixes to PWDLEN and VMAILAGE in globals and extensions
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 25 Jun 2013 18:00:00 +0000
+
+
+sail (4.0.0-70) UNRELEASED; urgency=low
+
+  * svn commit r2007
+  - fix to CLID routing
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 25 Jun 2013 18:00:00 +0000
+
+sail (4.0.0-69) UNRELEASED; urgency=low
+
+  * svn commit r2006
+  - temporarily remove smartlink flag 
+  - fix to COS inheritance
+
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 25 Jun 2013 14:00:00 +0000
+sail (4.0.0-68) UNRELEASED; urgency=low
+
+  * svn commit r1994
+  - added amacs/r1994 - Yealink T32/T38
+  - /sites-available/sark - change to baseurl to allow reading of voicemail
+  - generator/extensions.php - fixed minor bug
+  - generator/vmailSQL.php - allow additional vmail parameters
+  - endpoints/list.php - added DISA & CALLBACK
+  - sarkedsw/javascript.js -removed paging, replaced with scrolling
+  - srkPageClass - added DISA & CALLBACK
+  - /www/provisioning/yealink/commonFuncs.php - change to Yealink multicast provisioning
+  - /www/provisioning/yealink/yealink.php - change to Yealink multicast provisioning
+
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 28 Apr 2013 20:00:00 +0000
+sail (4.0.0-67) UNRELEASED; urgency=low
+
+  * svn commit r1991
+  - Added variables to sip header for SIP over TCP
+  - Fix to srkgenAst for dual db
+  - Fix to SarkSubs for dual db
+  - Fix to voicemail main generator to handle options properly
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 12 Apr 2013 20:00:00 +0000
+sail (4.0.0-66) UNRELEASED; urgency=low
+
+  * svn commit r1986
+  - consolidated commit processing into srkgenAst.  It was possible to get a partial commit across a restart
+  - srktimer.php
+  - SarkSubs.pl
+  - srkHelperClass
+  - srkgenAst
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 8 Apr 2013 20:00:00 +0000
+sail (4.0.0-65) UNRELEASED; urgency=low
+
+  * svn commit r1985
+  - trunk/view.php -fix to include outbound trunks in trunk route dropdowns and JQuery
+  - srkPageClass - fix to sysSelect to allow outbound trunks to be specified
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 8 Apr 2013 10:00:00 +0000
+sail (4.0.0-64) UNRELEASED; urgency=low
+
+  * svn commit r1984
+  - endpoints/list.php - fix to add conferences and outbound trunks
+  - route/view.php - fix to custom trunks
+  - lineio/routes.php - fix to add custom trunks
+  - trunk/view.php - fix to allow leading + on DiD for Lync
+  - srkHelperClass/displayRouteClass - add space in returned name
+  - trunk/view.php - fix for incorrect call-progress display0 
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 7 Apr 2013 10:00:00 +0000
+sail (4.0.0-63) UNRELEASED; urgency=low
+
+  * svn commit r1982
+  - allow leading + in a DDI/DiD
+  - fix to record options in extensions
+  - fix to key validation in extensions
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 4 Apr 2013 10:00:00 +0000
+sail (4.0.0-62) UNRELEASED; urgency=low
+
+  * svn commit r1979
+  - added timezone setter to networks
+  - changed date request to system date in globals - php date can be incorrect
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 1 Apr 2013 10:00:00 +0000
+sail (4.0.0-60) UNRELEASED; urgency=low
+
+  * svn commit r1976
+  - added additional jquery validation
+  - added multicast paging
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 31 Mar 2013 10:00:00 +0000
+sail (4.0.0-59) UNRELEASED; urgency=low
+
+  * svn commit r1974
+  - consolidated delete processing and added additional jquery validation
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 29 Mar 2013 10:00:00 +0000
+sail (4.0.0-57) UNRELEASED; urgency=low
+
+  * svn commit r1972
+  - added span variable into app create
+  - Fix to srktimer.php for dual db
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 29 Mar 2013 10:00:00 +0000
+sail (4.0.0-56) UNRELEASED; urgency=low
+
+  *  svn commit r1968
+  *  Fixes to the endpoint list generator and callgroups
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 26 Mar 2013 10:00:00 +0000
+sail (4.0.0-55) UNRELEASED; urgency=low
+
+  *  svn commit r1963
+  *  changes to postinst install sequence for amacs
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 24 Mar 2013 10:00:00 +0000
+sail (4.0.0-54) UNRELEASED; urgency=low
+
+  *  svn commit r1963
+  *  changes to the following modules
+  - sarkbackup/javascript.js
+  - sarkcallgroup/view.php
+  - sarkextension/view.php
+  - sarkroute/javascript.js
+  - sarkroute/update.php
+  - sarkroute/view.php
+  * Added the following modules
+  - sarksupt
+  - sarksupt/main.php
+  - sarksupt/view.php
+  - www/support.htm
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 23 Mar 2013 10:00:00 +0000
+sail (4.0.0-53) UNRELEASED; urgency=low
+
+  * svn commit r1961
+  * change to greetings, ivr, spin and the helper to handle PIKA debian
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 11 Mar 2013 10:00:00 +0000
+sail (4.0.0-52) UNRELEASED; urgency=low
+
+  * svn commit r1957
+  * change to sites-available for /usr/share/asterisk
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 09 Mar 2013 10:00:00 +0000
+sail (4.0.0-51) UNRELEASED; urgency=low
+
+  * svn commit r1955
+  * changes to postinst
+  * added debsetlan to startup tasks - it sets LAN variable for shorewall
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 07 Mar 2013 10:00:00 +0000
+sail (4.0.0-50) UNRELEASED; urgency=low
+
+  * svn commit r1954
+  * changes to postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 05 Mar 2013 10:00:00 +0000
+sail (4.0.0-49) UNRELEASED; urgency=low
+
+  * svn commit r1954
+  * changes to postinst
+  * added override to default to  ast 1.8 delimiters
+  * added override to default to UK countrycode
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 05 Mar 2013 10:00:00 +0000
+sail (4.0.0-46) UNRELEASED; urgency=low
+
+  * svn commit r1951
+  * lots of minor changes for the S200 & debian i386 release
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 05 Mar 2013 10:00:00 +0000
+sail (4.0.0-45) UNRELEASED; urgency=low
+
+  * svn commit r1945
+  * replaced tftpd dependency
+  * lots of minor changes for the debian i386 release
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 28 Feb 2013 21:00:00 +0000
+sail (4.0.0-44) UNRELEASED; urgency=low
+
+  * svn commit r1944
+  * removed tftp and tftpd dependencies 
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 27 Feb 2013 09:00:00 +0000
+sail (4.0.0-43) UNRELEASED; urgency=low
+
+  * svn commit r1944
+  * fixes to srknetwork for the i386 Debian release
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 27 Feb 2013 09:00:00 +0000
+sail (4.0.0-42) UNRELEASED; urgency=low
+
+  * svn commit r1940
+  * fixes to responder commit and to srkhelper FOP generation
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 03 Feb 2013 12:00:00 +0000
+sail (4.0.0-41) UNRELEASED; urgency=low
+
+  * svn commit r1939
+  * fixes for S200 console; mods to service sark run, srkhelper, responder and snap
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 03 Feb 2013 12:00:00 +0000
+sail (4.0.0-40) UNRELEASED; urgency=low
+
+  * svn commit r1938
+  * fixed render problem for stats package in IE8
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 02 Feb 2013 21:00:00 +0000
+sail (4.0.0-39) UNRELEASED; urgency=low
+
+  * svn commit r1936
+  * fixed bugs in 3 routines
+  * operator/list.php - missing require
+  * sarktimer/javascript.js - edit layout bug
+  * sarktrunk/javascript.js - regexp bug in transform
+
+ -- CoCoSoft <admin@aelintra.com>  Sat, 02 Feb 2013 15:00:00 +0000
+sail (4.0.0-38) UNRELEASED; urgency=low
+
+  * svn commit r1935
+  * changed rundb name to sark.rdonly.db5
+  * changed rundb name to sark.rdonly.db5
+  * changed rundb name to sark.rdonly.db5
+  * changed rundb name to sark.rdonly.db5
+  * changed rundb name to sark.rdonly.db
+  * svn commit r1933
+  * fixed bug in extension add
+  * added r1 prefix handler to allow short code dialling over SIP and IAX - 2 new variables
+  * LOCALAREA - area code prefix to be prepended
+  * LOCALDLEN - short dial length (used to decide when to add LOCALAREA)
+  * svn commit 1931
+  * Included extalert in the dont_strip_tags list in srkHelper buildTuple
+  * svn commit r1930 
+  * added variable timers for IVR
+  * IVRKEYWAIT - default 6 seconds.  How long the IVR will wait for a keypress
+  * IVRDIGITWAIT - default 6000 millisecnds.  How long the IVR will wait between digits.
+  * svn commit r1926 
+  * Fixed XML handling issue for provision and sipiaxfriend
+  * Added generic Aastra and Cisco/Linksys phone types
+  * svn commit r1924
+  * Added dual active/passive sqlite databases
+  * svn commit r1923
+  * Fixed bug in extension add
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 28 Jan 2013 15:00:00 +0000
+

@@ -439,21 +439,6 @@ while (1) {
 
 
 				if ($in_event_type eq 'ua-profile') {
-#
-# Harvest the information for later use by the discover program
-#
-					my $dbh = SarkSubs::SQLiteConnect();
-					my $checkmac = SarkSubs::SQLiteGet($dbh, "SELECT pkey FROM netphone where pkey = '$macaddr'");
-					unless ($checkmac) {
-						SarkSubs::SQLiteDo($dbh, "INSERT INTO netphone (pkey,vendor,model) 	
-							VALUES ('$macaddr','$in_event_ua_profile_vendor','$in_event_ua_profile_model')" );
-					}
-					SarkSubs::SQLiteDisconnect($dbh);
-
-#if (($pkt =~ m/MAC%3[aA](000413[^@]+)@/sio || $pkt =~ m/snom/so) && $pkt =~ m/^(?:Accept):\s*application\/url/msio) {
-#				if ($in_event_ua_profile_vendor eq 'snom') {
-# Snom 3xx
-# http://wiki.snom.com/SIP_Traces#PnP_Config
 
 					if ($in_header_accept !~ m/\bapplication\/url\b/io) {
 						next;
@@ -566,16 +551,17 @@ sleep(1);
 
 sub createExten($$$) {
 
-	my @asterisk_sip_array = (
-		"defaultuser=\$desc",
-		"secret=\$password",
-		"mailbox=\$ext",
-		"callerid=\"\$desc\" <\$ext>",
-		"call-limit=3",
-		"pickupgroup=1",
-		"callgroup=1",
-		"qualify=yes"
-	);
+#	my @asterisk_sip_array = (
+#		"call-limit=3",
+#		"defaultuser=\$desc",
+#		"secret=\$password",
+#		"mailbox=\$ext",
+#		"callerid=\"\$desc\" <\$ext>",
+#		"call-limit=3",
+#		"pickupgroup=1",
+#		"callgroup=1",
+#		"qualify=yes"
+#	);
 	
 	my $vendor = shift;
 	my $devicemodel = shift;
@@ -616,12 +602,13 @@ sub createExten($$$) {
     
 # get the template 
 
-#    my $sipiaxfriend = SarkSubs::SQLiteGet($dbh, "SELECT sipiaxfriend FROM Device where pkey = '$vendor'");
-	my $sipiaxfriend;
-	foreach (@asterisk_sip_array) {	
-		$sipiaxfriend .= $_;
-		$sipiaxfriend .= "\n";
-	};
+    my $sipiaxfriend = SarkSubs::SQLiteGet($dbh, "SELECT sipiaxfriend FROM Device where pkey = 'General SIP'");
+#	my $sipiaxfriend;
+#	foreach (@asterisk_sip_array) {	
+#		$sipiaxfriend .= $_;
+#		$sipiaxfriend .= "\n";
+#	};
+    
     
     my $provision 	 = SarkSubs::SQLiteGet($dbh, "SELECT provision FROM Device where pkey = '$vendor'"); 
     my $blfkeyname	 = SarkSubs::SQLiteGet($dbh, "SELECT blfkeyname FROM Device where pkey = '$vendor'"); 

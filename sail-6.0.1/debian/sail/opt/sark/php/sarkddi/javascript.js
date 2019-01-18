@@ -38,7 +38,10 @@
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"sDom": 'fti',
-		"bSort" : false,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [6,7]
+		}],
 		"aoColumns": [
 	 
 			{ "sName": "pkey" },

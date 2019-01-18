@@ -73,7 +73,7 @@ else {
 	$email .= "\nDear User, \n\nHere is a summary of calls today $today \n\n";
 }
 $call_list = explode("\n",$calls);
-print_r($call_list);
+//print_r($call_list);
 
 if (!$emailaddr) {
 	die("$today  CDR print-request failed for $exten - no email addresses available\n");

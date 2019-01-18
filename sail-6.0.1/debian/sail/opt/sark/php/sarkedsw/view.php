@@ -68,8 +68,6 @@ public function showForm() {
 }
 
 private function showMain() {
-	
-
 /* 
  * start page output
  */
@@ -152,8 +150,7 @@ private function showMain() {
 	$this->myPanel->responsiveClose();	
 }
 
-private function show() {
-	    
+private function show() {    
 	
 	$buttonArray['cancel'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkedswForm",true,false);
@@ -182,13 +179,13 @@ private function show() {
 	$description = null;
 
 
-	
+/*	
 	$fwsource = strip_tags($_REQUEST['fwsource']);
 	$fwproto = strip_tags($_REQUEST['fwproto']);
 	$fwdestports = strip_tags($_REQUEST['fwdestports']);
 	$connrate = strip_tags($_REQUEST['connrate']);
 	$description = strip_tags($_REQUEST['description']);	
-
+*/
 	if (isset($_REQUEST['pkey'])) {
 		echo '<input type="hidden" name="pkey" id="pkey" value="' . strip_tags($_REQUEST['pkey']) . '" />' . PHP_EOL;
 	}
@@ -217,6 +214,7 @@ private function show() {
 
 private function save() {
 // save the data away	
+
 	$tuple = array();
 	$this->validator = new FormValidator();
 	$this->validator->addValidation("fwsource","req","Please fill in source");
@@ -238,6 +236,7 @@ private function save() {
 	$sourcepass=false;
 
 	if (preg_match (' /^\$LAN$/ ',$_POST['fwsource'] )) {
+		$_POST['fwsource'] = 'net:$LAN';
 		$sourcepass=true;
 	}
 	elseif (preg_match (' /^net$/ ',$_POST['fwsource'] )) {
@@ -316,7 +315,7 @@ private function restartFirewall() {
  * 	call the tuple builder to create a table row array 
  */  
 
-//	$this->copyFirewallTemplates(); N.B. ToDo!
+	$this->copyFirewallTemplates(); # N.B. ToDo!
  
  
 	$tuple = array();
@@ -370,11 +369,11 @@ private function restartFirewall() {
 private function copyFirewallTemplates() {
 
 // check the rulesets exist 
-
+/*
   	$rc = $this->helper->request_syscmd ("ipset -N voipbl iphash");
 	$rc = $this->helper->request_syscmd ("ipset -N fqdntrust iphash");
 	$rc = $this->helper->request_syscmd ("ipset -N fqdndrop iphash");
-
+*/
 	$this->dbh = DB::getInstance();
 	$res = $this->dbh->query("SELECT EXTBLKLST,FQDN,FQDNINSPECT,FQDNTRUST,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	
@@ -395,7 +394,10 @@ private function copyFirewallTemplates() {
 	else {
 		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_inline_limit");
 	}		
-	
+
+/*
+ *  Tested and working but never used 
+
 	$file = '/opt/sark/templates/shorewall/sark_ipset_blist';
 	if (file_exists($file) && $res['EXTBLKLST'] == 'YES') {
 		$rc = $this->helper->request_syscmd ("cp $file /etc/shorewall");
@@ -416,7 +418,7 @@ private function copyFirewallTemplates() {
 	else {
 		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_ipset_fqdndrop");
 	}	
- 			
+ */	 			
 }
 
 private function valid_ip_cidr($cidr, $must_cidr = false) {

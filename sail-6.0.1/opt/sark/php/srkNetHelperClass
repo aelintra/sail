@@ -29,7 +29,16 @@ Class nethelper {
 function __construct() {
 
 // interface name
-	$this->interfaceName = trim(`ls /sys/class/net | grep -v lo | head -n1`);
+// Find the first active interface and use it
+
+	$firstUpInterface = trim (`ip addr | grep UP | grep -v lo: | head -n1`);
+	if (empty($firstUpInterface)) {
+		$this->interfaceName = 'ERROR';
+	} 
+	else {
+		preg_match( '/\d:\s*(\w+):/',$firstUpInterface,$matches);
+		$this->interfaceName = trim($matches[1]);
+	}
 
 // localIPV4
 	$iprets = shell_exec( "ip addr show dev " . $this->interfaceName);
@@ -134,14 +143,24 @@ public function internetIsUp() {
 		default:
 			return False;   // unsuccessful ping
 	}
-	return -1;
 }
 
 public function get_externip() {
+
 	if ($this->internetIsUp()) {
-		return trim(`dig +short myip.opendns.com @resolver1.opendns.com`);
+// try DiG first		
+		$r1 = trim(`dig +short myip.opendns.com @resolver1.opendns.com`);
+		if (filter_var($r1, FILTER_VALIDATE_IP)) {
+			return $r1;
+		}
+//	DiG failed so lets try ipify
+		$r2 = file_get_contents('https://api.ipify.org');
+		if (filter_var($r2, FILTER_VALIDATE_IP)) {
+			return $r2;
+		}
 	}
-	return -1;   	 		
+//  No IP so lets bug out	
+	return False;   	 		
 }
 
 

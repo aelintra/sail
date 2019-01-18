@@ -83,7 +83,7 @@ private function showMain() {
 		}	
 		closedir($handle);
 	}
-	
+	$buttonArray=array();	
 	$this->myPanel->actionBar($buttonArray,"sarkeditForm",false);
 	$this->myPanel->Heading($this->head,$this->message);
 	$this->myPanel->responsiveSetup(2);	

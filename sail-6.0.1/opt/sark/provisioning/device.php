@@ -36,7 +36,15 @@ try {
   	$global = $db->query("select EDOMAIN,FQDN,FQDNPROV,HACLUSTERIP,HAUSECLUSTER,LDAPBASE,LOGLEVEL,TLSPORT from globals")->fetch();
 
 } catch (Exception $e) {
-  logIt("Unable to retrieve cluster values");
+  $errorMsg = $e->getMessage();
+  logIt("Unable to retrieve cluster values for $mac  - DB error $errorMsg");
+  send404();
+  exit(1);
+}
+if (empty($global)) {
+  logIt("Unable to retrieve cluster values - DB may be locked");
+  send404();
+  exit(1);
 }
 $haclusterip = $global['HACLUSTERIP'];
 $hausecluster = $global['HAUSECLUSTER'];
@@ -189,10 +197,16 @@ try {
 // update the phone model (it may have changed or it may not be present yet)
   	$model = logUA();
   	if (!empty($model)) {
+  		if ($model != $thisConfig->devicemodel) {
 // set the model in the extension record  	
-  	  	$sql = $db->prepare('UPDATE ipphone SET devicemodel=? WHERE pkey = ?');
-		$sql->execute(array($model,$thisConfig->pkey));
+ 			logIt("Device model differs between UA and DB.  UA = $model, DB = " . $thisConfig->devicemodel);
+  	  		$sql = $db->prepare('UPDATE ipphone SET devicemodel=? WHERE pkey = ?');
+			$sql->execute(array($model,$thisConfig->pkey));
+		}
+	}
+
 // create and/or set the model in netphone record
+/*
 		$sql = $db->prepare('select * from netphone WHERE pkey = ?');
 		$sql->execute(array($mac));
 		$thisNetphone = $sql->fetchObject();
@@ -204,12 +218,15 @@ try {
 			$sql = $db->prepare('INSERT INTO netphone (pkey,model) VALUES(?,?)');
 			$sql->execute(array($mac,$model));
 		}
+*/
 	}	
-  }
    
 //  $masterkey = $thisConfig->pkey;
 } catch (Exception $e) {
-  logIt("Unable send mac file for $mac");
+  $errorMsg = $e->getMessage();
+  logIt("Unable send mac file for $mac  - DB error $errorMsg");
+  send404();
+  exit;
 }
 // check if we are going to send creds
 $sndcreds=false;
@@ -234,7 +251,9 @@ if (isset($thisConfig->location) && $thisConfig->location == 'remote') {
 }
 
 // substitute real values into the output	
-$retstring = preg_replace ( '/\$localip/', ret_localip($thisConfig->provisionwith, $thisConfig->protocol), $retstring); 
+if (preg_match('/\$localip/',$retstring)) {
+	$retstring = preg_replace ( '/\$localip/', ret_localip($thisConfig->provisionwith, $thisConfig->protocol), $retstring); 
+}
 $retstring = preg_replace ( '/\$tlsport/', $tlsport, $retstring);
 $retstring = preg_replace ( '/\$ldapbase/', $ldapbase, $retstring);
 
@@ -258,8 +277,29 @@ if (preg_match('/\$fkey/',$retstring) ) {
 else {
 	$retstring .= getBlf();
 }
+
+// try to update lasteen
+try {
+	$time = time();
+	if (isset($_SERVER["REMOTE_ADDR"])) {
+    	if (empty($thisConfig->firstseen)) {
+      		$sql = $db->prepare('UPDATE ipphone SET firstseen=?,lastseen=? WHERE pkey = ?');
+			$sql->execute(array($time,$time,$thisConfig->pkey));
+		}
+		else {
+    		$sql = $db->prepare('UPDATE ipphone SET lastseen=? WHERE pkey = ?');
+			$sql->execute(array($time,$thisConfig->pkey));
+		}
+	}	
+
+} catch (Exception $e) {
+		$errorMsg = $e->getMessage();
+  		logIt("Unable to update lastseen/firstseen - DB error $errorMsg");
+  		send404();
+  		exit(1);
+	}
 	
-// and finally ship it out
+// and, if we got this far,  finally ship it out
 
 if ($frequest) {
 	logIt("sending config $frequest");
@@ -278,23 +318,7 @@ logit ("====================End of stream======================>",4);
 // send it
 echo $retstring; 
 
-// update lasteen
-try {
-	$time = time();
-	if (isset($_SERVER["REMOTE_ADDR"])) {
-    	if (!$thisConfig->firstseen) {
-      		$sql = $db->prepare('UPDATE ipphone SET firstseen=?,lastseen=? WHERE pkey = ?');
-			$sql->execute(array($time,$time,$thisConfig->pkey));
-		}
-		else {
-    		$sql = $db->prepare('UPDATE ipphone SET lastseen=? WHERE pkey = ?');
-			$sql->execute(array($time,$thisConfig->pkey));
-		}
-	}	
 
-} catch (Exception $e) {
-		logIt("Unable to update extension sndcreds");
-	}
 
 // disable auth send for next time
 if (!$descriptor) {
@@ -303,7 +327,9 @@ if (!$descriptor) {
 			$update = $db->prepare("update ipphone set sndcreds='No' where  pkey = '" . $thisConfig->pkey . "'");
 			$update->execute();
 		} catch (Exception $e) {
-			logIt("Unable to update extension sndcreds");
+			$errorMsg = $e->getMessage();
+  			logIt("Unable to update extension sndcreds  - DB error $errorMsg");
+  			exit(1);
 		}
 	}
 }

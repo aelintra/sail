@@ -28,26 +28,19 @@ Class sarkgreeting {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $distro = array();
-	protected $soundir = '/var/lib/asterisk/sounds'; // set for rhel (see below)
+	protected $soundir = '/usr/share/asterisk/sounds'; // set for Debian/Ubuntu
 
 public function showForm() {
-	
+
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
 	$this->helper = new helper;
-	$this->helper->qDistro($distro);
-	
-	if ( $distro['debian'] )  {
-		$this->soundir = '/usr/share/asterisk/sounds';
-	}	
-	
 	
 	$this->myPanel->pagename = 'Greeting';
 	
-	if (isset($_POST['upimgclick'])) { 
+	if (!empty($_FILES['file']['name'])) { 
 		$filename = strip_tags($_FILES['file']['name']);
-		if (preg_match (' /^(usergreeting\d{4})\.(mp3)$/ ', $filename, $matches) ) {
+		if (preg_match (' /^(usergreeting\d{4})\.(mp3|wav)$/ ', $filename, $matches) ) {
 			if (glob('/usr/share/asterisk/sounds/' . $matches[1] . '.*')) {
 				$this->message = $matches[1] . " already exists";
 			}
@@ -88,10 +81,10 @@ private function showMain() {
 /* 
  * start page output
  */
-  	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;
-	echo '<input type="hidden" id="upimgclick" name="upimgclick" />'. PHP_EOL;
+  	
 
 	$buttonArray=array();
+	$buttonArray['upimg'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkgreetingForm",false,false);
 
 	if ($this->invalidForm) {
@@ -110,11 +103,11 @@ private function showMain() {
 	
 
 	$this->myPanel->aHeaderFor('greetingnum');
-	$this->myPanel->aHeaderFor('cluster');
+	$this->myPanel->aHeaderFor('cluster',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('description'); 	
-	$this->myPanel->aHeaderFor('filesize');	
-	$this->myPanel->aHeaderFor('filetype');
-	$this->myPanel->aHeaderFor('D/L');
+	$this->myPanel->aHeaderFor('filesize',false,'w3-hide-small w3-hide-medium');	
+	$this->myPanel->aHeaderFor('filetype',false,'w3-hide-small');
+	$this->myPanel->aHeaderFor('D/L',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('play'); 
 	$this->myPanel->aHeaderFor('del');
 	 
@@ -167,16 +160,20 @@ private function showMain() {
 		$file = glob( $this->soundir . "/" . $row['pkey'] . '*');
 		$filesize = filesize($file[0]);
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
-		echo '<td class="read_only">' . $row['pkey'] . '</td>' . PHP_EOL;	
-		echo '<td >' . $row['cluster']  . '</td>' . PHP_EOL;		
+
+		preg_match(" /^.*(\d{4}$)/ ", $row['pkey'],$matches);
+
+
+		echo '<td class="read_only">' . $matches[1] . '</td>' . PHP_EOL;	
+		echo '<td class="w3-hide-small">' . $row['cluster']  . '</td>' . PHP_EOL;		
 		echo '<td >' . $row['desc']  . '</td>' . PHP_EOL;
-		echo '<td >' . $filesize. '</td>' . PHP_EOL;
-		echo '<td >' . $row['type']  . '</td>' . PHP_EOL;
+		echo '<td class="w3-hide-small w3-hide-medium">' . $filesize. '</td>' . PHP_EOL;
+		echo '<td class="w3-hide-small">' . $row['type']  . '</td>' . PHP_EOL;
 		if (preg_match('/mp3$/',$file[0])) {
-			echo '<td class="center"><a href="/php/downloadg.php?dtype=greet&dfile=' . $file[0] . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
+			echo '<td class="center w3-hide-small"><a href="/php/downloadg.php?dtype=greet&dfile=' . $file[0] . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
 		}
 		else {
-			echo '<td class="center">N/A</td>' . PHP_EOL;
+			echo '<td class="center w3-hide-small">N/A</td>' . PHP_EOL;
 		}
 									
 		if (preg_match('(wav|mp3)',$row['type'])) {
@@ -193,6 +190,8 @@ private function showMain() {
 
 	echo '</tbody>' . PHP_EOL;
 	$this->myPanel->endResponsiveTable();
+	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;
+	echo '<input type="hidden" id="upimgclick" name="upimgclick" />'. PHP_EOL;	
 	echo '</form>';
 	$this->myPanel->responsiveClose();	
 		

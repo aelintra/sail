@@ -1,3 +1,16 @@
+sail (5.0.0-60) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-60
+  - positive apach2 set and start in postinst
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 6  Jul 2018 18:00:00 +0000
+
+sail (5.0.0-59) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-59
+  - fixed minor bug in responder for Yealink phones
+  - added additional Yealink model definitions 
+  
+ -- CoCoSoft <admin@aelintra.com>  Fri, 6  Jul 2018 18:00:00 +0000
+
 sail (5.0.0-58) UNRELEASED; urgency=low
   * Tagged as 5.0.0-58
   - fixed minor bug in list.php when serving endpoints to non admin users

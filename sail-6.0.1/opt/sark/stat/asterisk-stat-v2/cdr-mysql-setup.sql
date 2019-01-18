@@ -10,7 +10,7 @@ GRANT ALL
 USE asterisk; 
 
 CREATE TABLE IF NOT EXISTS `cdr` ( 
-`calldate` datetime NOT NULL default '0000-00-00 00:00:00', 
+`calldate` datetime NOT NULL, 
 `clid` varchar(80) NOT NULL default '', 
 `src` varchar(80) NOT NULL default '', 
 `dst` varchar(80) NOT NULL default '', 

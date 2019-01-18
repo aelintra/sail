@@ -98,9 +98,11 @@ public function put_database($newkey) {
 			$this->amiHdle->DelDB('ringdelay', $newkey);
 		}				
 	}
-	if ($_POST['celltwin'] == 'ON') {
-		$twin = strip_tags($_POST['cellphone']);
-		$this->amiHdle->PutDB('srktwin', $newkey, $twin);
+	if (isset($_POST['celltwin'])) {
+		if ($_POST['celltwin'] == 'ON') {
+			$twin = strip_tags($_POST['cellphone']);
+			$this->amiHdle->PutDB('srktwin', $newkey, $twin);
+		}
 	}
 	else {
 		$this->amiHdle->DelDB('srktwin', $newkey);

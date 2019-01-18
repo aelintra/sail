@@ -29,15 +29,10 @@
         preg_match("/^(\d+)/",$acount[1],$matches);
         $var['upcalls'] = $matches[1];
 
-        $disk = `/bin/df -h`;
-
-        if ($disk) {
-            $diskusage = preg_match ( '/(\d{1,2})\%/', $disk,$matches);
-            $var['disk'] = $matches[1];
-        }
-        else {
-            $var['disk'] = 'unknown'; 
-        }
+        $rootdev = trim (`df -P / | tail -n 1 | awk '/.*/ { print $1 }'`);
+        $diskusage = `df --output=pcent $rootdev | tr -dc '0-9'`;
+        $var['disk'] = $diskusage; 
+        
         $cpu_usage = sys_getloadavg();
         $var['lga'] = $cpu_usage[0];
         $var['lgb'] = $cpu_usage[1];

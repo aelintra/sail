@@ -352,13 +352,19 @@ private function showEdit() {
 		
   	}
   	else {
-		$res = $dbh->query("SELECT cluster from user where pkey='" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);		
-		$wherestring = "ORDER BY pkey WHERE cluster='" . $res['cluster'] . "'" ;
+		$cluster = $dbh->query("SELECT cluster from user where pkey='" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);		
+		$wherestring = "ORDER BY pkey WHERE cluster='" . $cluster['cluster'] . "'" ;
   	}
-  
-  	$sql = "select pkey from Queue $wherestring";
-  	$queueList = $this->dbh->query($sql)->fetch(PDO::FETCH_ASSOC);
-  	array_push($queueList, 'None');
+
+  	
+  	$queuelist = array();
+  	$sql = "select * from Queue $wherestring";
+  	foreach ($this->dbh->query($sql) as $row) { 
+  		$queueList[] = $row['pkey'];
+  	}
+  	
+  	$queueList[] = 'None';
+
 	$i = 1;
 	while ($i < 6) {
 		$this->myPanel->displayPopupFor('queue'.$i,$res['queue'.$i],$queueList);

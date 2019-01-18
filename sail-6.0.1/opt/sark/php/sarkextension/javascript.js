@@ -141,7 +141,10 @@
 		"bAutoWidth": true,
 //		"bStateSave": true,
 		"sDom": 'fti',
-		"bSort" : false,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [2,5,6,7,8,10,11]
+		}],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
 			{ "sName": "cluster" },
