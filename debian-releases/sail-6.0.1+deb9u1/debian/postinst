@@ -297,7 +297,7 @@ chmod 664 /opt/sark/db/sark.db
 [ ! -d /opt/sark/public/vtech ] && mkdir /opt/sark/public/vtech && chown www-data:www-data /opt/sark/public/vtech
 [ ! -d /opt/sark/public/yealink ] && mkdir /opt/sark/public/yealink && chown www-data:www-data /opt/sark/public/yealink
 
-#set up shellinabox to our liking
+#set up shellinabox to our likin
 sed -i "/^SHELLINABOX_PORT/c\SHELLINABOX_PORT=63005" /etc/default/shellinabox
 sed -i '/^SHELLINABOX_ARGS/c\SHELLINABOX_ARGS="--no-beep --localhost-only --disable-peer-check --disable-ssl"' /etc/default/shellinabox
 [ -e /etc/shellinabox/options-enabled/00_White\ On\ Black.css ] && rm -rf /etc/shellinabox/options-enabled/00_White\ On\ Black.css
@@ -333,10 +333,21 @@ sv u srk-ua-helper
 #add definitions to MySQL
 mysql -u root < /opt/sark/stat/asterisk-stat-v2/cdr-mysql-setup.sql
 
-#stop systend.resolved - it interferes with dnsmasq
+#stop systemd.resolved - it interferes with dnsmasq
 systemctl disable systemd-resolved
 #restart dnsmasq
 systemctl restart dnsmasq
+
+#Check if I am an AWS instance and set defaults accordingly
+dmidecode -s bios-version | grep amazon
+if [ "$?" -ne "0" ] ; then
+# turn on VCL in Globals
+    sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
+# open 80,443 and 22 in the firewall (otherwise we'll be locked out)
+    sed -i 's/ACCEPT net:$LAN $FW tcp 80/ACCEPT net $FW tcp 80/' /etc/shorewall/sark_rules
+    sed -i 's/ACCEPT net:$LAN $FW tcp 443/ACCEPT net $FW tcp 443/' /etc/shorewall/sark_rules
+    sed -i 's/ACCEPT net:$LAN $FW tcp 22/ACCEPT net $FW tcp 22/' /etc/shorewall/sark_rules
+fi
 
 
 #Install date

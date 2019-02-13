@@ -23,7 +23,7 @@ ACCEPT		$FW		net		icmp
 
 #SARK include - DO NOT remove!
 INCLUDE sark_rules
+INCLUDE sark_redirect_rules
 #
-
 
 #LAST LINE -- ADD YOUR ENTRIES BEFORE THIS ONE -- DO NOT REMOVE

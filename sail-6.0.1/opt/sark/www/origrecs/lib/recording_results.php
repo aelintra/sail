@@ -72,8 +72,10 @@ if (is_dir($folder))
             syslog(LOG_WARNING, "Drop reason 1 file $file");
             continue;
         }
+// replace with preg_split for php7
+//        $file_list = split('[-.]', $file);
 
-        $file_list = split('[-.]', $file);
+	$file_list = preg_split('/[-.]/', $file);	
 
         // Unless the filename contains the tenant name then we don't want to include this recording
         if ($offset > 0 && $TENANT != 'MASTER-USER' && $file_list[1] != $TENANT)

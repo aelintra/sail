@@ -431,7 +431,8 @@ private function showEdit() {
  * trunk container
  */ 	
  	$this->myPanel->displayBooleanFor('active',$tuple['active']);
- 	$this->myPanel->displayInputFor('description','text',$tuple['trunkname']); 
+ 	$this->myPanel->displayInputFor('trunkname','text',$tuple['trunkname']); 
+ 	$this->myPanel->displayInputFor('description','text',$tuple['description']); 
 	
 	echo '<div class="cluster">';
 	echo '<div class="cluster w3-margin-bottom">';

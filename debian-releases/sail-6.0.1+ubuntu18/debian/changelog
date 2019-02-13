@@ -1,3 +1,27 @@
+sail (6.0.1-36+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - added basic support for high 443 resirection 
+  - amalgamated new generator code for batch
+  - fix for paging
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 07  Feb 2019 18:00:00 +0000
+
+sail (6.0.1-35+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - fixed bug in Users.  It wasn't recognising spaces in descriptions
+  - removed requirement for email address in User add
+  - updated phoneimages
+  - added automatic phoneimage retrieval/update
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 01  Feb 2019 18:00:00 +0000
+
+sail (6.0.1-34+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - fixed php5 incompatibility in callrecording (it was using split)
+  - fixed update bug in sarkddi
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 31  Jan 2019 18:00:00 +0000
+
 sail (6.0.1-33+ubuntu18) UNRELEASED; urgency=low
   * untagged
   - added cluster CLID to Tenants

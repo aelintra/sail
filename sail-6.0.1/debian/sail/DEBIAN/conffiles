@@ -46,6 +46,7 @@
 /etc/shorewall/policy
 /etc/shorewall/routestopped
 /etc/shorewall/rules
+/etc/shorewall/sark_redirect_rules
 /etc/shorewall/stoppedrules
 /etc/shorewall/zones
 /etc/shorewall6/interfaces

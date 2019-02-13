@@ -16,7 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
+
+//
+// we use the full path here because this class gets called from batch as well as online
+//  
+require_once "/opt/sark/php/srkNetHelperClass";
 
 Class genAsteriskObjects {
 
@@ -1261,11 +1265,15 @@ THERE;
 		$dialstr = "";
 	}
 // insert page group dialstrings into their tables 
-/*	
+	
 	foreach ($pagearray as $pkey=>$dialstr) {
-		$count = $dbh->exec("UPDATE speed SET pagegroup = '". $dialstr . "' WHERE pkey = '" . $pkey . "'" );
+		$sql = $this->dbh->prepare("UPDATE speed SET pagegroup = '". $dialstr . "' where pkey=?");
+		$sql->execute(array($pkey));		
+//		$carrier = $sql->fetch();	
+		$sql=NULL;
+//		$count = $dbh->exec("UPDATE speed SET pagegroup = '". $dialstr . "' WHERE pkey = '" . $pkey . "'" );
  	}
-*/  
+ 
 
 	
 // V4 open/closed lamps

@@ -2,17 +2,8 @@
 [ ! -e /opt/sark/db/sark.db ] && exit 4
 
 /usr/bin/logger Regenerating Asterisk
-#
-#/usr/bin/php /opt/sark/generator/agentSQL.php >/dev/null
-/usr/bin/php /opt/sark/generator/cdr_mysql.php >/dev/null
-/usr/bin/php /opt/sark/generator/extensions.php
-#/usr/bin/php /opt/sark/generator/paging.php
-/usr/bin/php /opt/sark/generator/iaxSQL.php >/dev/null
-/usr/bin/php /opt/sark/generator/meetmeSQL.php >/dev/null
-/usr/bin/php /opt/sark/generator/queuesSQL.php >/dev/null
-/usr/bin/php /opt/sark/generator/sipSQL.php >/dev/null
-/usr/bin/php /opt/sark/generator/featuresSQL.php >/dev/null
-/usr/bin/php /opt/sark/generator/vmailSQL.php >/dev/null
+
+php /opt/sark/generator/runApacheGen.php
 
 # HA
 if [ -e "/etc/ha.d" ]; then

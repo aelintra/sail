@@ -172,6 +172,8 @@ private function showNew() {
 
 	$this->myPanel->internalEditBoxStart();
 
+	$this->myPanel->displayInputFor('extension','text');
+
 	$this->myPanel->displayInputFor('realname','text',null,'realname');
 //	$this->myPanel->aLabelFor('user');
 //	echo '<input type="text" name="pkey" id="pkey"   />' . PHP_EOL;
@@ -180,9 +182,9 @@ private function showNew() {
 //	$this->myPanel->aLabelFor('password');
 //	echo '<input type="password" name="password" id="password"   />' . PHP_EOL;
 
-	$this->myPanel->displayInputFor('extension','text');
+	
 
-	$this->myPanel->displayInputFor('email','email');
+//	$this->myPanel->displayInputFor('email','email');
 //	$this->myPanel->aLabelFor('email');
 //	echo '<input type="text" email" name="email" id="email"   />' . PHP_EOL;
 
@@ -287,7 +289,7 @@ private function showPerms() {
 
 	$this->myPanel->internalEditBoxStart();
 	$this->myPanel->displayInputFor('realname','text',$user['realname']);
-	$this->myPanel->displayInputFor('email','text',$user['email']);	
+//	$this->myPanel->displayInputFor('email','text',$user['email']);	
 	echo '</div>';
 	
 	foreach ($panel as $j => $panelrow) {
@@ -355,7 +357,7 @@ private function showPerms() {
 
 
 private function setPerms() {
-//print_r($_POST);
+
 	$user_pkey = $_POST['pkey'];
 	$tuple = array();
 	
@@ -367,7 +369,7 @@ private function setPerms() {
     if ($this->validator->ValidateForm()) {
 		$tuple['pkey']			=  strip_tags($_POST['pkey']);
 		$tuple['realname']  	=  strip_tags($_POST['realname']);
-		$tuple['email'] 		=  strip_tags($_POST['email']);
+//		$tuple['email'] 		=  strip_tags($_POST['email']);
 		$ret = $this->helper->setTuple("user",$tuple);		
 		if ($ret != 'OK') {
 			$this->invalidForm = True;
@@ -395,6 +397,10 @@ private function setPerms() {
 		if ($perm == 'off') {
 			continue;
 		}
+/*
+	$dname may have unwanted underscores in it from presentation.  we will remove them here
+ */
+		$dname = preg_replace("/_/"," ",$dname);
 		$panel = $this->dbh->query("SELECT pkey FROM panel where displayname = '" . $dname . "'" )->fetch(PDO::FETCH_ASSOC);
 		$res=$this->dbh->prepare('INSERT INTO userpanel(user_pkey,panel_pkey,perms) VALUES(?,?,?)');
 		$res->execute(array($user_pkey,$panel['pkey'],$perm));

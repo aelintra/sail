@@ -22,5 +22,7 @@
 #fetch manufacturer MAC list once a week
 #refresh MAC db weekly
 0 0 * * 0 root sh /opt/sark/scripts/getmaclist.sh
+#refresh phone images  weekly
+0 0 * * 0 root sh /opt/sark/scripts/getimages.sh
 #recording offload every 10 minutes
 */10 * * * * root sh /opt/sark/scripts/srkoffload_simple.sh >/dev/null 2>&1

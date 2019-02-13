@@ -195,7 +195,7 @@ private function show() {
 	else {
 		$this->myPanel->displayInputFor('fwsource','text');
 	}
-	$this->myPanel->radioSlide('fwproto',$fwproto,array('tcp','udp','ALL'));
+	$this->myPanel->radioSlide('fwproto',$fwproto,array('tcp','udp'));
 	$this->myPanel->displayInputFor('fwdestports','text',$fwdestports);
 //	$this->myPanel->displayInputFor('portrangeend','number');
 	$this->myPanel->displayInputFor('connrate','text',$connrate);
