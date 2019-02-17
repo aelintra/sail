@@ -404,7 +404,11 @@ Class page {
                 'edomainsend'   => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'
-                                ), 
+                                ),
+                'fqdnhttp'   => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO',
+                                ),                                  
                 'fqdninspect'   => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO',
@@ -508,6 +512,10 @@ Class page {
 								'checked' =>'YES',
                                 'unchecked' => 'NO'
                                 ),
+                'playtransfer'  => array(
+                                'checked' =>'YES',
+                                'unchecked' => 'NO'
+                                ),                
                 'privileged'      => array(
                                 'checked' =>'YES',
                                 'unchecked' => 'NO'

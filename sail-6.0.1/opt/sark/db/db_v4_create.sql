@@ -302,6 +302,7 @@ FOPPASS TEXT,                       -- Flash opeartor panel password
 FQDN TEXT,							-- FQDN V5+
 FQDNDROPBUFF TEXT DEFAULT 100,		-- fqdn drop set size (in entries)
 FQDNINSPECT TEXT DEFAULT NO,		-- Require FQDN in SIP Ops Shorewall 4.6+
+FQDNHTTP TEXT DEFAULT NO,			-- Require FQDN in remote HTTP Ops 
 FQDNPROV TEXT,						-- use FQDN in remote provisioning YES/NO
 FQDNTRUST TEXT DEFAULT NO,			-- construct an ipset of trusted IP's from a list of trusted fqdns
 G729 TEXT,                          -- G729 switch - not used
@@ -349,6 +350,7 @@ PKTINSPECT TEXT,					-- not used
 PLAYBEEP TEXT,                      -- play beep on failover
 PLAYBUSY TEXT,                      -- play busy message or tones
 PLAYCONGESTED TEXT,                 -- play congested message or tones
+PLAYTRANSFER TEXT DEFAULT YES,     	-- play transfer message when transferring off the PBX
 PROXY TEXT,                         -- allow proxy operations
 PROXYIGNORE TEXT,                   -- not used in 4.x
 RECFINALDEST TEXT,                  -- recordings folder

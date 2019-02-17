@@ -329,6 +329,18 @@ sv d srk-ua-helper
 sleep 1
 sv u srk-ua-helper
 
+#Check if I am an AWS instance and set defaults accordingly
+dmidecode -s bios-version | grep amazon
+if [ "$?" -eq "0" ] ; then
+    echo setting defaults for AWS
+# turn on VCL in Globals
+    sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
+# open 80,443 and 22 in the firewall (otherwise we'll be locked out)
+    sed -i 's/ACCEPT net:$LAN $FW tcp 80/ACCEPT net $FW tcp 80/' /etc/shorewall/sark_rules
+    sed -i 's/ACCEPT net:$LAN $FW tcp 443/ACCEPT net $FW tcp 443/' /etc/shorewall/sark_rules
+    sed -i 's/ACCEPT net:$LAN $FW tcp 22/ACCEPT net $FW tcp 22/' /etc/shorewall/sark_rules
+fi
+
 
 #Install date
 date --iso-8601=minutes > /opt/sark/db/.sail-install-date

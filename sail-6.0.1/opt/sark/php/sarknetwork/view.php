@@ -36,6 +36,7 @@ Class sarknetwork {
 	protected $myBooleans = array(
 		'toggleDhcpElement',
 		'edomainsend',
+		'fqdnhttp',		
 		'fqdninspect',
 		'fqdnprov',
 		'icmp',
@@ -87,7 +88,7 @@ private function showMain() {
 	if (isset($this->message)) {
 		$this->myPanel->msg = $this->message;
 	} 
-	$sql = $this->dbh->prepare("SELECT fqdn,fqdninspect,fqdnprov,bindaddr,edomain,sendedomain,vcl FROM globals where pkey = ?");
+	$sql = $this->dbh->prepare("SELECT fqdn,fqdnhttp,fqdninspect,fqdnprov,bindaddr,edomain,sendedomain,vcl FROM globals where pkey = ?");
 	$sql->execute(array('global'));
 	$global = $sql->fetchObject();
 		
@@ -272,20 +273,10 @@ private function showMain() {
     if (!empty($global->FQDN)) {
     	$this->myPanel->displayBooleanFor('fqdnprov',$global->FQDNPROV);
     	$this->myPanel->displayBooleanFor('fqdninspect',$global->FQDNINSPECT);
+    	$this->myPanel->displayBooleanFor('fqdnhttp',$global->FQDNHTTP);
     }
 	echo '</div>';
 
-/*
- *  Access
- */   
-	
-	$this->myPanel->internalEditBoxStart();
-	$this->myPanel->subjectBar("Access");
-	$this->myPanel->displayBooleanFor('icmp',$icmp);  
-	$this->myPanel->displayInputFor("sshport",'number',$sshport);
-	echo '</div>';
-
-	
 
 	$this->myPanel->responsiveTwoColRight();
 
@@ -379,6 +370,16 @@ private function showMain() {
 */
 	echo '</div>';
 
+/*
+ *  Access
+ */   
+	
+	$this->myPanel->internalEditBoxStart();
+	$this->myPanel->subjectBar("Access");
+	$this->myPanel->displayBooleanFor('icmp',$icmp);  
+	$this->myPanel->displayInputFor("sshport",'number',$sshport);
+	echo '</div>';	
+
 //	echo '<br/>' . PHP_EOL; 
 	
 	$endButtonArray['save'] = "endsave";
@@ -458,6 +459,7 @@ private function saveEdit() {
 		$sendedomain	= strip_tags($_POST['edomainsend']);
 		$bindaddr 		= strip_tags($_POST['bindaddr']);
 		$fqdn 			= strip_tags($_POST['fqdn']);
+		$fqdnhttp 		= strip_tags($_POST['fqdnhttp']);
 		$fqdninspect 	= strip_tags($_POST['fqdninspect']);
 		$fqdnprov 		= strip_tags($_POST['fqdnprov']);
 		$sshport		= strip_tags($_POST['sshport']);
@@ -482,16 +484,27 @@ private function saveEdit() {
 		}
 		$tuple['fqdnprov'] = 'NO';
 		$tuple['fqdninspect'] = 'NO';
-		if (isset($fqdn)) {		
+		$tuple['fqdnhttp'] = 'NO';
+		if (!empty($fqdn)) {		
 			$tuple['fqdn'] = $fqdn;
+			$sname = 'ServerName ' . $fqdn;
+			`echo $sname > /opt/sark/etc/apache2/sark_includes/sarkServerName.conf`;
 			$tuple['sendedomain'] = $sendedomain;
 			if (isset($fqdnprov)) {
 				$tuple['fqdnprov'] = $fqdnprov;
 			}
 			if (isset($fqdninspect)) {
 				$tuple['fqdninspect'] = $fqdninspect;
-			}						
+			}
+			if (isset($fqdnhttp)) {
+				$tuple['fqdnhttp'] = $fqdnhttp;
+				$this->doHttpFilter($fqdnhttp,$fqdn);
+			}									
 		}
+		else {
+			`echo 'ServerName sark.local' > /opt/sark/etc/apache2/sark_includes/sarkServerName.conf`;
+		}
+
 		$ret = $this->helper->setTuple("globals",$tuple);
 		
 		if (isset($_POST['dhcpstart'])) {
@@ -739,7 +752,7 @@ private function saveEdit() {
 		}
 */		
 		if ($timez !=  $oldtz ) {
-			$distro = trim(`lsb release -si`);
+			$distro = trim(`lsb_release -si`);
 			$rlse = trim(`lsb_release -sr`);
 			if ($distro == 'Ubuntu' || $rlse > 9.0) {
 				$this->helper->request_syscmd('rm -rf /etc/localtime');
@@ -838,6 +851,32 @@ function doResolv() {
 		if ($retcode) {
 			$myret = $this->helper->request_syscmd ("echo options attempts:2 >> /etc/resolv.conf");
 		}			
+}	
+
+function doHttpFilter($filterValue,$fqdn) {
+
+	if ($filterValue == 'NO') {
+		`echo "#" > /opt/sark/etc/apache2/sark_includes/preventIpAccess.conf`;
+		return;
+	}
+	$cur_ipaddr = $this->nethelper->get_localIPV4();
+	$quads = explode ('.',$cur_ipaddr);
+	$localcond = 'RewriteCond %{HTTP_HOST} ' . $quads[0] . '\\\.' . $quads[1] . '\\\.' . $quads[2] . '\\\.' . $quads[3];
+	$localrule = 'RewriteRule .\* \- [L]';
+	$lds = explode ('.',$fqdn);
+	$regex = '!';
+	foreach ($lds as $ld) {
+		$regex .= $ld . '\.';
+	}
+	$regex = preg_replace (' /\.$/ ' , '$', $regex);
+	$fqdncond = 'RewriteCond %{HTTP_HOST} ' . $regex;
+	$fqdnrule = 'RewriteRule .\* \- [F]';
+
+	`echo $localcond >  /opt/sark/etc/apache2/sark_includes/preventIpAccess.conf`;
+	`echo $localrule >>  /opt/sark/etc/apache2/sark_includes/preventIpAccess.conf`;
+	`echo $fqdncond >>  /opt/sark/etc/apache2/sark_includes/preventIpAccess.conf`;
+	`echo $fqdnrule >>  /opt/sark/etc/apache2/sark_includes/preventIpAccess.conf`;
+	return;
 }	
 
 

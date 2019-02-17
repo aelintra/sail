@@ -616,7 +616,7 @@ try {
 	
 	$displayglobals = array("ABSTIMEOUT","ALLOWHASHXFER","BLINDBUSY","BOUNCEALERT","CALLRECORD1","EXTLEN",
 			   "FAX","FAXDETECT","INTRINGDELAY","LANGUAGE","LTERM","OPERATOR","PLAYBEEP","PLAYBUSY","PLAYCONGESTED",
-			   "RINGDELAY","SYSOP","SYSPASS","SPYPASS","VOIPMAX","VOICEINSTR","ASTDLIM","MAXIN");
+			   "PLAYTRANSFER","RINGDELAY","SYSOP","SYSPASS","SPYPASS","VOIPMAX","VOICEINSTR","ASTDLIM","MAXIN");
 
 
 
@@ -1162,20 +1162,15 @@ THERE;
 		$count++;
     } 
 //  strip trailing space and generate ringall
-	$ringall = preg_replace ('/&/'," ", $ringall );
-	$ringall = preg_replace ( '/\s*$/',"", $ringall ); 
+//	$ringall = preg_replace ('/&/'," ", $ringall );
+	$ringall = preg_replace ( '/&$/',"", $ringall ); 
 
 	if ($ringall != '') {
 		$OUT .= "\texten => RINGALL,1,agi(sarkhpe,Alias,$ringall,\${EXTEN},)\n"; 
 //		$count = $dbh->exec("UPDATE speed SET out = '". $ringall . "' WHERE pkey = 'RINGALL'" );  
 	}
 //  strip last & and save pageall
-    $dialstr = preg_replace ( '/&$/',"", $dialstr ); 
-//    $res = $dbh->prepare("UPDATE page SET pagegroup = '". $dialstr . "' WHERE pkey = ?");
-// 	$res->execute(array('pageall')); 
-//	$count = $dbh->exec("UPDATE page SET pagegroup = '". $dialstr . "' WHERE pkey = 'pageall'" );   
-	
-//  done with pageall/ringall
+//    $dialstr = preg_replace ( '/&$/',"", $dialstr );
 
 
 	$speedflag = false;
@@ -1197,24 +1192,29 @@ THERE;
 //				$IPphone = $dbh->query($sql2)->fetch(PDO::FETCH_ASSOC);
 				if ($IPphone['technology'] == "Analogue") {
 					$IPphone['technology'] = "DAHDI";
-					$dialstr .= $IPphone['technology'] . "/" . $IPphone['channel'] ." ";
+					$dialstr .= $IPphone['technology'] . "/" . $IPphone['channel'] ."&";
 				}
 				elseif ($IPphone['technology'] == "Custom") {
 					continue;
 //					$dialstr .= $IPphone['dialstring'] ." ";
 				}
 				else { 
-					$dialstr .= $IPphone['technology'] . "/" . $ep . " ";	
+// check if we found a technology - if not skip expansion of this endpoint
+					if ($IPphone['technology']) {
+						$dialstr .= $IPphone['technology'] . "/" . $ep . "&";
+					}	
 				}	
 			}
 			elseif (preg_match(' /\// ',$ep)) {
-				$dialstr .= $ep . " ";
+				$dialstr .= $ep . "&";
 			}
 			else {
-				$dialstr .= "Local/$ep@internal ";	 		
+				if (!empty($ep)) {
+					$dialstr .= "Local/$ep@internal&";	
+				} 		
 			}
 		}
-		$dialstr = preg_replace ( '/\s*$/',"", $dialstr );
+		$dialstr = preg_replace ( '/&$/',"", $dialstr );
 		if ($row['grouptype'] != "Page" && $row['pkey'] != 'RINGALL') {
 	/*
 		This stanza looks redundant.  

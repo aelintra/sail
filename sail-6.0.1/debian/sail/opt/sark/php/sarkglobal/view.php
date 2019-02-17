@@ -39,6 +39,7 @@ Class sarkglobal {
 		'clusterstart',
 		'cosstart',		
 		'playbeep',
+		'playtransfer',		
 		'proxy',
 		'sipmulticast',
 		'usercreate',		
@@ -268,6 +269,7 @@ private function showMain() {
     $this->myPanel->displayBooleanFor('cfwdprogress',$global['CFWDPROGRESS']);
     $this->myPanel->displayBooleanFor('voiceinstr',$global['VOICEINSTR']);
     $this->myPanel->displayBooleanFor('playbeep',$global['PLAYBEEP']);
+	$this->myPanel->displayBooleanFor('playtransfer',$global['PLAYTRANSFER']);
     $this->myPanel->radioSlide('playcongested',$global['PLAYCONGESTED'],array('YES','NO','SIGNAL'));
     $this->myPanel->radioSlide('playbusy',$global['PLAYBUSY'],array('YES','NO','SIGNAL'));
     $this->myPanel->radioSlide('callrecord1',$global['CALLRECORD1'],array('None','OTR','OTRR','In','Out','Both'));	

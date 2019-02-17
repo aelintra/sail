@@ -174,7 +174,7 @@ private function showNew() {
 	$this->myPanel->internalEditBoxStart();
 	$this->myPanel->subjectBar("New Ring Group");
 	$this->myPanel->displayInputFor('callgroup','text',null,'pkey');	
-	$this->myPanel->radioSlide('grouptype','Ring',array('Ring','Hunt','Page','Alias'));
+	$this->myPanel->radioSlide('grouptype','Ring',array('Ring','Hunt','Page'));
 
 	echo '<div class="cluster">';
 	echo '<div class="cluster w3-margin-bottom">';
@@ -192,7 +192,7 @@ private function showNew() {
 	$this->myPanel->aHelpBoxFor('outcome');
 	$this->myPanel->displayInputFor('groupstring','text',null,'out');
 	$this->myPanel->radioSlide('devicerec','default',array('default','None','OTR','OTRR','Inbound'));
-	$this->myPanel->displayInputFor('ringdelay','number');
+	$this->myPanel->displayInputFor('ringdelay','number',$intringdelay);
 	$this->myPanel->displayInputFor('alphatag','text',null,'calleridname');
 	$this->myPanel->displayInputFor('alertinfo','text',null,'speedalert');
 	$this->myPanel->displayInputFor('description','text',null,'longdesc');
@@ -284,7 +284,7 @@ private function showEdit($key=False) {
 	
 
 //	$this->myPanel->displayInputFor('callgroup','text',$res['pkey'],'pkey');	
-	$this->myPanel->radioSlide('grouptype',$res['grouptype'],array('Ring','Hunt','Page','Alias'));
+	$this->myPanel->radioSlide('grouptype',$res['grouptype'],array('Ring','Hunt','Page'));
 	$dialparams = 'ciIkt';
 	if (isset($res['dialparamsring']) ) {
 		$dialparams = $res['dialparamsring'];

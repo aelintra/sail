@@ -45,6 +45,7 @@ chown -R www-data:www-data /opt/sark/www
 chown -R www-data:www-data /opt/sark/db
 chown -R www-data:www-data /opt/sark/passwd
 chown -R www-data:www-data /opt/sark/cache
+chown www-data:www-data /opt/sark/etc/apache2/sark_includes/*
 
 chown -R asterisk:asterisk /opt/sark/otrr/var/spool/asterisk/monitor 
 chown -R asterisk:asterisk /opt/sark/mixmon/var/spool/asterisk/monitor 
@@ -249,6 +250,7 @@ if [  "$?" -eq "0" ] ; then
 	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
 	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
+    ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/sark_includes
 	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php5/apache2/php.ini
 	cp -f /opt/sark/cache/debsetlan /etc/init.d
 	update-rc.d debsetlan defaults > /dev/null 2>&1	
@@ -270,6 +272,18 @@ if [  "$?" -eq "0" ] ; then
 # pre -98 we used runit to manage asterisk.  Post 98 we use init.d
 # we don't enable asterisk if ASHA is installed because Pacemaker will handle	
 	[ ! -e /opt/asha/asha.conf ] && update-rc.d asterisk defaults 
+fi
+
+#Check if I am an AWS instance and set defaults accordingly
+dmidecode -s bios-version | grep amazon
+if [ "$?" -eq "0" ] ; then
+    echo setting defaults for AWS
+# turn on VCL in Globals
+    sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
+# open 80,443 and 22 in the firewall (otherwise we'll be locked out)
+    sed -i 's/ACCEPT net:$LAN $FW tcp 80/ACCEPT net $FW tcp 80/' /etc/shorewall/sark_rules
+    sed -i 's/ACCEPT net:$LAN $FW tcp 443/ACCEPT net $FW tcp 443/' /etc/shorewall/sark_rules
+    sed -i 's/ACCEPT net:$LAN $FW tcp 22/ACCEPT net $FW tcp 22/' /etc/shorewall/sark_rules
 fi
 
 a2ensite sark-ssl.conf > /dev/null 2>&1
@@ -322,16 +336,6 @@ sv d srk-ua-helper
 sleep 1
 sv u srk-ua-helper
 
-#Check if I am an AWS instance and set defaults accordingly
-dmidecode -s bios-version | grep amazon
-if [ "$?" -ne "0" ] ; then
-# turn on VCL in Globals
-    sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
-# open 80,443 and 22 in the firewall (otherwise we'll be locked out)
-    sed -i 's/ACCEPT net:$LAN $FW tcp 80/ACCEPT net $FW tcp 80/' /etc/shorewall/sark_rules
-    sed -i 's/ACCEPT net:$LAN $FW tcp 443/ACCEPT net $FW tcp 443/' /etc/shorewall/sark_rules
-    sed -i 's/ACCEPT net:$LAN $FW tcp 22/ACCEPT net $FW tcp 22/' /etc/shorewall/sark_rules
-fi
 
 
 #Install date

@@ -38,7 +38,7 @@ else {
 
 $(document).ready(function() {
 
-  $('.message').delay(2000).fadeOut(600);
+  $('.message').delay(500).fadeOut(1200);
 //  $('.emessage').delay(10000).fadeOut(600);
 
 });

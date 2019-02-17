@@ -247,6 +247,7 @@ OPTION66_REBOOT="Y"
 PROVISION_ENABLE="Y"
 CFG_RESYNC_FROM_SIP="check-sync"
 CFG_STANDARD_FILE_PATH="http://$localip/provisioning?mac={mac}"
+SIP_DETECT_SSAF_1="Y"
 ############################################################
 # SIP Settings #
 # Suffix "_1" indicates this parameter is for "line 1". #
@@ -2121,6 +2122,9 @@ INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('yeal
 
 # # phone browser access - change for your site
 security.user_password = admin:myadminpass
+security.user_password = user:myuserpass
+
+features.direct_ip_call_enable = 0
 
 # Auto provisioning
 auto_provision.pnp_enable = 1
@@ -2185,6 +2189,7 @@ account.1.outbound_proxy_enable = 1
 account.1.subscribe_register = 1
 account.1.subscribe_mwi = 1
 account.1.subscribe_mwi_to_vm = 1
+account.1.sip_trust_ctrl = 1
 voice_mail.number.1 = *50*
 
 # Enable/Disable the codecs you want to use - default is law, G729, G722

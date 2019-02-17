@@ -1,4 +1,4 @@
-<? 
+<?php 
          
     $int="eth0"; 
     session_start(); 
