@@ -859,9 +859,13 @@ function doHttpFilter($filterValue,$fqdn) {
 		`echo "#" > /opt/sark/etc/apache2/sark_includes/preventIpAccess.conf`;
 		return;
 	}
-	$cur_ipaddr = $this->nethelper->get_localIPV4();
-	$quads = explode ('.',$cur_ipaddr);
-	$localcond = 'RewriteCond %{HTTP_HOST} ' . $quads[0] . '\\\.' . $quads[1] . '\\\.' . $quads[2] . '\\\.' . $quads[3];
+
+//	$cur_ipaddr = $this->nethelper->get_localIPV4();
+//	$quads = explode ('.',$cur_ipaddr);
+//	$localcond = 'RewriteCond %{HTTP_HOST} ' . $quads[0] . '\\\.' . $quads[1] . '\\\.' . $quads[2] . '\\\.' . $quads[3];
+	$localnet = $this->nethelper->get_networkIPV4();
+	$localcidr = $this->nethelper->get_networkCIDR();
+	$localcond = 'RewriteCond expr \"-R ' . "\'" . $localnet . '/' . $localcidr . "\'" . '\"';
 	$localrule = 'RewriteRule .\* \- [L]';
 	$lds = explode ('.',$fqdn);
 	$regex = '!';

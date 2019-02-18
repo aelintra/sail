@@ -253,6 +253,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('provisionwit
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('proxy','Dynamic Proxy Enable','Enables/disables SARKs dynamic proxy feature (see extensions panel status field).');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('push','Push','Some phones (Snoms) can reload their config without rebooting');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('pwdlen','Ext password length','Length of the password (in characters) the randomizer will create for new extensions');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('qdd','Direct Dial','Queue direct dial access');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q1','Q1','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q2','Q2','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q3','Q3','Agent Queue ');

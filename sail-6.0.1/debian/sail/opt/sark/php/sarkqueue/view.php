@@ -109,6 +109,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('queueoptions',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('devicerec',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('preannounce',false,'w3-hide-small');
+	$this->myPanel->aHeaderFor('qdd',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('ed',false,'editcol');
 	$this->myPanel->aHeaderFor('del',false,'delcol');
 	
@@ -128,6 +129,8 @@ private function showMain() {
 		echo '<td class="w3-hide-small ">' . $row['options']  . '</td>' . PHP_EOL;	
 		echo '<td class="w3-hide-small ">' . $row['devicerec']  . '</td>' . PHP_EOL;	
 		echo '<td class="w3-hide-small ">' . $row['greetnum']  . '</td>' . PHP_EOL;
+		$qdd = 12200 + $row['id'];
+		echo '<td class="w3-hide-small ">' . $qdd  . '</td>' . PHP_EOL;
 		$get = '?edit=yes&amp;pkey=';
 		$get .= $row['pkey'];	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
@@ -237,6 +240,16 @@ private function showEdit($pkey=false) {
 	$this->myPanel->subjectBar('Queue' . " " . $pkey);
 
 	echo '<form id="sarkqueueForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
+
+	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $res['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
+	echo '</div>';
+
 
 	$this->myPanel->displayInputFor('queueoptions','text',$res['options'],'options');
 	$this->myPanel->radioSlide('devicerec',$res['devicerec'],array('OTR','OTRR','Inbound'));

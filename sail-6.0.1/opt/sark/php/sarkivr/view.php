@@ -125,6 +125,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('description',false,'w3-hide-small w3-hide-medium');
 	$this->myPanel->aHeaderFor('timeout',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('listenforext',false,'w3-hide-small w3-hide-medium');
+	$this->myPanel->aHeaderFor('qdd',false,'w3-hide-small w3-hide-medium');
 	$this->myPanel->aHeaderFor('ed',false,'editcol');
 	$this->myPanel->aHeaderFor('del',false,'delcol');
 	
@@ -142,7 +143,9 @@ private function showMain() {
 		echo '<td class="w3-hide-small">' . $row['greetnum']  . '</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small w3-hide-medium">' . $row['description']  . '</td>' . PHP_EOL;	
 		echo '<td class="w3-hide-small">' . $row['timeout']  . '</td>' . PHP_EOL;
-		echo '<td class="w3-hide-small w3-hide-medium">' . $row['listenforext']  . '</td>' . PHP_EOL;	
+		echo '<td class="w3-hide-small w3-hide-medium">' . $row['listenforext']  . '</td>' . PHP_EOL;
+		$qdd = 11200 + $row['id'];
+		echo '<td class="w3-hide-small w3-hide-medium ">' . $qdd  . '</td>' . PHP_EOL;	
 		$get = '?edit=yes&amp;pkey=';
 		$get .= $row['pkey'];	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
@@ -312,7 +315,14 @@ private function showEdit($pkey=false) {
 //    $this->myPanel->aLabelFor('ivrname'); 		
 	echo '<input type="hidden" name="newkey" size="20" id="newkey" value="' . $pkey . '"  />' . PHP_EOL;
 
-	$this->myPanel->internalEditBoxStart();
+	$this->myPanel->internalEditBoxStart;
+
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $ivrmenu['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
 
 	if (!empty($this->greetings)) {
 		$this->myPanel->aLabelFor('greeting'); 	

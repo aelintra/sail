@@ -716,12 +716,16 @@ try {
 //
 
  	foreach ($cluster as $row) {
+		
 		if ($row['pkey'] == "default") {
-			$OUT .= "[qrxvtmny]\n";    
+			$OUT .= "[qrxvtmny]\n"; 
+//			$OUT .= "\tinclude => qrxvtmny-qaccess\n";   
 		}
 		else {
-			$OUT .= "[" . $row['pkey'] . "]\n"; 
+			$OUT .= "[" . $row['pkey'] . "]\n";
+//			$OUT .= "\tinclude => " . $row['pkey'] . "-qaccess\n"; 
 		}
+
 		$OUT .= "\tinclude => parkedcalls\n";
 		$OUT .= "\tinclude => internal-presets\n";
     	$OUT .= "\tinclude => extensions\n";
@@ -770,6 +774,10 @@ try {
 //	$OUT .= "\n\texten => t,1,Hangup\n";
 //    	$OUT .= "\texten => h,1,Hangup\n";
 //    	$OUT .= "\texten => i,1,Playtones(congestion)\n";
+//    	
+//    	
+
+/*  Removed DISA Callback 17/02/19    	
     	if ($row['pkey'] == "default") {
         	$OUT .= "[qrxvtmny-callback]\n";
         	$OUT .= "\texten => _X.,1,DISA(no-password,qrxvtmny)\n";
@@ -777,12 +785,51 @@ try {
     	else {
         	$OUT .= "\n[" . $row['pkey'] . "-callback]\n";
         	$OUT .= "\texten => _X.,1,DISA(no-password," . $row['pkey'] . ")\n";
-    	}			
+    	}
+
+    	if ($row['pkey'] == "default") {
+        	$OUT .= "[qrxvtmny-qaccess]\n";
+    	}
+    	else {
+        	$OUT .= "[" . $row['pkey'] . "-qaccess]\n";
+    	} 
+*/
+		$sql = "SELECT * FROM Queue WHERE cluster='" . $row['pkey'] . "' ORDER BY id";
+		$qRes = $this->dbh->query($sql);
+		$queue = $qRes->fetchAll();
+		$qRes = NULL;			
+		foreach ($queue as $qrow) {
+				$qExten = 12200 + $qrow['id'];
+				$OUT .= "\texten => " . $qExten . ",1,Answer()\n";
+				$outstring =  "\texten => " . $qExten . ",n,Queue(";
+				$outstring .= $qrow['pkey'];
+				$outstring .= ',';
+				$outstring .= $qrow['options'];
+				$outstring .= ',,,,';
+				if ($qrow['devicerec'] != 'None') {
+					$outstring .= 'sarkhpe';
+				}
+				$outstring .= ")\n";
+				if ($qrow['greetnum'] != 'None') {
+					$OUT .= "\texten => " . $qExten . ",n,Playback(" . $qrow['greetnum'] . ")\n";
+				}
+				$OUT .= $outstring;    	
+		} 
+
+		$sql = "SELECT * FROM IVRmenu WHERE cluster='" . $row['pkey'] . "' ORDER BY id";
+		$qRes = $this->dbh->query($sql);
+		$ivr = $qRes->fetchAll();
+		$qRes = NULL;			
+		foreach ($ivr as $irow) {
+				$qExten = 11200 + $irow['id'];
+				$OUT .= "\texten => " . $qExten . ",1,Answer()\n"; 
+				$OUT .= "\texten => " . $qExten . ",n,agi(sarkhpe,IVR," . $irow['pkey'] . ")\n";    	
+		}		   	   				
 	}
 //	
 //  Extensions
 //
-	$OUT .= ";\n";
+//	$OUT .= ";\n";
     	$OUT .= "[extensions] \n";
     	$OUT .= "\tinclude => internal-presets\n";
     	$OUT .= "\tinclude => parkedcalls\n\n";

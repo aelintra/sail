@@ -281,7 +281,14 @@ private function showEdit($key=False) {
 	$intringdelay = $res['INTRINGDELAY'];	
 	$res = $this->dbh->query("SELECT * FROM speed where pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 	
-	
+	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $res['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
+	echo '</div>';
 
 //	$this->myPanel->displayInputFor('callgroup','text',$res['pkey'],'pkey');	
 	$this->myPanel->radioSlide('grouptype',$res['grouptype'],array('Ring','Hunt','Page'));
@@ -317,16 +324,6 @@ private function showEdit($key=False) {
 	echo '<div id="divhuntname">' . PHP_EOL;
 	$this->myPanel->displayInputFor('dialparams','text',$dialparams,"dialparamshunt");	
 	echo '</div>' . PHP_EOL;	
-	
-	
-	echo '<div class="cluster">';
-	echo '<div class="cluster w3-margin-bottom">';
-    $this->myPanel->aLabelFor('cluster','cluster');
-    echo '</div>';
-	$this->myPanel->selected = $res['cluster'];
-	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
-	echo '</div>';
 
 
 	$this->myPanel->radioSlide('devicerec','default',array('default','None','OTR','OTRR','Inbound'));

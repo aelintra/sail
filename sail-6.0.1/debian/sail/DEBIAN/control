@@ -1,9 +1,9 @@
 Package: sail
-Version: 6.0.1-40
+Version: 6.0.1-41+ubuntu18
 Architecture: all
 Maintainer: CoCo <admin@aelintra.com>
-Installed-Size: 21144
-Depends: sailhpe, lsb-release, ntp, asterisk, asterisk-mp3, asterisk-mysql, apache2, sqlite3, php5-gd, php5-sqlite, php5-curl, php5-mysql, php-pear, libio-socket-multicast-perl, libapache2-mod-php5, libdbi-perl, libdbd-sqlite3-perl, runit, sox, mysql-server, nmap, zip, libfile-readbackwards-perl, shorewall, shorewall6, fail2ban, sudo, dos2unix, dnsmasq, tshark, vim, debian-archive-keyring, less, hostname, ipcalc, php5-ldap, slapd, ldap-utils, speedtest-cli, tcpdump, rsync, shellinabox, dnsutils, sysstat, curl
+Installed-Size: 21145
+Depends: sailhpe, sqlite3, lsb-release, ntp, asterisk, asterisk-mp3, asterisk-mysql, apache2, php, php-mbstring, php-gd, php-sqlite3, php-curl, php-mysql, php-pear, php-ldap, libio-socket-multicast-perl, libapache2-mod-php, libdbi-perl, libdbd-sqlite3-perl, runit-systemd, sox, mysql-server, nmap, zip, libfile-readbackwards-perl, shorewall, shorewall6, fail2ban, sudo, dos2unix, dnsmasq, tshark, vim, debian-archive-keyring, less, hostname, ipcalc, slapd, ldap-utils, speedtest-cli, tcpdump, rsync, shellinabox, dnsutils, sysstat, curl
 Section: network
 Priority: extra
 Description: SARK  Asterisk Integration Layer (SAIL) - A fast, lightweight switch for Asterisk

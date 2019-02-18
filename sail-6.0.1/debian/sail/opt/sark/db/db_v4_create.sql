@@ -199,7 +199,8 @@ PRIMARY KEY (pkey, seq)
 
 /* call queues */
 CREATE TABLE IF NOT EXISTS Queue (
-pkey TEXT PRIMARY KEY,
+id INTEGER PRIMARY KEY,
+pkey TEXT,
 cluster TEXT,
 conf TEXT,
 devicerec TEXT,
@@ -399,7 +400,8 @@ z_updater TEXT DEFAULT 'system'
 
 /* IVR menus */
 CREATE TABLE IF NOT EXISTS ivrmenu (
-pkey TEXT PRIMARY KEY,
+id INTEGER PRIMARY KEY,	
+pkey TEXT,
 alert0 TEXT,						-- Alertinfo for each keypress
 alert1 TEXT,
 alert10 TEXT,
@@ -1402,5 +1404,4 @@ BEGIN
 END;
 
 COMMIT;
-
 
