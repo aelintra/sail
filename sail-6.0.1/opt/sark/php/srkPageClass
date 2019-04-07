@@ -71,7 +71,7 @@ Class page {
 //								'faclass' => 'check',
 								'src' => 'commit.png',
                                 'class' => 'buttonUpdate',
-								'colour' => 'w3-text-green',
+								'colour' => 'w3-text-light-blue',
                                 'alt' => 'Commit',
                                 'title' => 'COMMIT (Generate Asterisk objects)',
                                 'onClick' => "return confirmOK('Commit - Confirm?')",
@@ -679,7 +679,7 @@ Class page {
 	public $selected;
 	public $opSys;
 	public $tableClass = 'w3-table w3-card-4 w3-text-gray w3-striped w3-hoverable';
-    public $tableHeaderClass = 'w3-red w3-text-white';
+    public $tableHeaderClass = 'w3-deep-orange w3-text-white';
     public $bgColorClass = 'w3-light-gray';
 	
 	
@@ -874,7 +874,7 @@ Class page {
 				$commitColour = "w3-text-red";
 		}
 		else {
-				$commitColour = "w3-text-green";
+				$commitColour = "w3-text-light-blue";
 		} 
 		echo '<div class="w3-bar w3-black" >' . PHP_EOL;
 
@@ -1882,15 +1882,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
         $updays = $matches[1];
     }
     
-    $arch = `uname -m`;
-    $disk = array();
+    $disk = `/bin/df -k .`;
     
-    if (preg_match( ' /^arm/ ', $arch)) {
-        $disk = `/bin/df -h`;
-    }
-    else {
-        $disk = `/bin/df -h`;
-    }
     if ($disk) {
         $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
         $diskusage = $matches[1];

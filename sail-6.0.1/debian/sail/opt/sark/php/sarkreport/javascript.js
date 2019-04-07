@@ -6,6 +6,6 @@
 		"bSort" : false,
 		"bPaginate": false,
 		"bAutoWidth": true,
-		"sDom": 'ti'			
+		"sDom": 't'			
 	});            
  });

@@ -135,7 +135,7 @@ require_once $sarkpath . "/php/srkHelperClass";
 				echo "DATE " . $row['datemonth'] . "\n";
 			}
         }
-        if ($row['timespan'] == "*" ) {
+        if ($row['timespan'] == "*-*" ) {
 			if ($match == true) {
 				if ($debug) {
 					echo "TIMESPAN = * BUT MATCHED  - WE'RE CLOSED " . $row['timespan'] . "\n";

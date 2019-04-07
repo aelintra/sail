@@ -30,8 +30,13 @@
 //		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
-		"sDom": 'ti',
-		"bSort": false,
+		"bStateSave": true,
+		"bstateDuration": 360,			
+		"sDom": 'fti',
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [4,5,6,7]
+		}],
 		"aoColumns": [ 
 			{ "sName": "cluster" },
 			{ "sName": "beginclose" },
@@ -44,6 +49,9 @@
 			{ "sName": "ed" },			
 			{ "sName": "del" }
 		],
+		"oLanguage": {
+			"sSearch": "Filter:"
+		},			
 	} ).makeEditable({
 			sUpdateURL: "/php/sarktimer/update.php",
 				fnOnEdited: function(status)

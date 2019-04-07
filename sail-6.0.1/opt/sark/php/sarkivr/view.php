@@ -125,7 +125,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('description',false,'w3-hide-small w3-hide-medium');
 	$this->myPanel->aHeaderFor('timeout',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('listenforext',false,'w3-hide-small w3-hide-medium');
-	$this->myPanel->aHeaderFor('qdd',false,'w3-hide-small w3-hide-medium');
+//	$this->myPanel->aHeaderFor('qdd',false,'w3-hide-small w3-hide-medium');
 	$this->myPanel->aHeaderFor('ed',false,'editcol');
 	$this->myPanel->aHeaderFor('del',false,'delcol');
 	
@@ -144,8 +144,8 @@ private function showMain() {
 		echo '<td class="w3-hide-small w3-hide-medium">' . $row['description']  . '</td>' . PHP_EOL;	
 		echo '<td class="w3-hide-small">' . $row['timeout']  . '</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small w3-hide-medium">' . $row['listenforext']  . '</td>' . PHP_EOL;
-		$qdd = 11200 + $row['id'];
-		echo '<td class="w3-hide-small w3-hide-medium ">' . $qdd  . '</td>' . PHP_EOL;	
+//		$qdd = 11200 + $row['id'];
+//		echo '<td class="w3-hide-small w3-hide-medium ">' . $qdd  . '</td>' . PHP_EOL;	
 		$get = '?edit=yes&amp;pkey=';
 		$get .= $row['pkey'];	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
@@ -473,7 +473,7 @@ private function saveEdit() {
  */ 
 
        $key=0;
-       while ($key < 12) {
+       while ($key < 10) {
        		if (! isset($_POST['PhoneKey' . $key])) {
             	$tuple['option'.$key] = 'None';
             }
@@ -485,6 +485,21 @@ private function saveEdit() {
             }
             $key++;
        }
+
+// handle * and #
+		if (! isset($_POST['PhoneKey*'])) {
+       		$tuple['option10'] = 'None';
+		}
+		else {
+       		$tuple['routeclass10'] = $this->helper->setRouteClass($tuple['option10']);
+		}
+		if (! isset($_POST['PhoneKey#'])) {
+       		$tuple['option11'] = 'None';
+		}
+		else {
+       		$tuple['routeclass11'] = $this->helper->setRouteClass($tuple['option11']);
+		} 
+
        if (isset ($tuple['timeout'])) {
 			$tuple['timeoutrouteclass'] = $this->helper->setRouteClass($tuple['timeout']);
        }

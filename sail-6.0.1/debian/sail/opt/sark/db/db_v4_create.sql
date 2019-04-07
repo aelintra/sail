@@ -277,6 +277,7 @@ ATTEMPTRESTART TEXT,                -- not used in 4.x
 BINDADDR TEXT,                      -- Asterisk SIP bindaddr
 BLINDBUSY TEXT,                     -- blind transfer busy bounce
 BOUNCEALERT TEXT,                   -- alertinfo string for blind transfer bounce
+CALLPARKING TEXT DEFAULT 'YES',	-- turn call parking on/off
 CALLRECORD1 TEXT,					-- call recording defaults
 CAMPONQONOFF TEXT,                  -- camp-on miniqueue enable
 CAMPONQOPT TEXT,                    -- camp-on miniqueue options

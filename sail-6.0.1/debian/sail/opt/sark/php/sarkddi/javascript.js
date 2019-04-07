@@ -37,6 +37,8 @@
 	$('#trunktable').dataTable ( {
 		"bPaginate": false,
 		"bAutoWidth": true,
+		"bStateSave": true,
+		"bstateDuration": 360,			
 		"sDom": 'fti',
 		"aoColumnDefs" : [{
 			"bSortable" : false,
@@ -61,6 +63,9 @@
           $('td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8)', nRow).addClass( "bluetags" );
         },
 */
+		"oLanguage": {
+			"sSearch": "Filter:"
+		},
         "drawCallback": function() {
 			$(".dataTables_scrollBody").scrollTop(scrollPosition);
 		}    		 

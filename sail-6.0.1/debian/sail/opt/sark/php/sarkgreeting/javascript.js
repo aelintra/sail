@@ -26,11 +26,16 @@
 //		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
+		"bStateSave": true,
+		"bstateDuration": 360,	
 		"sDom": 'ti',
-		"bSort": false, 
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [2,6,7]
+		}],
 		"aoColumns": [ 
 			{ "sName": "pkey" },
-			{ "sName": "cluster" },
+			{ "sName": "cluster" },			
 			{ "sName": "desc"},
 			{ "sName": "filesize" },			
 			{ "sName": "filetype" },
@@ -38,6 +43,9 @@
 			{ "sName": "play" },
 			{ "sName": "del" }
 		],
+		"oLanguage": {
+			"sSearch": "Filter:"
+		},		
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
           $('td:eq(1),td:eq(2)', nRow).addClass( "bluetags" );
         }  

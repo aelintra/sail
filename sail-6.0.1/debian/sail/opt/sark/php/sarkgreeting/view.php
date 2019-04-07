@@ -177,7 +177,7 @@ private function showMain() {
 		}
 									
 		if (preg_match('(wav|mp3)',$row['type'])) {
-			echo '<td ><a href="/server-sounds/' . $row['pkey'] . '.' .$row['type'] . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
+			echo '<td ><a href="/server-sounds/' . $row['pkey'] . '.' .$row['type'] . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" target="blank"></a></td>' . PHP_EOL; 
 		}
 		else {
 			echo '<td title = "Only  files of type \'wav\' and \'mp3\'  may be played">N/A</td>' . PHP_EOL;

@@ -104,8 +104,8 @@ private function showEdit() {
 	}	
 		
 	if ($this->astrunning) {
-			 $amiHelper = new amiHelper();
-             $amiHelper->get_database($this->pkey,$cfim,$cfbs,$ringdelay,$twin); 
+//			 $amiHelper = new amiHelper();
+//             $amiHelper->get_database($this->pkey,$cfim,$cfbs,$ringdelay,$twin); 
 	}
 	else {
 		$this->myPanel->msg .= "  (No Asterisk running)";
@@ -138,7 +138,7 @@ private function showEdit() {
 
 	echo '<span onclick="document.getElementById(\'dial01\').style.display=\'none\'" class="w3-button w3-right w3-tiny ">&times&nbsp;close</span>';  
 	$this->myPanel->displayInputFor('keyboardDial','tel');
-	echo '<div class="w3-container w3-bar w3-padding ' . $this->bgColorClass . '" >' . PHP_EOL;
+	echo '<div class="w3-container w3-bar w3-padding ' . $this->myPanel->bgColorClass . '" >' . PHP_EOL;
 	     
     echo '<button class="w3-button w3-right w3-margin-left w3-blue w3-round-xxlarge" ';
     echo ' id="dial" name ="dial" value="Dial" type="button">Dial <i class="fas fa-phone"></i></button>'; 

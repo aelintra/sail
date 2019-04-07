@@ -259,16 +259,16 @@ private function saveNew() {
 
 
 // convert the inputs to Epoch time	
-    $dtsplit = split('-',$sdd);
-	$hmsplit = split(':',$shm);
+    $dtsplit = preg_split('/-/',$sdd);
+	$hmsplit = preg_split('/:/',$shm);
 
 	$tm = new DateTime();
 	$tm-> setDate($dtsplit[2], $dtsplit[1], $dtsplit[0]);
 	$tm-> setTime($hmsplit[0], $hmsplit[1], 00);
 	$sepoch = $tm->getTimestamp();
 
-	$dtsplit = split('-',$edd);
-	$hmsplit = split(':',$ehm);
+	$dtsplit = preg_split('/-/',$edd);
+	$hmsplit = preg_split('/:/',$ehm);
 
 	$tm-> setDate($dtsplit[2], $dtsplit[1], $dtsplit[0]);
 	$tm-> setTime($hmsplit[0], $hmsplit[1], 00);
@@ -420,16 +420,16 @@ private function saveEdit() {
 
 
 // convert the inputs to Epoch time	
-    $dtsplit = split('-',$sdd);
-	$hmsplit = split(':',$shm);
+    $dtsplit = preg_split('/-/',$sdd);
+	$hmsplit = preg_split('/:/',$shm);
 
 	$tm = new DateTime();
 	$tm-> setDate($dtsplit[2], $dtsplit[1], $dtsplit[0]);
 	$tm-> setTime($hmsplit[0], $hmsplit[1], 00);
 	$sepoch = $tm->getTimestamp();
 
-	$dtsplit = split('-',$edd);
-	$hmsplit = split(':',$ehm);
+	$dtsplit = preg_split('/-/',$edd);
+	$hmsplit = preg_split('/:/',$ehm);
 
 	$tm-> setDate($dtsplit[2], $dtsplit[1], $dtsplit[0]);
 	$tm-> setTime($hmsplit[0], $hmsplit[1], 00);

@@ -8,11 +8,16 @@
 //		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
+		"bStateSave": true,
+		"bstateDuration": 360,		
 		"sDom": 'fti',
 		"aoColumnDefs" : [{
 			"bSortable" : false,
 			"aTargets" : [2,3,4,7,8,9]
 		}],
+		"oLanguage": {
+			"sSearch": "Filter:"
+		},		
         "drawCallback": function() {
 			$(".dataTables_scrollBody").scrollTop(scrollPosition);
 		}      

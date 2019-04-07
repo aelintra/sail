@@ -83,7 +83,12 @@ public function showForm() {
     echo '<div class="w3-col m2 l4"><span>&nbsp;</span></div>' . PHP_EOL;
     echo '<div class="w3-col s12 m7 l4">' . PHP_EOL;
     echo '<div class="w3-card-4 w3-margin w3-border w3-white w3-round-large w3-margin-top" style="width:90%">' . PHP_EOL;
-    echo '<div class="w3-panel" ><h2><img src="/sark-common/Sark_favicon.png" class=" w3-image" alt="SARK UCS" style="max-height: 3em;"></h2></div>' . PHP_EOL;
+    if (file_exists("/sark-common/Customer_favicon.png")) {
+    	echo '<div class="w3-panel" ><h2><img src="/sark-common/Customer_favicon.png" class=" w3-image" alt="SARK UCS" style="max-height: 3em;"></h2></div>' . PHP_EOL;
+    }
+    else {
+    	echo '<div class="w3-panel" ><h2><img src="/sark-common/Sark_favicon.png" class=" w3-image" alt="SARK UCS" style="max-height: 3em;"></h2></div>' . PHP_EOL;
+    }
     echo '<form class="w3-container" id="sarkloginForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;	
 	echo '<p><input class="w3-input" type="text" id="pkey" name="pkey" placeholder="Username"></p>' . PHP_EOL;
     echo '<p><input class="w3-input" type="password" id="password" name="password" placeholder="Password"></p> ' . PHP_EOL;       

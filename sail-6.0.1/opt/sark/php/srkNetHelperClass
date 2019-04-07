@@ -36,7 +36,7 @@ function __construct() {
 		$this->interfaceName = 'ERROR';
 	} 
 	else {
-		preg_match( '/\d:\s*(\w+):/',$firstUpInterface,$matches);
+		preg_match( '/\d:\s*(\w+):?/',$firstUpInterface,$matches);
 		$this->interfaceName = trim($matches[1]);
 	}
 

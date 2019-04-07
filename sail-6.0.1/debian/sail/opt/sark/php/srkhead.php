@@ -14,6 +14,14 @@ else {
 <title>SARK PBX</title>
 <meta name="copyright" content="Copyright 2018 Aelintra Telecom Limited" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
+  if (file_exists("/sark-common/Customer_favicon.png")) {
+    echo '<link rel="icon" type="image/png" href="/sark-common/Customer_favicon.png">' . PHP_EOL;
+  }
+  else {
+    echo '<link rel="icon" type="image/png" href="/sark-common/Sark_favicon.png">' . PHP_EOL;
+  }
+?>
 <link rel="icon" type="image/png" href="/sark-common/Sark_favicon.png">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">

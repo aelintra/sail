@@ -125,7 +125,7 @@ private function showMain() {
 		
 /*** table rows ****/
 
-	$rows = $this->helper->getTable("dateseg");
+	$rows = $this->helper->getTable("dateseg",NULL,true,false,"cluster,dayofweek");
 	foreach ($rows as $row ) {
 		if ( $row['timespan'] == '*') {
 			$beginclosed = '*';
@@ -292,8 +292,13 @@ private function showEdit() {
     echo '</div>';
 
     $this->myPanel->internalEditBoxStart();
-	$this->myPanel->displayPopupFor('dayofweek','Day of Week',Array('Every Day','mon','tue','wed','thu','fri','sat','sun')); 
-	 echo '</div>';
+    $mySelected = $tuple['dayofweek'];
+    if ($mySelected == '*') {
+    	$mySelected = 'Every Day';
+    }
+    $this->myPanel->selected = $mySelected;
+	$this->myPanel->displayPopupFor('dayofweek',$mySelected,Array('Every Day','mon','tue','wed','thu','fri','sat','sun'));
+	echo '</div>';
 
 	$this->myPanel->internalEditBoxStart();
 	$this->myPanel->displayInputFor('description','text',$tuple['desc'],'desc');

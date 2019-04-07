@@ -530,7 +530,7 @@ public function getTable($table, $sql='',$filter=true, $default=false,$order='pk
 			}			
 		}
 	}
-	$sql .= " ORDER BY " . $order;
+	$sql .= " ORDER BY " . $order . " COLLATE NOCASE ASC";
 	$this->logit("getTable; I'm running sql $sql",3 );
 	$res = $dbh->query($sql);    
 	$return = $res->fetchAll(); 

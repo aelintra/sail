@@ -19,7 +19,10 @@
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"sDom": 'fti',
-		"bSort": false,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [2,3,4,5,6]
+		}],
 	} ).makeEditable({
 			sUpdateURL: "/php/sarkqueue/update.php",
 				fnOnEdited: function(status)

@@ -356,6 +356,9 @@ private function showEdit() {
 	
 
 	echo '</div>';
+	$endButtonArray['cancel'] = true;
+	$endButtonArray['update'] = "endsave";
+	$this->myPanel->endBar($endButtonArray);
  	echo '</form>' . PHP_EOL; // close the form 
     $this->myPanel->responsiveClose();
 

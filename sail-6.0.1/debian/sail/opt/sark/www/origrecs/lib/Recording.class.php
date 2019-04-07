@@ -85,7 +85,7 @@ class RecordingList
             <td>{$call['file_list'][1+$this->offset]}</td>
             <td>{$datetime}</td>
             <td>{$call['file_list'][3+$this->offset]}</td>
-            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\"><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\" title=\"Download\"></span></a></td>
+            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\" download><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\" title=\"Download\"></span></a></td>
             </tr>\n";
         }
 
@@ -115,7 +115,7 @@ class RecordingList
             <td>{$call['file_list'][1+$this->offset]}</td>
             <td>{$datetime}</td>
             <td>{$call['file_list'][3+$this->offset]}</td>
-            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\"><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\"></span></a></td>
+            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\" download><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\"></span></a></td>
             </tr>\n";
         }
 
@@ -146,7 +146,7 @@ class RecordingList
             <td>{$call['file_list'][1+$this->offset]}</td>
             <td>{$datetime}</td>
             <td>{$call['file_list'][4+$this->offset]}</td>
-            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\"><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\"></span></a></td>
+            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\" download><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\"></span></a></td>
             </tr>\n";
         }
 
@@ -178,7 +178,7 @@ class RecordingList
             <td>{$call['file_list'][1+$this->offset]}</td>
             <td>{$datetime}</td>
             <td>{$call['file_list'][3+$this->offset]}</td>
-            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\"><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\"></span></a></td>
+            <td><a href=\"#\" class=\"player ui-state-default ui-icon ui-icon-play\"></a><a href=\"#\" class=\"ui-state-default ui-icon ui-icon-stop\"></a><a href=\"{$call['file_link']}\" download><span class=\"download ui-state-default ui-icon ui-icon-arrowthickstop-1-s\"></span></a></td>
             </tr>\n";
         }
 

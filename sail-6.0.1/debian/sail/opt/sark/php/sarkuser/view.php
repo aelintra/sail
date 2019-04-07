@@ -112,7 +112,7 @@ private function showMain() {
 	$this->myPanel->aHeaderFor('cluster',false,'cluster w3-hide-medium w3-hide-small');
 	$this->myPanel->aHeaderFor('realname',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('exten');		 		
-	$this->myPanel->aHeaderFor('useremail',false,'w3-hide-small');
+//	$this->myPanel->aHeaderFor('useremail',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('resetpwd',false,'w3-hide-small');
 //	$this->myPanel->aHeaderFor('userspan');
 	$this->myPanel->aHeaderFor('edit');
@@ -134,7 +134,7 @@ private function showMain() {
 			echo '<td class="w3-hide-medium w3-hide-small">' . $row['cluster'] . '</td>' . PHP_EOL;
 			echo '<td class="w3-hide-small">' . $row['realname'] . '</td>' . PHP_EOL;
 			echo '<td >' . $row['extension'] . '</td>' . PHP_EOL;
-			echo '<td class="w3-hide-small">' . $row['email'] . '</td>' . PHP_EOL;				
+//			echo '<td class="w3-hide-small">' . $row['email'] . '</td>' . PHP_EOL;				
 			echo '<td class="w3-hide-small"><a href="/php/sarkuser/main.php?reset=yes&pkey=' . $row['pkey'] . '" ><img src="/sark-common/icons/undo.png" border=0 title = "Click to Reset" )"></a></td>' . PHP_EOL;			
 //			echo '<td >' . $row['selection'] . '</td>' . PHP_EOL;
 //			echo '<td >' . $row['readonly'] . '</td>' . PHP_EOL;

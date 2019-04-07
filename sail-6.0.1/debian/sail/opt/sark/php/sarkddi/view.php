@@ -21,7 +21,7 @@
 Class sarkddi {
 	
 	protected $message; 
-	protected $head = "DDI's";
+	protected $head = "DiD's";
 	protected $myPanel;
 	protected $dbh;
 	protected $helper;
@@ -196,7 +196,7 @@ private function showNew() {
 	$this->myPanel->responsiveSetup(2);
 
 	$this->myPanel->internalEditBoxStart();
-	$this->myPanel->subjectBar("New DDI");
+	$this->myPanel->subjectBar("New DiD");
 
 	echo '<form id="sarkddiForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 		
@@ -351,7 +351,7 @@ private function saveDiD(&$tuple) {
 			else {
 				$this->invalidForm = True;
 				$this->message = "<B>  --  Validation Errors!(1)</B>";	
-				$this->error_hash['DiD'] = "$didnumber - Span (/nnn) must be numeric for DDI range";
+				$this->error_hash['DiD'] = "$didnumber - Span (/nnn) must be numeric for DiD range";
 			}							
 		}
 		else {

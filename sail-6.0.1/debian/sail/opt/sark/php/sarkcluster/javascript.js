@@ -36,7 +36,7 @@
 		"sDom": 'fti',
 		"aoColumnDefs" : [{
 			"bSortable" : false,
-			"aTargets" : [3,4,5,7,8,9,10]
+			"aTargets" : [2,3,6,7,8,9]
 		}],
 	});	
 

@@ -139,6 +139,8 @@
 //		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
+		"bStateSave": true,
+		"bstateDuration": 360,		
 //		"bStateSave": true,
 		"sDom": 'fti',
 		"aoColumnDefs" : [{
@@ -161,6 +163,11 @@
 			{ "sName": "edit" },
 			{ "sName": "del" }		
 		],
+		"oLanguage": {
+
+			"sSearch": "Filter:"
+
+		},
 /*
 		"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
         $('td:eq(7),td:eq(10)', nRow).addClass( "bluetags" );

@@ -466,7 +466,7 @@ private function genFeatures() {
        	$OUT .= "#include sark_features_general.conf  \n";
    	} 
    	$OUT .= "#include sark_features_featuremap.conf  \n";
-   	$OUT .= 	"#include sark_features_applicationmap.conf  \n";
+   	$OUT .= "#include sark_features_applicationmap.conf  \n";
 
    	$fh = fopen("/etc/asterisk/features.conf", 'w') or die('Could not open file!');
    	fwrite($fh, $OUT. " \n")
@@ -674,11 +674,13 @@ try {
 	$OUT .= "\tinclude => internal \n";
 
 	$OUT .= "[internal] \n";
-	$OUT .= "\tinclude => parkedcalls\n";
-	
+	if ($this->globals['CALLPARKING'] == "YES") { 
+		$OUT .= "\tinclude => parkedcalls\n";
+	}
+
 	$OUT .= "\n\texten => MASTER,1,GoTo(extensions,\${EXTEN},1)\n";
 
-	$sql = "select pkey from Cluster order by pkey";
+	$sql = "select * from Cluster order by pkey";
 	$qRes = $this->dbh->query($sql);
 	$cluster = $qRes->fetchAll();
 	$qRes = NULL;
@@ -726,7 +728,9 @@ try {
 //			$OUT .= "\tinclude => " . $row['pkey'] . "-qaccess\n"; 
 		}
 
-		$OUT .= "\tinclude => parkedcalls\n";
+		if ($this->globals['CALLPARKING'] == "YES") { 
+			$OUT .= "\tinclude => parkedcalls\n";
+		}
 		$OUT .= "\tinclude => internal-presets\n";
     	$OUT .= "\tinclude => extensions\n";
 //    	$OUT .= "\tinclude => conferences\n"; 
@@ -777,23 +781,8 @@ try {
 //    	
 //    	
 
-/*  Removed DISA Callback 17/02/19    	
-    	if ($row['pkey'] == "default") {
-        	$OUT .= "[qrxvtmny-callback]\n";
-        	$OUT .= "\texten => _X.,1,DISA(no-password,qrxvtmny)\n";
-    	}
-    	else {
-        	$OUT .= "\n[" . $row['pkey'] . "-callback]\n";
-        	$OUT .= "\texten => _X.,1,DISA(no-password," . $row['pkey'] . ")\n";
-    	}
+/*   This section has been temporarily remove in V6 until we harmonise the extension allocation with V7
 
-    	if ($row['pkey'] == "default") {
-        	$OUT .= "[qrxvtmny-qaccess]\n";
-    	}
-    	else {
-        	$OUT .= "[" . $row['pkey'] . "-qaccess]\n";
-    	} 
-*/
 		$sql = "SELECT * FROM Queue WHERE cluster='" . $row['pkey'] . "' ORDER BY id";
 		$qRes = $this->dbh->query($sql);
 		$queue = $qRes->fetchAll();
@@ -824,27 +813,34 @@ try {
 				$qExten = 11200 + $irow['id'];
 				$OUT .= "\texten => " . $qExten . ",1,Answer()\n"; 
 				$OUT .= "\texten => " . $qExten . ",n,agi(sarkhpe,IVR," . $irow['pkey'] . ")\n";    	
-		}		   	   				
+		}	
+*/			   	   				
 	}
+
+
 //	
 //  Extensions
 //
 //	$OUT .= ";\n";
     	$OUT .= "[extensions] \n";
     	$OUT .= "\tinclude => internal-presets\n";
-    	$OUT .= "\tinclude => parkedcalls\n\n";
+    	if ($this->globals['CALLPARKING'] == "YES") { 
+			$OUT .= "\tinclude => parkedcalls\n";
+		}
         $OUT .= "\tinclude => conferences\n";
 //
 //  Call Parks
 //	
-	$park = `/bin/cat /etc/asterisk/sark_features_general.conf`;
-	if (preg_match(' /parkpos\s*=>\s*(\d{1,3})-(\d{1,3})/ ',$park,$matches)) { 
-		while ( $matches[1] <= $matches[2] ) {
-			$OUT .= "\texten => " . $matches[1] . ",1,ParkedCall(" . $matches[1] . ")\n";
+        if ($this->globals['CALLPARKING'] == "YES") { 
+			$park = `/bin/cat /etc/asterisk/sark_features_general.conf`;
+			if (preg_match(' /parkpos\s*=>\s*(\d{1,3})-(\d{1,3})/ ',$park,$matches)) { 
+				while ( $matches[1] <= $matches[2] ) {
+					$OUT .= "\texten => " . $matches[1] . ",1,ParkedCall(" . $matches[1] . ")\n";
             		$OUT .= "\texten => " . $matches[1] . ",hint,park:" . $matches[1] . "@parkedcalls\n";
-			$matches[1]++;
-		}				
-	}
+					$matches[1]++;
+				}				
+			}
+		}
 //
 //  open/closed hint
 //	 
@@ -1385,7 +1381,7 @@ ANDHERE;
         exten => _*3[012345][*],1,agi(sarkhpe,\${EXTEN},,)	; TIMERS
         exten => _*5[012567][*],1,agi(sarkhpe,\${EXTEN},,)	; VMAIL, TIME etc.
         exten => _*60*XXXX,1,agi(sarkhpe,\${EXTEN},,)		; Greetings
-        exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN,4})	; Greetings
+        exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN:4})	; Greetings
         exten => _*6[34][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent pause/unpause(63 64)
         exten => _*6[56][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent Login/out(65 66)
         exten => _*67[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)		; ChanSpy (Whisper)
