@@ -333,7 +333,7 @@ private function genSip() {
 				$row['sipiaxfriend'] = preg_replace ( '/context=internal/', "context=" . $myContext . "COS", $row['sipiaxfriend']);		
 				$row['sipiaxfriend'] = preg_replace ( '/\$desc/', $row['desc'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$password/', $row['passwd'], $row['sipiaxfriend']);
-				$row['sipiaxfriend'] = preg_replace ( '/\$ext/', $row['pkey'], $row['sipiaxfriend']);
+				$row['sipiaxfriend'] = preg_replace ( '/\$ext/', substr($row['pkey'],2), $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$clst/', $row['cluster'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$subtxt/', $myContext, $row['sipiaxfriend']);
 				$nat='no';
@@ -516,23 +516,23 @@ Context not currently used but may be in future
 			if (!preg_match(" /^;.*/",$line)) {
 				$line = preg_replace( '/\s+/', ' ', $line );
 				if (preg_match(" /^(\d{3,6})\s*=>\s*((\d*)?),/",$line,$matches)) {			
-					$mailbox[$matches[1]]['password'] = substr($matches[2],2);
+					$mailbox[$context][$matches[1]]['password'] = substr($matches[2],2);
 				}
 				$parts = explode('=>',$line);
 				if (isset($parts[1])) {	
 					$exten = trim($parts[0]);		
 					$params = explode(',',$parts[1]);
 					if (isset($params[1])) {
-						$mailbox[$exten]['name'] = trim($params[1]);
+						$mailbox[$context][$exten]['name'] = trim($params[1]);
 					}
 					if (isset($params[2])) {
-						$mailbox[$exten]['email'] = trim($params[2]);
+						$mailbox[$context][$exten]['email'] = trim($params[2]);
 					}
 					if (isset($params[3])) {
-						$mailbox[$exten]['options'] = trim($params[3]);
+						$mailbox[$context][$exten]['options'] = trim($params[3]);
 					}
 					if (isset($params[4])) {
-						$mailbox[$exten]['options'] .= ',' . trim($params[4]);
+						$mailbox[$context][$exten]['options'] .= ',' . trim($params[4]);
 					}								
 				}				
 			}
@@ -553,23 +553,27 @@ Context not currently used but may be in future
 #include sark_customer_vmail_header.conf
 #include sark_vmail_layout.conf
 
-[default]
-
 BANNEREND;
      
-    $result = $this->helper->getTable("ipphone",null,false);
+    $result = $this->helper->getTable("ipphone",null,false,false,"cluster,pkey");
+    $cluster=null;
     foreach ($result as $row) {
+    	$shortkey = substr($row['pkey'],2);
+    	if ($row['cluster'] != $cluster) {
+    		$cluster = $row['cluster'];
+    		$OUT .= "[" . $cluster . "]\n";
+    	} 
 		if ($row['dvrvmail'] != 'None') {
-			if (!empty ($mailbox[$row['pkey']]['password'])) {
-				$pwd = $mailbox[$row['pkey']]['password'];
+			if (!empty ($mailbox[$row['cluster']][$row['pkey']]['password'])) {
+				$pwd = $mailbox[$row['cluster']][$row['pkey']]['password'];
 			}
 			else {
 				$pwd = substr($row['pkey'],2);
 			}
-			$OUT .= $row['pkey'] . ' => ' . $pwd . ',' . $row['desc'] . ',' .
+			$OUT .= $shortkey . ' => ' . $pwd . ',' . $row['desc'] . ',' .
 			$row['vmailfwd'];
-			if (isset($mailbox[$row['pkey']]['options'])) {
-				$OUT .= ',' . $mailbox[$row['pkey']]['options'];
+			if (isset($mailbox[$row['cluster']][$row['pkey']]['options'])) {
+				$OUT .= ',' . $mailbox[$row['cluster']][$row['pkey']]['options'];
 			}
 			$OUT .= " \n";
         }
@@ -741,7 +745,12 @@ try {
 		$OUT .= "[" . $myCluster . "COS]\n";
 		$OUT .= "\texten => _.,1,GoToIf(\$[\${LEN(\${CALLERID(num)})} > 6]?$myCluster,\${EXTEN},1)\n";
 		$OUT .= "\texten => _.,2,SET(myClusterOclo=\${DB($myCluster/STATE)})\n";
-		$OUT .= "\t" . 'exten => _.,n,GoToIf($["${myClusterOclo}" = "CLOSED"]?${CALLERID(num)}closedcos,${EXTEN},1:${CALLERID(num)}opencos,${EXTEN},1)' . "\n\n";
+		
+//		$OUT .= "\t" . 'exten => _.,n,GoToIf($["${myClusterOclo}" = "CLOSED"]?${CALLERID(num)}closedcos,${EXTEN},1:${CALLERID(num)}opencos,${EXTEN},1)' . "\n\n";
+		
+		$OUT .= "\t" . 'exten => _.,n,GoToIf($["${myClusterOclo}" = "CLOSED"]?' . 
+			$myCluster . '${CALLERID(num)}closedcos,${EXTEN},1:' . 
+			$myCluster . '${CALLERID(num)}opencos,${EXTEN},1)' . "\n\n";
 	}
 
 //
@@ -766,9 +775,21 @@ try {
 		$OUT .= "\tinclude => parkedcalls\n";
 		$OUT .= "\tinclude => internal-presets\n";
 
-//    	$OUT .= "\tinclude => extensions\n";
-//    	$OUT .= "\tinclude => conferences\n"; 
-
+		$OUT .= <<<WHCLID
+;
+; 	Withhold CLI for outbound SIP trunks
+;   	This will work in most cases if the carrier is a good player
+;
+;   	It will usually not work for IAX2 trunks and you'll need to figure out 
+;	what your carrier requires
+;		
+        exten => _141XXXXX.,1,NoOp(whcli detected for \${EXTEN})
+        exten => _141XXXXX.,n,Set(CALLERID(pres)=prohib)
+        exten => _141XXXXX.,n,GoTo(\${EXTEN:3},1)
+                 
+WHCLID;
+		
+		$OUT .= "\n";
 		$sql = "SELECT * FROM Appl WHERE cluster='" . $row['pkey'] . "' ORDER BY pkey";
 		$qRes = $this->dbh->query($sql);
 		$appl = $qRes->fetchAll();
@@ -856,6 +877,8 @@ LOCAL;
 */
 			$OUT .= "\n\texten => _*8XX.,1,Pickup(" .$row['id'] . "\${EXTEN:2}@PICKUPMARK)\n\n";
 //		}
+		
+
 
 //Routes
 //
@@ -981,6 +1004,8 @@ LOCAL;
 
 		$this->generateRingGroups($OUT,$row['pkey'],$row['id']);	
 		$this->confBridge($OUT,$row['pkey']);
+		
+        $OUT .= "\texten => *50*,1,VoiceMailMain(\${CALLERID(num):2}@" . $row['pkey'] . ")\n";
 
 	}
 
@@ -1105,7 +1130,7 @@ LOCAL;
 			if ($myCluster == 'default') {
 				$myCluster = 'qrxvtmny';
 			} 
-			$OUT .= "[" . $IPphone['pkey'] . "opencos]\n";
+			$OUT .= "[" . $myCluster . substr($IPphone['pkey'],2) . "opencos]\n";
 
 			$OUT .= "\tinclude => Emergency\n"; 
 //			
@@ -1128,9 +1153,9 @@ LOCAL;
 				} 	
 			}
 
-			$OUT .= "\tinclude => " . $IPphone['pkey'] . "Cosend\n";
+			$OUT .= "\tinclude => ". $myCluster . substr($IPphone['pkey'],2) . "Cosend\n";
 
-			$OUT .= "[" . $IPphone['pkey'] . "closedcos]\n";
+			$OUT .= "[" . $myCluster . substr($IPphone['pkey'],2) . "closedcos]\n";
 			$OUT .= "\tinclude => Emergency\n"; 
 			
 			foreach ($orideclosedarray as $key => $value) {
@@ -1149,9 +1174,9 @@ LOCAL;
 					$OUT .= "\tinclude => " . $coskeys['COS_pkey'] . "\n";
 				} 	
 			}
-			$OUT .= "\tinclude => " . $IPphone['pkey'] . "Cosend\n";
+			$OUT .= "\tinclude => " . $myCluster . substr($IPphone['pkey'],2) . "Cosend\n";
 
-			$OUT .= '[' . $IPphone['pkey'] . "Cosend]\n";
+			$OUT .= '[' . $myCluster . substr($IPphone['pkey'],2) . "Cosend]\n";
 			$OUT .= "\texten => _.,1,GoTo($myCluster,\${EXTEN},1))\n";
 		}  
 	}		
@@ -1173,15 +1198,19 @@ LOCAL;
 	foreach ($dialplan as $plan) {
 			$OUT .= "\texten => $plan,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
 	}
+	
+	
+	
+/*	
     	$OUT .= "\n[Cosend]\n";
-/*
+
     	$OUT .= "\texten => _X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
     	$OUT .= "\texten => _[+*]X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
     	$OUT .= "\texten => _**X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
     	$OUT .= "\texten => _***X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-*/    	
+    	
     	$OUT .= "\texten => _.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-    	 
+*/    	 
 
 //
 //  begin mainmenu (inbound context) 
@@ -1244,6 +1273,7 @@ $OUT .= "\n[mainmenu]\n";
         exten=>s,2,UnPauseMonitor
         exten=>s,3,NoOp
 
+
 [internal-presets]
 
 THERE;
@@ -1276,14 +1306,13 @@ THERE;
         exten => _*26[*]X,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay
         exten => _*26[*]XX,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay
         exten => _*3[012345][*],1,agi(sarkhpe,\${EXTEN},,)	; TIMERS
-        exten => _*50*,1,VoiceMailMain(\${CALLERID(num)})	; VMAIL
-        exten => _*51*,1,VoiceMailMain()  					; VMAIL
-        exten => _*52*,1,PlayBack(demo-echotest)        	; Echotest
-        exten => _*52*,n,Echo
-        exten => _*52*,n,PlayBack(demo-echodone)
-        exten => _*55*,1,SayUnixTime(,,HMpABd)          	; SayTime/Date
-        exten => _*56*,1,PlayBack(vm-extension)
-        exten => _*56*,n,SayDigits(\${CALLERID(num):2})
+        exten => *51*,1,VoiceMailMain()  					; VMAIL
+        exten => *52*,1,PlayBack(demo-echotest)        		; Echotest
+        exten => *52*,n,Echo
+        exten => *52*,n,PlayBack(demo-echodone)
+        exten => *55*,1,SayUnixTime(,,HMpABd)          		; SayTime/Date
+        exten => *56*,1,PlayBack(vm-extension)
+        exten => *56*,n,SayDigits(\${CALLERID(num)})
         exten => _*60*XXXX,1,agi(sarkhpe,\${EXTEN},,)		; Greetings
         exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN,4})	; Greetings
         exten => _*6[34][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent pause/unpause(63 64)

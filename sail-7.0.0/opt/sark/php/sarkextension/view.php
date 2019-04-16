@@ -588,6 +588,7 @@ defaultuser=\$desc
 secret=\$password
 mailbox=\$ext
 host=dynamic
+qualify=yes
 context=internal
 call-limit=3
 callerid=\"\$desc\" <\$ext>
@@ -622,7 +623,7 @@ encryption=\$encryption";
 	}
 	$tuple['technology'] = $resdevice['technology'];			
 	$tuple['passwd'] = $this->helper->ret_password ($this->passwordLength);
-	$tuple['dvrvmail'] = $tuple['pkey'];
+	$tuple['dvrvmail'] = substr($tuple['pkey'],2);
 			
 // ToDo permit ipv6 acl
 
@@ -811,9 +812,9 @@ private function showEdit() {
 	
 	$extlist=array();
 	array_push($extlist,"None");	
-	$res = $this->helper->getTable("ipphone","select pkey from ipphone",false);
+	$res = $this->helper->getTable("ipphone","select pkey from ipphone WHERE cluster='" . $extension['cluster'] . "'",false);
 	foreach ($res as $row) {
-		array_push($extlist,$row['pkey']);
+		array_push($extlist,substr($row['pkey'],2));
 	}
 
 	$protocol = array('IPV4');

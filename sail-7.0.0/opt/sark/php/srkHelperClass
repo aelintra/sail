@@ -452,6 +452,7 @@ public function check_hapid_installed () {
 	return (false);
 }  
 
+// not used in V7
 public function getNextFreeExt() {
 /*
  *  find the next unused ext#

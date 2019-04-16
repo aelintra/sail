@@ -133,8 +133,8 @@ private function showMain() {
 	echo '<thead>' . PHP_EOL;	
 	echo '<tr>' . PHP_EOL;
 	
-	$this->myPanel->aHeaderFor('agent');
 	$this->myPanel->aHeaderFor('cluster',false,'cluster w3-hide-small w3-hide-medium');	
+	$this->myPanel->aHeaderFor('agent');
 	$this->myPanel->aHeaderFor('agentname');	
 	$this->myPanel->aHeaderFor('PIN',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('state',false,'w3-hide-small');
@@ -153,7 +153,7 @@ private function showMain() {
 	echo '<tbody>' . PHP_EOL;
 		
 /*** table rows ****/
-	$sql = "select * from agent";
+	$sql = "select * from agent ORDER by cluster COLLATE NOCASE ASC";
 	$class = null;
 	$state = '<i class="fas fa-thumbs-down"></i>';
 	$locked = false;
@@ -169,8 +169,8 @@ private function showMain() {
 			$locked = true;
 		}
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
-		echo '<td >' . $row['pkey'] . '</td>' . PHP_EOL;
 		echo '<td class="cluster  w3-hide-small w3-hide-medium">' . $row['cluster'] . '</td>' . PHP_EOL;
+		echo '<td >' . substr($row['pkey'],2) . '</td>' . PHP_EOL;		
 		echo '<td >' . $row['name'] . '</td>' . PHP_EOL;		
 		echo '<td class="w3-hide-small ">***</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small ">' . $state . '</td>' . PHP_EOL;
@@ -219,7 +219,7 @@ private function showNew() {
 			break;
 		}
 	}   
-	$pkey		=  $agentstart;	
+	$pkey	=  $agentstart;	
 	$buttonArray['cancel'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkagentForm",true,false);
 
@@ -234,33 +234,19 @@ private function showNew() {
 
 	echo '<form id="sarkagentForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 
-	
-	$this->myPanel->displayInputFor('agent','number',$pkey,'pkey');
-//	$this->myPanel->aLabelFor('agent');
-//	echo '<input type="text" name="pkey" size="4" id="pkey" value=' . $pkey . ' />' . PHP_EOL;		
-
 	$this->myPanel->displayInputFor('agentname','text',null,'name');
-//	$this->myPanel->aLabelFor('agentname');
-//	echo '<input type="text" name="name" size="15" id="name" placeholder="Name" />' . PHP_EOL;	
 
 	echo '<div class="cluster">';
 	echo '<div class="cluster w3-margin-bottom">';
     $this->myPanel->aLabelFor('cluster','cluster');
     echo '</div>';
-	$this->myPanel->selected = $tuple['cluster'];
+	$this->myPanel->selected = "default";
 	$this->myPanel->displayCluster();
 	$this->myPanel->aHelpBoxFor('cluster');
 	echo '</div>';
 
-//	$this->myPanel->aLabelFor('cluster','cluster');
-//	$this->myPanel->displayCluster();
+	$this->myPanel->displayInputFor('pin','number',"1001",'passwd');
 
-	$this->myPanel->displayInputFor('pin','number',null,'passwd');
-
-//	$this->myPanel->aLabelFor('PIN');
-//	echo '<input type="password" name="passwd" id="passwd" size="5" placeholder="PIN" />' . PHP_EOL;
-	
-//	echo '<input type="hidden" name="pkey" id="pkey" value="' . $pkey . '" />' . PHP_EOL;
 
 
 	echo '</div>';
@@ -276,20 +262,47 @@ private function showNew() {
 
 private function saveNew() {
 // save the data away
-
+	$tuple = array();
 	$this->validator = new FormValidator();
     $this->validator->addValidation("name","req","Please fill in Agent name");
     $this->validator->addValidation("passwd","req","Please fill in Agent PIN");
-    
+
  
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
+    
 
+    
+/*
+ *	get the cluster id 
+ */
+    	$sql = $this->dbh->prepare("SELECT id FROM cluster WHERE pkey = ?");
+		$sql->execute(array($_POST['cluster']));
+		$resid = $sql->fetch();
+		$sql=NULL;
+		
+		$res = $this->dbh->query("SELECT startagent FROM cluster where pkey = '" . $_POST['cluster'] . "'")->fetch(PDO::FETCH_ASSOC);
+		$startagent = $resid['id'] .$res['startagent'];
+	
+		while (1) {		
+			$res = $this->dbh->query("SELECT pkey FROM agent where pkey = '" . $startagent . "' AND cluster = '" . $_POST['cluster'] . "'")->fetch(PDO::FETCH_ASSOC);
+			if ( isset($res['pkey']) ) {
+				$startagent++;
+			}
+			else {
+				break;
+			}
+		}    		
 
+		$_POST['pkey'] = $startagent;	;
+		
+		
+    
 /*
  * 	call the tuple builder to create a table row array 
  */  
-		$this->helper->buildTupleArray($_POST,$tuple);			   
+		$this->helper->buildTupleArray($_POST,$tuple);	
+				   
 		$ret = $this->helper->createTuple("agent",$tuple);
 		if ($ret == 'OK') {
 //			$this->helper->commitOn();	
@@ -325,23 +338,15 @@ private function showEdit() {
 	$this->myPanel->responsiveSetup(2);
 
 	$this->myPanel->internalEditBoxStart();
-	$this->myPanel->subjectBar("Edit Agent " . $pkey);
+	$this->myPanel->subjectBar("Edit Agent " . substr($pkey,2));
 
 	echo '<form id="sarkagentForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';	
 
-	$this->myPanel->displayInputFor('agentname','text',$res['name'],'name');
-
-	echo '<div class="cluster">';
-	echo '<div class="cluster w3-margin-bottom">';
-    $this->myPanel->aLabelFor('cluster','cluster');
-    echo '</div>';
-	$this->myPanel->selected = $res['cluster'];
-	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
+	echo '<div id="clustershow">';
+	$this->myPanel->displayInputFor('cluster','text',$res['cluster'],'cluster');
 	echo '</div>';
 
-//	$this->myPanel->aLabelFor('cluster','cluster');
-//	$this->myPanel->displayCluster();
+	$this->myPanel->displayInputFor('agentname','text',$res['name'],'name');
 
 	$this->myPanel->displayInputFor('pin','number',$res['passwd'],'passwd');
 
@@ -353,12 +358,11 @@ private function showEdit() {
   	}
   	else {
 		$cluster = $dbh->query("SELECT cluster from user where pkey='" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);		
-		$wherestring = "ORDER BY pkey WHERE cluster='" . $cluster['cluster'] . "'" ;
   	}
 
   	
   	$queuelist = array();
-  	$sql = "select * from Queue $wherestring";
+  	$sql = "select * from Queue WHERE cluster='" . $res['cluster'] . "'";
   	foreach ($this->dbh->query($sql) as $row) { 
   		$queueList[] = $row['pkey'];
   	}
