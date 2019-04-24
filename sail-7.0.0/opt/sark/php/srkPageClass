@@ -738,9 +738,12 @@ Class page {
  * @return [null]            
  */
     public function showErrors($errorHash) {
+    	if (empty($errorHash)) {
+    		return;
+    	}
 		echo '<div class="emessage " id="id01" >';
 		echo '<div class="w3-card w3-padding w3-pale-yellow"';
-    	echo '<span onclick="document.getElementById(\'id01\').style.display=\'none\'" class="w3-button w3-tiny w3-display-topleft">&times&nbsp;close</span>';
+    	echo '<span onclick="document.getElementById(\'id01\').style.display=\'none\'" class="w3-button w3-tiny w3-display-topleft" style="cursor:pointer">&times&nbsp;close</span>';
     	foreach ($errorHash as $msg) {
     		echo '<p>' . $msg . '</p>';
     	}
@@ -844,7 +847,17 @@ Class page {
     public function endBar ($buttonArray) {
 
         echo '<div class="w3-container w3-bar w3-padding ' . $this->bgColorClass . '" >' . PHP_EOL;
-        foreach ($buttonArray as $key => $id) {        
+        foreach ($buttonArray as $key => $id) { 
+/*
+ *  Special case of the upload button.   It is javascript triggered and not a true button   
+ */
+            if ($key == 'Upload') {
+                echo '<span class="w3-right w3-margin-left w3-padding w3-blue w3-round-xxlarge " name="upimg" style="cursor:pointer" title="Upload a greeting">Upload</span>';
+                continue;
+            }
+/*
+ *
+ */               
             echo '<button class="w3-button w3-right w3-margin-left w3-blue w3-round-xxlarge ';
             if ($key == 'update') {
                 echo 'buttonUpdate';

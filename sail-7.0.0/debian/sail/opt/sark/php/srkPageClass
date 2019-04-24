@@ -738,9 +738,12 @@ Class page {
  * @return [null]            
  */
     public function showErrors($errorHash) {
+    	if (empty($errorHash)) {
+    		return;
+    	}
 		echo '<div class="emessage " id="id01" >';
 		echo '<div class="w3-card w3-padding w3-pale-yellow"';
-    	echo '<span onclick="document.getElementById(\'id01\').style.display=\'none\'" class="w3-button w3-tiny w3-display-topleft">&times&nbsp;close</span>';
+    	echo '<span onclick="document.getElementById(\'id01\').style.display=\'none\'" class="w3-button w3-tiny w3-display-topleft" style="cursor:pointer">&times&nbsp;close</span>';
     	foreach ($errorHash as $msg) {
     		echo '<p>' . $msg . '</p>';
     	}
@@ -844,7 +847,17 @@ Class page {
     public function endBar ($buttonArray) {
 
         echo '<div class="w3-container w3-bar w3-padding ' . $this->bgColorClass . '" >' . PHP_EOL;
-        foreach ($buttonArray as $key => $id) {        
+        foreach ($buttonArray as $key => $id) { 
+/*
+ *  Special case of the upload button.   It is javascript triggered and not a true button   
+ */
+            if ($key == 'Upload') {
+                echo '<span class="w3-right w3-margin-left w3-padding w3-blue w3-round-xxlarge " name="upimg" style="cursor:pointer" title="Upload a greeting">Upload</span>';
+                continue;
+            }
+/*
+ *
+ */               
             echo '<button class="w3-button w3-right w3-margin-left w3-blue w3-round-xxlarge ';
             if ($key == 'update') {
                 echo 'buttonUpdate';
@@ -1487,15 +1500,59 @@ Class page {
 	 
 		$html = '<select class = "w3-select w3-border w3-round w3-white keyoption" style="background:url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+) no-repeat right 2px center;-moz-appearance: none; -webkit-appearance: none; appearance: none; padding-left:8px;" name="'. $name . '" id="' . $name . '">' . PHP_EOL;
 		
-	
 		if ($none) {
 			$html = $this->genHtml("None",$html);
 		}
 				
-		if (!$short) {				
-			$html = $this->genHtml("Operator",$html);
-			$html = $this->genHtml("Hangup",$html);
-			
+		$speed = $helper->getTable("speed", "SELECT pkey from speed WHERE cluster='" . $cluster . "'");		
+		$html .= '<optgroup label="RING GROUPS">' . PHP_EOL; 
+		foreach ($speed as $speed => $value)  {          
+			$html = $this->genHtml(substr($value['pkey'],2),$html);
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		
+		$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone WHERE cluster='" . $cluster . "'");		
+		$html .= '<optgroup label="EXTENSIONS">' . PHP_EOL; 		
+		foreach ($ipphone as $ipphone => $value)  {
+            $shortkey = substr($value['pkey'],2); 
+			$html = $this->genHtml( $shortkey,$html);
+		}
+		$html .= '</optgroup>' . PHP_EOL;
+		 
+		if ($trunk) {
+			$trunk = $helper->getTable("lineio", "SELECT pkey,technology from lineio");		
+			$html .= '<optgroup label="TRUNKS">' . PHP_EOL; 
+			foreach ($trunk as $trunk => $value)  {
+				if ($value['technology'] != 'DiD' AND $value['technology'] != 'CLID' AND $value['technology'] != 'Class') {
+					$html = $this->genHtml($value['pkey'],$html);
+				}
+			}
+			$html .= '</optgroup>' . PHP_EOL;
+		}
+				
+		if (!$short) {
+            $sql = "SELECT * FROM meetme WHERE cluster='" . $cluster . "'"; 
+            $qRes = $dbh->query($sql);
+            $conferences = $qRes->fetchAll();
+            $qRes = NULL;		
+			$html .= '</optgroup>' . PHP_EOL;
+			if (!empty($conferences)) {
+				$html .= '<optgroup label="CONF ROOMS">' . PHP_EOL;
+				foreach ($conferences as $conf)  {
+                    $shortkey = substr($conf['pkey'],2);                   
+					$html = $this->genHtml($shortkey,$html);	
+				}
+				$html .= '</optgroup>' . PHP_EOL;
+			}			
+				
+			$html .= '<optgroup label="VOICEMAIL">' . PHP_EOL;
+			$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone WHERE cluster='" . $cluster . "'"); 		
+			foreach ($ipphone as $ipphone => $value)  {
+				$shortkey = substr($value['pkey'],2); 
+				$html = $this->genHtml("*". $shortkey,$html);
+			}
+			$html .= '</optgroup>' . PHP_EOL;	
+	
 			$ivr = $helper->getTable("ivrmenu", "SELECT pkey from ivrmenu WHERE cluster='" . $cluster . "'");   
 			$html .= '<optgroup label="IVRs">' . PHP_EOL; 
 			foreach ($ivr as $ivr => $value)  {
@@ -1509,82 +1566,19 @@ Class page {
 				$html = $this->genHtml($value['pkey'],$html);
 			}
 			$html .= '</optgroup>' . PHP_EOL;
-		}
-		
-		$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone WHERE cluster='" . $cluster . "'");		
-		$html .= '<optgroup label="EXTENSIONS">' . PHP_EOL; 		
-		foreach ($ipphone as $ipphone => $value)  {
-/*            
-            if ($cluster == 'default') {
-                $shortkey = $value['pkey'];
-            }
-            else {
-*/
-               $shortkey = substr($value['pkey'],2); 
-//            }
-			$html = $this->genHtml( $shortkey,$html);
-			if (!$short) {	
-				$html = $this->genHtml("*". $shortkey,$html);
-			}
-		}
-		$html .= '</optgroup>' . PHP_EOL;
-		 
-		$speed = $helper->getTable("speed", "SELECT pkey from speed WHERE cluster='" . $cluster . "'");		
-		$html .= '<optgroup label="RING GROUPS">' . PHP_EOL; 
-		foreach ($speed as $speed => $value)  {          
-			$html = $this->genHtml(substr($value['pkey'],2),$html);
-		}
-		$html .= '</optgroup>' . PHP_EOL;
-		
-		if (!$short) {	
-			$html .= '<optgroup label="DISA">' . PHP_EOL; 
-			$html = $this->genHtml('DISA',$html);
-//			$html = $this->genHtml('CALLBACK',$html);
-			$html .= '</optgroup>' . PHP_EOL;
-		}		
-
-		if ($trunk) {
-			$trunk = $helper->getTable("lineio", "SELECT pkey,technology from lineio");		
-			$html .= '<optgroup label="TRUNKS">' . PHP_EOL; 
-			foreach ($trunk as $trunk => $value)  {
-				if ($value['technology'] != 'DiD' AND $value['technology'] != 'CLID' AND $value['technology'] != 'Class') {
-					$html = $this->genHtml($value['pkey'],$html);
-				}
-			}
-			$html .= '</optgroup>' . PHP_EOL;
-		}
-				
-		if (!$short) {
-			$html .= '<optgroup label="GET VOICEMAIL">' . PHP_EOL; 
-			$html = $this->genHtml("Retrieve Voicemail",$html);
-			$html .= '</optgroup>' . PHP_EOL; 
-
 			$appl = $helper->getTable("appl", "SELECT pkey from appl WHERE cluster='" . $cluster . "'"); 		
 			$html .= '<optgroup label="Custom Apps">' . PHP_EOL; 
 			foreach ($appl as $appl => $value)  {
 				$html = $this->genHtml($value['pkey'],$html);
 			}
-            $sql = "SELECT * FROM meetme WHERE cluster='" . $cluster . "'"; 
-            $qRes = $dbh->query($sql);
-            $conferences = $qRes->fetchAll();
-            $qRes = NULL;		
+			$html .= '<optgroup label="MISC">' . PHP_EOL; 
+			$html = $this->genHtml('DISA',$html);
+			$html = $this->genHtml("Retrieve Voicemail",$html);	
+			$html = $this->genHtml("Operator",$html);
+			$html = $this->genHtml("Hangup",$html);
 			$html .= '</optgroup>' . PHP_EOL;
-			if (!empty($conferences)) {
-				$html .= '<optgroup label="CONF ROOMS">' . PHP_EOL;
-				foreach ($conferences as $conf)  {
-                    if ($cluster == 'default') {
-                        $shortkey = $conf['pkey'];
-                    }
-                    else {
-                        $shortkey = substr($conf['pkey'],2); 
-                    }                       
-					$html = $this->genHtml($shortkey,$html);	
-				}
-				$html .= '</optgroup>' . PHP_EOL;
-			}
 		}
-		
-			
+					
 		$html .= '</select>';
 		
 		echo $html;
@@ -1653,7 +1647,7 @@ Class page {
 		
 		$lockicon = "locked.png";		
 		if ($lock) {
-			echo '<td class="icons"><img src="' . $this->iconpath . $lockicon . ' alt = "locked"></a></td>';
+			echo '<td class="icons"><img src="' . $this->iconpath . $lockicon . '" alt = "locked"></a></td>';
 		}
 		else {
 			echo '<td class="icons">&nbsp;</td>';
@@ -1893,8 +1887,15 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
         $updays = $matches[1];
     }
     
-    $disk = `/bin/df -k .`;
+    $arch = `uname -m`;
+    $disk = array();
     
+    if (preg_match( ' /^arm/ ', $arch)) {
+        $disk = `/bin/df -h`;
+    }
+    else {
+        $disk = `/bin/df -h`;
+    }
     if ($disk) {
         $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
         $diskusage = $matches[1];

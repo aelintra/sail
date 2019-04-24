@@ -29,24 +29,6 @@ Class sarkivr {
 	protected $invalidForm;
 	protected $error_hash = array();
 	protected $greetings = array();
-	protected $soundir = '/usr/share/asterisk/sounds/'; // set for Debian/Ubuntu	
-
-/*
-function __construct() {
-
-	if ($handle = opendir($this->soundir)) {
-		while (false !== ($entry = readdir($handle))) {
-			if (preg_match("/^usergreeting(\d*)/",$entry,$matches)) {
-				array_push($this->greetings, $matches[1]);
-			}
-		}
-		closedir($handle);
-		asort($this->greetings);
-		$this->greetings[] = 'None';
-	}
-
-}
-*/
 
 public function showForm() {
 //print_r($_POST);	

@@ -30,8 +30,17 @@ Class nethelper {
 
 function __construct() {
 
-// interface name
-	$this->interfaceName = trim(`ls /sys/class/net | grep -v lo | head -n1`);
+// interface name 
+// Find the first active interface and use it
+
+	$firstUpInterface = trim (`ip addr | grep UP | grep -v lo: | head -n1`);
+	if (empty($firstUpInterface)) {
+		$this->interfaceName = 'ERROR';
+	} 
+	else {
+		preg_match( '/\d:\s*(\w+):/',$firstUpInterface,$matches);
+		$this->interfaceName = trim($matches[1]);
+	}
 
 // localIPV4
 	$iprets = shell_exec( "ip addr show dev " . $this->interfaceName);
@@ -58,14 +67,7 @@ function __construct() {
 // network mask
 	$netmask = str_split(str_pad(str_pad('', $this->networkCIDR, '1'), 32, '0'), 8);
     foreach ($netmask as &$element) $element = bindec($element);
-    $this->netMask = join('.', $netmask);
-/* 
-Old ifconfig way of doing stuff.   
-	$iprets = shell_exec( "/sbin/ifconfig " . $this->interfaceName);	
-	preg_match ( '/[M|m]ask:?\s*([\d\.]+)/', $iprets, $matches);
-    $this->netMask = $matches[1]; 
-*/    
-   
+    $this->netMask = join('.', $netmask);   
 }
  	
 	

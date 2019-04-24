@@ -10,6 +10,9 @@
 //    	scrollbar: true
 
   	});
+  	
+	$('#clustershow :input').prop('readonly', true);
+	$('#clustershow :input').css('background-color','#f1f1f1');  	
 
   	$('input[class=allday]').click(function(event) {  //on click 
 
@@ -30,13 +33,8 @@
 //		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
-		"bStateSave": true,
-		"bstateDuration": 360,			
-		"sDom": 'fti',
-		"aoColumnDefs" : [{
-			"bSortable" : false,
-			"aTargets" : [4,5,6,7]
-		}],
+		"sDom": 'ti',
+		"bSort": false,
 		"aoColumns": [ 
 			{ "sName": "cluster" },
 			{ "sName": "beginclose" },
@@ -49,9 +47,6 @@
 			{ "sName": "ed" },			
 			{ "sName": "del" }
 		],
-		"oLanguage": {
-			"sSearch": "Filter:"
-		},			
 	} ).makeEditable({
 			sUpdateURL: "/php/sarktimer/update.php",
 				fnOnEdited: function(status)

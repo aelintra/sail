@@ -1,0 +1,4 @@
+DROP net:+voipbl $FW udp 5060
+DROP net:+voipbl $FW tcp 5060
+DROP net:+voipbl $FW udp 5061
+

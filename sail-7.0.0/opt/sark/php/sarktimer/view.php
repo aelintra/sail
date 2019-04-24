@@ -125,7 +125,7 @@ private function showMain() {
 		
 /*** table rows ****/
 
-	$rows = $this->helper->getTable("dateseg",NULL,true,false,"cluster,dayofweek");
+	$rows = $this->helper->getTable("dateseg");
 	foreach ($rows as $row ) {
 		if ( $row['timespan'] == '*') {
 			$beginclosed = '*';
@@ -261,14 +261,9 @@ private function showEdit() {
 	$this->myPanel->displayBooleanFor('allday', $allday,'allday');
 	
 	$this->myPanel->internalEditBoxStart();
-	echo '<div class="cluster">';
-	echo '<div class="cluster w3-margin-bottom">';
-    $this->myPanel->aLabelFor('cluster','cluster');
-    echo '</div>';
-	$this->myPanel->selected = $tuple['cluster'];
-	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
-	echo '</div>';
+	
+	echo '<div id="clustershow">';
+	$this->myPanel->displayInputFor('cluster','text',$tuple['cluster'],'cluster');
 	echo '</div>';
 
 	
@@ -297,8 +292,8 @@ private function showEdit() {
     	$mySelected = 'Every Day';
     }
     $this->myPanel->selected = $mySelected;
-	$this->myPanel->displayPopupFor('dayofweek',$mySelected,Array('Every Day','mon','tue','wed','thu','fri','sat','sun'));
-	echo '</div>';
+	$this->myPanel->displayPopupFor('dayofweek',$mySelected,Array('Every Day','mon','tue','wed','thu','fri','sat','sun')); 
+	 echo '</div>';
 
 	$this->myPanel->internalEditBoxStart();
 	$this->myPanel->displayInputFor('description','text',$tuple['desc'],'desc');

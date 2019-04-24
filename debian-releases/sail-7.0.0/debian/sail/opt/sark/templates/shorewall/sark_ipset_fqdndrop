@@ -1,0 +1,4 @@
+DROP net:+fqdndrop $FW udp 5060
+DROP net:+fqdndrop $FW tcp 5060
+DROP net:+fqdndrop $FW udp 5061
+

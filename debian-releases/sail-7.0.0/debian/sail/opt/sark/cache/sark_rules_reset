@@ -1,0 +1,9 @@
+ACCEPT net:$LAN $FW tcp 22 #SSH
+ACCEPT net:$LAN $FW udp 123 #NTP
+ACCEPT net:$LAN $FW tcp 80 #HTTP
+ACCEPT net:$LAN $FW tcp 389 #ldap
+ACCEPT net:$LAN $FW tcp 443 #HTTPS
+ACCEPT net:$LAN $FW tcp 4569 #IAX2
+ACCEPT net:$LAN $FW udp 5060 #SIP
+ACCEPT net:$LAN $FW tcp 5061 #SIPS
+ACCEPT net:$LAN $FW udp 10000:20000 #RTP

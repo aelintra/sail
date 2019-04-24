@@ -29,6 +29,7 @@ Class genAsteriskObjects {
 	private $dbh;
 	private $globals;
 	private $HINTS;
+	private $SOUNDIR = '/usr/share/asterisk/sarksounds/';
 
 	
 public function genAsterisk() {
@@ -56,7 +57,6 @@ public function genAsterisk() {
     $this->genParks();
     $this->genIax();
     $this->genSip();
-//    $this->genConferences();
     $this->genQueues();
     $this->genFeatures();
     $this->genVmail();
@@ -243,8 +243,6 @@ private function genIax() {
 }
 
 
-
-
 private function genSip() {
 
 	$OUT = $this->genFileBanner();
@@ -284,8 +282,6 @@ private function genSip() {
 	fwrite($fh,$OUT) or die('Could not write to file sark_sip_localnet_header.conf');
 	fclose($fh);
 
-
-
 	$OUT = $this->genFileBanner();
 
 	$result = $this->helper->getTable("lineio",null,false);
@@ -313,7 +309,7 @@ private function genSip() {
 	$fh = fopen("/etc/asterisk/sark_sip_registrations.conf", 'w') or die('Could not open file sark_sip_registrations.conf!');
 	fwrite($fh,$OUT) or die('Could not write to file sark_sip_registrations.conf');
 	fclose($fh);	
-//[
+//
 //  SIP extensions (phones)
 //
 	$OUT = $this->genFileBanner();	 
@@ -333,7 +329,8 @@ private function genSip() {
 				$row['sipiaxfriend'] = preg_replace ( '/context=internal/', "context=" . $myContext . "COS", $row['sipiaxfriend']);		
 				$row['sipiaxfriend'] = preg_replace ( '/\$desc/', $row['desc'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$password/', $row['passwd'], $row['sipiaxfriend']);
-				$row['sipiaxfriend'] = preg_replace ( '/\$ext/', $row['pkey'], $row['sipiaxfriend']);
+				$row['sipiaxfriend'] = preg_replace ( '/\$ext/', substr($row['pkey'],2), $row['sipiaxfriend']);
+//				$row['sipiaxfriend'] = preg_replace ( '/\$ext/', $row['pkey'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$clst/', $row['cluster'], $row['sipiaxfriend']);
 				$row['sipiaxfriend'] = preg_replace ( '/\$subtxt/', $myContext, $row['sipiaxfriend']);
 				$nat='no';
@@ -359,8 +356,6 @@ private function genSip() {
 
     foreach ($result as $row) {             
     	if ($row['active'] == "YES") {    
-//			$cquery = "select * from Carrier where pkey='" . $row['carrier'] . "'";
-
 			try {
 				$sql = $this->dbh->prepare("SELECT * from Carrier where pkey=?");
 				$sql->execute(array($row['carrier']));		
@@ -392,8 +387,7 @@ private function genSip() {
 			}	
 		}
 	}
-    /*** close the database connection ***/
-//    $dbh = null;   
+
 	 
 // write the generated include file 
 	$fh = fopen("/etc/asterisk/sark_sip_main.conf", 'w') or die('Could not open file sark_sip_main.conf!');
@@ -516,23 +510,23 @@ Context not currently used but may be in future
 			if (!preg_match(" /^;.*/",$line)) {
 				$line = preg_replace( '/\s+/', ' ', $line );
 				if (preg_match(" /^(\d{3,6})\s*=>\s*((\d*)?),/",$line,$matches)) {			
-					$mailbox[$matches[1]]['password'] = substr($matches[2],2);
+					$mailbox[$context][$matches[1]]['password'] = substr($matches[2],2);
 				}
 				$parts = explode('=>',$line);
 				if (isset($parts[1])) {	
 					$exten = trim($parts[0]);		
 					$params = explode(',',$parts[1]);
 					if (isset($params[1])) {
-						$mailbox[$exten]['name'] = trim($params[1]);
+						$mailbox[$context][$exten]['name'] = trim($params[1]);
 					}
 					if (isset($params[2])) {
-						$mailbox[$exten]['email'] = trim($params[2]);
+						$mailbox[$context][$exten]['email'] = trim($params[2]);
 					}
 					if (isset($params[3])) {
-						$mailbox[$exten]['options'] = trim($params[3]);
+						$mailbox[$context][$exten]['options'] = trim($params[3]);
 					}
 					if (isset($params[4])) {
-						$mailbox[$exten]['options'] .= ',' . trim($params[4]);
+						$mailbox[$context][$exten]['options'] .= ',' . trim($params[4]);
 					}								
 				}				
 			}
@@ -553,23 +547,27 @@ Context not currently used but may be in future
 #include sark_customer_vmail_header.conf
 #include sark_vmail_layout.conf
 
-[default]
-
 BANNEREND;
      
-    $result = $this->helper->getTable("ipphone",null,false);
+    $result = $this->helper->getTable("ipphone",null,false,false,"cluster,pkey");
+    $cluster=null;
     foreach ($result as $row) {
+    	$shortkey = substr($row['pkey'],2);
+    	if ($row['cluster'] != $cluster) {
+    		$cluster = $row['cluster'];
+    		$OUT .= "[" . $cluster . "]\n";
+    	} 
 		if ($row['dvrvmail'] != 'None') {
-			if (!empty ($mailbox[$row['pkey']]['password'])) {
-				$pwd = $mailbox[$row['pkey']]['password'];
+			if (!empty ($mailbox[$row['cluster']][$row['pkey']]['password'])) {
+				$pwd = $mailbox[$row['cluster']][$row['pkey']]['password'];
 			}
 			else {
 				$pwd = substr($row['pkey'],2);
 			}
-			$OUT .= $row['pkey'] . ' => ' . $pwd . ',' . $row['desc'] . ',' .
+			$OUT .= $shortkey . ' => ' . $pwd . ',' . $row['desc'] . ',' .
 			$row['vmailfwd'];
-			if (isset($mailbox[$row['pkey']]['options'])) {
-				$OUT .= ',' . $mailbox[$row['pkey']]['options'];
+			if (isset($mailbox[$row['cluster']][$row['pkey']]['options'])) {
+				$OUT .= ',' . $mailbox[$row['cluster']][$row['pkey']]['options'];
 			}
 			$OUT .= " \n";
         }
@@ -629,12 +627,8 @@ $OUT .= "static=yes \n";
 $OUT .= "writeprotect=yes \n";
 $OUT .= "[globals] \n";
 
-//$nethelper = new netHelper;	
-//$helper = new Helper;
-
 $OUT.="\tLOCALIP=" . $this->nethelper->get_localIPV4() ."\n";
 
-//var_dump($this->globals);
 
 try {
 
@@ -657,9 +651,9 @@ try {
 
 //
 //  globals required for Hot Desk
+//	Not currently implemented
 //
-//
-
+/*
 	if (file_exists("/usr/sbin/aelhdlon")) {
 
 		$OUT .= "\tHDLOGIN=*14*\n";
@@ -667,8 +661,8 @@ try {
 		$OUT .= "\tHDLOGOUTR=*16*\n";
 		$OUT .= "\tHDLOGOUTRS=*17*\n";
 		$OUT .= "\tHDSUPPASS=3243\n";
-
 	}
+*/
 
 //	
 //  globals required for call recording     		/
@@ -715,9 +709,6 @@ try {
 	$cluster = $qRes->fetchAll();
 	$qRes = NULL;
 
-
-//	$OUT .= "\texten => _vm.,1,GoTo(extensions,\${EXTEN},1)\n\n";
-
 //
 //  Class Of Service and Tenants if they are enabled
 //
@@ -725,8 +716,6 @@ try {
 	if (empty($this->globals['OPERATOR'])) {
 		$this->globals['OPERATOR'] = "0";
 	}
-
-//	$OUT .= "\n\texten => " . $this->globals['OPERATOR'] . ",1,Goto(extensions,\${SYSOP},1)\n\n";
 
 //
 //	extension start contexts
@@ -741,7 +730,12 @@ try {
 		$OUT .= "[" . $myCluster . "COS]\n";
 		$OUT .= "\texten => _.,1,GoToIf(\$[\${LEN(\${CALLERID(num)})} > 6]?$myCluster,\${EXTEN},1)\n";
 		$OUT .= "\texten => _.,2,SET(myClusterOclo=\${DB($myCluster/STATE)})\n";
-		$OUT .= "\t" . 'exten => _.,n,GoToIf($["${myClusterOclo}" = "CLOSED"]?${CALLERID(num)}closedcos,${EXTEN},1:${CALLERID(num)}opencos,${EXTEN},1)' . "\n\n";
+		
+//		$OUT .= "\t" . 'exten => _.,n,GoToIf($["${myClusterOclo}" = "CLOSED"]?${CALLERID(num)}closedcos,${EXTEN},1:${CALLERID(num)}opencos,${EXTEN},1)' . "\n\n";
+		
+		$OUT .= "\t" . 'exten => _.,n,GoToIf($["${myClusterOclo}" = "CLOSED"]?' . 
+			$myCluster . '${CALLERID(num)}closedcos,${EXTEN},1:' . 
+			$myCluster . '${CALLERID(num)}opencos,${EXTEN},1)' . "\n\n";
 	}
 
 //
@@ -766,9 +760,21 @@ try {
 		$OUT .= "\tinclude => parkedcalls\n";
 		$OUT .= "\tinclude => internal-presets\n";
 
-//    	$OUT .= "\tinclude => extensions\n";
-//    	$OUT .= "\tinclude => conferences\n"; 
-
+		$OUT .= <<<WHCLID
+;
+; 	Withhold CLI for outbound SIP trunks
+;   	This will work in most cases if the carrier is a good player
+;
+;   	It will usually not work for IAX2 trunks and you'll need to figure out 
+;	what your carrier requires
+;		
+        exten => _141XXXXX.,1,NoOp(withhold cli detected)
+        exten => _141XXXXX.,n,Set(CALLERID(pres)=prohib)
+        exten => _141XXXXX.,n,GoTo(\${EXTEN:3},1)
+                 
+WHCLID;
+		
+		$OUT .= "\n";
 		$sql = "SELECT * FROM Appl WHERE cluster='" . $row['pkey'] . "' ORDER BY pkey";
 		$qRes = $this->dbh->query($sql);
 		$appl = $qRes->fetchAll();
@@ -856,6 +862,8 @@ LOCAL;
 */
 			$OUT .= "\n\texten => _*8XX.,1,Pickup(" .$row['id'] . "\${EXTEN:2}@PICKUPMARK)\n\n";
 //		}
+		
+
 
 //Routes
 //
@@ -884,29 +892,28 @@ LOCAL;
 			}
 		}
 
+// Queues
 		$sql = "SELECT * FROM Queue WHERE cluster='" . $row['pkey'] . "' ORDER BY directdial";
 		$qRes = $this->dbh->query($sql);
 		$queue = $qRes->fetchAll();
 		$qRes = NULL;			
 		foreach ($queue as $qrow) {
-				$OUT .= "\texten => " . $qrow['directdial'] . ",1,Answer()\n";
-				$outstring =  "\texten => " . $qrow['directdial'] . ",n,Queue(";
-				$outstring .= $qrow['pkey'];
-				$outstring .= ',';
-				$outstring .= $qrow['options'];
-				$outstring .= ',,,,';
-				if ($qrow['devicerec'] != 'None') {
-					$outstring .= 'sarkhpe';
-				}
-				$outstring .= ")\n";
-				if ($qrow['greetnum'] != 'None') {
-					$OUT .= "\texten => " . $qExten . ",n,Playback(" . $qrow['greetnum'] . ")\n";
-				}
-				$OUT .= $outstring; 
-				$shortdial = substr($qrow['directdial'],2);
-				$OUT .= "\texten => " . $shortdial . ",1,GoTo(" . $qrow['directdial'] . ",1)\n";   
-				$OUT .= "\texten => " . $qrow['pkey'] . ",1,GoTo(" . $qrow['directdial'] . ",1)\n";
-//outcome processing
+			$OUT .= "\texten => " . $qrow['directdial'] . ",1,Answer()\n";
+			$outstring =  "\texten => " . $qrow['directdial'] . ",n,Queue(";
+			$outstring .= $qrow['pkey'];
+			$outstring .= ',';
+			$outstring .= $qrow['options'];
+			$outstring .= ',,,,';
+			if ($qrow['devicerec'] != 'None') {
+				$outstring .= 'sarkhpe';
+			}
+			$outstring .= ")\n";
+			if ($qrow['greetnum'] != 'None') {
+				$OUT .= "\texten => " . $qrow['directdial'] . ",n,Playback(" . $this->SOUNDIR . $row['pkey'] . "/usergreeting" . $qrow['greetnum'] . ")\n";
+			}
+			$OUT .= $outstring; 
+			$OUT .= "\texten => " . $qrow['pkey'] . ",1,GoTo(" . $qrow['directdial'] . ",1)\n";
+// ToDo outcome processing...
 
 		} 
 
@@ -922,35 +929,20 @@ LOCAL;
 				$OUT .= "\texten => " . $shortdial . ",1,GoTo(" . $irow['directdial'] . ",1)\n";   	
 		}
 
-
-		
-
 		$sql = "SELECT * FROM IPphone where cluster = '" . $row['pkey'] . "' ORDER BY pkey";
 		$qRes = $this->dbh->query($sql);
 		$phone = $qRes->fetchAll();
 		$qRes = NULL;				
 		foreach ($phone as $IPphone) {
-/*			
-			if ($row['pkey'] == 'default') {
-				$shortdial = $IPphone['pkey'];
-			}
-			else {
-*/
-				$shortdial = substr($IPphone['pkey'],2);
-//			}
+			$shortdial = substr($IPphone['pkey'],2);
 			$OUT .= "\texten => " . $shortdial . ",hint,SIP/" . $IPphone['pkey'] . "\n";
 			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,InCall,,,)\n";
-//			if ($row['pkey'] != 'default') { 
-				$OUT .= "\texten => " . $shortdial . ",1,GoTo(" . $IPphone['pkey'] . ",1)\n";
-//			}
+			$OUT .= "\texten => " . $shortdial . ",1,GoTo(" . $IPphone['pkey'] . ",1)\n";
 			if ($IPphone['dvrvmail'] != "None") {
 				if ($IPphone['dvrvmail'] == "") {
               		$IPphone['dvrvmail'] = $IPphone['pkey'];
             	}
-//          		$OUT .=  "\texten => *" . $IPphone['pkey'] . ",1,Voicemail(" . $IPphone['dvrvmail'] . ",su)\n";
           		$OUT .=  "\texten => *" . $shortdial . ",1,Voicemail(" . $IPphone['dvrvmail'] . ",su)\n";
-//          		$OUT .=  "\texten => vm" . $IPphone['pkey'] . ",hint,Custom:vm" . $IPphone['pkey'] . "\n";
-//          		$OUT .=  "\texten => vm" . $IPphone['pkey'] . ",1,VoicemailMain(" . $IPphone['pkey'] . ")\n";
          		$OUT .=  "\texten => vm" . $shortdial . ",hint,Custom:vm" . $IPphone['pkey'] . "\n";
           		$OUT .=  "\texten => vm" . $shortdial . ",1,VoicemailMain(" . $IPphone['pkey'] . ")\n";          		
 			}
@@ -969,7 +961,6 @@ LOCAL;
     		if ($count > 30) {
     			break;
     		}    
-//			$dialstr .= "SIP/" . $exten['pkey'] .'&';
 			$ringall .= "SIP/" . $exten['pkey'] .'&';
 			$count++;
     	} 
@@ -981,34 +972,12 @@ LOCAL;
 
 		$this->generateRingGroups($OUT,$row['pkey'],$row['id']);	
 		$this->confBridge($OUT,$row['pkey']);
-
+		
+        $OUT .= "\texten => *50*,1,VoiceMailMain(\${CALLERID(num):2}@" . $row['pkey'] . ")\t;Voicemail Retrieve\n"; 
+		$OUT .= "\texten => _*61*XXXX,1,Playback(/usr/share/asterisk/sarksounds/" . $row['pkey'] . "/usergreeting\${EXTEN:4})\n";  
 	}
 
 
-//	
-//  Extensions
-//
-//	$OUT .= ";\n";
-//	
-//	
-/*
-    	$OUT .= "[extensions] \n";
-    	$OUT .= "\tinclude => internal-presets\n";
-    	$OUT .= "\tinclude => parkedcalls\n\n";
-        $OUT .= "\tinclude => conferences\n";
-//
-//  Call Parks
-//	
-	$park = `/bin/cat /etc/asterisk/sark_features_general.conf`;
-	if (preg_match(' /parkpos\s*=>\s*(\d{1,3})-(\d{1,3})/ ',$park,$matches)) { 
-		while ( $matches[1] <= $matches[2] ) {
-			$OUT .= "\texten => " . $matches[1] . ",1,ParkedCall(" . $matches[1] . ")\n";
-            $OUT .= "\texten => " . $matches[1] . ",hint,park:" . $matches[1] . "@parkedcalls\n";
-			$matches[1]++;
-		}				
-	}
-*/
-	
 
 //
 //	Multicast page groups - gone in V7
@@ -1031,15 +1000,6 @@ LOCAL;
 	$OUT .= "\n";
 
 //
-//  Clean up
-//
-//    	$OUT .= "\texten => o,1,Playback(pls-hold-while-try)\n";
-//    	$OUT .= "\texten => o,2,GoTo(0,1)\n";
-//    	$OUT .= "\texten => t,1,Hangup\n";
-//    	$OUT .= "\texten => h,1,Hangup\n";
-//    	$OUT .= "\texten => i,1,Playtones(congestion)\n";
-//    	$OUT .= "\texten => i,2,Hangup\n";
-//
 //	Queues
 //
 
@@ -1055,21 +1015,6 @@ LOCAL;
 			$OUT .= "\texten => " . $IPphone['pkey'] . ",1,agi(sarkhpe,Dial," . $IPphone['pkey'] . ",queue,)\n";
 	  	}
     }
-//
-//	Clean up
-//
-//    	$OUT .= "\texten => t,1,Hangup\n";
-//    	$OUT .= "\texten => h,1,Hangup\n";
-//    	$OUT .= "\texten => i,1,Playtones(congestion)\n\n";
-
-
-
-
-
-
-
-
-
 
 //
 //  Class Of Service
@@ -1105,8 +1050,9 @@ LOCAL;
 			if ($myCluster == 'default') {
 				$myCluster = 'qrxvtmny';
 			} 
-			$OUT .= "[" . $IPphone['pkey'] . "opencos]\n";
-
+			$OUT .= "[" . $myCluster . substr($IPphone['pkey'],2) . "opencos]\n";
+//			$OUT .= "[" . $myCluster . $IPphone['pkey'] . "opencos]\n";
+			
 			$OUT .= "\tinclude => Emergency\n"; 
 //			
 //			print the overrides
@@ -1128,9 +1074,12 @@ LOCAL;
 				} 	
 			}
 
-			$OUT .= "\tinclude => " . $IPphone['pkey'] . "Cosend\n";
+			$OUT .= "\tinclude => ". $myCluster . substr($IPphone['pkey'],2) . "Cosend\n";
+//			$OUT .= "\tinclude => ". $myCluster . $IPphone['pkey'] . "Cosend\n";			
 
-			$OUT .= "[" . $IPphone['pkey'] . "closedcos]\n";
+			$OUT .= "[" . $myCluster . substr($IPphone['pkey'],2) . "closedcos]\n";
+//			$OUT .= "[" . $myCluster . $IPphone['pkey'] . "closedcos]\n";
+			
 			$OUT .= "\tinclude => Emergency\n"; 
 			
 			foreach ($orideclosedarray as $key => $value) {
@@ -1149,9 +1098,13 @@ LOCAL;
 					$OUT .= "\tinclude => " . $coskeys['COS_pkey'] . "\n";
 				} 	
 			}
-			$OUT .= "\tinclude => " . $IPphone['pkey'] . "Cosend\n";
-
-			$OUT .= '[' . $IPphone['pkey'] . "Cosend]\n";
+			$OUT .= "\tinclude => " . $myCluster . substr($IPphone['pkey'],2) . "Cosend\n";
+//			$OUT .= "\tinclude => " . $myCluster . $IPphone['pkey'] . "Cosend\n";
+			
+			$OUT .= '[' . $myCluster . substr($IPphone['pkey'],2) . "Cosend]\n";
+//			$OUT .= '[' . $myCluster . $IPphone['pkey'] . "Cosend]\n";
+			
+			
 			$OUT .= "\texten => _.,1,GoTo($myCluster,\${EXTEN},1))\n";
 		}  
 	}		
@@ -1172,16 +1125,7 @@ LOCAL;
 	$dialplan = explode(" ", $this->globals['EMERGENCY']);
 	foreach ($dialplan as $plan) {
 			$OUT .= "\texten => $plan,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-	}
-    	$OUT .= "\n[Cosend]\n";
-/*
-    	$OUT .= "\texten => _X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-    	$OUT .= "\texten => _[+*]X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-    	$OUT .= "\texten => _**X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-    	$OUT .= "\texten => _***X.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-*/    	
-    	$OUT .= "\texten => _.,1,agi(sarkhpe,OutCluster,\${EXTEN},,)\n";
-    	 
+	} 	 
 
 //
 //  begin mainmenu (inbound context) 
@@ -1244,6 +1188,7 @@ $OUT .= "\n[mainmenu]\n";
         exten=>s,2,UnPauseMonitor
         exten=>s,3,NoOp
 
+
 [internal-presets]
 
 THERE;
@@ -1252,12 +1197,7 @@ THERE;
 //
 
 	$OUT .= "\n";
-//	$sql = "select pkey from Cluster order by pkey";
- 	foreach ($cluster as $row) {
-
-	}	
 	
-
 	$OUT .= <<<ANDTHERE
 ;
 ;	SARK Service Codes
@@ -1272,20 +1212,21 @@ THERE;
         exten => _*3[89][*]XX.,1,agi(sarkhpe,\${EXTEN},,)	; CFxxCL ON
         exten => _*3[89][*],1,agi(sarkhpe,\${EXTEN},,)		; CFxxCL OFF
         exten => _*2[123789][*],1,agi(sarkhpe,\${EXTEN},,)	; CF OFFs
+        
         exten => _*26[*],1,agi(sarkhpe,\${EXTEN},,)			; RingDelay
-        exten => _*26[*]X,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay
+        exten => _*26[*]X,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay        
         exten => _*26[*]XX,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay
+        
         exten => _*3[012345][*],1,agi(sarkhpe,\${EXTEN},,)	; TIMERS
-        exten => _*50*,1,VoiceMailMain(\${CALLERID(num)})	; VMAIL
-        exten => _*51*,1,VoiceMailMain()  					; VMAIL
-        exten => _*52*,1,PlayBack(demo-echotest)        	; Echotest
-        exten => _*52*,n,Echo
-        exten => _*52*,n,PlayBack(demo-echodone)
-        exten => _*55*,1,SayUnixTime(,,HMpABd)          	; SayTime/Date
-        exten => _*56*,1,PlayBack(vm-extension)
-        exten => _*56*,n,SayDigits(\${CALLERID(num):2})
+        exten => *51*,1,VoiceMailMain()  					; VMAIL
+        exten => *52*,1,PlayBack(demo-echotest)        		; Echotest
+        exten => *52*,n,Echo
+        exten => *52*,n,PlayBack(demo-echodone)
+        exten => *55*,1,SayUnixTime(,,HMpABd)          		; SayTime/Date
+        exten => *56*,1,PlayBack(vm-extension)
+        exten => *56*,n,SayDigits(\${CALLERID(num)})
         exten => _*60*XXXX,1,agi(sarkhpe,\${EXTEN},,)		; Greetings
-        exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN,4})	; Greetings
+        
         exten => _*6[34][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent pause/unpause(63 64)
         exten => _*6[56][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent Login/out(65 66)
         exten => _*67[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)		; ChanSpy (Whisper)
@@ -1435,14 +1376,7 @@ private function generateRingGroups(&$OUT,$cluster,$id) {
  	foreach ($speed as $row) { 
 		$outlist = $this->synthAlias($row['pkey']);
 		foreach ($outlist as $ep) {
-/*
-			if ($cluster == 'default') {
-				$phonekey = $ep;
-			}
-			else {
-*/
-				$phonekey = $id . $ep;
-//			}
+			$phonekey = $id . $ep;
 			if (strlen($phonekey) <= 6 ) {
 				$sql = "select * from IPphone WHERE pkey = '" . $phonekey . "'"; 
 				$qRes = $this->dbh->query($sql);
@@ -1468,48 +1402,37 @@ private function generateRingGroups(&$OUT,$cluster,$id) {
 			}
 		}
 		$dialstr = preg_replace ( '/&$/',"", $dialstr );
+		$fullKey = $row['pkey'];
+		$shortKey = substr($row['pkey'],2);
 		if ($row['grouptype'] != "Page" && $row['pkey'] != 'RINGALL') {
-	/*
-		This stanza looks redundant.  
-		It may have been an old optimization to handle single extension call groups but the preg_match can't succeed.
-		The else will always be taken. 
-	 */			
-			if (preg_match(' /^\d{4}$/ ',$dialstr) && $row['grouptype'] != "Alias") {
-				$OUT .= "\texten => " . $row['pkey'] . ",1,agi(sarkhpe,InCall," . $row['out'] . ",,)\n";
-                $OUT .= "\texten => *" . $row['pkey'] . ",1,GoTo(extensions,*" . $row['out'] . ",1)\n";
-                $OUT .= "\texten => **" . $row['pkey'] . ",1,GoTo(extensions,**" . $row['out'] . ",1)\n";
+// ring group forwarding logic				
+			if (!empty($row['divert'])) {				
+				$OUT .= "\texten => **" . substr($row['pkey'],2) . ",1,NoOp()\n";
+				$OUT .= "\texten => **$shortKey,n,GoToIf(\$[\"\${DEVICE_STATE(Custom:$fullKey)}\" = \"BUSY\"]?free$fullKey:set$fullKey)\n";
+
+				$OUT .= "\texten => **$shortKey,n(set$fullKey),NoOp()\n";
+				$OUT .= "\texten => **$shortKey,n,Set(DEVICE_STATE(Custom:$fullKey)=BUSY)\n";
+				$OUT .= "\texten => **$shortKey,n,Playback(activated)\n";
+				$OUT .= "\texten => **$shortKey,n,Hangup()\n";
+
+				$OUT .= "\texten => **$shortKey,n(free$fullKey),NoOp()\n";					
+				$OUT .= "\texten => **$shortKey,n,Set(DEVICE_STATE(Custom:$fullKey)=NOT_INUSE)\n";
+				$OUT .= "\texten => **$shortKey,n,Playback(de-activated)\n";
+				$OUT .= "\texten => **$shortKey,n,Hangup()\n";
+
+				$OUT .= "\texten => $fullKey,1,NoOp(Custom:$fullKey state is \${DEVICE_STATE(Custom:$fullKey) )\n";
+				$OUT .= "\texten => $fullKey,n,GoToIf(\$[\"\${DEVICE_STATE(Custom:$fullKey)}\"=\"BUSY\"]?divert$fullKey:normal$fullKey)\n"; 
+				$OUT .= "\texten => $fullKey,n(normal$fullKey),NoOp()\n";
+				$OUT .= "\texten => $fullKey,n,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n";
+				$OUT .= "\texten => $fullKey,n,Hangup()\n";
+				$OUT .= "\texten => $fullKey,n(divert$fullKey),NoOp()\n";
+				$OUT .= "\texten => $fullKey,n,GoTo(" . $row['divert'] . ",1)\n";
+				$OUT .= "\texten => $shortKey,hint,Custom:$fullKey\n";		
 			}
 			else {
-				
-				if (empty($row['divert'])) {
-					$OUT .= "\texten => " . $row['pkey'] . ",1,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n";
-					
-				}
-				else {
-					$this->HINTS .= "\texten => **" . $row['pkey'] . ",hint,Custom:**" . $row['pkey'] . "\n"; 
-					$OUT .= "\texten => **" . $row['pkey'] . ",1,NoOp()\n";
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,GoToIf($["${DEVICE_STATE(Custom:${EXTEN})}" = "NOT_INUSE"]?set' . $row['pkey'] . ':free' . $row['pkey'] . ")\n";
-
-					$OUT .= "\texten => **" . $row['pkey'] . ',n(set' . $row['pkey'] . '),NoOp()' ."\n";
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,Set(DEVICE_STATE(Custom:${EXTEN})=BUSY)' . "\n";
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,Playback(activated)' . "\n";
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,Hangup()' . "\n";
-
-					$OUT .= "\texten => **" . $row['pkey'] . ',n(free' . $row['pkey'] . '),NoOp()' ."\n";					
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,Set(DEVICE_STATE(Custom:${EXTEN})=NOT_INUSE)' . "\n";
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,Playback(de-activated)' . "\n";
-					$OUT .= "\texten => **" . $row['pkey'] . ',n,Hangup()' . "\n";
-
-					$OUT .= "\texten => " . $row['pkey'] . ',1,NoOp(Custom:**${EXTEN} state is ${DEVICE_STATE(Custom:**${EXTEN})}))' . "\n";
-					$OUT .= "\texten => " . $row['pkey'] . ',n,GoToIf($["${DEVICE_STATE(Custom:**${EXTEN})}"="BUSY"]?divert' . $row['pkey'] . ":normal" . $row['pkey'] . ")\n"; 
-					$OUT .= "\texten => " . $row['pkey'] . ',n(normal' . $row['pkey'] . '),NoOp()' . "\n";
-					$OUT .= "\texten => " . $row['pkey'] . ",n,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n";
-					$OUT .= "\texten => " . $row['pkey'] . ',n,Hangup()' . "\n";
-					$OUT .= "\texten => " . $row['pkey'] . ',n(divert' . $row['pkey'] . '),NoOp()' . "\n";
-					$OUT .= "\texten => " . $row['pkey'] . ',n,GoTo(' . $row['divert'] . ",1)\n";
-				}
-				$OUT .= "\texten => " . substr($row['pkey'],2) . ",1,GoTo(" . $row['pkey'] . ",1)\n";
+				$OUT .= "\texten => $fullKey,1,agi(sarkhpe,Alias,$dialstr,\${EXTEN},)\n";
 			}
+			$OUT .= "\texten => $shortKey,1,GoTo($fullKey,1)\n";
 		}
 		else {
 			// build array of page groups (key & dialstring)
@@ -1522,10 +1445,8 @@ private function generateRingGroups(&$OUT,$cluster,$id) {
 	
 	foreach ($pagearray as $pkey=>$dialstr) {
 		$sql = $this->dbh->prepare("UPDATE speed SET pagegroup = '". $dialstr . "' where pkey=?");
-		$sql->execute(array($pkey));		
-//		$carrier = $sql->fetch();	
+		$sql->execute(array($pkey));			
 		$sql=NULL;
-//		$count = $dbh->exec("UPDATE speed SET pagegroup = '". $dialstr . "' WHERE pkey = '" . $pkey . "'" );
  	}
 
 }	

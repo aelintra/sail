@@ -200,11 +200,11 @@ private function showMain() {
 
   	$this->myPanel->displayPopupFor('countrycode',$global['COUNTRYCODE'],$country);  
 	
-	if ( ! $extensions ) {	
-		$this->myPanel->displayPopupFor('extlen',$global['EXTLEN'],array('3','4','5','6'));
-	} 
+//	if ( ! $extensions ) {	
+//		$this->myPanel->displayPopupFor('extlen',$global['EXTLEN'],array('3','4','5','6'));
+//	} 
 
-    $this->myPanel->displayInputFor('sipiaxstart','number',$global['SIPIAXSTART']);
+//    $this->myPanel->displayInputFor('sipiaxstart','number',$global['SIPIAXSTART']);
 
     if ( ! $global['VCL'] ) {
     	$this->myPanel->radioSlide('natdefault',$global['NATDEFAULT'],array('local','remote'));
@@ -352,13 +352,13 @@ private function saveEdit() {
     $this->validator->addValidation("abstimeout","num","Call timeout must be numeric");    
     $this->validator->addValidation("voipmax","req","Max Outbound VOIP Calls must be entered");
     $this->validator->addValidation("voipmax","num","Max Outbound VOIP Calls must be numeric");    
-    $this->validator->addValidation("extlen","num","Extension Length must be numeric");
-    $this->validator->addValidation("extlen","gt=2","Extension Length must 3 to 6");
-    $this->validator->addValidation("extlen","lt=7","Extension Length must 3 to 6");    
-    $this->validator->addValidation("sipiaxstart","req","Extension start must be entered");
-    $this->validator->addValidation("sipiaxstart","num","Extension start must be numeric");
-    $this->validator->addValidation("sipiaxstart","maxlen=6","Extension start must be 3 to 6 digits (same as extension length)"); 
-	$this->validator->addValidation("sipiaxstart","minlen=3","Extension start must be 3 to 6 digits (same as extension length)");	   
+//  $this->validator->addValidation("extlen","num","Extension Length must be numeric");
+//  $this->validator->addValidation("extlen","gt=2","Extension Length must 3 to 6");
+//  $this->validator->addValidation("extlen","lt=7","Extension Length must 3 to 6");    
+//  $this->validator->addValidation("sipiaxstart","req","Extension start must be entered");
+//  $this->validator->addValidation("sipiaxstart","num","Extension start must be numeric");
+//  $this->validator->addValidation("sipiaxstart","maxlen=6","Extension start must be 3 to 6 digits (same as extension length)"); 
+//	$this->validator->addValidation("sipiaxstart","minlen=3","Extension start must be 3 to 6 digits (same as extension length)");	   
     $this->validator->addValidation("agentstart","num","Agent start must be numeric");
     $this->validator->addValidation("agentstart","maxlen=4","Agent start must be 4 digits");
     $this->validator->addValidation("agentstart","minlen=4","Agent start must be 4 digits");    

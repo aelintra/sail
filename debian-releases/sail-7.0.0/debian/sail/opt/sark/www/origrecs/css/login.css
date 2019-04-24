@@ -1,0 +1,46 @@
+*{margin:0;padding:0;}
+
+form{margin-left:8px;padding:16px 16px 40px 16px;font-weight:normal;-moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;border-radius:5px;background:#fff;border:1px solid #888;-moz-box-shadow:rgba(200,200,200,1) 0 4px 18px;-webkit-box-shadow:rgba(200,200,200,1) 0 4px 18px;-khtml-box-shadow:rgba(200,200,200,1) 0 4px 18px;box-shadow:rgba(200,200,200,1) 0 4px 18px;}
+form .forgetmenot{font-weight:normal;float:left;margin-bottom:0;}
+
+.button-primary{font-family:"Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;padding:3px 10px;border:none;font-size:12px;border-width:1px;border-style:solid;-moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;border-radius:11px;cursor:pointer;text-decoration:none;margin-top:-3px;}
+
+#login form p{margin-bottom:0;}
+
+label{color:#777;font-size:13px;}
+
+form .submit {float:center;}
+
+form p{margin-bottom:24px;}
+
+#nav{text-shadow:rgba(255,255,255,1) 0 1px 0;}
+
+#login {width:320px;margin:7em auto;}
+#login_error {
+	margin:8px;
+	border-width:1px;
+	border-style:solid;
+	padding:12px;
+	-moz-border-radius:3px;
+	-khtml-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border-color: #ff0000;
+	text-align: left;
+}
+
+#login_error li {
+	margin-left: 15px;
+}
+
+#nav{margin:0 0 0 8px;padding:16px;}
+
+#user_pass,#user_login {font-size:24px;width:97%;padding:3px;margin-top:2px;margin-right:6px;margin-bottom:16px;border:1px solid #888888;background:#fbfbfb;-moz-border-radius:11px;-khtml-border-radius:11px;-webkit-border-radius:11px;border-radius:5px;}
+
+input{color:#555;}
+.clear{clear:both;}
+
+#user_pass:focus,#user_login:focus {
+    border:1px solid #ffcc73;
+    background-color:#efefff;
+}

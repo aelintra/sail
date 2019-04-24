@@ -667,7 +667,7 @@ ANDHERE;
         exten => _*3[012345][*],1,agi(sarkhpe,\${EXTEN},,)	; TIMERS
         exten => _*5[012567][*],1,agi(sarkhpe,\${EXTEN},,)	; VMAIL, TIME etc.
         exten => _*60*XXXX,1,agi(sarkhpe,\${EXTEN},,)		; Greetings
-        exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN,4})	; Greetings
+        exten => _*61*XXXX,1,Playback(usergreeting\${EXTEN:4})	; Greetings
         exten => _*6[34][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent pause/unpause(63 64)
         exten => _*6[56][*],1,agi(sarkhpe,\${EXTEN},,)		; Agent Login/out(65 66)
         exten => _*67[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)		; ChanSpy (Whisper)

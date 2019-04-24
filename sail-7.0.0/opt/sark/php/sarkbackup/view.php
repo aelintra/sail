@@ -239,7 +239,7 @@ private function showMain() {
 		echo '<td >' . $file . '</td>' . PHP_EOL;		
 		echo '<td class="w3-hide-small">' . $fsize . '</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small" >' . $rdate . '</td>' . PHP_EOL;
-		echo '<td class="w3-hide-small"><a href="/php/download.php?dtype=bkup&dfile=' . $file . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" download></a></td>' . PHP_EOL;
+		echo '<td class="w3-hide-small"><a href="/php/download.php?dtype=bkup&dfile=' . $file . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
 		echo '<td class="icons"><a href="/php/sarkbackup/main.php?regressbk=yes&dfile=' . $file . '" ><img src="/sark-common/icons/undo.png" border=0 title = "Click to Restore" )"></a></td>' . PHP_EOL;	
 		echo '<td class="icons"><a class="table-action-deletelink" href="delete.php?id=/opt/sark/bkup/' . $file . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;							
 		echo '</td>' . PHP_EOL;
@@ -292,7 +292,7 @@ private function showMain() {
 		echo '<td>' . $file . '</td>' . PHP_EOL;		
 		echo '<td class="w3-hide-small">' . $fsize . '</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small">' . $rdate . '</td>' . PHP_EOL;
-		echo '<td class="w3-hide-small"><a href="/php/download.php?dtype=snap&dfile=' . $file . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" download></a></td>' . PHP_EOL;
+		echo '<td class="w3-hide-small"><a href="/php/download.php?dtype=snap&dfile=' . $file . '"><img src="/sark-common/icons/download.png" border=0 title = "Click to Download" ></a></td>' . PHP_EOL;
 		echo '<td class="icons"><a href="/php/sarkbackup/main.php?regress=yes&dfile=' . $file . '"><img src="/sark-common/icons/undo.png" border=0 title = "Click to Regress" onclick="return confirmOK(\'Regress to this Snapshot - Confirm?\')"></a></td>' . PHP_EOL;	
 		echo '<td class="icons"><a class="table-action-deletelink" href="delete.php?id=/opt/sark/snap/' . $file . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;							
 		echo '</td>' . PHP_EOL;
@@ -359,30 +359,11 @@ private function showRestore($rfile) {
 
     $this->myPanel->internalEditBoxStart();
 
-//	echo '<div id="reset" >'. PHP_EOL;
-	
-//	echo '<h2>'. PHP_EOL;
 	$this->myPanel->displayBooleanFor('resetdb','');
-//	echo '<input id="resetdb" type="checkbox" name="resetdb" checked="checked" >'. PHP_EOL;
-//	echo ' :Restore Customer Database?';
-//	echo '<br/>';
 	$this->myPanel->displayBooleanFor('resetasterisk','');
-//	echo '<input id="asterisk" type="checkbox" name="asterisk" checked="checked" >'. PHP_EOL;
-//	echo ' :Restore Asterisk files?';				
-//	echo '<br/>';
 	$this->myPanel->displayBooleanFor('resetvmail','');
-//	echo '<input id="vmail" type="checkbox" name="vmail" checked="checked" >'. PHP_EOL;
-//	echo ' :Restore Voicemail?';				
-//	echo '<br/>';
 	$this->myPanel->displayBooleanFor('resetusergreets','');
-//	echo '<input id="usergreets" type="checkbox" name="usergreets" checked="checked" >'. PHP_EOL;
-//	echo ' :Restore greetings?';				
-//	echo '<br/>';
 	$this->myPanel->displayBooleanFor('resetldap','');
-//	echo '<input id="ldap" type="checkbox" name="ldap" checked="checked" >'. PHP_EOL;
-//	echo ' :Restore LDAP Directory?';				
-//	echo '<br/>';																														
-//	echo '</h2>'. PHP_EOL;
 
     echo '</div>' . PHP_EOL;
     
@@ -481,9 +462,15 @@ private function doRestore() {
 		if (glob($tempDname . '/usr/share/asterisk/sounds/usergreeting*')) {
 			$this->helper->request_syscmd ("rm -rf /usr/share/asterisk/sounds/usergreeting*");
 			$this->helper->request_syscmd ("cp -a  $tempDname/usr/share/asterisk/sounds/usergreeting* /usr/share/asterisk/sounds");
-			$this->helper->request_syscmd ("chown asterisk:asterisk /usr/share/asterisk/sounds/usergreeting*");
-			$this->log .= "<p>Greeting files RESTORED</p>";
+			$this->helper->request_syscmd ("chown asterisk:asterisk /usr/share/asterisk/sounds/usergreeting*");						
+			$this->log .= "<p>Old greeting files found in /sounds these will be restored but not used in V7+</p>";
 		}
+		if (file_exists($tempDname . '/usr/share/asterisk/sarksounds')) {
+			$this->helper->request_syscmd ("rm -rf /usr/share/asterisk/sarksounds");
+			$this->helper->request_syscmd ("cp -a  $tempDname/usr/share/asterisk/sarksounds /usr/share/asterisk/");
+			$this->helper->request_syscmd ("chown -R asterisk:asterisk /usr/share/asterisk/sarksounds");
+			$this->log .= "<p>Greeting files found in /sarksounds RESTORED</p>";
+		}				
 		else {
 			$this->log .= "<p>No greeting files in backup set; request ignored </p>";
 			$this->log .= "<p>Greeting files PRESERVED</p>";

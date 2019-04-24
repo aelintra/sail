@@ -123,30 +123,11 @@ private function showMain() {
 	$this->myPanel->subjectBar("Reset Functions");
 
 	$this->myPanel->displayBooleanFor('fresetdb','','resetcheck');
-//	echo '<input class="resetcheck" id="resetdb" type="checkbox" name="resetdb" >'. PHP_EOL;
-//	echo ' :Reset PBX Database?';
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetfirewall','','resetcheck');
-//	echo '<input class="resetcheck" id="firewall" type="checkbox" name="firewall" >'. PHP_EOL;
-//	echo ' :Reset firewall rules to default?';				
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetdhcp','','resetcheck');
-//	echo '<input class="resetcheck" id="dhcp" type="checkbox" name="dhcp" >'. PHP_EOL;
-//	echo ' :Reset network to defaults (DHCP)?';				
-//	echo '<br/>';	
-
 	$this->myPanel->displayBooleanFor('fresethost','','resetcheck');
-//	echo '<input class="resetcheck" id="host" type="checkbox" name="host" >'. PHP_EOL;
-//	echo ' :Reset hostname and domain to default?';				
-//	echo '<br/>';		
-
 	$this->myPanel->displayBooleanFor('fresetsshport','','resetcheck');
-//	echo '<input class="resetcheck" id="sshport" type="checkbox" name="sshport" >'. PHP_EOL;
-//	echo ' :Reset ssh port to default?';				
-//	echo '<br/>';	
-
+	
 	$this->myPanel->aHelpBoxFor('fresetboot');
 	echo '</div>';
 
@@ -157,44 +138,14 @@ private function showMain() {
 	$this->myPanel->subjectBar("Delete Functions");
 
 	$this->myPanel->displayBooleanFor('fresetldap','','resetcheck');
-//	echo '<input class="resetcheck" id="ldap" type="checkbox" name="ldap" >'. PHP_EOL;
-//	echo ' :Delete LDAP directory entries?';				
-//	echo '<br/>';			
-
 	$this->myPanel->displayBooleanFor('fresetbackups','','resetcheck');
-//	echo '<input class="resetcheck" id="backups" type="checkbox" name="backups" >'. PHP_EOL;
-//	echo ' :Delete backups?';				
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetsnaps','','resetcheck');
-//	echo '<input class="resetcheck" id="snaps" type="checkbox" name="snaps" >'. PHP_EOL;
-//	echo ' :Delete snapshots?';				
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetusergreets','','resetcheck');
-//	echo '<input class="resetcheck" id="usergreets" type="checkbox" name="usergreets" >'. PHP_EOL;
-//	echo ' :Delete greetings?';				
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetvmail','','resetcheck');
-//	echo '<input class="resetcheck" id="vmail" type="checkbox" name="vmail" >'. PHP_EOL;
-//	echo ' :Delete voicemail?';				
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetvrec','','resetcheck');
-//	echo '<input class="resetcheck" id="vrec" type="checkbox" name="vrec" >'. PHP_EOL;
-//	echo ' :Delete recordings?';				
-//	echo '<br/>';		
-
 	$this->myPanel->displayBooleanFor('fresetcdrs','','resetcheck');
-//	echo '<input class="resetcheck" id="cdrs" type="checkbox" name="cdrs" >'. PHP_EOL;
-//	echo ' :Delete CDRs?';				
-//	echo '<br/>';
-
 	$this->myPanel->displayBooleanFor('fresetlogs','','resetcheck');
-//	echo '<input class="resetcheck" id="logs" type="checkbox" name="logs" >'. PHP_EOL;
-//	echo ' :Delete logs?';				
-//	echo '<br/>';																								
+
 	$this->myPanel->aHelpBoxFor('fresetcontinue');
     echo '</div>' . PHP_EOL;
 
@@ -291,21 +242,21 @@ private function doReset() {
 		$this->log .= "<p>backups PRESERVED</p>";	
 	}	
 	if ( isset($_POST['fresetsnaps'] ) ) {
-			$this->helper->request_syscmd ("rm -rf /opt/sark/snap/*");
+		$this->helper->request_syscmd ("rm -rf /opt/sark/snap/*");
 		$this->log .= "<p>snaps DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>snaps PRESERVED</p>";	
 	}		 			
 	if ( isset($_POST['fresetusergreets'] ) ) {
-			$this->helper->request_syscmd ("rm -rf /usr/share/asterisk/sounds/usergreeting*");
+		$this->helper->request_syscmd ("rm -rf /usr/share/asterisk/sarksounds/*");
 		$this->log .= "<p>greetings DELETED</p>";
 	}
 	else {
 		$this->log .= "<p>greetings PRESERVED</p>";	
 	}	
 	if ( isset($_POST['fresetvmail'] ) ) {
-			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/voicemail/default/*");
+			$this->helper->request_syscmd ("rm -rf /var/spool/asterisk/voicemail/*");
 		$this->log .= "<p>voicemail DELETED</p>";
 	}
 	else {

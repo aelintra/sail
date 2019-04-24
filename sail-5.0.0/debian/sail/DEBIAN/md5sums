@@ -257,7 +257,7 @@ dfced7667010a86c22b82ed77cdb4841  opt/sark/countries/zm.zone
 d9a06d67646549c502dc676e4373f25a  opt/sark/db/.sail-install-date
 634b108d4c1b5d78b34eb10dab47edb8  opt/sark/db/db_v4_create.sql
 44f32ef31347b00856bafad93073ab5a  opt/sark/db/db_v4_device.sql
-6284d88cb94950efa0aa5e457fcce69a  opt/sark/db/db_v4_system.sql
+060c9bb1365ebc8216f338bb070800ef  opt/sark/db/db_v4_system.sql
 fc6ff2307a71a374b7148da57410afcf  opt/sark/db/ldap_create.ldif
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/db/srkaudit.log
 1d6fbde91bcdb08404d648614af65fb3  opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf
@@ -275,10 +275,10 @@ e83e5d0a4969814e91d940916132750e  opt/sark/generator/agentSQL.php
 8189c534d5480566e1c541f217f306a4  opt/sark/generator/cdr_mysql.php
 3b9e993e8e097f443f5e892043353e24  opt/sark/generator/daycall
 1a7933004391c7c2fa21f979dfb6e616  opt/sark/generator/edsw.php
-31a975aae576b0e21ad385006ca5ce5a  opt/sark/generator/extensions.php
+53d8568caa831abaae061fc3f7bf3678  opt/sark/generator/extensions.php
 f169442254928726cdf9e892167a37e8  opt/sark/generator/featuresSQL.php
 1acf0f78f843caeb0597878cb3899910  opt/sark/generator/generated_file_banner.php
-096f745e3d977ddea2ce82cb2ebcf02c  opt/sark/generator/iaxSQL.php
+692f740ff7b997fc056cdf017714823a  opt/sark/generator/iaxSQL.php
 d2526a4798de7cbdddbfd107de134d61  opt/sark/generator/localvars.php
 6d627692f8e577a763ca92591c69db80  opt/sark/generator/mcstcaller.php
 7ad9a874365067bf9f103db41666a2a4  opt/sark/generator/meetmeSQL.php
@@ -514,7 +514,7 @@ e6bcb74c4ef6b96b1e31d41077b05269  opt/sark/php/srkAmiHelperClass
 afc5cb6fb105328d45a7ec4f1e0e2800  opt/sark/php/srkDbClass
 3cf656de6acce8a3c87028260d2b433c  opt/sark/php/srkHelperClass
 23da937f48cff63849d153a8cc5d9c6c  opt/sark/php/srkLDAPHelperClass
-fbb2a898e480d28709ab22658c35d1de  opt/sark/php/srkNetHelperClass
+879c3c0c9b2967b4cb41be0e6b601958  opt/sark/php/srkNetHelperClass
 777ba6316790f9c09db002dd7bec44e1  opt/sark/php/srkPDFClass
 1dcb44d14960866cc22a3c327aa43d5b  opt/sark/php/srkPageClass
 f2ed3471b2ac07d27e9e9a310c32d806  opt/sark/php/srkfoot.php
@@ -1395,5 +1395,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-00d5ea319a1294fb9d8a4b62dda1abf6  usr/share/doc/sail/changelog.Debian.gz
+81dfe244500aafac0db99ff6b9aa846a  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

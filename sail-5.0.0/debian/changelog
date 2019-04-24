@@ -1,6 +1,19 @@
+sail (5.0.0-62) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-62
+  - fixed typo in *61* greeting playback
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 7  Mar 2019 18:00:00 +0000
+
+sail (5.0.0-61) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-61
+  - added user recovery (S200) for the techs
+  - added more Yealink phone types
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 5  Mar 2019 18:00:00 +0000
+
 sail (5.0.0-60) UNRELEASED; urgency=low
   * Tagged as 5.0.0-60
-  - positive apach2 set and start in postinst
+  - positive apache2 set and start in postinst
 
  -- CoCoSoft <admin@aelintra.com>  Fri, 6  Jul 2018 18:00:00 +0000
 

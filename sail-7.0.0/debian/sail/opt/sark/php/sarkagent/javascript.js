@@ -1,6 +1,9 @@
 
   $(document).ready(function() {
 	
+	$('#clustershow :input').prop('readonly', true);
+	$('#clustershow :input').css('background-color','#f1f1f1');
+	
 	$("#sarkagentForm").validate ( {
 	   rules: {
 	   		pkey: {

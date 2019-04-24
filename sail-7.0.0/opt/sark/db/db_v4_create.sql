@@ -129,7 +129,7 @@ z_updater TEXT DEFAULT 'system'
 CREATE TABLE IF NOT EXISTS Greeting (
 id INTEGER PRIMARY KEY,	
 pkey TEXT,
-cluster TEXT,							-- Tenant	
+cluster TEXT DEFAULT 'default',			-- Tenant	
 desc TEXT, 								-- Description
 type TEXT,								-- MIME type
 z_created datetime,

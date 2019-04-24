@@ -79,6 +79,8 @@ INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:0E:08','Linksys','sip
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:11:5C','Cisco 7960','cisco-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:14:A8','Cisco 7940','cisco-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:15:65','Yealink T2x','yealink-check-cfg');
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('80:5E:0C','Yealink','yealink-check-cfg');
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('80:5E:C0','Yealink','yealink-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:23:69','Linksys','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:80:F0','Panasonic','panasonic-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('08:00:23','Panasonic','panasonic-check-cfg');
@@ -711,6 +713,13 @@ INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T28P','Yealink T28')
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T29P','Yealink T29');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T32G','Yealink T32');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T38G','Yealink T38');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T40G','Yealink T40');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T41S','Yealink T41');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T42S','Yealink T42');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T46S','Yealink T46');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T48S','Yealink T48');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T56','Yealink T56');
+INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('SIP-T58A','Yealink T58');
 
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T19','Yealink T19');
 INSERT OR IGNORE INTO vendorxref(pkey,intpkey) values ('T21','Yealink T21');

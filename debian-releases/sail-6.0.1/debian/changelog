@@ -1,3 +1,44 @@
+sail (6.0.1-44) UNRELEASED; urgency=low
+  * untagged
+  - Fix to disk space calculation algorithm in srkPageClass
+  - Fix to sarktimer incorrectly displayng day setter during edit
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 7  Apr 2019 18:00:00 +0000
+
+sail (6.0.1-43) UNRELEASED; urgency=low
+  * untagged
+  - srkfoot gives space before bottom bar
+  - srkHelper now defaults to NOCASE sort on table retrieval
+  - Customer_favicon.png will override Sark_favicon.png
+  - Added Cluster sort
+  - fixed inbound route DiD DDI name inconsistency
+  - added greeting sort 
+  - added queue sort
+  - added timer sort
+  - removed count from reports
+  - new Globals parameter CALLPARKING use to generate or suppress callparking
+  - always fix for admin sers being upgraded from V5
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 15  Mar 2019 18:00:00 +0000
+
+sail (6.0.1-42) UNRELEASED; urgency=low
+  * untagged
+  - fixed incorrect generation of local number dial for tenants
+  - fixed HTML5 download MIME mis-interpretation in recorder, backup and greetings
+  - added sticky filtering to call groups, DDI, Extensions, Recurring timers 
+  - sorted dateSeg by cluster and day
+  - removed email requirement from user panels
+  - fixed typo in *61* greeting playback
+  - fixed unset error in AMIhelper (not setting twinning off)
+  - fixed back button in greetings playback
+  - removed queue/ivr numbering for now.  It needs to harminize with V7
+  - run speeedtest only once per day
+  - changed table header colour to dark orange
+  - added update cancel buttons to template footer
+  - added panasonic KX-HDV legacy device to templates 
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 12  Mar 2019 18:00:00 +0000
+
 sail (6.0.1-41) UNRELEASED; urgency=low
   * untagged
   - id added to IVR and Queue

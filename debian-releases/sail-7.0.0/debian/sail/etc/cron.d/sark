@@ -1,0 +1,26 @@
+# SARK timer
+* * * * * root php /opt/sark/generator/srktimer.php >/dev/null 2>&1 
+# SARK queue mover in ARC
+* * * * * root perl /opt/sark/scripts/srkcronqmove.pl >/dev/null 2>&1
+# SARK spin off regression copies
+0 4 * * * root sh /opt/sark/scripts/spin.sh >/dev/null 2>&1
+# SARK age regressions
+0 4 * * * root sh /opt/sark/scripts/age.sh >/dev/null 2>&1
+# SARK HD pruning
+01 * * * * root perl /opt/sark/scripts/aelhdlon.pl prune >/dev/null 2>&1
+# SARK VMAIL ageing
+01 * * * * root perl /opt/sark/scripts/agevmail.sh >/dev/null 2>&1
+#sark disk space pruner (ppc and arm)
+*/10 * * * * root perl /opt/sark/scripts/diskabs.pl >/dev/null 2>&1
+#sark blacklist loader for the firewall - requires ipset 
+*/30 * * * * root sh /opt/sark/scripts/getvoipbl.sh >/dev/null 2>&1
+#sark fqdn whitelist loader for the firewall - requires ipset 
+* * * * * root /bin/sh /opt/sark/scripts/getfqdnip.sh 
+*/30 * * * * root sh /opt/sark/scripts/getfqdndrop.sh >/dev/null 2>&1
+#run an internet speed test once every hour
+0 * * * * root /usr/bin/speedtest-cli --simple  > /opt/sark/cache/speedtest 
+#fetch manufacturer MAC list once a week
+#refresh MAC db weekly
+0 0 * * 0 root sh /opt/sark/scripts/getmaclist.sh
+#recording offload every 10 minutes
+*/10 * * * * root sh /opt/sark/scripts/srkoffload_simple.sh >/dev/null 2>&1

@@ -28,6 +28,7 @@ Class sarkcluster {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
+	protected $soundir = '/usr/share/asterisk/'; // set for Debian/Ubuntu
 	protected $myBooleans = array(
 		'usemohcustom'
 	);
@@ -40,27 +41,9 @@ public function showForm() {
 
 	
 	$this->myPanel->pagename = 'Tenants';
-	$message=false;
-	if (!empty($_FILES['file']['name'])) { 
-		if ($_FILES['file']['error']) {
-			$this->message = "Upload failed.  Check filesize.";
-			$message = true;
-		}
 
-		$filename = strip_tags($_FILES['file']['name']);
-		if (!preg_match (' /wav|mp3$/ ', $filename) ) {
-			$this->message = "Upload file MUST be format wav or mp3";
-			$message = true;
-		}
-
-		if (!$message) {
-			$dir='moh-' . $_POST['pkey'];
-			$tfile = $_FILES['file']['tmp_name'];
-			if (!$this->message) {
-				$this->helper->request_syscmd ("/bin/mv $tfile /usr/share/asterisk/$dir/$filename");
-				$this->message = "File $filename uploaded!";
-			}
-		}
+	if (!empty($_FILES['file']['name'])) {
+		$this->doUpload(); 
 		$this->showEdit();
 		return;									
 	}	
@@ -92,6 +75,7 @@ public function showForm() {
 	if (isset($_REQUEST['delete'])  ) { 
 		$pkey = $_REQUEST['pkey'];
 		$this->helper->delTuple("cluster",$pkey);
+		$ret = $this->helper->request_syscmd ("rm -rf " . $this->soundir . $_REQUEST['pkey']);
 		$this->message = "Deleted " . $pkey;		
 	}
 
@@ -105,7 +89,7 @@ public function showForm() {
 	}	
 
 
-	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
+	if (isset($_REQUEST['commit'])) { 
 		$this->helper->sysCommit();
 		$this->message = "Updates have been Committed";	
 	}
@@ -122,8 +106,10 @@ private function showMain() {
 	
 	if (isset($this->message)) {
 		$this->myPanel->msg = $this->message;
-	}  
-
+	}
+	  
+	$this->myPanel->showErrors($this->error_hash);
+	
 	$buttonArray['new'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkclusterForm",false);
 
@@ -266,7 +252,8 @@ private function saveNew() {
 		
 		$ret = $this->helper->createTuple("cluster",$tuple);
 		if ($ret == 'OK') {
-//			$this->helper->commitOn();	
+			$this->helper->request_syscmd ("mkdir $this->soundir" . $tuple['pkey']);
+			$this->helper->request_syscmd ("chown asterisk:asterisk $this->soundir" . $tuple['pkey']);
 			$this->message = "Saved new Tenant " . $tuple['pkey'] . "!";
 		}
 		else {
@@ -304,7 +291,9 @@ private function showEdit($pkey=false) {
 	
 	$buttonArray['cancel'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkclusterForm",false,false,true);
-
+	
+	$this->myPanel->showErrors($this->error_hash);
+	
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
 	}
@@ -368,7 +357,8 @@ private function showEdit($pkey=false) {
 		foreach ($mohlist as $row ) {
 			echo '<tr id="' . $row . '">'. PHP_EOL; 
 			echo '<td >' . $row . '</td>' . PHP_EOL;
-			echo '<td ><a href="/server-moh/moh-' . $pkey . '/' . $row . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>';
+ 			echo '<td><audio controls><source src="/server-moh/moh-' . $pkey . '/' . $row . '"></audio></td>'; 
+//			echo '<td ><a href="/server-moh/moh-' . $pkey . '/' . $row . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>';
 			echo '<td><a href="'; 
 			echo $_SERVER['PHP_SELF'];
 			echo '?mohdelete=yes&amp;pkey=';
@@ -477,6 +467,32 @@ private function saveEdit() {
 		$this->message = "Validation Errors!";		
     }
     unset ($this->validator);
+}
+
+private function doUpload() {
+
+		if ($_FILES['file']['error']) {
+			$this->error_hash['Upload'] = "Upload failed.  Check PHP max filesize.";
+			return -1;
+		}
+
+		$filename = strip_tags($_FILES['file']['name']);
+		if (!preg_match (' /wav$/ ', $filename) ) {
+			$this->error_hash['Format'] = "Upload file MUST be format wav";
+			return -1;
+		}
+		$sox = "/usr/bin/sox " . $_FILES['file']['tmp_name'] . " -r 8000 -c 1 -e signed /tmp/" . $_FILES['file']['name'] . " -q";
+		$rets = `$sox`;
+		if ($rets) {
+			$this->error_hash['fileconv'] = "Upload file conversion failed! - $rets";
+			return -1;			
+		}
+
+		$dir='moh-' . $_POST['pkey'];
+		$tfile = $_FILES['file']['tmp_name'];
+		$this->helper->request_syscmd ("/bin/mv /tmp/" . $_FILES['file']['name'] . ' ' . $this->soundir . $dir);
+		$this->message = "File $filename uploaded!";
+		
 }
 
 

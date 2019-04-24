@@ -1,0 +1,24 @@
+**************************
+**  SARK Call Recording **
+**************************
+
+1. Web interface for the SARK call recording package
+2. Can be used with or without user login
+
+
+
+User Administration
+*******************
+
+- Accessed via admin.php
+- Hard-coded "admin" account which can be changed in config.php
+- allows for simple adding/updating/deleting of users
+
+
+User Login
+**********
+
+1. Users are presented with a login page
+2. The administrator needs to setup the user accounts first, a user cannot register a new account on their own
+3. The username and password should be presented to the user by the administrator, there is no email functionality to email the user directly
+4. The username matches up with the tenant name and filters the call recordings accordingly

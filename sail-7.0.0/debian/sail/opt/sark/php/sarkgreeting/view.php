@@ -28,7 +28,7 @@ Class sarkgreeting {
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
-	protected $soundir = '/usr/share/asterisk/sounds'; // set for Debian/Ubuntu
+	protected $soundir = '/usr/share/asterisk/sarksounds/'; // set for Debian/Ubuntu
 
 public function showForm() {
 
@@ -37,24 +37,35 @@ public function showForm() {
 	$this->helper = new helper;
 	
 	$this->myPanel->pagename = 'Greeting';
-	
+
 	if (!empty($_FILES['file']['name'])) { 
 		$filename = strip_tags($_FILES['file']['name']);
-		if (preg_match (' /^(usergreeting\d{4})\.(mp3|wav)$/ ', $filename, $matches) ) {
-			if (glob('/usr/share/asterisk/sounds/' . $matches[1] . '.*')) {
-				$this->message = $matches[1] . " already exists";
+		if (preg_match (' /^(usergreeting\d{4})\.(wav)$/ ', $filename, $matches) ) {
+			if (glob($this->soundir . '/' . $_REQUEST['cluster'] . '/' . $matches[1] . '.*')) {
+				$this->error_hash['duplicate'] = $matches[1] . " already exists";
 			}
 			else {
-				$tfile = strip_tags($_FILES['file']['tmp_name']);
-				$this->helper->request_syscmd ("/bin/mv $tfile /usr/share/asterisk/sounds/$filename");
-				$this->helper->request_syscmd ("/bin/chown asterisk:asterisk /usr/share/asterisk/sounds/$filename");
-				$this->helper->request_syscmd ("/bin/chmod 664 /usr/share/asterisk/sounds/$filename");
-				$this->message = "File $filename uploaded!";
+				$sox = "/usr/bin/sox " . $_FILES['file']['tmp_name'] . " -r 8000 -c 1 -e signed /tmp/" . $_FILES['file']['name'] . " -q";
+				$rets = `$sox`;
+				if (!$rets) {
+					$this->helper->request_syscmd ("/bin/mv /tmp/" . $_FILES['file']['name'] . ' ' . $this->soundir . $_REQUEST['cluster']);				
+					$this->helper->request_syscmd ("/bin/chown asterisk:asterisk $this->soundir" . $_REQUEST['cluster'] .  "/$filename");
+					$this->helper->request_syscmd ("/bin/chmod 664 $this->soundir" . $_REQUEST['cluster'] .  "/$filename");
+					$this->message = "File $filename uploaded!";
+				}
+				else {					
+					$this->error_hash['fileconv'] = "Upload file conversion failed! - $rets";				
+				}
 			}
 		}
 		else {
-			$this->message = "*ERROR* - File name must be format usergreeting{9999}.{wav|mp3}";
+			$this->error_hash['format'] = "*ERROR* - File name must be format usergreeting{9999}.wav";
 		}					
+	}
+	
+	if (isset($_POST['new']) || isset ($_GET['new'])  ) { 
+		$this->showNew();
+		return;		
 	}	
 
 	if (isset($_GET['edit'])) { 
@@ -69,10 +80,6 @@ public function showForm() {
 			return;
 		}					
 	}	
-	if (isset($_POST['commit_x']) || isset($_POST['commitClick_x'])) { 
-		$this->helper->sysCommit();
-		$this->message = "Updates have been Committed";	
-	}
 		
 	$this->showMain();
 	
@@ -87,6 +94,8 @@ private function showMain() {
 		$this->myPanel->msg = $this->message;
 	} 
 	
+	$this->myPanel->showErrors($this->error_hash);
+	
 	$fgreeting = array();
 	$tuple = array();	
 
@@ -96,7 +105,8 @@ private function showMain() {
   	
 
 	$buttonArray=array();
-	$buttonArray['upimg'] = true;
+	$buttonArray['new'] = true;
+//	$buttonArray['upimg'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkgreetingForm",false,false);
 
 	if ($this->invalidForm) {
@@ -129,25 +139,34 @@ private function showMain() {
 	echo '<tbody>' . PHP_EOL;
 	
 /*
- * read the greeting files and create an array of filename=>filetype
+ * read the greeting files and create an array of cluster=>filename=>filetype
  */ 
 
 	if ( $handle = opendir($this->soundir) ) {
 		while (false !== ($entry = readdir($handle))) {
-			if (preg_match(' /(^usergreeting\d*)\.(wav|gsm|mp3)$/ ',$entry,$matches)) {
-				$fgreeting[$matches[1]] = $matches[2];
+			if ($entry == '.' || $entry == '..') {
+				continue;
+			}
+			if (is_dir($this->soundir . $entry)) {
+				if ( $handleSubD = opendir($this->soundir . $entry) ) {
+					while (false !== ($fileEntry = readdir($handleSubD))) {	
+						if (preg_match(' /(^usergreeting\d*)\.(wav|gsm|mp3)$/ ',$fileEntry,$matches)) {
+							$fgreeting[$entry][$matches[1]] = $matches[2];
+						}
+					}
+					closedir($handleSubD);
+				}	
 			}
 		}	
 		closedir($handle);
 	}
 
-
 /*
  * If a table row exists without a corresponding sound file then delete it.
  */ 
-	$rows = $this->helper->getTable("greeting");
+	$rows = $this->helper->getTable("greeting",NULL,true,false,'cluster');
 	foreach ($rows as $row ) {
-		$globarray = glob ($this->soundir . "/" . $row['pkey'] . '*');
+		$globarray = glob ($this->soundir . $row['cluster'] . '/' . $row['pkey'] . '*');
 		if (empty($globarray)) {
 			$ret = $this->helper->delTuple("greeting",$row['pkey']);
 		}	
@@ -155,20 +174,23 @@ private function showMain() {
 /*
  * attempt to insert an entry for each sound file into the database
  */ 
-	foreach ($fgreeting as $key=>$value) {
-		$tuple['pkey'] = $key;
-		$tuple['type'] = $value;
-		$this->helper->createTuple("greeting",$tuple); 
+	foreach ($fgreeting as $dkey=>$dir) {
+		foreach ($dir as $key=>$value) {
+			$tuple['pkey'] = $key;
+			$tuple['type'] = $value;
+			$tuple['cluster'] = $dkey;
+			$this->helper->createTuple("greeting",$tuple,true,true);
+		}		 
     }
 /*
  * read the table again - it should be consistent with the files now.
  */
   		
-	$rows = $this->helper->getTable("greeting",NULL,true,false,'cluster');	
+	$rows = $this->helper->getTable("greeting",NULL,true,false,'cluster,pkey');	
 	
 /**** table rows ****/	
 	foreach ($rows as $row ) {
-		$file = glob( $this->soundir . "/" . $row['pkey'] . '*');
+		$file = glob( $this->soundir . $row['cluster'] . '/' . $row['pkey'] . '*');
 		$filesize = filesize($file[0]);
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
 
@@ -188,7 +210,13 @@ private function showMain() {
 		}
 									
 		if (preg_match('(wav|mp3)',$row['type'])) {
-			echo '<td ><a href="/server-sounds/' . $row['pkey'] . '.' .$row['type'] . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
+/*
+ * HTML5 audio tag doesn't look nice on this page.   
+ * ToDo - implement jPlayer or similar
+ *
+ *			echo '<td><audio controls><source src="/server-moh/moh-' . $pkey . '/' . $row . '"></audio></td>';
+ */
+			echo '<td ><a href="/server-sounds/' . $row['cluster'] . '/' . $row['pkey'] . '.' .$row['type'] . '"><img src="/sark-common/icons/play.png" border=0 title = "Click to play" ></a></td>' . PHP_EOL; 
 		}
 		else {
 			echo '<td title = "Only  files of type \'wav\' and \'mp3\'  may be played">N/A</td>' . PHP_EOL;
@@ -197,7 +225,7 @@ private function showMain() {
 		$get = '?edit=yes&amp;id=' . $row['id']; 
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);		
 
-		echo '<td ><a class="table-action-deletelink" href="/php/sarkgreeting/delete.php?id=' . $row['pkey'] . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;				
+		echo '<td ><a class="table-action-deletelink" href="/php/sarkgreeting/delete.php?id=' . $row['id'] . '&key=' . $row['pkey'] . '&cluster=' . $row['cluster'] . '"><img src="/sark-common/icons/delete.png" border=0 title = "Click to Delete" ></a></td>' . PHP_EOL;				
 
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
@@ -205,32 +233,50 @@ private function showMain() {
 
 	echo '</tbody>' . PHP_EOL;
 	$this->myPanel->endResponsiveTable();
-	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;
-	echo '<input type="hidden" id="upimgclick" name="upimgclick" />'. PHP_EOL;	
+
 	echo '</form>';
 	$this->myPanel->responsiveClose();	
 		
 }
 
-private function saveNew() {
-// save the data away
-	
-	$tuple = array();
+private function showNew() {
+		
 
-		$tuple['pkey'] 	= '0000' . rand(1000, 9999);
+	$buttonArray['cancel'] = true;
+	$this->myPanel->actionBar($buttonArray,"sarkgreetingForm",false,false);
 
-		$ret = $this->helper->createTuple("greeting",$tuple);
-		if ($ret == 'OK') {
-//			$this->helper->commitOn();	
-			$this->message = "Saved new greeting " . $tuple['pkey'] . "!";
-		}
-		else {
-			$this->invalidForm = True;
-			$this->message = "<B>  --  Validation Errors!</B>";	
-			$this->error_hash['exteninsert'] = $ret;	
-		}
-	
+	if ($this->invalidForm) {
+		$this->myPanel->showErrors($this->error_hash);
+	}
+
+	$this->myPanel->Heading($this->head,$this->message);
+	$this->myPanel->responsiveSetup(2);
+
+	$this->myPanel->internalEditBoxStart();
+	$this->myPanel->subjectBar("New Greeting");
+
+	echo '<form id="sarkgreetingForm" action="' . $_SERVER['PHP_SELF'] . '" method="post" enctype="multipart/form-data">';
+
+	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = 'default';
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
+	echo '</div>';	
+
+
+	$endButtonArray['Upload'] = "upimg";
+	$this->myPanel->endBar($endButtonArray);
+	echo '<br/>' . PHP_EOL;
+	echo '<input type="file" id="file" name="file" style="display: none;" />'. PHP_EOL;
+	echo '<input type="hidden" id="upimgclick" name="upimgclick" />'. PHP_EOL;		
+	echo '</form>' . PHP_EOL; // close the form
+	echo '</div>';  
+    $this->myPanel->responsiveClose();	
 }
+
 
 private function showEdit() {
 	
@@ -252,14 +298,9 @@ private function showEdit() {
 	$this->myPanel->subjectBar($res['pkey']);
 	echo '<form id="sarkgreetingForm" action="' . $_SERVER['PHP_SELF'] . '" method="post" enctype="multipart/form-data">' . PHP_EOL;
 	
-	echo '<div class="cluster">';
-	echo '<div class="cluster w3-margin-bottom">';
-    $this->myPanel->aLabelFor('cluster','cluster');
-    echo '</div>';
-	$this->myPanel->selected = $res['cluster'];
-	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
-	echo '</div>';	
+	echo '<div id="clustershow">';
+	$this->myPanel->displayInputFor('cluster','text',$res['cluster'],'cluster');
+	echo '</div>';
 
 	$this->myPanel->displayInputFor('description','text',$res['desc'],'desc');
 	
@@ -278,7 +319,7 @@ private function showEdit() {
 	
 	echo '<input type="hidden" name="id" value="' . $id . '"  />' . PHP_EOL;
 
-
+	$endButtonArray = array();
 	$endButtonArray['cancel'] = true;
 	$endButtonArray['update'] = "endsave";
 

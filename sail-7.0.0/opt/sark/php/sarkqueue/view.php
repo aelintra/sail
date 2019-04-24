@@ -276,8 +276,6 @@ private function showEdit($pkey=false) {
 	
 	echo '<br/><br/>';	
 
-//	$this->myPanel->displayInputFor('preannounce','text',$res['greetnum'],'greetnum');
-
 	echo '<div class="w3-margin-bottom">';	
 	$this->myPanel->aLabelFor("conf");
 	echo '</div>';	

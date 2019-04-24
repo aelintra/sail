@@ -87,13 +87,13 @@ operator TEXT,    					-- tenant sysop
 pickupgroup TEXT,  					-- asterisk pickupgroup number (1-63)
 routeclassoverride TEXT,			-- Holiday scheduler route class override
 routeoverride TEXT,					-- Holiday scheduler route override
-startagent INTEGER DEFAULT 600,		-- default start numbers
-startconfroom INTEGER DEFAULT 900,	
+startagent INTEGER DEFAULT 8001,	-- default start agent numbers
+startconfroom INTEGER DEFAULT 900,	-- not used, customer nominated
 startextension INTEGER DEFAULT 200,	
-startivr INTEGER DEFAULT 750,
+startivr INTEGER DEFAULT 750,		-- not used, customer nominated
 startparks INTEGER DEFAULT 700,
-startqueue INTEGER DEFAULT 800,
-startringgroup INTEGER DEFAULT 500,
+startqueue INTEGER DEFAULT 800,		-- not used, customer nominated
+startringgroup INTEGER DEFAULT 500,	-- not used, customer nominated
 usemohcustom TEXT,					-- use custom moh YES/NO
 z_created datetime,
 z_updated datetime,
@@ -129,7 +129,7 @@ z_updater TEXT DEFAULT 'system'
 CREATE TABLE IF NOT EXISTS Greeting (
 id INTEGER PRIMARY KEY,	
 pkey TEXT,
-cluster TEXT,							-- Tenant	
+cluster TEXT DEFAULT 'default',			-- Tenant	
 desc TEXT, 								-- Description
 type TEXT,								-- MIME type
 z_created datetime,
