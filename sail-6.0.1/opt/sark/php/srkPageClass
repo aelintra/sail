@@ -1642,7 +1642,7 @@ Class page {
 		
 		$lockicon = "locked.png";		
 		if ($lock) {
-			echo '<td class="icons"><img src="' . $this->iconpath . $lockicon . '" alt = "locked"></a></td>';
+			echo '<td class="icons"><img src="' . $this->iconpath . $lockicon . ' alt = "locked"></a></td>';
 		}
 		else {
 			echo '<td class="icons">&nbsp;</td>';

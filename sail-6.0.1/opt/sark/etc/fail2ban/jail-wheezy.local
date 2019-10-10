@@ -1,5 +1,5 @@
 [DEFAULT]
-ignoreip = 127.0.0.1 
+
 banaction = shorewall
 
 [asterisk-iptables]
@@ -10,5 +10,3 @@ logpath  = /var/log/asterisk/messages
 maxretry = 5
 findtime = 600
 bantime = 600
-
-

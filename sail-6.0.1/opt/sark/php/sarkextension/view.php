@@ -52,7 +52,8 @@ Class sarkextension {
 		'Provisioned',
 		'Unprovisioned',
 		'Provisioned batch',		
-		'Unprovisioned batch'
+		'Unprovisioned batch',
+		'MAILBOX'		
 	); 
 
 	protected $adoptOptions = array(
@@ -575,11 +576,24 @@ private function saveNew() {
 			}
 			return;
 			break;
+
 			
+		case 'MAILBOX':
+			$tuple['device'] = 'MAILBOX';
+			$tuple['desc'] = $this->helper->displaykey($tuple['pkey']);;
+			$this->addNewExtension($tuple);
+
+			break;
+						
 		default:
 			break;
 	}
-	if ($usercreate == 'YES') {
+		
+    unset ($this->validator);
+}
+
+private function addNewUser ($tuple) {
+
 		$usertuple = array();
 		$usertuple['pkey'] = $tuple['pkey'];
 		$usertuple['extension'] = $tuple['pkey'];
@@ -593,10 +607,7 @@ private function saveNew() {
 			$this->message = "User Create Error!";	
 			$this->error_hash['userinsert'] = $ret;	
 		}
-	}
 
-			
-    unset ($this->validator);
 }
 
 private function addNewExtension ($tuple) {
@@ -1077,48 +1088,55 @@ private function showEdit() {
 			echo '</div>' . PHP_EOL;
 		}
 		echo '</div>' . PHP_EOL;
-	}	
-	
+	}
 
-	
+
 /*
  *   TAB Asterisk
  */
-	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
-		if ( $_SESSION['user']['pkey'] == 'admin' ) {
-			echo '<div class="w3-margin-bottom">';	
-			$this->myPanel->aLabelFor("sipiaxfriend");
-			echo '</div>';	
-			echo '<div id="asterisk" >';
-			$this->myPanel->displayFile(htmlspecialchars($extension['sipiaxfriend']),"sipiaxfriend");
-			echo '</div>' . PHP_EOL;
+	if ($extension['technology'] == 'SIP') {
+		if ( $_SESSION['user']['pkey'] != 'admin' ) {
+			echo '<div style="display:none">';
 		}
-	}	
-    
-    /*
+		echo '<div class="w3-margin-bottom">';
+		$this->myPanel->aLabelFor("sipiaxfriend");
+		echo '</div>';
+		echo '<div id="asterisk" >';
+		$this->myPanel->displayFile(htmlspecialchars($extension['sipiaxfriend']),"sipiaxfriend");
+		echo '</div>' . PHP_EOL;
+		if ( $_SESSION['user']['pkey'] != 'admin' ) {
+			echo '</div>';
+		}
+	}
+
+/*
  *   TAB Provisioning
  */
-	
+
     if ($extension['technology'] == 'SIP') {
-    	
-		if ( $_SESSION['user']['pkey'] == 'admin' ) {
-			if (isset($extension['macaddr'])) {
-				echo '<div class="w3-margin-bottom">';	
-				$this->myPanel->aLabelFor("Provisioning Rules");
-				echo '</div>';	
-				echo '<div id="provisioning" >';
-				$this->myPanel->displayFile(htmlspecialchars($extension['provision']),"provision");
-				if (!empty($extension['macaddr'])) {
-					echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-					echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
-					echo '</div>' . PHP_EOL;
-					$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
-					$expand_prov = `$cmd`; 
-				}		
+		if ( $_SESSION['user']['pkey'] != 'admin' ) {
+			echo '<div style="display:none">';
+		}
+		if (isset($extension['macaddr'])) {
+			echo '<div class="w3-margin-bottom">';
+			$this->myPanel->aLabelFor("Provisioning Rules");
+			echo '</div>';
+			echo '<div id="provisioning" >';
+			$this->myPanel->displayFile(htmlspecialchars($extension['provision']),"provision");
+			if (!empty($extension['macaddr'])) {
+				echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
+				echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
 				echo '</div>' . PHP_EOL;
+				$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
+				$expand_prov = `$cmd`;
+			}
+			echo '</div>' . PHP_EOL;
+			if ( $_SESSION['user']['pkey'] != 'admin' ) {
+				echo '</div>';
 			}
 		}
 	}
+
 
     echo '<div id="provExpand" style="display:none">';
     $this->myPanel->displayFile(htmlspecialchars($expand_prov),"provisioning",true);

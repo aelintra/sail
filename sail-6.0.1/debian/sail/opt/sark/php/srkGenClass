@@ -688,6 +688,12 @@ try {
  	foreach ($cluster as $row) {
 		$OUT .= "\texten => " . $row['pkey'] . ",1,GoTo(extensions,\${EXTEN},1)\n";
 	}
+	$OUT .= "\n";
+	$OUT .= "\texten => _141XXXXX.,1,NoOp(whcli detected for \${EXTEN})\n";
+	$OUT .= "\texten => _141XXXXX.,n,Set(CALLERID(pres)=prohib)\n";
+	$OUT .= "\texten => _141XXXXX.,n,GoTo(\${EXTEN:3},1)\n";
+	$OUT .= "\n";
+
 	$OUT .= "\texten => _vm.,1,GoTo(extensions,\${EXTEN},1)\n\n";
 
 //

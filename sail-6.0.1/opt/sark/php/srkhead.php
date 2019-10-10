@@ -40,8 +40,6 @@ else {
 <script  src="/sark-common/js/jQuery-autoComplete-master/jquery.auto-complete.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
-
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe.min.js"></script>-->
 <script>
 
 $(document).ready(function() {
@@ -145,28 +143,10 @@ function confirmOK(myMsg) {
 	return window.confirm(myMsg);
 }
 
-/*
 
-document.onkeypress = keyPress;
-
-function keyPress(e){
-  var x = e || window.event;
-  var key = (x.keyCode || x.which);
-  if(key == 13 || key == 3){
-   
-   e.preventDefault();
-// these two will disable "enter"   
-   $(this).blur();
-   return false;
-// This will translate enter to save
-//   document.getElementById("save").click()
-  }
-}
-*/
 $(window).load(function() {
 	$(".loader").fadeOut("slow");
 })
-
 
 
 </script>
@@ -180,7 +160,6 @@ $(window).load(function() {
     margin-top: -50px; /* half height of the spinner gif */
     text-align:center;
     z-index:1234;
-/*    overflow: auto; */
     width: 100px; /* width of the spinner gif */
     height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
 }
@@ -200,32 +179,16 @@ $(window).load(function() {
     width: 100%;
     height: 100%;
 }
-    .longdatabox {
-/*      
-    margin: auto;
-    margin-right: 2em;
-    font-size: 1em;
-*/
+.longdatabox {
     width: 100%;
-    height: 26em;
+    height: 30em;
     resize: none;
-//    border-style: none;
-    
-/*
-    border-width: 0;
- 
-    border-style: solid;
-    border-width: 2px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-*/
-    }
+}
 
-    .intBoxBackground {
+.intBoxBackground {
       background-color: WhiteSmoke;
-    }
-    </style> 
+}
+</style> 
 
 <?php
 	$url = explode('/', $_SERVER['SCRIPT_URL']);
