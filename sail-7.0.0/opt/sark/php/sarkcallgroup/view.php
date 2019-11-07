@@ -223,7 +223,7 @@ private function showNew() {
 private function saveNew() {
 // save the data away
 // 
-//	$_POST['pkey'] = $this->helper->getNextFreeKey('speed',$_POST['cluster'],'startringgroup');
+
 
 
 	$this->validator = new FormValidator();
@@ -242,9 +242,14 @@ private function saveNew() {
 		$resid = $sql->fetch();
 		$sql=NULL;
 		
-//		if ($_POST['cluster'] != 'default') {
-			$_POST['pkey'] = $resid['id'] . $_POST['pkey'];
-//		}
+		$_POST['pkey'] = $resid['id'] . $_POST['pkey'];
+
+    	$retc = $this->helper->checkXref($_POST['pkey'],$_POST['cluster']);
+	    if ($retc) {
+    		$this->invalidForm = True;
+    		$this->error_hash['insert'] = "Duplicate found in table $retc - choose a different extension number";
+    		return;    	
+    	}
 
 /*
  * 	call the tuple builder to create a table row array 

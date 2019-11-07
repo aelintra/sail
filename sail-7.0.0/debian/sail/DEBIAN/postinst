@@ -83,6 +83,11 @@ if [  "$?" -ne "0" ] ; then
         echo "enable=no" > /etc/asterisk/sark_cdr.conf
 fi
 
+grep -q '#include sark_moh.conf' /etc/asterisk/musiconhold.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_cdr.conf" >> /etc/asterisk/musiconhold.conf
+fi
+
 if [ -e /etc/asterisk/meetme.conf ] ; then
 	grep -q '#include sark_meetme.conf' /etc/asterisk/meetme.conf
 	if [  "$?" -ne "0" ] ; then
@@ -251,8 +256,8 @@ sed -i 's/Listen 443/Listen [::]:443/' /etc/apache2/ports.conf
 
 
 # F2b setup
-[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
-[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+ln -s /opt/sark/etc/fail2ban/jail-stretch.local /etc/fail2ban/jail.local
+ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 
 # apache setup
 ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf

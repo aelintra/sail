@@ -6,7 +6,7 @@
 //  	console.log( $("#keyboardDial").val() );
 		$(".myspinner").show();
   		var number = $("#keyboardDial").val();
-  		var pkey = $("#pkey").val();
+  		var pkey = $("#sessext").val();
   		$.post('../dialler.php', { number:number, pkey:pkey },
 			function (response) {
 				var obj = JSON.parse(response);
@@ -17,7 +17,8 @@
 		document.getElementById('dial01').style.display='none';		
   	});
 
-
+	$('#clustershow :input').prop('readonly', true);
+	$('#clustershow :input').css('background-color','#f1f1f1');
 
 
 	$("#sarkphoneForm").validate ( {

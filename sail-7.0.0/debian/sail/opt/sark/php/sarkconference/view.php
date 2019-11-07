@@ -135,7 +135,7 @@ private function showMain() {
 		 
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL; 
 		echo '<td class="read_only">' . $row['cluster'] . '</td>' . PHP_EOL;
-		echo '<input type="hidden" name="pkey" id="pkey" value="' . $res['pkey'] . '"  />' . PHP_EOL;
+		echo '<input type="hidden" name="pkey" id="pkey" value="' . $row['pkey'] . '"  />' . PHP_EOL;
 //		if ($row['cluster'] != 'default') {
 			$shortkey = substr($row['pkey'],2);
 /*
@@ -191,19 +191,6 @@ $buttonArray['cancel'] = true;
 
 	$this->myPanel->internalEditBoxStart();
 
-// Get next key
-/*
-	$sql = $this->dbh->prepare("SELECT pkey FROM meetme ORDER BY pkey COLLATE NOCASE DESC LIMIT 1");
-	$sql->execute();
-	$res = $sql->fetch();	
-	if (isset($res['pkey'])) {
-		$newroom = $res['pkey'] + 1;
-	}
-	else {
-		$res = $this->dbh->query("SELECT CONFSTART FROM globals")->fetch(PDO::FETCH_ASSOC);
-		$newroom = $res['CONFSTART'];	
-	}
-*/
 	$this->myPanel->displayInputFor('confpkey','number',null,'pkey');
 
 	echo '<div class="cluster">';
@@ -215,14 +202,7 @@ $buttonArray['cancel'] = true;
 	$this->myPanel->aHelpBoxFor('cluster');
 	echo '</div>';  
 
-
-//	$this->myPanel->displayInputFor('confpkey','number',null,'pkey');
-//	$this->myPanel->aLabelFor('confpkey');
-//	echo '<input type="text" name="pkey" size="6" id="pkey" size="4" placeholder="Number" />' . PHP_EOL;
-
 	$this->myPanel->displayInputFor('description','text');
-//	$this->myPanel->aLabelFor('description');
-//	echo '<input type="text" name="description" id="description" size="30"  />' . PHP_EOL;
 
 	echo '</div>';	
 
@@ -238,27 +218,41 @@ $buttonArray['cancel'] = true;
 private function saveNew() {
 // save the data away
 	
-
+	$this->validator = new FormValidator();
+    $this->validator->addValidation("pkey","req","Please supply the Room number"); 
+    $this->validator->addValidation("pkey","num","Room number");    
+    $this->validator->addValidation("pkey","maxlen=4","Room number must be 3 or 4 digits");     
+	$this->validator->addValidation("pkey","minlen=3","Room number must be 3 or 4 digits");     
+ 
+    //Now, validate the form
+    if (!$this->validator->ValidateForm()) {
+		$this->invalidForm = True;
+		$this->error_hash = $this->validator->GetErrors();
+		$this->message = "<B>  --  Validation Errors!</B>";	
+		return;
+	}   
+    
 /*
  * 	call the tuple builder to create a table row array 
  */  
-	// Get next key
-	$sql = $this->dbh->prepare("SELECT pkey FROM meetme ORDER BY pkey COLLATE NOCASE DESC LIMIT 1");
-	$sql->execute();
-	$res = $sql->fetch();
 
-//	$_POST['pkey'] = $this->helper->getNextFreeKey('meetme',$_POST['cluster'],'startconfroom');
 	$tuple['pkey'] = $_POST['pkey'];
-	/*
+/*
  *	prepend the cluster id to the key
  */
     $sql = $this->dbh->prepare("SELECT id FROM cluster WHERE pkey = ?");
 	$sql->execute(array($_POST['cluster']));
 	$resid = $sql->fetch();
 	$sql=NULL;
-//	if ($_POST['cluster'] != 'default') {
-		$_POST['pkey'] = $resid['id'] . $_POST['pkey'];
-//	}
+
+	$_POST['pkey'] = $resid['id'] . $_POST['pkey'];
+    $retc = $this->helper->checkXref($_POST['pkey'],$_POST['cluster']);
+	if ($retc) {
+    	$this->invalidForm = True;
+    	$this->error_hash['insert'] = "Duplicate found in table $retc - choose a different extension number";
+    	return;    	
+    }
+	
 	$this->helper->buildTupleArray($_POST,$tuple);	
 			  
 	$ret = $this->helper->createTuple("meetme",$tuple);
@@ -293,11 +287,11 @@ private function showEdit() {
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
 	}
-	$this->myPanel->Heading($this->head,$this->message);
+	$this->myPanel->Heading($this->head,$this->message );
 	$this->myPanel->responsiveSetup(2);
 
 	$this->myPanel->internalEditBoxStart();
-	$this->myPanel->subjectBar("Update Conference " . $shortkey);
+	$this->myPanel->subjectBar("Edit Conference " . $shortkey);
 
 	echo '<form id="sarkconferenceForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 

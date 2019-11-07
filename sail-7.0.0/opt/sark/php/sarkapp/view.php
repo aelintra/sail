@@ -178,6 +178,15 @@ private function showEdit() {
 
     $this->myPanel->internalEditBoxStart();
 	$this->myPanel->subjectBar("Settings - App " . $pkey);
+	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $app['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
+	echo '</div>';
+	
 	$this->myPanel->displayInputFor('context','text',$pkey);
 	$this->myPanel->displayInputFor('description','text',$app['desc'],"desc");
 	$this->myPanel->radioSlide('span',$app['span'],array('Internal','External','Both','Neither'));		
@@ -301,6 +310,16 @@ private function showNew() {
 	echo '<form id="sarkappForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">' . PHP_EOL;	
 
    	$this->myPanel->displayInputFor('context','text',$pkey);
+   	
+   	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $app['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster');
+	echo '</div>';
+   
    	$this->myPanel->displayInputFor('description','text',$app['desc'],"desc");
 	$this->myPanel->radioSlide('span',$app['span'],array('Internal','External','Both','Neither'));		
 //    $this->myPanel->displayBooleanFor('striptags','YES');

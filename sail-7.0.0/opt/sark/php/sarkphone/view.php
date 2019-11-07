@@ -23,7 +23,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkAmiHelperClass";
 Class sarkphone {
 	
 	protected $message; 
-	protected $head = "Ext";
+	protected $head = "User";
 	protected $myPanel;
 	protected $dbh;
 	protected $helper;
@@ -33,7 +33,6 @@ Class sarkphone {
 	protected $error_hash = array();
 	protected $params = array('server' => '127.0.0.1', 'port' => '5038');
 	protected $astrunning=false;
-	protected $pkey;
 	protected $selection;
 	protected $myBooleans = array(
 		'celltwin'
@@ -52,30 +51,26 @@ public function showForm() {
 
 
 	$this->myPanel->pagename = 'Phone';
-	$user = $_SESSION['user']['pkey'];
-	$res = $this->dbh->query("SELECT extension,selection FROM user WHERE pkey = '" . $user . "'")->fetch(PDO::FETCH_ASSOC);
+	$res = $this->dbh->query("SELECT extension,selection FROM user WHERE pkey = '" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
 	
 	if (isset($res['extension']) && $res['extension'] != 'None') {
-		$this->pkey = $res['extension'];
 		$this->selection = $res['selection'];
 	}
 	else {		
 		$this->myPanel->msg .= "No phone extension associated with user " . $_SESSION['user']['pkey'] . " - Contact your Administrator" . PHP_EOL;
-		$this->myPanel->Heading();
+		$this->myPanel->Heading("",$this->msg);
 		exit;
 	}
 	
 	
 		
 	if (isset($_GET['delete'])) {
-		if (isset($_GET['pkey'])) {
-			$id = $_GET['pkey'];
-			$this->helper->request_syscmd ( "rm $id.*" );			
-			$this->helper->logit("I'm deleting file $id ",3 );
-			$this->message = " - Voicemail successfully deleted!";
-			if (count(glob("/var/spool/asterisk/voicemail/default/" . $this->pkey . "/INBOX/*")) === 0) {
-				$this->helper->request_syscmd ( "asterisk -rx 'sip notify clear-mwi " . $this-pkey . "'" );
-			}
+		$id = $_SESSION['user']['pkey'];
+		$this->helper->request_syscmd ( "rm $id.*" );			
+		$this->helper->logit("I'm deleting file $id ",3 );
+		$this->message = " - Voicemail successfully deleted!";
+		if (count(glob("/var/spool/asterisk/voicemail/default/" . $_SESSION['user']['pkey'] . "/INBOX/*")) === 0) {
+			$this->helper->request_syscmd ( "asterisk -rx 'sip notify clear-mwi " . $_SESSION['user']['pkey'] . "'" );
 		}
 	}
 	
@@ -97,26 +92,16 @@ public function showForm() {
 
 private function showEdit() {
 	
-	$extension = $this->dbh->query("SELECT * FROM IPphone WHERE pkey = '" . $this->pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	$extension = $this->dbh->query("SELECT * FROM IPphone WHERE pkey = '" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
 	
 	if (isset($this->message)) {
 		$this->myPanel->msg .= $this->message;
 	}	
 		
-	if ($this->astrunning) {
-//			 $amiHelper = new amiHelper();
-//             $amiHelper->get_database($this->pkey,$cfim,$cfbs,$ringdelay,$twin); 
-	}
-	else {
+	if (!$this->astrunning) {
 		$this->myPanel->msg .= "  (No Asterisk running)";
 	}
 
-    $extlist=array();
-	array_push($extlist,"None");	
-	$res = $this->helper->getTable("ipphone",null,false);
-	foreach ($res as $row) {
-		array_push($extlist,$row['pkey']);
-	}
 	$buttonArray=array();
 	$buttonArray['dialbutton'] = True;
 	$this->myPanel->actionBar($buttonArray,"sarkphoneForm",false,false,true);
@@ -124,7 +109,7 @@ private function showEdit() {
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
 	}
-	$this->myPanel->Heading($this->head . " " . $this->pkey, $this->message);
+	$this->myPanel->Heading($this->head . " " . $extension['pkey'], $this->message);
 
 	$this->myPanel->responsiveSetup(2);
 
@@ -145,14 +130,17 @@ private function showEdit() {
 	echo '</div>';
 	echo '</div>';
 	echo '</div>';
-
-    $this->myPanel->internalEditBoxStart();
-
+	
+	$this->myPanel->internalEditBoxStart();
+/*	
+	echo '<div id="clustershow">';
+	$this->myPanel->displayInputFor('cluster','text',$extension['cluster'],'cluster');
+	echo '</div>'; 
+*/
 	$this->myPanel->displayInputFor('cellphone','tel',$extension['cellphone']);
-
 	if ( $this->astrunning ) {
 		$amiHelper = new amiHelper();
-		$amiHelper->get_database($this->pkey,$cfim,$cfbs,$ringdelay,$celltwin);
+		$amiHelper->get_database($_SESSION['user']['pkey'],$cfim,$cfbs,$ringdelay,$celltwin);
 		if ( $extension['cellphone'] ) {
 			if ($celltwin) {
     			$this->myPanel->displayBooleanFor('celltwin','ON');
@@ -214,11 +202,11 @@ private function showEdit() {
 
 
    	$rets=$this->cdr->prepare("select calldate,src,dst,billsec from cdr where dst <> 's' AND src = ? ORDER BY calldate DESC LIMIT 40");
-    $rets->execute(array($this->pkey));
+    $rets->execute(array($_SESSION['user']['pkey']));
     $outbound = $rets->fetchAll();
 
     $rets=$this->cdr->prepare("select calldate,src,dst,billsec from cdr where dst <> 's' AND dst = ? ORDER BY calldate DESC LIMIT 40");
-    $rets->execute(array($this->pkey));
+    $rets->execute(array($_SESSION['user']['pkey']));
     $inbound = $rets->fetchAll();
 
    	echo '<div class="w3-margin-top w3-margin-bottom">';
@@ -303,7 +291,7 @@ private function showEdit() {
  */ 
    
     echo '</div>' . PHP_EOL;			
-	echo '<input type="hidden" id="pkey" name="pkey" value="' . $this->pkey . '" />' . PHP_EOL;	
+	echo '<input type="hidden" id="pkey" name="pkey" value="' . $_SESSION['user']['pkey'] . '" />' . PHP_EOL;	
 	echo '</div>';
  	echo '</form>' . PHP_EOL; // close the form 
     $this->myPanel->responsiveClose();
@@ -317,7 +305,7 @@ private function saveEdit() {
 
 	$this->myPanel->xlateBooleans($this->myBooleans);
 
-	$extension = $this->dbh->query("SELECT * FROM IPphone WHERE pkey = '" . $this->pkey . "'")->fetch(PDO::FETCH_ASSOC);
+	$extension = $this->dbh->query("SELECT * FROM IPphone WHERE pkey = '" . $_SESSION['user']['pkey'] . "'")->fetch(PDO::FETCH_ASSOC);
 		
 	$this->validator = new FormValidator();
 	$this->validator->addValidation("cellphone","num","cellphone number must be numeric"); 
@@ -354,19 +342,19 @@ private function saveEdit() {
 		}
 		else {
 			$tuple['celltwin'] = False;
-		}	
-			
-		$tuple['pkey'] = $this->pkey;
+		}
+	
+		$tuple['pkey'] = $_SESSION['user']['pkey'];
 /*	
  * update the asterisk internal database (callforwards and ringdelay)
  */ 
 		
 		if ($this->astrunning) {
 			$amiHelper = new amiHelper();
-			$amiHelper->put_database($this->pkey);                      
+			$amiHelper->put_database($_SESSION['user']['pkey']);                      
         }
  		
-		$ret = $this->helper->setTuple("ipphone",$tuple,$this->pkey);
+		$ret = $this->helper->setTuple("ipphone",$tuple,$_SESSION['user']['pkey']);
 		if ($ret == 'OK') {
 			$this->message = "Updated!";
 		}
@@ -391,7 +379,7 @@ private function genMail($mailbox) {
  * gen a mailbox table
  */ 	
 	$maildir = array();
-	$path = "/var/spool/asterisk/voicemail/default/". $this->pkey . "/$mailbox/";
+	$path = "/var/spool/asterisk/voicemail/default/". $_SESSION['user']['pkey'] . "/$mailbox/";
 	
 	if (file_exists($path)) {
 		if ($handle = opendir($path)) {
@@ -429,7 +417,7 @@ private function genMail($mailbox) {
 		$dt = new DateTime("@$epoch");
 		echo '<td  class="icons">' . $dt->format('d/m/y  H:i:s') . '</td>' . PHP_EOL;
 		echo '<td  class="w3-hide-medium w3-hide-small"><a href="/php/downloadg.php?dfile=' . $fullpath . '"><i class="fas fa-download"></i></a></td>' . PHP_EOL;									
-		echo '<td  class="icons"><a href="/server-vmail/default/' . $this->pkey . "/$mailbox/" . $file . '"><i class="fas fa-play"></i></a></td>' . PHP_EOL; 
+		echo '<td  class="icons"><a href="/server-vmail/default/' . $_SESSION['user']['pkey'] . "/$mailbox/" . $file . '"><i class="fas fa-play"></i></a></td>' . PHP_EOL; 
 		$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$deletepath);
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;

@@ -111,8 +111,9 @@ private function showMain() {
 	echo '<tr>' . PHP_EOL;
 
 	$this->myPanel->aHeaderFor('cluster',false,'cluster w3-hide-small w3-hide-medium');
-	$this->myPanel->aHeaderFor('queuename');	
-	$this->myPanel->aHeaderFor('qdd',false,'w3-hide-small');
+	$this->myPanel->aHeaderFor('qdd');
+	$this->myPanel->aHeaderFor('queuename');
+	$this->myPanel->aHeaderFor('description',false,'w3-hide-small w3-hide-medium');	
 	$this->myPanel->aHeaderFor('queueoptions',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('devicerec',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('preannounce',false,'w3-hide-small');
@@ -128,11 +129,11 @@ private function showMain() {
 	$rows = $this->helper->getTable("queue");
 	foreach ($rows as $row ) { 
 		echo '<tr id="' . $row['pkey'] . '">'. PHP_EOL;
-		echo '<input type="hidden" name="id" value="' . $row['id'] . '"  />' . PHP_EOL;
+		echo '<input type="hidden" name="id" value="' . $row['id'] . '"  />' . PHP_EOL;		
 		echo '<td class="w3-hide-small w3-hide-medium">' . $row['cluster']  . '</td>' . PHP_EOL;
-		echo '<td >' . $row['pkey'] . '</td>' . PHP_EOL;
-		echo '<td class="w3-hide-small ">' . $row['directdial']  . '</td>' . PHP_EOL;
-						 
+		echo '<td >' . substr($row['pkey'],2) . '</td>' . PHP_EOL;
+		echo '<td>' . $row['name']  . '</td>' . PHP_EOL;	
+		echo '<td class="w3-hide-small w3-hide-medium">' . $row['description']  . '</td>' . PHP_EOL;					 
 		echo '<td class="w3-hide-small ">' . $row['options']  . '</td>' . PHP_EOL;	
 		echo '<td class="w3-hide-small ">' . $row['devicerec']  . '</td>' . PHP_EOL;	
 		echo '<td class="w3-hide-small ">' . $row['greetnum']  . '</td>' . PHP_EOL;
@@ -175,9 +176,10 @@ private function showNew() {
 	$this->myPanel->aHelpBoxFor('cluster');
 	echo '</div>';	
 
-	$this->myPanel->displayInputFor('queuename','text',null,'pkey');
-	$this->myPanel->displayInputFor('qdd','text',null,'directdial');
-	
+	$this->myPanel->displayInputFor('qdd','text',null,'pkey');
+	$this->myPanel->displayInputFor('queuename','text',null,'name');
+	$this->myPanel->displayInputFor('description','text');
+		
 	echo '</div>';
 	$endButtonArray['cancel'] = true;
 	$endButtonArray['save'] = "endsave";
@@ -190,17 +192,32 @@ private function showNew() {
 
 private function saveNew() {
 // save the data away
-	
+
 	$tuple = array();
 
-//	$_POST['directdial'] = $this->helper->getNextFreeQIvr('queue',$_POST['cluster'],'startqueue');
 	$this->validator = new FormValidator();
-    $this->validator->addValidation("pkey","req","Please fill in Queue name");
-    
+    $this->validator->addValidation("name","req","Please fill in Queue name");
+    $this->validator->addValidation("pkey","req","Please supply Queue direct dial"); 
+    $this->validator->addValidation("pkey","num","Queue direct dial must be numeric");    
+    $this->validator->addValidation("pkey","maxlen=4","Queue direct dial must be 3 or 4 digits");     
+	$this->validator->addValidation("pkey","minlen=3","Queue direct dial must be 3 or 4 digits");     
  
     //Now, validate the form
     if ($this->validator->ValidateForm()) {
 
+// create full pkey
+    	$res = $this->dbh->query("SELECT id FROM cluster WHERE pkey = '" . $_POST['cluster'] . "'")->fetch(PDO::FETCH_ASSOC);
+		$_POST['pkey'] = $res['id'] . $_POST['pkey']; 
+		$res=NULL;
+		
+// check for dups
+	
+    $retc = $this->helper->checkXref($_POST['pkey'],$_POST['cluster']);
+    if ($retc) {
+    	$this->invalidForm = True;
+    	$this->error_hash['extinsert'] = "Duplicate found in table $retc - choose a different extension number";
+    	return;    	
+    }
 /*
  * 	call the tuple builder to create a table row array 
  */  
@@ -257,15 +274,20 @@ private function showEdit($pkey=false) {
 	$this->myPanel->responsiveSetup(2);
 
 	$this->myPanel->internalEditBoxStart();
-	$this->myPanel->subjectBar('Queue' . " " . $pkey);
+	$this->myPanel->subjectBar('Edit Queue ' . substr($res['pkey'],2));
 
 	echo '<form id="sarkqueueForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 
 	echo '<div id="clustershow">';
 	$this->myPanel->displayInputFor('cluster','text',$res['cluster'],'cluster');
 	echo '</div>';
-	$this->myPanel->displayInputFor('queuename','text',$res['pkey'],'pkey');
-	$this->myPanel->displayInputFor('qdd','text',$res['directdial'],'directdial');
+	$this->myPanel->displayInputFor('queuename','text',$res['name'],'name');
+/*	
+	echo '<div id="pkeyshow">';
+	$this->myPanel->displayInputFor('qdd','text',substr($res['pkey'],2),'pkey');
+	echo '</div>';
+*/
+	$this->myPanel->displayInputFor('description','text',$res['description']);
 	$this->myPanel->displayInputFor('queueoptions','text',$res['options'],'options');
 	$this->myPanel->radioSlide('devicerec',$res['devicerec'],array('OTR','OTRR','Inbound'));
 

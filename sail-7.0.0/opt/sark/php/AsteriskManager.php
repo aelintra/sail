@@ -338,7 +338,7 @@ class ami
         
         $command = "Action: Originate\r\nChannel: $channel\r\n"
             ."Context: $context\r\nExten: $extension\r\nPriority: $priority\r\n"
-            ."Callerid: $cid\r\nTimeout: $timeout\r\n";
+            ."CallerID: $cid\r\nTimeout: $timeout\r\n";
 
         if (count($variables) > 0) {
             $chunked_vars = array();
@@ -352,7 +352,7 @@ class ami
         if ($action_id) {
             $command .= "ActionID: $action_id\r\n";
         }
-//        syslog(LOG_WARNING, "command=" . $command);
+        syslog(LOG_WARNING, "AMIcommand IS : " . $command);
         $this->_sendCommand($command."\r\n");
         return true;
     }

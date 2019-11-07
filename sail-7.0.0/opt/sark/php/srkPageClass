@@ -1492,7 +1492,15 @@ Class page {
 	}
 	
 	public function sysSelect($name = '', $none=false, $short=false, $trunk=false, $cluster='default' ) {
-		/*** display the special "endpoint" selection ***/
+/*** display the special "endpoint" selection 
+
+	name -> name/id of the html tag
+	none -> false/true - include a selection of none 
+	short -> list does not include conference rooms, ivr's, queues or apps
+	trunk -> don't include trunks
+	cluster -> cluster name
+
+***/
 		
 		$helper = new helper;
         $dbh = DB::getInstance();
@@ -1511,10 +1519,15 @@ Class page {
 		}
 		$html .= '</optgroup>' . PHP_EOL;
 		
-		$ipphone = $helper->getTable("ipphone", "SELECT pkey from ipphone WHERE cluster='" . $cluster . "'");		
+		$ipphone = $helper->getTable("ipphone", "SELECT pkey,cluster from ipphone WHERE cluster='" . $cluster . "'");		
 		$html .= '<optgroup label="EXTENSIONS">' . PHP_EOL; 		
 		foreach ($ipphone as $ipphone => $value)  {
-            $shortkey = substr($value['pkey'],2); 
+			if ($value['cluster'] == 'default') {
+				$shortkey = $value['pkey']; 	
+			}
+			else {
+            	$shortkey = substr($value['pkey'],2); 
+            }
 			$html = $this->genHtml( $shortkey,$html);
 		}
 		$html .= '</optgroup>' . PHP_EOL;

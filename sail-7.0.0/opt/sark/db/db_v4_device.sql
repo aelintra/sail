@@ -331,6 +331,8 @@ LDAP_PKEY_PATH=""
 
 # ID, password for SIP authentication
 PHONE_NUMBER_1="$ext"
+DISPLAY_NAME_1="$desc"
+IDLE_DISPLAY_TYPE="3"
 SIP_AUTHID_1="$ext"
 SIP_PASS_1="$password"','type=peer
 defaultuser=$desc

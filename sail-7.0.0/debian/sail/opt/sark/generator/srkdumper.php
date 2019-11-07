@@ -76,7 +76,15 @@ if (isset ($argv[1])) {
  * get a column list for each table
  */		
 	foreach ($tables as $table) {
-
+// ignore sqlite_sequence
+		if ( $table['name'] == 'sqlite_sequence') {
+			continue;
+		} 
+//	mcast and threat are gone in V7 - ignore them if this is a V3 upgrade
+		if ( $table['name'] == 'mcast' || $table['name'] == 'threat') {
+			continue;
+		} 
+		
 //	undolog and tt_help_user are gone in V4 - ignore them if this is a V3 upgrade
 		if ( $table['name'] == 'undolog' || $table['name'] == 'tt_help_user') {
 			continue;

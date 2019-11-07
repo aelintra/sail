@@ -25,21 +25,23 @@
     
     if (isset($_POST['pkey'])) {
         $pkey = $_POST['pkey']; 
-        syslog(LOG_WARNING, "POST " . $_POST['pkey']);
+        syslog(LOG_WARNING, "PKEY IS " . $_POST['pkey']);
     }
     else {
         $msg = 'No pkey';
+        syslog(LOG_WARNING, "NO PKEY");
     }   
     
     if (isset($_POST['number'])) {
         $extension = $_POST['number'];
-       syslog(LOG_WARNING, "POST " . $_POST['number']);
+       	syslog(LOG_WARNING, "POST NUMBER IS " . $_POST['number']);
     }
     else {
-        $msg = 'No number';
+    	$msg = 'No pkey';
+        syslog(LOG_WARNING, "NO NUMBER");
     }
 
-    $querystring = "SELECT pkey,callbackto,cellphone from ipphone where pkey=?";   
+    $querystring = "SELECT pkey,callbackto,cellphone,cluster from ipphone where pkey=?";   
     $sql = $dbh->prepare ($querystring);
     $sql->execute(array($pkey));
     $res = $sql->fetch();
@@ -61,9 +63,9 @@
                 $amiloginret = $ami->login('sark','mysark');
                 syslog(LOG_WARNING, "amilogin=" . $amiloginret);
                 $amisiprets = $ami->originateCall($extension, 
-                           'Local/' . $pkey . '@internal',
-                           'internal', 
-                           'click2dial');       
+                           'Local/' . $pkey . '@' . $res['cluster'] . 'COS',
+                           $res['cluster'] . 'COS', 
+                           $pkey);       
                 $amirets = $ami->logout();
                 syslog(LOG_WARNING, "amiret=" . $amirets);
                 $msg='Good Connect';

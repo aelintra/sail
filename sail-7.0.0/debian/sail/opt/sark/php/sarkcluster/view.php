@@ -290,7 +290,7 @@ private function showEdit($pkey=false) {
 	$res = $this->dbh->query("SELECT * FROM cluster WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 	
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkclusterForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkclusterForm",false,false,false);
 	
 	$this->myPanel->showErrors($this->error_hash);
 	
@@ -310,7 +310,7 @@ private function showEdit($pkey=false) {
 	$this->myPanel->aLabelFor('clustersysop');
 	echo '</div>'; 
 	$this->myPanel->selected = $res['operator'];
-	$this->myPanel->sysSelect('operator',false,true,true,$res['pkey']) . PHP_EOL;
+	$this->myPanel->sysSelect('operator',false,true,false,$res['pkey']) . PHP_EOL;
 	$this->myPanel->aHelpBoxFor('clustersysop');
 
 //	$this->myPanel->displayInputFor('include','text',$res['include']);

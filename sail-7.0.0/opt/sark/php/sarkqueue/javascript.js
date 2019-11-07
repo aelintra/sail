@@ -1,7 +1,11 @@
 
   $(document).ready(function() {
-  $('#clustershow :input').prop('readonly', true);
-  $('#clustershow :input').css('background-color','#f1f1f1');
+  	$('#clustershow :input').prop('readonly', true);
+  	$('#clustershow :input').css('background-color','#f1f1f1');
+  
+  	$('#pkeyshow :input').prop('readonly', true);
+	$('#pkeyshow :input').css('background-color','#f1f1f1');
+
   
 	$.validator.addMethod("alpha",function(value,element) {
 		return this.optional(element) || /^[A-Za-z0-9_-]{2,20}$/i.test(value); 

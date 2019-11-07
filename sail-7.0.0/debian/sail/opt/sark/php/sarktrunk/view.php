@@ -509,53 +509,6 @@ private function showEdit() {
 
 	echo '<form id="sarktrunkForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 
-/*	
-	echo '<br/>' . PHP_EOL;
-	echo '<div class="titlebar">' . PHP_EOL; 			
-	echo '<div class="buttons">';
-	$this->myPanel->Button("cancel");
-	$ret = $this->helper->getLc();	
-	if (!$ret) {	
-		$this->myPanel->Button("new");
-	}	
-	$this->myPanel->override="update";
-	$this->myPanel->Button("save");
-	$this->myPanel->commitButton();
-	$this->myPanel->Button("delete");
-	echo '</div>';	
-	
-	$this->myPanel->Heading();
-	if (isset($this->message)) {	
-		foreach($this->error_hash as $inpname => $inp_err) {
-			echo "<p>$inpname : $inp_err</p>\n";
-		}       
-	}
-	echo '</div>';
-
-	echo '<div class="globalwrapper">' . PHP_EOL;
-
-	
-	if ($tuple['technology'] == 'IAX2') {
-		$this->printEditNotes($tuple['peername'],$tuple,$iax_peers);
-	}
-	else {
-		$this->printEditNotes($tuple['peername'],$tuple,$sip_peers);
-	}
-	echo '<div class="exttabedit">';
-		
-	echo '<div id="pagetabs">' . PHP_EOL;
-	echo '<ul>' . PHP_EOL;
-	echo '<li><a href="#general">General</a></li>' . PHP_EOL;
-	echo '<li><a href="#line" >Line</a></li>' . PHP_EOL;
-	if ($tuple['technology'] == 'SIP' ||  $tuple['technology'] == 'IAX2' ) {
-		echo  '<li><a href="#peer">Peer</a></li>' . PHP_EOL;
-	}
-	if ($tuple['technology'] == 'IAX2' ) {
-		echo  '<li><a href="#user">User</a></li>' . PHP_EOL;
-	}
-    echo '</ul>' . PHP_EOL;	
-*/
-
     $this->myPanel->displayBooleanFor('active',$tuple['active']);
 
     if ($tuple['technology'] == 'SIP' ||  $tuple['technology'] == 'IAX2') {

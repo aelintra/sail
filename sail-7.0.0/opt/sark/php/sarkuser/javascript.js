@@ -1,30 +1,8 @@
 
   $(document).ready(function() {
-/*	  
-	$.validator.addMethod("alpha",function(value,element) {
-		return this.optional(element) || /^[A-Za-z0-9_-]{2,20}$/i.test(value); 
-	},"field can only contain alphanumerics and no spaces");
-	  
-	$("#sarkuserForm").validate ( {
-	   rules: {
-			pkey: {
-				alpha: true,
-				minlength: 4,
-//				remote: "/php/user/check.php"
-			},
-			password: {
-				alpha: true,
-				minlength: 8
-			},			   
-	   },
-	   messages: {
-		   	pkey: {
-				minlength: jQuery.format("Enter at least {0} characters"),
-				remote: jQuery.format("{0} is already in use")
-			}
-	   }					
-	});  
-*/
+
+	$('#clustershow :input').prop('readonly', true);
+	$('#clustershow :input').css('background-color','#f1f1f1');
 
 	$('#usertable').dataTable ( {
 //		"sScrollY": ($(window).height() - 300),

@@ -157,7 +157,7 @@ public function setRouteClass($var) {
 # 0  => value is "None" for an IVR menu selection
 # 1  => value is a dialable internal number (extension or callgroup)
 # 2  => value is an IVR name
-# 3  => value is the default IVR
+# 3  => value is the default IVR (No longer used)
 # 4  => value is a queue name
 # 5  => value is DISA
 # 6  => value is CALLBACK
@@ -472,54 +472,46 @@ public function getNextFreeExt() {
 	
 }
 
-public function getNextFreeKey($table,$cluster,$startkey) {
+public function checkXref($key,$cluster=false) {
+
 /*
- *  find the next unused ext#
+ *  find key clashes
+ *	Checks a full key or a shortkey (no cluster ID prefix) with a cluster name qualifier
  */	
 	
 	$dbh = DB::getInstance();
-
-	$sql = "SELECT $startkey,id FROM cluster where pkey = '" . $cluster . "'";
+	
+	$sql = "SELECT * FROM master_xref where pkey = '$key'";
+	if ($cluster) {
+		$sql .= " AND cluster = '$cluster'";
+	}
+	
 	$res = $dbh->query($sql)->fetch(PDO::FETCH_ASSOC);
-	$startkey = $res[$startkey];
-	$cid = $res['id'];
+	if (empty($res)) {
+		$res = NULL;
+		return 0;
+	}	
+	$foundKey = $res['pkey'];
+	$relation = $res['relation'];
 	$res = NULL;
-	$sql = $dbh->prepare("SELECT pkey FROM $table WHERE cluster = '" . $cluster . "' ORDER BY pkey COLLATE NOCASE DESC LIMIT 1");
-	$sql->execute();
-	$res = $sql->fetch();	
-	if (!empty($res['pkey'])) {
-		return $res['pkey'] + 1;
-	}
-	
-//	if ($cluster == 'default') {
-//		return $startkey;
-//	}
-	return $cid . $startkey;
-}
 
-public function getNextFreeQIvr($table,$cluster,$startkey) {
-/*
- *  find the next unused ext#
- */	
-	
-	$dbh = DB::getInstance();
-
-	$sql = "SELECT $startkey,id FROM cluster where pkey = '" . $cluster . "'";
-	$res = $dbh->query($sql)->fetch(PDO::FETCH_ASSOC);
-	$spkey = $res[$startkey];
-	$cid = $res['id'];
-	$sql = $dbh->prepare("SELECT directdial FROM $table WHERE directdial LIKE '" . $cid . "%' ORDER BY directdial COLLATE NOCASE DESC LIMIT 1");
-	$sql->execute();
-	$res = $sql->fetch();	
-	if (isset($res['directdial'])) {
-		$rkey = $res['directdial'];
-		return $rkey + 1;
+	switch ($relation) {
+		case "IPphone":
+			$relation = "Extension";
+			break;
+		case "speed";
+			$relation = "Ring Group";
+			break;
+		case "ivrmenu":
+			$relation = "IVR";
+			break;
+		case "meetme":
+			$relation = "Conference";
+			break;			
 	}
-	return $cid . $spkey;
+	return $relation;
 	
 }
-
-
 
 public function getPerms() {
 /*
@@ -555,7 +547,7 @@ public function getTrunklist() {
 	return ($trunklist);
 }
 
-public function getTable($table, $sql='',$filter=true, $default=false,$order='pkey') {
+public function getTable($table, $sql='',$filter=true,$default=false,$order='pkey',$cast=false) {
 /*
  * general table getter - it is used to filter the rows a panel "sees" based upon the
  * user who is making the request. - In general a user is filtered according to the
@@ -581,7 +573,12 @@ public function getTable($table, $sql='',$filter=true, $default=false,$order='pk
 			}			
 		}
 	}
-	$sql .= " ORDER BY " . $order . " COLLATE NOCASE ASC";
+	if ($cast) {
+		$sql .= " ORDER BY CAST(" . $order . " AS NUMBER)";
+	}
+	else {
+		$sql .= " ORDER BY " . $order . " COLLATE NOCASE ASC";
+	}
 	$this->logit("getTable; I'm running sql $sql",3 );
 	$res = $dbh->query($sql);    
 	$return = $res->fetchAll(); 
@@ -721,7 +718,10 @@ public function setTuple($tab,$rec,$modpkey=false) {
  */  
 	$sql->execute($varg);
 	$this->commitOn();
-	$this->logit("I'm updating $tab",3 );
+	$this->logit("I'm updating $tab $vnarg with ...",3 );
+	foreach ($varg as $v) {
+		$this->logit("$v ...",3 );
+	}
 	return 'OK';
 }	
 
@@ -910,7 +910,8 @@ public function buildTupleArray($post,&$tuple,$custom=false,$stripslash=array())
  */
 	if ($custom) {
 		$ignore = array_merge($ignore,$custom);
-	}	
+	}
+	
 	foreach ($post as $key=>$value) {
 		if (array_key_exists($key,$ignore)) {
 			continue;
@@ -925,6 +926,7 @@ public function buildTupleArray($post,&$tuple,$custom=false,$stripslash=array())
 			$tuple[$key] = stripslashes($value);
 		}
 	} 
+	
 } 	
 
 public function exec_SQL($dbh,$sql) {
@@ -1186,6 +1188,13 @@ public function xRef($pkey,$apptype="object") {
     	$xref .= 'No IVRs reference this  ' . $apptype . '<br/>' . PHP_EOL;
     } 
     return $xref;  		   				
+}
+
+public function displayKey($key) {	
+	if (strlen($key) <= 4) {
+		return $key;
+	}
+    return substr($key,2);
 }
 
 

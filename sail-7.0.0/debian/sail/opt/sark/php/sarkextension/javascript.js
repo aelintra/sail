@@ -1,30 +1,5 @@
 
   $(document).ready(function() {
-/*
-	$(function() {      
-      //Enable swiping...
-      $("#twocol").swipe( {
-        //Generic swipe handler for all directions
-        swipeLeft:function(event, direction, distance, duration, fingerCount, fingerData) {
-//          $(this).text("You swiped " + direction );
-          console.log("You swiped left");
-          if ( $("#nextKey").length ) { 
-          	var nextv = document.getElementById("nextKey").value;  
-          	window.location.replace("main.php?edit=yes&pkey=" + nextv );
-          }	
-        },
-		swipeRight:function(event, direction, distance, duration, fingerCount, fingerData) {
-//          $(this).text("You swiped " + direction );
-          console.log("You swiped right");
-          var prevv = document.getElementById("prevKey").value;  
-          	window.location.replace("main.php?edit=yes&pkey=" + prevv );  
-        },        
-        //Default is 75px, set to 0 for demo so any distance triggers swipe
-         threshold:0
-      });
-    });
-
-*/
 
 	$('#clustershow :input').prop('readonly', true);
 	$('#clustershow :input').css('background-color','#f1f1f1');
@@ -32,12 +7,7 @@
 /*
  * hide/reveal logic for create
  */         
-//        $('#divmacaddr').hide();	
-//        $('#divrule').hide();
-//        $('#divpassword').hide();
-//        $('#divcalleridname').hide();
-//        $('#divdevice').hide();
-//        $('#divlocation').hide();
+
         $('#divmacblock').hide();
         $('#divblksize').hide();
         $('#endsave').hide();
@@ -47,21 +17,20 @@
 			$('#divchooser').hide();
 			$('#endsave').show();
         	$('#save').show();
-//			$('#extchooser').css('background-color','WhiteSmoke');			
-/*
-			if(this.value=='Provisioned') {
+		
+
+			if(this.value=='MAILBOX') {
 				$('#divmacaddr').show();			
 				$('#divrule').show();
 				$('#divcalleridname').show();
-//				$('#divlocation').show();										
+									
 			}
-*/
+
 			if(this.value=='Provisioned') {
 				$('#divrule').show();
 				$('#divmacblock').show();																	
 			}
 			if(this.value=='Unprovisioned') {
-//				$('#divrule').show();
 				$('#divblksize').show();					
 			}			
 					
@@ -146,8 +115,8 @@
 			"sSearch": "Filter:"
 		},		
 		"aoColumns": [ 
-			{ "sName": "pkey" },
 			{ "sName": "cluster" },
+			{ "sName": "pkey" },			
 			{ "sName": "user" },
 			{ "sName": "device" },
 			{ "sName": "macaddr" },					

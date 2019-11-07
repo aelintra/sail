@@ -103,11 +103,10 @@ public function put_database($newkey) {
 			$twin = strip_tags($_POST['cellphone']);
 			$this->amiHdle->PutDB('srktwin', $newkey, $twin);
 		}
-		else {
-			$this->amiHdle->DelDB('srktwin', $newkey);
-		}	
 	}
-									
+	else {
+		$this->amiHdle->DelDB('srktwin', $newkey);
+	}									
 	$this->amiHdle->logout();
 
 }	

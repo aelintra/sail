@@ -1,8 +1,10 @@
 
   $(document).ready(function() {  
-  $('#clustershow :input').prop('readonly', true);
-  $('#clustershow :input').css('background-color','#f1f1f1');
-  
+	$('#clustershow :input').prop('readonly', true);
+	$('#clustershow :input').css('background-color','#f1f1f1');
+  	$('#pkeyshow :input').prop('readonly', true);
+	$('#pkeyshow :input').css('background-color','#f1f1f1');
+	  
   	$('input[class*=ivrBoolean]').click(function(event) {  //on click 
 
   		var myClass = this.className;

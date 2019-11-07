@@ -30,7 +30,7 @@
 			$userext = $res['extension'];
 		}
 		echo '<input type="hidden" id="userext" name="userext" value="' . $userext .  '" />' . PHP_EOL;	
-
+		echo '<input type="hidden" id="sessext" name="sessext" value="' . $_SESSION['user']['pkey'] .  '" />' . PHP_EOL;	
 
 		echo '<div class="w3-top" style="z-index:99">';
 		require_once $_SERVER["DOCUMENT_ROOT"] . "../php/banner.php";

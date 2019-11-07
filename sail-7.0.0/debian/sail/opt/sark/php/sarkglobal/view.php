@@ -209,9 +209,8 @@ private function showMain() {
     if ( ! $global['VCL'] ) {
     	$this->myPanel->radioSlide('natdefault',$global['NATDEFAULT'],array('local','remote'));
     }
-
-  	$this->myPanel->displayInputFor('agentstart','number',$global['AGENTSTART']); 
-/*  	                  		  
+/*
+  	$this->myPanel->displayInputFor('agentstart','number',$global['AGENTSTART']);   	                  		  
 	$this->myPanel->displayInputFor('operator','text',$global['OPERATOR']);
 */
 	echo '<div class="w3-margin-bottom">';
@@ -359,9 +358,9 @@ private function saveEdit() {
 //  $this->validator->addValidation("sipiaxstart","num","Extension start must be numeric");
 //  $this->validator->addValidation("sipiaxstart","maxlen=6","Extension start must be 3 to 6 digits (same as extension length)"); 
 //	$this->validator->addValidation("sipiaxstart","minlen=3","Extension start must be 3 to 6 digits (same as extension length)");	   
-    $this->validator->addValidation("agentstart","num","Agent start must be numeric");
-    $this->validator->addValidation("agentstart","maxlen=4","Agent start must be 4 digits");
-    $this->validator->addValidation("agentstart","minlen=4","Agent start must be 4 digits");    
+//    $this->validator->addValidation("agentstart","num","Agent start must be numeric");
+//   $this->validator->addValidation("agentstart","maxlen=4","Agent start must be 4 digits");
+//    $this->validator->addValidation("agentstart","minlen=4","Agent start must be 4 digits");    
     $this->validator->addValidation("operator","num","Operator must be numeric");   
 /*
     $this->validator->addValidation("EDOMAIN",

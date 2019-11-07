@@ -43,12 +43,6 @@ public function showForm() {
 				header("Location: ../sarkpasswd/main.php"); 
 				die("Redirecting to: sarkpasswd/main.php"); 
 			}
-/*
-			if ( $_POST['pkey'] == 'admin' ) {
-				header("Location: ../sarksplash/main.php"); 
-				die("Redirecting to: sarksplash/main.php");
-			}
-*/
 			else if ( $_POST['pkey'] == 'wallboard' ) {
 				header("Location: ../sarksplash/main.php"); 
 				die("Redirecting to: sarksplash/main.php");
@@ -57,10 +51,14 @@ public function showForm() {
                 header("Location: ../sarkldap/main.php");
                 die("Redirecting to: sarkldap/main.php");
             }			
-			else {
+			else if ( $_POST['pkey'] == 'admin' ) {
 				header("Location: ../sarkreception/main.php"); 
 				die("Redirecting to: sarkreception/main.php");	
-			}			 
+			}
+			else  {
+				header("Location: ../sarkphone/main.php"); 
+				die("Redirecting to: sarkreception/main.php");	
+			}						 
         }		
 	}
 

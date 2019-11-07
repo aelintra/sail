@@ -51,6 +51,7 @@ Class sarkextension {
 		'Choose extension type',
 		'Provisioned',
 		'Unprovisioned',
+		'MAILBOX'	
 	); 
 
 	protected $adoptOptions = array(
@@ -61,7 +62,6 @@ Class sarkextension {
 
 public function showForm() {
 
-//	print_r($_REQUEST);
 
 	$this->myPanel = new page;
 	$this->dbh = DB::getInstance();
@@ -139,11 +139,7 @@ public function showForm() {
 		$this->saveNew();
 		if ($this->invalidForm) {
 			$this->showNew();
-		}
-		else {
-			$this->showEdit();
-		}
-		return;					
+		}			
 	}
 	
 	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
@@ -242,13 +238,9 @@ private function showMain() {
 
 		echo '<td class="w3-hide-small  w3-hide-medium">' . $row['cluster'] . '</td>' . PHP_EOL;
 		echo '<input type="hidden" name="pkey" id="pkey" value="' . $row['pkey'] . '"  />' . PHP_EOL;
-//		if ($row['cluster'] != 'default') {
-			$shortkey = substr($row['pkey'],2);
-/*		}
-		else {
-			$shortkey = $row['pkey'];
-		}	
-*/	
+
+		$shortkey = $this->helper->displayKey($row['pkey']);
+
 		echo '<td class="read_only">' . $shortkey . '</td>' . PHP_EOL;
 		
 		$display = $row['desc'];
@@ -332,17 +324,13 @@ private function showNew() {
 	$buttonArray['cancel'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkextensionForm",true,false);
 
-	if ($this->invalidForm) {
-		$this->myPanel->showErrors($this->error_hash);
-	}
+	$this->myPanel->showErrors($this->error_hash);
+
 	$this->myPanel->Heading($this->head,$this->message);
 	$this->myPanel->responsiveSetup(2);
 	$this->myPanel->subjectBar("New Extension");
 
 	echo '<form id="sarkextensionForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
-		
-// find the next available ext# - can't do this until we know the cluster
-//	$pkey = $this->helper->getNextFreeExt();
 
 	$provisionwith = array('IPV4');
 	
@@ -374,6 +362,8 @@ private function showNew() {
 	$this->myPanel->displayCluster();
 	$this->myPanel->aHelpBoxFor('cluster');
 	echo '</div>';
+	
+	$this->myPanel->displayInputFor('Extension','text',null,'pkey');
 
 	echo '<div id="divchooser">' . PHP_EOL;
 	if (isset($_GET['new'])) {
@@ -383,11 +373,6 @@ private function showNew() {
 		$this->myPanel->displayPopupFor('extchooser','Choose extension type',$this->createOptions); 
 	}
 	echo '</div>' . PHP_EOL;
-/*
-	echo '<div id="divmacaddr">' . PHP_EOL;
-	$this->myPanel->displayInputFor('macaddr','text',$value);
-	echo '</div>' . PHP_EOL;
-*/
 
 /*
 	echo '<div id="divrule">' . PHP_EOL;
@@ -434,9 +419,42 @@ private function showNew() {
 private function saveNew() {
 // save the data away
 
-	$this->myPanel->xlateBooleans($this->myBooleans);
-
 	$tuple = array();
+	$clustId = NULL;
+
+	$this->validator = new FormValidator();
+    $this->validator->addValidation("pkey","req","Please fill in Extension number");
+    $this->validator->addValidation("pkey","num","Extension must be numeric");    
+    $this->validator->addValidation("pkey","maxlen=4","Extension Number must be 3 or 4 digits");     
+	$this->validator->addValidation("pkey","minlen=3","Extension Number must be 3 or 4 digits"); 
+    //Now, validate the form
+    if (!$this->validator->ValidateForm()) {
+    	$this->invalidForm = True;
+    	$this->error_hash = $this->validator->GetErrors();
+    	return;
+    }
+    if (isset ($_POST['cluster'])) {
+		$tuple['cluster'] = strip_tags($_POST['cluster']);
+	}
+	else {
+		$tuple['cluster'] = 'default';
+	}
+	
+	if ($tuple['cluster'] != 'default' ) {
+		$res = $this->dbh->query("SELECT id FROM cluster WHERE pkey = '" . $tuple['cluster'] . "'")->fetch(PDO::FETCH_ASSOC);
+		$clustId = $res['id'];
+	}
+	
+	$pkey = $clustId . $_POST['pkey'];	
+	$tuple['pkey'] = $pkey;	
+    $retc = $this->helper->checkXref($pkey,$tuple['cluster']);
+    if ($retc) {
+    	$this->invalidForm = True;
+    	$this->error_hash['extinsert'] = "Duplicate found in table $retc - choose a different extension number";
+    	return;    	
+    }
+	
+	$this->myPanel->xlateBooleans($this->myBooleans);
 
 	$res = $this->dbh->query("SELECT ACL,NATDEFAULT,PWDLEN,USERCREATE,FQDNPROV,VCL FROM globals WHERE pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$acl = $res['ACL'];
@@ -449,10 +467,12 @@ private function saveNew() {
 	$usercreate = $res['USERCREATE'];
 	$fqdnprov = $res['FQDNPROV'];
 
-	$_POST['pkey'] = $this->helper->getNextFreeKey('ipphone',$_POST['cluster'],'startextension');
-	$tuple['pkey'] = $_POST['pkey'];
+	
+	
+	
 //remove first two digits - or return an array from the sub.
-	$tuple['desc'] = substr($tuple['pkey'],2);
+
+	$tuple['desc'] = $this->helper->displayKey($tuple['pkey']);
 
 	if ($vcl) {
 		$tuple['location'] = 'remote';
@@ -465,12 +485,7 @@ private function saveNew() {
 		$tuple['provisionwith'] = 'FQDN';
 	}					
 
-	if (isset ($_POST['cluster'])) {
-		$tuple['cluster'] = strip_tags($_POST['cluster']);
-	}
-	else {
-		$tuple['cluster'] = 'default';
-	}
+
 
 	$sql = "SELECT * FROM COS ORDER BY pkey";
 	$this->cosresult = $this->dbh->query($sql);		
@@ -483,7 +498,7 @@ private function saveNew() {
 			if ( empty ($macArray) ) {
 				$this->error_hash['MAC'] = "No MAC address list entered";
 				$this->invalidForm = True;
-				return -1;
+				break;
 			}
 			foreach ($macArray as $mac) {
 				$mac =  trim($mac);
@@ -497,15 +512,17 @@ private function saveNew() {
 				$this->invalidForm = True;				
 			}
 			if ($this->invalidForm) {
-				return -1;
+				break;
 			}
 			foreach ($macArray as $mac) {
 				$res = $this->getVendorFromMac($mac);
 				if ( ! $res) {
 					$this->helper->logit("mac is $mac res is $res ",1 );
-					$this->error_hash['macArray'] = "Vendor lookup failed for MAC $mac";
+					$this->error_hash['$mac'] = "Vendor lookup failed for MAC $mac";
 					$this->invalidForm = True;
-					return -1;
+				}
+				if ($this->invalidForm) {
+					break;
 				}
 				$this->helper->logit("mac is $mac res is $res ",5 );
 				$tuple['device'] = $res;
@@ -516,42 +533,53 @@ private function saveNew() {
 				}
 				else {
 */
-					$tuple['desc'] = substr($tuple['pkey'],2);
+					$tuple['desc'] = $this->helper->displayKey($tuple['pkey']);
 //				}
 				$this->addNewExtension($tuple);
+				if ($usercreate == 'YES') {
+					$this->addNewUser($tuple);
+				}				
 				$tuple['pkey'] ++;
 			}
-			return;
+
 			break;
 
 		case 'Unprovisioned':
 			if ($this->checkHeadRoom($_POST['blksize'],$pkey)) {
 				$this->error_hash['blksize'] = "Insufficient extension slots for block operation";
 				$this->invalidForm = True;
-				return;					
+				break;					
 			}
 			$tuple['device'] = 'General SIP';
 			$blksize = strip_tags($_POST['blksize']);
 			while ($blksize) {
-/*
-				if ($tuple['cluster'] == 'default') {					
-					$tuple['desc'] = $tuple['pkey'];
-				}
-				else {
-*/
-					$tuple['desc'] = substr($tuple['pkey'],2);
-//				}
+				$tuple['desc'] = $this->helper->displaykey($tuple['pkey']);;
 				$this->addNewExtension($tuple);
+				if ($usercreate == 'YES') {
+					$this->addNewUser($tuple);
+				}
 				$tuple['pkey'] ++;
 				$blksize--;
 			}
-			return;
+
 			break;
 			
+		case 'MAILBOX':
+			$tuple['device'] = 'MAILBOX';
+			$tuple['desc'] = $this->helper->displaykey($tuple['pkey']);;
+			$this->addNewExtension($tuple);
+
+			break;
+						
 		default:
 			break;
 	}
-	if ($usercreate == 'YES') {
+			
+    unset ($this->validator);
+}
+
+private function addNewUser ($tuple) {
+
 		$usertuple = array();
 		$usertuple['pkey'] = $tuple['pkey'];
 		$usertuple['extension'] = $tuple['pkey'];
@@ -565,14 +593,10 @@ private function saveNew() {
 			$this->message = "User Create Error!";	
 			$this->error_hash['userinsert'] = $ret;	
 		}
-	}
 
-			
-    unset ($this->validator);
 }
 
 private function addNewExtension ($tuple) {
-// move this to a function
 
 
 
@@ -580,13 +604,13 @@ private function addNewExtension ($tuple) {
 	$sql->execute(array($tuple['device']));
 	$resdevice = $sql->fetch();
 
-//	$tuple['sipiaxfriend'] 	= $resdevice['sipiaxfriend'];
+
 
 	$tuple['sipiaxfriend'] 	= 
 	"type=peer
 defaultuser=\$desc
 secret=\$password
-mailbox=\$ext
+mailbox=\$ext@\$clst
 host=dynamic
 qualify=yes
 context=internal
@@ -602,6 +626,8 @@ allow=ulaw
 nat=\$nat
 transport=\$transport
 encryption=\$encryption";
+
+//	$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend'],$tuple['cluster']);
 
 	if ($resdevice['technology'] == 'SIP') {
 		if ($tuple['device'] != 'General SIP' && $tuple['device'] != 'MAILBOX') {
@@ -623,7 +649,7 @@ encryption=\$encryption";
 	}
 	$tuple['technology'] = $resdevice['technology'];			
 	$tuple['passwd'] = $this->helper->ret_password ($this->passwordLength);
-	$tuple['dvrvmail'] = substr($tuple['pkey'],2);
+	$tuple['dvrvmail'] = $this->helper->displayKey($tuple['pkey']);
 			
 // ToDo permit ipv6 acl
 
@@ -779,7 +805,7 @@ private function deleteRow() {
 	$this->helper->predDelTuple("IPphoneCOSopen","IPphone_pkey",$pkey);
 	$this->helper->predDelTuple("IPphoneCOSclosed","IPphone_pkey",$pkey);
 	$this->helper->predDelTuple("IPphone_Fkey","pkey",$pkey);
-	$this->message = "Deleted extension " . $pkey;
+	$this->message = "Deleted extension " . $this->helper->displayKey($pkey);
 //	$this->myPanel->msgDisplay('Deleted extension ' . $pkey);
 //	$this->myPanel->navRowDisplay("ipphone", $pkey);
 }
@@ -814,7 +840,7 @@ private function showEdit() {
 	array_push($extlist,"None");	
 	$res = $this->helper->getTable("ipphone","select pkey from ipphone WHERE cluster='" . $extension['cluster'] . "'",false);
 	foreach ($res as $row) {
-		array_push($extlist,substr($row['pkey'],2));
+		array_push($extlist,$this->helper->displayKey($row['pkey']));
 	}
 
 	$protocol = array('IPV4');
@@ -842,7 +868,7 @@ private function showEdit() {
 		$this->myPanel->msg .= "  (No Asterisk running)";
 	}
 	
-	$xref = $this->xRef($pkey);
+//	$xref = $this->xRef($pkey);
 	$buttonArray['cancel'] = true;
 	if (preg_match(' /^OK/ ', $latency) && $extension['device'] != 'General SIP') {
 //		$buttonArray['redo'] = true;
@@ -875,7 +901,6 @@ private function showEdit() {
     echo '</span>';
     echo '</div>';
 
-//    print_r($_REQUEST);
 
 	$this->myPanel->responsiveTwoCol();
 
@@ -890,14 +915,6 @@ private function showEdit() {
 
 	echo '<form id="sarkextensionForm" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 
-/* ToDo - PROXY PANEL			
-	if ($extension['location'] == "remote" || $proxy == "NO" || $extension['noproxy']  ) {
-	}
-	else {
-		echo '<img src="/sark-common/buttons/connect.png" id="connect" alt="connect" title="Proxy to the phone" />'. PHP_EOL;
-	}
-*/
-
 	echo '<div class="w3-padding w3-margin-bottom w3-card-4 w3-white w3-hide-large w3-hide-medium">';   
     $this->printEditNotes($pkey,$extension,$sip_peers);
     echo '</div>';
@@ -911,14 +928,9 @@ private function showEdit() {
 	echo '</div>';    
     $this->myPanel->displayBooleanFor('active',$extension['active']);
     echo '<input type="hidden" name="pkey" id="pkey" value="' . $extension['pkey'] . '"  />' . PHP_EOL;
-//	if ($extension['cluster'] != 'default') {
-		$shortkey = substr($extension['pkey'],2);
-/*
-	}
-	else {
-		$shortkey = $row['pkey'];
-	}
-*/
+
+	$shortkey = $this->helper->displayKey($extension['pkey']);
+
 	$this->myPanel->displayInputFor('rule','text',$shortkey,'newkey');
 
 /*	
@@ -933,14 +945,16 @@ private function showEdit() {
 */	  	
 	$this->myPanel->displayInputFor('callerid','text',$extension['callerid']);	
 	$this->myPanel->displayInputFor('calleridname','text',$extension['desc'],'desc');
-	$this->myPanel->displayInputFor('password','text',$extension['passwd'],'passwd');	
-    $this->myPanel->displayInputFor('cellphone','number',$extension['cellphone']);
-    if ( $extension['cellphone'] ) {
-		if ($celltwin) {
-    		$this->myPanel->displayBooleanFor('celltwin','ON');
-    	}
-    	else {
-    		$this->myPanel->displayBooleanFor('celltwin','OFF');
+	$this->myPanel->displayInputFor('password','text',$extension['passwd'],'passwd');
+	if ($extension['device'] != 'MAILBOX') {	
+    	$this->myPanel->displayInputFor('cellphone','number',$extension['cellphone']);
+    	if ( $extension['cellphone'] ) {
+			if ($celltwin) {
+    			$this->myPanel->displayBooleanFor('celltwin','ON');
+    		}
+    		else {
+    			$this->myPanel->displayBooleanFor('celltwin','OFF');
+    		}
     	}
 	}
 
@@ -952,7 +966,9 @@ private function showEdit() {
 	$this->myPanel->displayInputFor('vmailfwd','text',$extension['vmailfwd']);
 	$this->myPanel->displayPopupFor('dvrvmail',$extension['dvrvmail'],$extlist);
     $this->myPanel->displayBooleanFor('vdelete','NO');
-    $this->myPanel->displayBooleanFor('vreset','NO');
+
+//ToDo - add this back with proper vmail parser for new structure
+    //    $this->myPanel->displayBooleanFor('vreset','NO');
 	
 	echo '</div>' . PHP_EOL;
 
@@ -1014,19 +1030,15 @@ private function showEdit() {
 /*
  * 	TAB XREF 
  */ 
-	$this->myPanel->internalEditBoxStart();
-	echo '<div class="w3-margin-bottom">';	
-	$this->myPanel->aLabelFor("xref");
-	echo '</div>';	
-//    $xref = $this->helper->xRef($pkey,"Extension");
-    $xref = $this->xRef($pkey);
-
-
-    $this->myPanel->displayXref($xref);
-
-
-	echo '</div>' . PHP_EOL;    
-
+ 	$xref = $this->xRef($pkey,$extension['cluster']);
+ 	if ($xref) {
+		$this->myPanel->internalEditBoxStart();
+		echo '<div class="w3-margin-bottom">';	
+		$this->myPanel->aLabelFor("xref");
+		echo '</div>';	
+    	$this->myPanel->displayXref($xref);
+		echo '</div>' . PHP_EOL; 
+	}   
 
 	$this->myPanel->internalEditBoxStart();
     $this->myPanel->displayInputFor('ringdelay','number',$ringdelay);		
@@ -1094,39 +1106,46 @@ private function showEdit() {
 /*
  *   TAB Asterisk
  */
-	if ($extension['technology'] == 'SIP' ||  $extension['technology'] == 'IAX') {
-		if ( $_SESSION['user']['pkey'] == 'admin' ) {
-			echo '<div class="w3-margin-bottom">';	
-			$this->myPanel->aLabelFor("sipiaxfriend");
-			echo '</div>';	
-			echo '<div id="asterisk" >';
-			$this->myPanel->displayFile(htmlspecialchars($extension['sipiaxfriend']),"sipiaxfriend");
-			echo '</div>' . PHP_EOL;
+	if ($extension['technology'] == 'SIP') {
+		if ( $_SESSION['user']['pkey'] != 'admin' ) {
+			echo '<div style="display:none">';
 		}
+		echo '<div class="w3-margin-bottom">';	
+		$this->myPanel->aLabelFor("sipiaxfriend");
+		echo '</div>';	
+		echo '<div id="asterisk" >';
+		$this->myPanel->displayFile(htmlspecialchars($extension['sipiaxfriend']),"sipiaxfriend");
+		echo '</div>' . PHP_EOL;
+		if ( $_SESSION['user']['pkey'] != 'admin' ) {
+			echo '</div>';
+		}		
 	}	
     
-    /*
+/*
  *   TAB Provisioning
  */
 	
-    if ($extension['technology'] == 'SIP') {
-    	
-		if ( $_SESSION['user']['pkey'] == 'admin' ) {
-			if (isset($extension['macaddr'])) {
-				echo '<div class="w3-margin-bottom">';	
-				$this->myPanel->aLabelFor("Provisioning Rules");
-				echo '</div>';	
-				echo '<div id="provisioning" >';
-				$this->myPanel->displayFile(htmlspecialchars($extension['provision']),"provision");
-				if (!empty($extension['macaddr'])) {
-					echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-					echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
-					echo '</div>' . PHP_EOL;
-					$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
-					$expand_prov = `$cmd`; 
-				}		
+    if ($extension['technology'] == 'SIP') {   	
+		if ( $_SESSION['user']['pkey'] != 'admin' ) {
+			echo '<div style="display:none">';
+		}
+		if (isset($extension['macaddr'])) {
+			echo '<div class="w3-margin-bottom">';	
+			$this->myPanel->aLabelFor("Provisioning Rules");
+			echo '</div>';	
+			echo '<div id="provisioning" >';
+			$this->myPanel->displayFile(htmlspecialchars($extension['provision']),"provision");
+			if (!empty($extension['macaddr'])) {
+				echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
+				echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
 				echo '</div>' . PHP_EOL;
-			}
+				$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
+				$expand_prov = `$cmd`; 
+			}		
+			echo '</div>' . PHP_EOL;
+			if ( $_SESSION['user']['pkey'] != 'admin' ) {
+				echo '</div>';
+			}				
 		}
 	}
 
@@ -1152,6 +1171,7 @@ private function showEdit() {
 
 private function saveEdit() {
 // save the data away
+
 	$tuple = array();
 
 	$this->myPanel->xlateBooleans($this->myBooleans);
@@ -1202,14 +1222,7 @@ private function saveEdit() {
 		}
 		
 		$this->helper->buildTupleArray($_POST,$tuple,$custom);
-/*		
-		if ( isset($_POST['twin']) && $_POST['twin'] == "" ) {
-			$tuple['celltwin'] = True;
-		}
-		else {
-			$tuple['celltwin'] = False;
-		}
-*/				
+	
 		$newkey =  trim(strip_tags($_POST['newkey']));
 
 /*
@@ -1229,15 +1242,15 @@ private function saveEdit() {
 /*
  * reset/empty voicemail if requested
  */
-
+ 
+	$shortkey = $this->helper->displayKey($skey);
 	if (isset($_POST['vdelete'])) { 
-		$rc = $this->helper->request_syscmd ("/bin/rm -rf /var/spool/asterisk/voicemail/default/" . $_POST['pkey']."/*");	
+		$rc = $this->helper->request_syscmd ("/bin/rm -rf /var/spool/asterisk/voicemail/" . $_POST['cluster'] . '/' . $shortkey . "/*");	
 		$this->message = "Voicemail deleted";
 	}	
 	
 	if (isset($_POST['vreset'])) { 
-		$skey = $_POST['pkey'];
-		$shortkey = substr($skey,2);
+		$skey = $_POST['pkey'];		
 		$rc = $this->helper->request_syscmd ("/bin/sed -i 's/^$skey => [0-9]*\(.*\)/$skey => $shortkey\\1/' /etc/asterisk/voicemail.conf");	
 		$this->message = "Voicemail password reset";	
 	}
@@ -1279,8 +1292,8 @@ private function saveEdit() {
 				$this->keychange = $newkey;
 				// set the mailbox to the new extension
 				$tuple['dvrvmail'] = $newkey;
-				$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend']);
-				
+				$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend'],$tuple['cluster']);
+
 				$ret = $this->helper->setTuple("ipphone",$tuple,$newkey);
 				if ($ret == 'OK') {
 					$this->message = "Updated extension " . $tuple['pkey'];
@@ -1304,10 +1317,10 @@ private function saveEdit() {
 			}
 		}
 		else {
-			$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend']);		
+			$this->chkMailbox($tuple['dvrvmail'],$tuple['sipiaxfriend'],$tuple['cluster']);		
 			$ret = $this->helper->setTuple("ipphone",$tuple,$newkey);
 			if ($ret == 'OK') {
-				$this->message = "Updated extension " . $tuple['pkey'];
+				$this->message = "Updated extension " . $this->helper->displayKey($tuple['pkey']);
 			}
 			else {
 				$this->invalidForm = True;
@@ -1328,6 +1341,7 @@ private function adjustAstProvSettings(&$tuple) {
 /*
  * local/remote processing
  */ 
+
 //		$tuple['sipiaxfriend'] = preg_replace( " /nat=yes/ ",'',$tuple['sipiaxfriend']);		
 		$tuple['sipiaxfriend'] = preg_replace( " /^\#include\s*sark_sip_tls.conf.*$/m ",'',$tuple['sipiaxfriend']);	
 		$tuple['sipiaxfriend'] = preg_replace( " /^\#include\s*sark_sip_tcp.conf.*$/m ",'',$tuple['sipiaxfriend']);	
@@ -1498,87 +1512,64 @@ private function doCOS($cosSetArray) {
 	
 }
 
-private function xRef($pkey) {
+private function xRef($pkey,$cluster) {
 /*
  * Build Xrefs
  */
-	$xref = '';
-	$tref = '';
-	$sql = $this->dbh->prepare("SELECT * FROM IPphone WHERE dvrvmail LIKE ? AND pkey != ? ORDER BY pkey");
-	$sql->execute(array($pkey,$pkey));
+ 	$shortkey = $this->helper->displayKey($pkey);
+ 	$this->helper->logit("Xref running for $pkey and $shortkey on cluster $cluster ",1 );
+	$xref = NULL;
+	$tref = NULL;
+	$sql = $this->dbh->prepare("SELECT * FROM IPphone WHERE cluster=? AND dvrvmail LIKE ? AND pkey != ? ORDER BY pkey");
+	$sql->execute(array($cluster,$shortkey,$pkey));
 	$result = $sql->fetchall();	
 	foreach ($result as $row) {
-//		if (!$row == $pkey) {
-//			if (!$row['dvrvmail'] == $pkey) {
-				$tref .= "This extension provides a voicemailbox for $pkey<br>" . PHP_EOL;
-//			}
-//		}
+		$tref .= "This extension provides a voicemailbox for " . $this->helper->displayKey($row[pkey]) . "<br>" . PHP_EOL;
 	}
-	if ($tref != "") {
+	if ($tref) {
     	$xref .= $tref;
-        $tref = "";
-    }
-    else {
-    	$xref .= "No other extensions reference this extension's voicemail box<br/>" . PHP_EOL;
+        $tref = NULL;
     }
     
-	$sql = $this->dbh->prepare("SELECT * FROM lineio WHERE openroute LIKE ? OR closeroute LIKE ? ORDER BY pkey");
-	$sql->execute(array($pkey,$pkey));		
+	$sql = $this->dbh->prepare("SELECT * FROM lineio WHERE cluster=? AND (openroute = ? OR closeroute = ?) ORDER BY pkey");
+	$sql->execute(array($cluster,$shortkey,$shortkey));		
 	$result = $sql->fetchall();	
 	foreach ($result as $row) {
-		if ( $row['openroute'] == $pkey || $row['closeroute'] == $pkey ) {
-                $tref .= "DDI/Class <a href='javascript:window.top.location.href=" . '"/php/sarkddi/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
-        }
+        $tref .= "DDI/Class <a href='javascript:window.top.location.href=" . '"/php/sarkddi/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row[pkey] . ' </a> references this extension <br>' . PHP_EOL;
 	}
-	if ($tref != "") {
+	if ($tref) {
     	$xref .= $tref;
-        $tref = "";
+        $tref = NULL;
     }
-    else {
-    	$xref .= "No DDI's reference this extension<br/>" . PHP_EOL;
-    }  
     
- 	$sql = $this->dbh->prepare("SELECT * FROM speed WHERE outcome LIKE ? OR out LIKE ? ORDER BY pkey");
-	$sql->execute(array($pkey,'%' . $pkey . '%'));	
+ 	$sql = $this->dbh->prepare("SELECT * FROM speed WHERE cluster=? AND (outcome LIKE ? OR out LIKE ?) ORDER BY pkey");
+	$sql->execute(array($cluster, '%' . $shortkey . '%', '%' . $shortkey . '%'));	
  	$result = $sql->fetchall();	
 	foreach ($result as $row) {
-		if ($row['pkey'] != 'RINGALL') {
-			$tref .= "Ring Group <a href='javascript:window.top.location.href=" . '"/php/sarkcallgroup/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
-
-		}
+		$tref .= "Ring Group <a href='javascript:window.top.location.href=" . '"/php/sarkcallgroup/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $this->helper->displayKey($row[pkey]) . ' </a> references this extension <br>' . PHP_EOL;
 	}
 	
-	if ($tref != "") {
+	if ($tref) {
     	$xref .= $tref;
-        $tref = "";
+        $tref = NULL;
     }
-    else {
-    	$xref .= "No callgroups reference this extension<br/>" . PHP_EOL;
-    }       
 
- 	$sql = $this->dbh->prepare("SELECT * FROM appl WHERE extcode LIKE ? ORDER BY pkey");
-	$sql->execute(array($pkey));		
+ 	$sql = $this->dbh->prepare("SELECT * FROM appl WHERE cluster=? AND extcode LIKE ? ORDER BY pkey");
+	$sql->execute(array($cluster,$shortkey));		
 	$result = $sql->fetchall();	
 	foreach ($result as $row) {
-/*
-		$extcode = $row['extcode'];
-		if (preg_match( "/$extcode/",$pkey)) {
-*/
-			$tref .= "Custom App <a href='javascript:window.top.location.href=" . '"/php/sarkappl/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
-
-//        }
+		$tref .= "Custom App <a href='javascript:window.top.location.href=" . '"/php/sarkappl/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
 	}
-	if ($tref != "") {
+	if ($tref) {
     	$xref .= $tref;
-        $tref = "";
+        $tref = NULL;
     }
-    else {
-    	$xref .= "No Apps reference this extension<br/>" . PHP_EOL;
-    }  
 
-	$sql = "SELECT * FROM ivrmenu ORDER BY pkey";
-	foreach ($this->dbh->query($sql) as $row) {
-		if ($row['timeout'] == $pkey) {
+	$sql = $this->dbh->prepare("SELECT * FROM ivrmenu WHERE cluster=? ORDER BY pkey");
+	$sql->execute(array($cluster));		
+	$result = $sql->fetchall();	
+	foreach ($result as $row) {
+		if ($row['timeout'] == $shortkey) {
 			$tref .= "IVR <a href='javascript:window.top.location.href=" . '"/php/sarkivr/main.php?edit=yes&pkey=' . $row['pkey'] . '"' . "' >" . $row['pkey'] . ' </a> references this extension <br>' . PHP_EOL;
 		}
 		else {
@@ -1590,13 +1581,10 @@ private function xRef($pkey) {
 			}
 		}
 	}
-	if ($tref != "") {
+	if ($tref) {
     	$xref .= $tref;
-        $tref = "";
+        $tref = NULL;
     }
-    else {
-    	$xref .= "No IVRs reference this extension<br/>" . PHP_EOL;
-    } 
     return $xref;  		   				
 }
 
@@ -1693,7 +1681,7 @@ private function sipNotifyPush () {
     	$this->message = "Issued SIP Notify" ;
 }
 
-private function chkMailbox(&$mailbox,&$friend)
+private function chkMailbox(&$mailbox,&$friend,$cluster)
 {
 	/*
  * check mailbox setting
@@ -1702,14 +1690,14 @@ private function chkMailbox(&$mailbox,&$friend)
 		if ($mailbox != "None") {			
 			$astmailbox .= $mailbox;	
 		}
-		if ( preg_match(' /mailbox=\$ext/ ',$friend))	{
-			$friend = preg_replace ( '/mailbox=\$ext/', $astmailbox, $friend);
+		if ( preg_match(' /mailbox=\$ext.*/ ',$friend))	{
+			$friend = preg_replace ( '/mailbox=\$ext.*/', $astmailbox . '@' . $cluster, $friend);
 		}
 		else if ( preg_match(' /mailbox=\d+/ ',$friend))	{	
-			$friend = preg_replace ( '/mailbox=\d+/', $astmailbox, $friend);
+			$friend = preg_replace ( '/mailbox=\d+.*/', $astmailbox . '@' . $cluster, $friend);
 		}
 		else if ( preg_match(' /mailbox=/ ',$friend))	{	
-			$friend = preg_replace ( '/mailbox=/', $astmailbox, $friend);
+			$friend = preg_replace ( '/mailbox=.*/', $astmailbox, $friend);
 		}
 }
 
@@ -1719,6 +1707,10 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
 #
 
     echo '<span style="color: #696969;" >';
+    if ($extension['device'] == 'MAILBOX') {
+    	echo 'Type: <strong>MAILBOX</strong><br/>' . PHP_EOL;
+    	return;
+    }
     echo 'Vendor: <strong>' . $extension['device'] . '</strong><br/>' . PHP_EOL;
     if (!empty($extension['devicemodel'])) {
     	echo 'Model: <strong>' . $extension['devicemodel'] . '</strong><br/>' . PHP_EOL;
@@ -1732,7 +1724,6 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
 	else {
 		echo 'State: <strong>UNKNOWN</strong><br/>' . PHP_EOL; 
 	}
-	
 	
 	if (preg_match(' /^OK/ ', $sip_peers [$pkey]['Status'])) {
 		if (isset ($sip_peers [$pkey]['IPport'])) {
@@ -1840,7 +1831,6 @@ private function getVendorFromMac($mac) {
 				$short_vendor = $matches[1];
 			}
 			else {
-//				print_r($findmac);
 				return 0;
 			}
 		}
@@ -1855,8 +1845,6 @@ private function getVendorFromMac($mac) {
 
 private function removeQuotes(&$string) {
 		$string = preg_replace ( "/\\\/", '', $string);
-
-// $tuple['sipiaxfriend'] = preg_replace ( "/\\\/", '', $tuple['sipiaxfriend']);
 
 }
 

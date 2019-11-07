@@ -15,9 +15,9 @@
 /etc/asterisk/sark_manager.conf
 /etc/asterisk/sark_mcstcnf.conf
 /etc/asterisk/sark_meetme.conf
+/etc/asterisk/sark_moh.conf
 /etc/asterisk/sark_queues_header.conf
 /etc/asterisk/sark_queues_main.conf
-/etc/asterisk/sark_recurse.conf
 /etc/asterisk/sark_res_parking.conf
 /etc/asterisk/sark_sip_header.conf
 /etc/asterisk/sark_sip_localnet_header.conf

@@ -69,8 +69,8 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('cn','Contact
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('compression','CODEC','[FIDELITY,THRUPUT,g729] Sark/SAIL will attempt to minimise CODEC transcoding using this value. If you choose Fidelity it will enforce g711(law) coding where it can.  If you choose Thruput it will use g729 if it is available, otherwise it use gsm.  If you choose g729. it will blanket enforce g729.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('conf','queues.conf Stanza','This is the stanza which SARK will generate for this queue. You can freely add to it if, for example, you want to add static members or change some of the default behaviours.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('conftype','Conference Type','Choose from assisted or unassisted conferences.');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('context','Context Name','The name of the context you want your custom app to run in.  This must be system-wide unique.');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpkey','Room','Room Number (100->99999).  Room numbers must be unique.  It is a good idea to use five digit numbers for your conferences so they don&#8217;t conflict with extension numbers.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('context','Context Name','The name of the context you want your custom app to run in.  This must be 3 or 4 digits and tenant-wide unique.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpkey','Room','Room Number (100->9999).  Room numbers must be tenant-wide unique.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confadminpin','Admin PIN','Administrator PIN (0000->9999 or blank)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('confpin','PIN','Access PIN (0000->9999 or blank).  When set, callers will be challenged for the pin when they dial the conference.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('conftype','Type','Choose from simple or hosted conferences. A simple conference will connect a caller directly to the conference room.  A hosted conference will request caller name before connecting and it will announce the caller name when they join or leave.');
@@ -122,7 +122,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('edomainsend'
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('emergency','COS Emergency passthru','Use this field to set your Emergency number (e.g. 911, 999, 112).  This is used by Class of Service and becomes part of the always-available set of dialable numbers.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('endclosed','End of Closed Period','Select the end time of your closed segment.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('eurl','External URL','Well formed URL for external phone provisioning');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('ext','Ext','Extension Number (if this is a local extension) or PSTN number if this is an organization or Direct Dial');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('ext','Ext','Extension Number.  This should be 3 or 4 digits and tenant-wide unique');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('extalert','Alert-info string','Alert-info alters the SIP header sent to the device.  It is usually used to send a request to play a distinctive ring-tone.  The actual content of the header varies from device to device.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('extblklst','Use external blacklists?','Block inbound traffic from known SIP offender IP addresses(needs line of site to port 80 outbound)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('extchooser','Extension Type','Choose the type of extension you want from the dropdown; - <br/>Provisioned extensions are auto provisioned by SARK and you will need to enter the MAC address of the phone.<br/>Unprovisioned extensions require no MAC and you manage their provisioning yourself.<br/>You can also create blocks where you can specify multiple extensions and SARK will create them all in one go.  For provisioned extensions you must supply a block of MAC addresses.  For unprovisioned extensions you simply need to tell SARK how many you want.');
@@ -175,7 +175,7 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('host','URI/I
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('hostname','Hostname','The local hostname of this server.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('httppassword','Password','Enter the existing password ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('icmp','Accept ping requests?','Set to NO if you want to ignore ping requests');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('idd','Direct Dial','IVR direct dial access.  Supply a unique tenant-wide number here if you wish to activate this IVR directly by dial or transfer.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('idd','Dial','IVR direct dial access.  Supply a unique tenant-wide extension number here.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('IPV6GUA','Global Unicast Address','The Global Unicast Address of this server (if any)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('IPV6ULA','Unique Local Address','The Unique Local Address of this server (if any)');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('IPV6LLA','Link Local Address','A Link Local address used by this server');
@@ -257,14 +257,14 @@ INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('provisionwit
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('proxy','Dynamic Proxy Enable','Enables/disables SARKs dynamic proxy feature (see extensions panel status field).');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('push','Push','Some phones (Snoms) can reload their config without rebooting');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('pwdlen','Ext password length','Length of the password (in characters) the randomizer will create for new extensions');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('qdd','Direct Dial','Queue direct dial access.  Supply a unique tenant-wide number here if you wish to activate this Queue directly by dial or transfer.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('qdd','Dial','Queue direct dial access.  Supply a unique tenant-wide extension number here.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q1','Q1','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q2','Q2','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q3','Q3','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q4','Q4','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q5','Q5','Agent Queue ');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('q6','Q6','Agent Queue ');
-INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('queuename','Queue','Tenant wide unique queue name. Name can be letters and numbers but you should not use special characters or spaces.');
+INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('queuename','Name','Tenant wide unique queue name. Name can be letters and numbers but you should not use special characters or spaces.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('queueoptions','Options','Asterisk Queue options.  You can learn what queue options are and what they do by reading the Asterisk sample queues.conf');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('realname','User Name','The name of this user.  N.B. There may be GDPR implications if you are using full names in this field so you may consider using nicknames or abbreviated names instead.');
 INSERT OR IGNORE INTO tt_help_core(pkey,displayname,htext) values ('register','Registration String','Used to provide a registration string if your carrier requires it');

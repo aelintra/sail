@@ -123,7 +123,7 @@ private function showMain() {
 		
 /*** table rows ****/
 
- 	$rows = $this->helper->getTable("user");
+ 	$rows = $this->helper->getTable('user',false,true,false,'pkey',true);
 	foreach ($rows as $row ) {
 		if ($row['pkey'] == 'admin' ) {
 			continue;
@@ -226,6 +226,15 @@ private function saveNew() {
 		$tuple['extension']  	=  strip_tags($_POST['extension']);
 		$tuple['cluster'] 		=  strip_tags($_POST['cluster']);
 		$tuple['email'] 		=  strip_tags($_POST['email']);
+		
+		$sql = $this->dbh->prepare("SELECT id FROM cluster WHERE pkey=?");
+		$sql->execute(array($tuple['cluster']));
+		$cluster = $sql->fetch();	
+		$sql = NULL;
+	
+		$tuple['pkey'] = $cluster['id'] . $tuple['pkey'];
+		
+		
 		$ret = $this->helper->createTuple("user",$tuple);		
 		if ($ret == 'OK') {
 			$this->helper->resetPassword($tuple['pkey']);

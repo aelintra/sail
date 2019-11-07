@@ -5,6 +5,8 @@
 		$('#file').click();
 	});
 	
+	
+	
 	$('#file').change(function() {
 		$('#newmohclick').val("TRUE");
 		$('#sarkclusterForm').submit();

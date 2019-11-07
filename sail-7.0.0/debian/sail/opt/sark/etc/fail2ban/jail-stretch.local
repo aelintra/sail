@@ -1,9 +1,5 @@
 [DEFAULT]
 banaction = shorewall
 
-[asterisk-tcp]
+[asterisk]
 enabled  = true
-
-[asterisk-udp]
-enabled  = true
-

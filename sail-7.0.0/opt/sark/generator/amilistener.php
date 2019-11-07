@@ -14,7 +14,6 @@
     permit=127.0.0.1/255.255.255.0
     read = system,call,log,verbose,command,agent,user,config,command,dtmf,reporting,cdr,dialplan,originate
     write = system,call,log,verbose,command,agent,user,config,command,dtmf,reporting,cdr,dialplan,originate
-
 /*
 
 /////////////////////////////////////////////////
