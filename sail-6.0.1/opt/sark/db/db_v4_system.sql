@@ -118,6 +118,7 @@ INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('236','sarkthreathist/main.php','Threat History','50','view');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('240','sarkbackup/main.php','Backup/Restore','50','create');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('250','sarklog/main.php','Logs','50','view');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('252','sarkpcap/main.php','SIP PCAP Logs','50','view');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('255','sarkshell/main.php','Console','50','view');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('260','sarkuser/main.php','Users','50','create');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('265','sarkldap/main.php','Directory','0','create');
@@ -172,6 +173,7 @@ INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500',
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','236');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','240');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','250');
+INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','252');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','255');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','260');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','265');

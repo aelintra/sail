@@ -332,6 +332,9 @@ LOCALDLEN TEXT,                     -- not used (See Cluster)
 LOCALIP TEXT,                       -- local ip address
 LOGLEVEL TEXT DEFAULT 0,            -- internal log level
 LOGOPTS TEXT,                       -- not used
+LOGSIPDISPSIZE INT DEFAULT 2000,	-- number of SIP pcap lines to display
+LOGSIPNUMFILES INT DEFAULT 10,		-- number of SIP pcap spins to keep
+LOGSIPFILESIZE INT DEFAULT 20000,  	-- SIP pcap max filesize (bytes)
 LTERM TEXT,                         -- late termination flag
 MAXIN TEXT,                         -- maximum inbound calls
 MEETMEDIAL TEXT,                    -- not used in 4.x 

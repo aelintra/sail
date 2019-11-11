@@ -27,7 +27,7 @@ require_once $sarkpath . "/php/srkHelperClass";
     $dbupdated = false;
     $debug = false; 	// set true for debug output
     
-    $helper->logit(" SARKTIMER Started", 0 );
+    $helper->logit(" SARKTIMER Started", 10 );
 
 		
 // initialize a holiday array
@@ -214,11 +214,11 @@ require_once $sarkpath . "/php/srkHelperClass";
     }
         
     if ($dbupdated == true) {
-		$helper->logit(" SARKTIMER MODIFY", 0 );
+		$helper->logit(" SARKTIMER MODIFY", 10 );
 		`/usr/bin/sqlite3 /opt/sark/db/sark.db "UPDATE globals SET MYCOMMIT='NO' WHERE pkey='global';"`;
 		$rc = `/bin/cp /opt/sark/db/sark.db /opt/sark/db/sark.copy.db`;
 		$rc = `/bin/mv /opt/sark/db/sark.copy.db /opt/sark/db/sark.rdonly.db`;
 #		$rc = `/bin/chown www:www /opt/sark/db/sark.rdonly.db`;  
 	}
-	$helper->logit(" SARKTIMER Ended", 0 );
+	$helper->logit(" SARKTIMER Ended", 10 );
 ?>

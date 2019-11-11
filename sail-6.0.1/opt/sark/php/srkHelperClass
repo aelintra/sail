@@ -875,7 +875,7 @@ public function logIt($someText, $userloglevel=0) {
 	$res = $dbh->query("SELECT LOGLEVEL FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$dbloglevel = $res['LOGLEVEL'];
 	if ($userloglevel <= $dbloglevel) {
-		syslog(LOG_WARNING, $someText . "\n");	
+		syslog(LOG_WARNING, $_SERVER['PHP_SELF'] . ' ' . $someText . "\n");	
 	}
 }
 
@@ -901,7 +901,7 @@ public function resetPassword ($user) {
 public function checkCreds($pkey, $password, &$msg, $login) {
 	
 		$dbh = DB::getInstance();
-		$this->logit("Checking password $password for $pkey", 5 );
+		$this->logit("Checking password for $pkey", 5 );
 
         // retreive the user's information from the database using 
         // their username. 

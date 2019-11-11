@@ -447,9 +447,14 @@ private function doRestore() {
 	
 	if ( isset($_POST['resetdb'] ) && $_POST['resetdb'] == 'YES') {
 		if (file_exists($tempDname . '/opt/sark/db/sark.db')) {
+			$this->helper->logit("Restoring the Database",5);
 			$this->helper->request_syscmd ("cp -f $tempDname/opt/sark/db/sark.db  /opt/sark/db/sark.db");
+			$this->helper->logit("Setting DB ownership",5);
 			$this->helper->request_syscmd ("chown www-data:www-data  /opt/sark/db/sark.db");
-			$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reloader.sh");
+			$this->helper->logit("Running the reloader to sync versions",5);
+			`sh /opt/sark/scripts/srkV4reloader.sh`;
+//			$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reloader.sh");			
+			$this->helper->logit("Database restore complete",5);
 			$this->log .= "<p>Database RESTORED</p>";
 		}
 		else {
@@ -527,9 +532,10 @@ private function doRestore() {
 		$this->log .= "<p>LDAP Directory PRESERVED</p>";	
 	}	
 	
-	`rm -rf $tempDname`;
+	$this->helper->request_syscmd ("rm -rf $tempDname");
 	$this->log .= "<p>Temporary work files deleted</p>";
-	$this->helper->request_syscmd ("sh /opt/sark/scripts/srkV4reload");
+	$this->log .= "<p>Requesting Asterisk reload</p>";
+	$this->helper->request_syscmd ("sh /opt/sark/scripts/srkreload");
 	$this->log .= "<p>System Regen complete</p>";
 
 

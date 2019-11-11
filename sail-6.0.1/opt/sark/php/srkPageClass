@@ -231,17 +231,24 @@ Class page {
   				'sipcapIsOff' => array (
 //  							'faclass' => 'camera',
 								'src' => 'screenshot.png',
-                                'alt' => 'Siplog Start',
+                                'alt' => 'PCAPstart',
 
-                                'title' => 'Turn on SIP logging',
+                                'title' => 'Start SIP PCAP logging',
                                 ), 
  				'sipcapIsOn' => array (
 //								'faclass' => 'camera',
 								'src' => 'screenshot-red.png',
 								'colour' => ' w3-text-red',
-                                'alt' => 'Siplog Stop',
-                                'title' => 'Turn off SIP logging',
-                                ), 
+                                'alt' => 'PCAPstop',
+                                'title' => 'Stop SIP PCAP logging',
+                                ),
+ 				'sipcapFilter' => array (
+//								'faclass' => 'camera',
+								'src' => 'screenshot-red.png',
+								'colour' => ' w3-text-yellow',
+                                'alt' => 'Filter',
+                                'title' => 'Erase the SIP PCAP logs',
+                                ),                                                                 
                 'snap' => array (
 //                                'faclass' => 'database',
                                 'src' => 'spin.png',
