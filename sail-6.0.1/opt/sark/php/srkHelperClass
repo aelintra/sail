@@ -531,7 +531,7 @@ public function getTable($table, $sql='',$filter=true, $default=false,$order='pk
 		}
 	}
 	$sql .= " ORDER BY " . $order . " COLLATE NOCASE ASC";
-	$this->logit("getTable; I'm running sql $sql",3 );
+	$this->logit("getTable; I'm running sql $sql",5 );
 	$res = $dbh->query($sql);    
 	$return = $res->fetchAll(); 
 	return $return;
@@ -604,7 +604,7 @@ public function createTuple($tab,$rec,$check=true) {
  */  
 	$sql->execute($varg);
 	$this->commitOn();
-	$this->logit("I'm creating a new $tab with $vnarg and $varg[0]",3 );
+	$this->logit("I'm creating a new $tab with $vnarg and $varg[0]",5 );
 	return 'OK';
 }
 
@@ -664,7 +664,7 @@ public function setTuple($tab,$rec,$modpkey=false) {
  */  
 	$sql->execute($varg);
 	$this->commitOn();
-	$this->logit("I'm updating $tab",3 );
+	$this->logit("I'm updating $tab",5 );
 	return 'OK';
 }	
 
@@ -788,7 +788,7 @@ public function buildTupleArray($post,&$tuple,$custom=false,$stripslash=array())
 public function exec_SQL($dbh,$sql) {
 	
 	try {
-		$this->logit("running SQL -> $sql", 8 );
+		$this->logit("running SQL -> $sql", 5 );
 		$audit = fopen("/opt/sark/db/srkaudit.log","a");
 		fwrite($audit,date("M j H:i:s") . ": " . $sql . "\n");		
 		$res=$dbh->prepare($sql);

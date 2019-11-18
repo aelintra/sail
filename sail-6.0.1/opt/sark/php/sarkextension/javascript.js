@@ -10,6 +10,7 @@
         $('#divcalleridname').hide();
         $('#divdevice').hide();
         $('#divmacblock').hide();
+        $('#divdevicevxt').hide();
         $('#divblksize').hide();
         $('#endsave').hide();
         $('#save').hide();
@@ -34,8 +35,12 @@
 			if(this.value=='Unprovisioned batch') {
 				$('#divrule').show();
 				$('#divblksize').show();					
-			}			
-					
+			}
+			if(~this.value.indexOf("VXT")) {
+				$('#divrule').show();
+				$('#divdevicevxt').show();
+				$('#divblksize').show();								
+			}											
 		}); 	
 	
 
@@ -73,12 +78,7 @@
 	  $("#update").attr("src", "/sark-common/buttons/save-red.png");
 	  $("#commit").attr("src", "/sark-common/buttons/commitClick.png");
 	}); 
-/*	
-	$("#blftable").change(function() {		  
-	  $("#upload").attr("src", "/sark-common/buttons/upload-red.png");
-	  $("#notify").attr("src", "/sark-common/buttons/redo-red.png");
-	}); 	
-*/	
+	
 	$("#sarkextensionForm").validate ( {
 	   rules: {
 // edit-panel rules
@@ -132,6 +132,20 @@
 			{ "sName": "edit" },
 			{ "sName": "del" }		
 		],
+		"createdRow": function( row, data, dataIndex ) {
+            if ( ~data[3].indexOf("VXT") &&  ~data[8].indexOf("OK") ) {        
+         			$(row).find('td:eq(0)').css('background-color', 'lightgreen');
+     
+       		}
+       		else if ( ~data[3].indexOf("VXT")) {        
+         			$(row).find('td:eq(0)').css('background-color', 'lightyellow');
+     
+       		}
+        	else if( ~data[8].indexOf("Stolen")) {        
+         			$(row).find('td:eq(0)').css('background-color', 'pink');
+         	}      		
+       	},
+
 		"oLanguage": {
 
 			"sSearch": "Filter:"
@@ -147,46 +161,6 @@
 		}  
 		        
 	} )
-/*
-	.makeEditable({
-			sUpdateURL: "/php/sarkextension/update.php",
-			fnOnEdited: function(status)
-				{ 	
-					$("#commit").attr("src", "/sark-common/buttons/commitClick.png");
-				},	
-			"aoColumns": [
-				null,  	// pkey
-				null,   // tenant
-				null,	// user
-				null,	// device
-				null, 	// MAC 
-				null, 	// IP	
-				null,	// local/remote	
-				{
-					tooltip: 'Click to edit',
-					type: 'select',
-					event: 'click',
-					onblur: 'cancel',
-					submit: 'save',
-					data: "{ 'No':'No','Once':'Once','Always':'Always' }"
-				}, 		// sndcreds
-				null,	// boot
-				null,   // trns 
-				null,   // connect
-				{
-					tooltip: 'Click to edit',
-					type: 'select',
-					event: 'click',
-					onblur: 'cancel',
-					submit: 'save',
-					data: "{ 'YES':'YES','NO':'NO' }"
-				}, 		// active				
-				null,	// edit
-				null	// delete					
-            ]	
-	});
-*/	
-//	$(".dataTables_scrollBody").find("tr").find('td:eq(10):not(:contains("OK"))').css('color', 'Red') ; 
 
 
 	

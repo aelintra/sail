@@ -236,121 +236,6 @@ disallow=all
 allow=alaw
 allow=ulaw','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,legacy,owner,technology) values ('PIKAFXS','PIKA fxs extension','1','system','Custom');
-INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,legacy,owner,provision,sipiaxfriend,technology) values ('Panasonic KX-HDV','1','panasonicHDV.Fkey','Panasonic KX-HDV range','system','# Panasonic SIP Phone Standard Format File #
-# This is a simplified sample configuration file.
-############################################################
-# Configuration Setting #
-############################################################
-# URL of this configuration file
-OPTION66_ENABLE="Y"
-OPTION66_REBOOT="Y"
-PROVISION_ENABLE="Y"
-CFG_RESYNC_FROM_SIP="check-sync"
-CFG_STANDARD_FILE_PATH="http://$localip/provisioning?mac={mac}"
-SIP_DETECT_SSAF_1="Y"
-############################################################
-# SIP Settings #
-# Suffix "_1" indicates this parameter is for "line 1". #
-############################################################
-# IP Address or FQDN of SIP registrar server, proxy server
-SIP_RGSTR_ADDR_1="$localip"
-SIP_PRXY_ADDR_1="$localip"
-# IP Address or FQDN of SIP presence server
-SIP_PRSNC_ADDR_1="$localip"
-# Enables DNS SRV lookup
-SIP_DNSSRV_ENA_1="Y"
-
-# Set TLS initially OFF
-SIP_RGSTR_PORT_1=“5060"
-SIP_PRXY_PORT_1=“5060"
-SIP_PRSNC_PORT_1="5060"
-SIP_SRC_PORT_1=“5060"
-SIP_TRANSPORT_1=“0"
-SIP_TLS_MODE_1=“0"
-SRTP_CONNECT_MODE_1=“1"
-
-NUM_PLAN_PICKUP_DIRECT="*8"
-NTP_ADDR="pool.ntp.org"
-# 
-# Timezone needs to be set for your zone if not UK
-#
-LOCAL_TIME_ZONE_POSIX="GMT0BST,M3.5.0/1,M10.5.0"
-HTTPD_PORTOPEN_AUTO="Y"
-VM_SUBSCRIBE_ENABLE="Y"
-VM_NUMBER_1="*50*"
-HTTPD_PORTOPEN_AUTO="Y"
-
-# UK call progress tones
-
-DIAL_TONE1_FRQ="350,440"
-DIAL_TONE1_TIMING="60,0"
-BUSY_TONE_FRQ="400,400"
-BUSY_TONE_TIMING="60,375,315"
-REORDER_TONE_FRQ="400,400"
-REORDER_TONE_TIMING="60,0"
-RINGBACK_TONE_FRQ="400,450"
-RINGBACK_TONE_TIMING="60,400,200,400,1940"
-
-# this is the stutter dial tone
-DIAL_TONE4_FRQ="350,440"
-DIAL_TONE4_TIMING="560,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,0"
-
-# not sure what this is used for but was the same as dial tone 1
-DIAL_TONE2_FRQ="350,440"
-DIAL_TONE2_TIMING="60,0"
-
-# # Browser access - CHANGE THIS FOR YOUR SITE!
-## N.B. passwords must be 6 characters or more
-ADMIN_ID="admin"
-ADMIN_PASS="myadminpass"
-USER_ID="user"
-USER_PASS="myuserpass"
-
-## LDAP Settings
-LDAP_ENABLE="Y"
-LDAP_DNSSRV_ENABLE="N"
-LDAP_SERVER="ldap://$localip"
-LDAP_SERVER_PORT="389"
-LDAP_MAXRECORD="20"
-LDAP_NUMB_SEARCH_TIMER="30"
-LDAP_NAME_SEARCH_TIMER="5"
-# 
-# UID and PWD need to be set for your installation!
-LDAP_USERID="root"
-LDAP_PASSWORD="spibble"
-#
-LDAP_NAME_FILTER="(|(cn=%)(sn=%))"
-LDAP_NUMB_FILTER="(|(telephoneNumber=%)(mobile=%)(homePhone=%))"
-LDAP_NAME_ATTRIBUTE="cn,sn"
-LDAP_NUMB_ATTRIBUTE="telephoneNumber,mobile,homePhone"
-LDAP_BASEDN="$ldapbase"
-LDAP_SSL_VERIFY="0"
-LDAP_ROOT_CERT_PATH=""
-LDAP_CLIENT_CERT_PATH=""
-LDAP_PKEY_PATH=""
-
-# ID, password for SIP authentication
-PHONE_NUMBER_1="$ext"
-SIP_AUTHID_1="$ext"
-SIP_PASS_1="$password"','type=peer
-defaultuser=$desc
-secret=$password
-mailbox=$ext
-host=dynamic
-qualify=yes
-context=internal
-call-limit=3
-callerid="$desc" <$ext>
-canreinvite=no
-pickupgroup=1
-callgroup=1
-subscribecontext=extensions
-disallow=all 
-allow=alaw
-allow=ulaw
-nat=$nat
-transport=$transport
-encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,technology) values ('Panasonic','panasonicHDV.Fkey','Panasonic KX-HDV range','system','# Panasonic SIP Phone Standard Format File #
 # This is a simplified sample configuration file.
 ############################################################
@@ -507,6 +392,121 @@ call-limit=3
 canreinvite=no
 pickupgroup=1
 callgroup=1','SIP');
+INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,legacy,owner,provision,sipiaxfriend,technology) values ('Panasonic KX-HDV','1','panasonicHDV.Fkey','Panasonic KX-HDV range','system','# Panasonic SIP Phone Standard Format File #
+# This is a simplified sample configuration file.
+############################################################
+# Configuration Setting #
+############################################################
+# URL of this configuration file
+OPTION66_ENABLE="Y"
+OPTION66_REBOOT="Y"
+PROVISION_ENABLE="Y"
+CFG_RESYNC_FROM_SIP="check-sync"
+CFG_STANDARD_FILE_PATH="http://$localip/provisioning?mac={mac}"
+SIP_DETECT_SSAF_1="Y"
+############################################################
+# SIP Settings #
+# Suffix "_1" indicates this parameter is for "line 1". #
+############################################################
+# IP Address or FQDN of SIP registrar server, proxy server
+SIP_RGSTR_ADDR_1="$localip"
+SIP_PRXY_ADDR_1="$localip"
+# IP Address or FQDN of SIP presence server
+SIP_PRSNC_ADDR_1="$localip"
+# Enables DNS SRV lookup
+SIP_DNSSRV_ENA_1="Y"
+
+# Set TLS initially OFF
+SIP_RGSTR_PORT_1=“5060"
+SIP_PRXY_PORT_1=“5060"
+SIP_PRSNC_PORT_1="5060"
+SIP_SRC_PORT_1=“5060"
+SIP_TRANSPORT_1=“0"
+SIP_TLS_MODE_1=“0"
+SRTP_CONNECT_MODE_1=“1"
+
+NUM_PLAN_PICKUP_DIRECT="*8"
+NTP_ADDR="pool.ntp.org"
+# 
+# Timezone needs to be set for your zone if not UK
+#
+LOCAL_TIME_ZONE_POSIX="GMT0BST,M3.5.0/1,M10.5.0"
+HTTPD_PORTOPEN_AUTO="Y"
+VM_SUBSCRIBE_ENABLE="Y"
+VM_NUMBER_1="*50*"
+HTTPD_PORTOPEN_AUTO="Y"
+
+# UK call progress tones
+
+DIAL_TONE1_FRQ="350,440"
+DIAL_TONE1_TIMING="60,0"
+BUSY_TONE_FRQ="400,400"
+BUSY_TONE_TIMING="60,375,315"
+REORDER_TONE_FRQ="400,400"
+REORDER_TONE_TIMING="60,0"
+RINGBACK_TONE_FRQ="400,450"
+RINGBACK_TONE_TIMING="60,400,200,400,1940"
+
+# this is the stutter dial tone
+DIAL_TONE4_FRQ="350,440"
+DIAL_TONE4_TIMING="560,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,0"
+
+# not sure what this is used for but was the same as dial tone 1
+DIAL_TONE2_FRQ="350,440"
+DIAL_TONE2_TIMING="60,0"
+
+# # Browser access - CHANGE THIS FOR YOUR SITE!
+## N.B. passwords must be 6 characters or more
+ADMIN_ID="admin"
+ADMIN_PASS="myadminpass"
+USER_ID="user"
+USER_PASS="myuserpass"
+
+## LDAP Settings
+LDAP_ENABLE="Y"
+LDAP_DNSSRV_ENABLE="N"
+LDAP_SERVER="ldap://$localip"
+LDAP_SERVER_PORT="389"
+LDAP_MAXRECORD="20"
+LDAP_NUMB_SEARCH_TIMER="30"
+LDAP_NAME_SEARCH_TIMER="5"
+# 
+# UID and PWD need to be set for your installation!
+LDAP_USERID="root"
+LDAP_PASSWORD="spibble"
+#
+LDAP_NAME_FILTER="(|(cn=%)(sn=%))"
+LDAP_NUMB_FILTER="(|(telephoneNumber=%)(mobile=%)(homePhone=%))"
+LDAP_NAME_ATTRIBUTE="cn,sn"
+LDAP_NUMB_ATTRIBUTE="telephoneNumber,mobile,homePhone"
+LDAP_BASEDN="$ldapbase"
+LDAP_SSL_VERIFY="0"
+LDAP_ROOT_CERT_PATH=""
+LDAP_CLIENT_CERT_PATH=""
+LDAP_PKEY_PATH=""
+
+# ID, password for SIP authentication
+PHONE_NUMBER_1="$ext"
+SIP_AUTHID_1="$ext"
+SIP_PASS_1="$password"','type=peer
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
 INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,sipiaxfriend,technology) values ('Panasonic TGP5xx','Panasonic DECT base station','system','# PCC Standard Format File #
 # This is a simplified sample configuration file.
 ############################################################

@@ -2,7 +2,7 @@
 #
 #
 #
-#	Copyrigt Aelintra Telecom Limited(2008-16), all rights reserved
+#	Copyrigt Aelintra Telecom Limited(2008-19), all rights reserved
 #
 #  N.B. requires db and sark.db to be 664 and www-data to be a member of group asterisk 
 #
@@ -41,10 +41,11 @@ if ($debug) {
 }
 
 my ($action, $exten, $clid) = @ARGV;
+doLogit("AELHD invoked with command=$action, exten=$exten, CLID=$clid");
 
 
 unless ($action) {
-	doLogit("Syntax Error - invoked without an action command $action");
+	doLogit("Syntax Error - invoked without an action command");
     exit (4);
 }
 
@@ -53,6 +54,8 @@ my $maclong;
 my $mfgmac;
 my $notify;
 my $clidevice;
+my $clitenant;
+my $extentenant;
 
 
 if ($action eq 'prune') {
@@ -65,7 +68,17 @@ my $dbh = DBI->connect( "dbi:SQLite:dbname=/opt/sark/db/sark.db","", "", { Raise
 
 if ($action eq 'login') {
        $maclong = SQLiteGet($dbh, "SELECT macaddr FROM ipphone where pkey = '$clid'");
-       $clidevice = SQLiteGet($dbh, "SELECT device FROM ipphone where pkey = '$clid'");      
+       $clidevice = SQLiteGet($dbh, "SELECT device FROM ipphone where pkey = '$clid'"); 
+       $clitenant = SQLiteGet($dbh, "SELECT cluster FROM ipphone where pkey = '$clid'"); 
+       $extentenant = SQLiteGet($dbh, "SELECT cluster FROM ipphone where pkey = '$exten'");
+# check tenants match
+	   if  ($clitenant ne $extentenant) {
+	   	doLogit("VXT exten and target phone are in different tenants! exten->$exten, CLID->$clid");
+		exit (4);
+	   } 
+	   else {
+	   	doLogit("VXT exten and target phone are in same tenant, proceeding... exten->$exten, CLID->$clid tenant->$clitenant");
+	   }         
 }
 else {
         $maclong = SQLiteGet($dbh, "SELECT macaddr FROM ipphone where pkey = '$exten'");
@@ -119,7 +132,7 @@ sub doLogin () {
 	unless ($device =~ $clidevice) {
 # allow Yealinks and Snoms to cross-map
 		unless ($device =~ /^Yealink/ && $clidevice =~ /^Yealink/) {
-			unless ($device =~ /^Snom/ && $clidevice =~ /^Snom/) {
+			unless ($device =~ /^S|snom/ && $clidevice =~ /^S|snom/) {
 				doLogit("Trying to log in on wrong device type - device->$device, clidevice->$clidevice,  exten->$exten, CLID->$clid ");
 				exit (4);
 			}
@@ -134,11 +147,14 @@ sub doLogin () {
         	doLogit("VXT attempting login but is already logged on to this extension exten->$exten, CLID->$clid ");
 			exit (4);
    		}
-       		doLogoutUser($exten);
+       	doLogoutUser($exten);
+ # give the logged in phone a few seconds to clear off and re-register      	
+       	sleep(5);
 	}
 	
-# Is this phone already stolen?
-    my $clidDevice = SQLiteGet($dbh, "SELECT device FROM ipphone where pkey = '$clid'");
+    my $clidDevice = SQLiteGet($dbh, "SELECT device FROM ipphone where pkey = '$clid'");   
+    
+  # Is this phone already stolen?  
 	if ( $clidDevice =~ /VXT/ ) {
 			doLogit("Override VXT User $clid with User $exten ");
 			my $savexten = $exten;
@@ -146,6 +162,8 @@ sub doLogin () {
 			$clid = SQLiteGet($dbh, "SELECT stolen FROM ipphone where pkey = '$exten'");
 			doLogit("origin clid is $clid ");	
 			doLogoutUser($exten);
+ # give the logged in phone a few seconds to clear off and re-register      	
+       		sleep(5);			
 			$exten = $savexten;
 	}
 	doLogit("Sense checks passed for login - device->$device, clidevice->$clidevice,  exten->$exten, CLID->$clid ");	
@@ -164,6 +182,7 @@ sub doLogin () {
 	doLogit("VXT User $exten is acquiring $clid");	
 	doLogit("Sending reset to $notify and $clid");
 	request_syscmd ("/usr/sbin/asterisk -rx \"sip notify $notify $clid\" ");
+#	`sudo /usr/sbin/asterisk -rx \"sip notify $notify $clid\"`;
 }
 
 
@@ -172,12 +191,13 @@ sub doLogoutUser ($) {
     my $stolen = SQLiteGet($dbh, "SELECT stolen FROM ipphone where pkey = '$exten'"); 
 
 	if ($stolen) {
-        SQLiteDo($dbh, "UPDATE ipphone SET macaddr=NULL,stolen=NULL,stealtime=NULL WHERE pkey='$exten'");
+        SQLiteDo($dbh, "UPDATE ipphone SET macaddr=NULL,devicemodel=NULL,stolen=NULL,stealtime=NULL WHERE pkey='$exten'");
         SQLiteDo($dbh, "UPDATE ipphone SET macaddr = basemacaddr WHERE pkey='$stolen'");
         SQLiteDo($dbh, "UPDATE ipphone SET stolen=NULL,stealtime=NULL WHERE pkey='$stolen'");
 		doLogit("VXT User $exten is releasing $stolen with $notify $exten");		
 
 		request_syscmd ("/usr/sbin/asterisk -rx \"sip notify $notify $exten\" ");
+#		`sudo /usr/sbin/asterisk -rx \"sip notify $notify $exten\" `;
 
 	}
 	else {

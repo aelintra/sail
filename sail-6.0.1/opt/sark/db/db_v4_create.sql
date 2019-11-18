@@ -325,7 +325,7 @@ LDAPBASE text,                      -- LDAP base
 LDAPOU text,                        -- LDAP OU
 LDAPUSER text,                      -- LDAP user
 LDAPPASS text,                      -- LDAP password
-LEASEHDTIME TEXT,                   -- Hot desk lease time
+LEASEHDTIME INT DEFAULT 43200,      -- Hot desk lease time
 LKEY TEXT,							-- not used
 LOCALAREA TEXT,                     -- not used (See Cluster)
 LOCALDLEN TEXT,                     -- not used (See Cluster)
@@ -394,6 +394,7 @@ VLIBS TEXT,                         -- not used in 4.x
 VMAILAGE TEXT,                      -- oldest age of vmail
 VOICEINSTR TEXT,                    -- play long or short Vmail instructions
 VOIPMAX TEXT,                       -- MAX outbound up calls
+VXT	TEXT DEFAULT 0,					-- Enable/disable VXT
 XMPP TEXT,                          -- not used in 4.x 
 XMPPSERV TEXT,                      -- not used in 4.x 
 ZTP TEXT,                           -- Zero touch provisioning on/off

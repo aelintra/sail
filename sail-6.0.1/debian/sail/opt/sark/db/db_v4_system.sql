@@ -86,6 +86,7 @@ INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('80:5E:C0','Yealink','yea
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:23:69','Linksys','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:80:F0','Panasonic','panasonic-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('08:00:23','Panasonic','panasonic-check-cfg');
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('BC:C3:42','Panasonic','panasonic-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('64:9E:F3','CiscoSPA','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('7C:2F:80','Gigaset','gigaset-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('14:B3:70','Gigaset','gigaset-check-cfg');

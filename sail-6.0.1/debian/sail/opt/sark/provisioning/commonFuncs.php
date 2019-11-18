@@ -88,12 +88,14 @@ function cleanConfig($phonepkey,$rawConfig,&$db,&$retstring,&$loopCheck,$sndcred
 			$configs = $db->prepare('select pkey, provision from Device where pkey = ?');
 			$configs->execute(array($devpkey));
 			$thisConfig = $configs->fetchObject();
+			$configs = NULL;
 		} catch (Exception $e) {
 			$errorMsg = $e->getMessage();
   			logIt("Could not retrieve Descriptor $devpkey  - DB error $errorMsg");
   			send404();
   			exit;			
 		}
+		$configs=NULL;
 		if (!is_object($thisConfig)) {
 			logIt("Unable send Descriptor file for $devpkey - skipping");
 			continue;
@@ -123,14 +125,17 @@ logIt("BLF iteration for phonepkey=$phonepkey, devpkey=$devpkey");
 		$extConfig = $db->prepare('select protocol,provisionwith from ipphone where pkey = ?');
 		$extConfig->execute(array($phonepkey));
 		$thisextConfig = $extConfig->fetchObject();
+		$extConfig = NULL;
 
 		$template = $db->prepare('select provision from Device where pkey = ?');
 		$template->execute(array($devpkey));
 		$thistemplate = $template->fetchObject();
+		$template = NULL;
 	
 		$phoneFKeys = $db->prepare('select * from IPphone_FKEY where pkey = ?');
 		$phoneFKeys->execute(array($phonepkey));
 		$fKeys = $phoneFKeys->fetchAll();
+		$phoneFKeys = NULL;
 
 	} catch (Exception $e){
   		$errorMsg = $e->getMessage();
@@ -289,6 +294,8 @@ function polycomSubConfig($mac,$fname,$db) {
 	try {
 		$extConfig = $db->prepare('select pkey,provision,provisionwith,device,desc,location,passwd,sndcreds from IPphone where technology=? AND lower(macaddr) = ? limit 1');
 		$extConfig->execute(array('SIP',$mac));
+		$thisextConfig = $extConfig->fetchObject();
+		$extConfig = NULL;
 		
 	} catch (Exception $e) {
 		logIt("Unable get mac file for Polycom $mac");
@@ -296,7 +303,6 @@ function polycomSubConfig($mac,$fname,$db) {
 		exit;
 	}
 	
-	$thisextConfig = $extConfig->fetchObject();
 	
 	if (!isset ($thisextConfig->pkey)) {
 		logIt("$mac-$fname MAC user not found in db - suspicious;  Sending 404 and giving up");
@@ -310,13 +316,15 @@ function polycomSubConfig($mac,$fname,$db) {
 	try {	
 		$configs = $db->prepare('select provision from Device where pkey = ?'); 
 		$configs->execute(array($fname));
+		$thisConfig = $configs->fetchObject();
+		$configs = NULL;
 		
 	} catch (Exception $e) {
 		logIt("Unable to fetch Polycom sub-file $fname");
 		send404();
 		exit;
 	}
-	$thisConfig = $configs->fetchObject();
+	
 	if (! isset($thisConfig->provision)) {
 		logIt("$mac-$fname provisioning data not found in db.  Sending 404 and giving up");
 		send404();
@@ -376,6 +384,7 @@ function polycomSubConfig($mac,$fname,$db) {
 			try {
 				$update = $db->prepare("update ipphone set sndcreds='No' where  pkey = '" . $thisextConfig->pkey . "'");
 				$update->execute();
+				$update = NULL;
 			} catch (Exception $e) {
 				logIt("Unable to update extension sndcreds - DB error $errorMsg");
 			}

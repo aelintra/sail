@@ -219,7 +219,13 @@ Class page {
 //                                'src' => 'cancel.png',
                                 'alt' => 'Return',
                                 'title' => 'Return'
-                                ),                                                
+                                ), 
+                'rlse' => array (
+//                              'faclass' => 'times',
+//                                'src' => 'cancel.png',
+                                'alt' => 'Rlse',
+                                'title' => 'Rlse'
+                                ),                                                                                
  				'save' => array (
 // 								'faclass' => 'save',
 								'class' => 'buttonUpdate',

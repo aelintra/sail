@@ -1398,6 +1398,24 @@ ANDHERE;
         exten => _*40[*]XXXX,1,agi(sarkhpe,\${EXTEN},,)       	; Page Group
         exten => _*40[*]XXX,1,agi(sarkhpe,\${EXTEN},,)		; Page Group
         exten => _*4[12][*],1,agi(sarkhpe,\${EXTEN},,)		; ProVu DND
+
+;
+;	HD INVOCATION
+:
+
+		exten=>_*0XX.,1,PlayBack(silence/1)
+		exten=>_*0XX.,n,VMAuthenticate(\${EXTEN:2},j)
+		exten=>_*0XX.,n,System(/opt/sark/scripts/aelhdlon.pl login \${EXTEN:2} \${CALLERID(number)} )
+		exten=>_*0XX.,n,Hangup
+		exten=>_*0XX.,101,Playtones(congestion)
+		
+		exten=>_*01,1,PlayBack(silence/1)
+		;exten=>_*1,n,VMAuthenticate(\${CALLERID(number)},j)
+		exten=>_*01,n,System(/opt/sark/scripts/aelhdlon.pl logout \${CALLERID(number)} )
+		exten=>_*01,n,Hangup
+		exten=>_*01,101,Playtones(congestion)
+
+
 ;
 ;   RSSH support sessions - requires rssh licence keys to be installed
 ;
