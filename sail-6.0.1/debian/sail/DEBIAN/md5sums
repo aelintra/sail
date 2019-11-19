@@ -259,7 +259,7 @@ dfced7667010a86c22b82ed77cdb4841  opt/sark/countries/zm.zone
 8c94efe3682ba36a21e6c56af65aa8a0  opt/sark/countries/zw.zone
 dd7462bbdfa72cd259a1e73d26bb5c0c  opt/sark/db/.sail-install-date
 368e76b4b6237c3c1c6edfe0a04f76b9  opt/sark/db/db_v4_create.sql
-050c4440a75579fdd2c94563fd88f7eb  opt/sark/db/db_v4_device.sql
+15e15fedfbb2ad2646225bd34afd0384  opt/sark/db/db_v4_device.sql
 15bf14c790690a9764f90984c38bc52f  opt/sark/db/db_v4_message.sql
 1586051c01b1b3ba662f96b18ef9de54  opt/sark/db/db_v4_system.sql
 fc6ff2307a71a374b7148da57410afcf  opt/sark/db/ldap_create.ldif
@@ -1374,5 +1374,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-29b17bf30b1fd312b7fe7b639f146a36  usr/share/doc/sail/changelog.Debian.gz
+e0d8b06930b9219206909f1821d7ad8a  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

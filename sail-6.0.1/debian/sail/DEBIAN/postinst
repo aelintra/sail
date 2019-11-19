@@ -246,13 +246,12 @@ sed -i 's/Listen 443/Listen [::]:443/' /etc/apache2/ports.conf
 
 # F2b setup
 [ -e /etc/fail2ban/jail.local ] && rm -rf /etc/fail2ban/jail.local && echo "replacing F2B jail.local" 
-
 ln -s /opt/sark/etc/fail2ban/jail-stretch.local /etc/fail2ban/jail.local
 [ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 
 # apache setup
 ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
-ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/sark_includes
+ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/
 
 # Asterisk 11+ call parks
 [ ! -e /etc/asterisk/res_parking.conf ] && touch /etc/asterisk/res_parking.conf

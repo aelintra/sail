@@ -299,6 +299,10 @@ DIAL_TONE4_TIMING="560,100,100,100,100,100,100,100,100,100,100,100,100,100,100,1
 DIAL_TONE2_FRQ="350,440"
 DIAL_TONE2_TIMING="60,0"
 
+# cause un-reg/re-reg on sync 
+USE_DEL_REG_OPEN_1="Y"
+USE_DEL_REG_CLOSE_1="Y"
+
 # # Browser access - CHANGE THIS FOR YOUR SITE!
 ## N.B. passwords must be 6 characters or more
 ADMIN_ID="admin"
@@ -545,6 +549,26 @@ LINE_ID_1=""
 DISPLAY_NAME_1="$desc"
 
 
+','type=peer
+defaultuser=$desc
+secret=$password
+mailbox=$ext
+host=dynamic
+qualify=yes
+context=internal
+call-limit=3
+callerid="$desc" <$ext>
+canreinvite=no
+pickupgroup=1
+callgroup=1
+subscribecontext=extensions
+disallow=all 
+allow=alaw
+allow=ulaw
+nat=$nat
+transport=$transport
+encryption=$encryption','SIP');
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,sipiaxfriend,technology) values ('Panasonic VXT','Panasonic Hot Desk','system','#INCLUDE Panasonic
 ','type=peer
 defaultuser=$desc
 secret=$password
