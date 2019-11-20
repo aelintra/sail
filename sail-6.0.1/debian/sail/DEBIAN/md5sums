@@ -440,7 +440,7 @@ db1a225810efb6831e530e3e6b494791  opt/sark/php/sarkedsw/view.php
 56013d06915524c3acfeec728d92c9ad  opt/sark/php/sarkedsw6/view.php
 ea4055b9123ff5334a3d7a51b802e3ba  opt/sark/php/sarkextension/blflist.php
 670157d460ce2b1dc856fdfd357e2155  opt/sark/php/sarkextension/delete.php
-52a4699dfb287c5427c2e89683ee4ae8  opt/sark/php/sarkextension/javascript.js
+324c885e71752b138e5d5be5c012d5c8  opt/sark/php/sarkextension/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkextension/main.php
 7bc584258baa51de30c1249b89d3b104  opt/sark/php/sarkextension/update.php
 72d675db1a467fbc9cd316f700b19911  opt/sark/php/sarkextension/updateblf.php
@@ -586,7 +586,7 @@ c2eb844019dfd01e67eea0c33ec6b0c9  opt/sark/provisioning/device.php
 61a2a12db7862761d193f47665e878c4  opt/sark/public/snom/snom_rereg.php
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/recone
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/sark.db
-6d5a880594f06d28c39b43611ba56ff1  opt/sark/scripts/aelhdlon.pl
+ec0857471d166e51b6edb7621c6a3e6d  opt/sark/scripts/aelhdlon.pl
 2f11f865191292b100e16ef227c5de06  opt/sark/scripts/age.sh
 0890537176fd22bdaf4183c21c0b47a4  opt/sark/scripts/agerecordings.sh
 77430ca1837e67c7268db55a5c2f9a93  opt/sark/scripts/agevmail.sh
@@ -1374,5 +1374,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-e0d8b06930b9219206909f1821d7ad8a  usr/share/doc/sail/changelog.Debian.gz
+8e4cd6e6b85e5d886b5143646f27d1d7  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

@@ -143,6 +143,7 @@
        		}
         	else if( ~data[8].indexOf("Stolen")) {        
          			$(row).find('td:eq(0)').css('background-color', 'pink');
+         			$(row).find('td:eq(7)').css('color', 'mediumblue');
          	}      		
        	},
 
