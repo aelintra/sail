@@ -64,7 +64,9 @@ public function showForm() {
 	}
 	
 	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
-		$this->setPerms();	
+		$this->setPerms();
+		$this->showPerms();	
+		return;	
 	}
 	if (isset($_GET['permedit'])) { 
 		$this->showPerms();	
@@ -258,7 +260,7 @@ private function showPerms() {
 	$res = $this->dbh->query("SELECT CLUSTER FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$cluster = $res['CLUSTER'];
 	
-	$user_pkey = $_GET['pkey'];
+	$user_pkey = $_REQUEST['pkey'];
 			
 	
 	$buttonArray['cancel'] = true;

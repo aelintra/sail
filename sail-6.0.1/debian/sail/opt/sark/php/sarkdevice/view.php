@@ -38,11 +38,12 @@ public function showForm() {
 	
 	$this->myPanel->pagename = 'Devices';
 	
-	if (isset($_GET['pkey'])) {
-		$this->showEdit($_GET['pkey']);
-		return;
-	}
-			
+	if (isset($_REQUEST['delete'])) { 
+		$pkey = $_REQUEST['pkey'];
+		$this->helper->delTuple("device",$pkey); 
+		$this->message = "$pkey - deleted";		
+	}	
+	
 	if (isset($_POST['new'])) { 
 		$this->showNew();
 		return;		
@@ -73,12 +74,10 @@ public function showForm() {
 		}					
 	}
 	
-	if (isset($_POST['update'])) { 
+	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}					
+		$this->showEdit();
+		return;				
 	}
 	
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -104,7 +103,7 @@ private function showMain() {
  */
 
 	$buttonArray['new'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkdeviceForm",false);
+	$this->myPanel->actionBar($buttonArray,"sarkdeviceForm",false,false);
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
 	}
@@ -158,8 +157,8 @@ private function showMain() {
 		else {
 			$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
 		}
-		$get = '?id=' . $row['pkey'];		
-		$this->myPanel->ajaxdeleteClick($get);
+		$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$row['pkey']);
+		
 		echo '</td>' . PHP_EOL;
 		echo '</tr>'. PHP_EOL;
 	}
@@ -290,18 +289,13 @@ private function deleteLastBlf() {
 }
 
 private function showEdit() {
-	if (isset($_POST['pkey'])) {
-		$pkey = $_POST['pkey'];
-	}
-	else {
-		$pkey = $_GET['pkey'];
-	}
+
+	$pkey = $_REQUEST['pkey'];
 	$device = $this->dbh->query("SELECT * FROM device WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 
 	$buttonArray['cancel'] = true;
-	$buttonArray['delete'] = true;
 
-	$this->myPanel->actionBar($buttonArray,"sarkdeviceForm",false,true,true);
+	$this->myPanel->actionBar($buttonArray,"sarkdeviceForm",false,false,true);
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
 	}
@@ -357,7 +351,7 @@ private function showEdit() {
 
 	echo '</div>';
 	$endButtonArray['cancel'] = true;
-	$endButtonArray['update'] = "endsave";
+	$endButtonArray['update'] = "endupdate";
 	$this->myPanel->endBar($endButtonArray);
  	echo '</form>' . PHP_EOL; // close the form 
     $this->myPanel->responsiveClose();

@@ -920,10 +920,10 @@ Class page {
         echo '<a href="/php/srksessions/logout.php" target="_parent" class="w3-button w3-text-light-blue w3-hide-small w3-hide-medium">Logout</a>' . PHP_EOL;
         
         if ($showSave) {
-		  echo '<button class="buttonUpdate w3-button w3-text-green" form="' . $form . '" type="submit" name="save" value="save" id="save" title="Save">Save</button>' . PHP_EOL;
+		  echo '<button class="buttonUpdate w3-button w3-text-light-blue" form="' . $form . '" type="submit" name="save" value="save" id="save" title="Save">Save</button>' . PHP_EOL;
         }
         if ($showUpdate) {
-          echo '<button class="buttonUpdate w3-button w3-text-green" form="' . $form . '" type="submit" name="update" value="update" id="update" title="Update">Update</button>' . PHP_EOL;
+          echo '<button class="buttonUpdate w3-button w3-text-light-blue" form="' . $form . '" type="submit" name="update" value="update" id="update" title="Update">Update</button>' . PHP_EOL;
         }        
         if ($showCommit) {
 		  echo '<button class="buttonUpdate w3-button ' . $commitColour . '" form="' . $form . '" type="submit" name="commit" value="commit" id="commit" title="Commit">Commit</button>' . PHP_EOL;
@@ -1648,7 +1648,8 @@ Class page {
 		echo $callback;
 		echo '?delete=yes&amp;pkey=';
 		echo $pkey;
-		echo '"><img src="' . $this->iconpath . 'delete.png" alt = "Click to Delete" title = "Click to Delete"></a></td>';
+		echo '"><img src="' . $this->iconpath . 'delete.png" alt = "Click to Delete" title = "Click to Delete"';
+		echo ' onclick = "return confirmOK(\'Delete? - Confirm?\')"></a></td>';
 	}
 	
 	public function lockState ($lock=true) {

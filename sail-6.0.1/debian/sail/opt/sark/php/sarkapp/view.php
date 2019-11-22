@@ -96,12 +96,13 @@ private function showMain() {
 
 	echo '<thead>' . PHP_EOL;	
 	echo '<tr>' . PHP_EOL;
-	$this->myPanel->aHeaderFor('del',false,'delcol');
+	
 	$this->myPanel->aHeaderFor('context');
 	$this->myPanel->aHeaderFor('cluster',false,'w3-hide-small'); 
 	$this->myPanel->aHeaderFor('description',false,'w3-hide-small'); 	
 	$this->myPanel->aHeaderFor('appspan',false,'w3-hide-small');
 	$this->myPanel->aHeaderFor('ed',false,'editcol');
+	$this->myPanel->aHeaderFor('del',false,'delcol');
 		
 	echo '</tr>' . PHP_EOL;
 	echo '</thead>' . PHP_EOL;
@@ -112,9 +113,7 @@ private function showMain() {
 	$rows = $this->helper->getTable("appl",null,false);
 	foreach ($rows as $row ) { 
 				
-		echo '<tr name="linekey" id="' . $row['pkey'] . '">'. PHP_EOL;
-		$get = '?delete=yes&amp;pkey='. $row['pkey'];
-		$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$get);		
+		echo '<tr name="linekey" id="' . $row['pkey'] . '">'. PHP_EOL;	
 		echo '</td>' . PHP_EOL;				
 		echo '<td class="read_only">' . $row['pkey'] . '</td>' . PHP_EOL;			
 		echo '<td class="w3-hide-small">' . $row['cluster']  . '</td>' . PHP_EOL;		 
@@ -123,6 +122,8 @@ private function showMain() {
 		$get = '?edit=yes&amp;pkey=';
 		$get .= $row['pkey'];	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
+		$get = '?delete=yes&amp;pkey='. $row['pkey'];
+		$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$get);	
 		echo '</tr>'. PHP_EOL;				
 	}
 
@@ -140,17 +141,12 @@ private function showEdit() {
 		$pkey = $this->keychange;		
 	}
 	else {	
-		if (isset($_POST['pkey'])) {
-			$pkey = $_POST['pkey'];
-		}
-		else {
-			$pkey = $_GET['pkey'];
-		}
+		$pkey = $_REQUEST['pkey'];
 	}
 
 	$buttonArray['cancel'] = true;
 
-	$this->myPanel->actionBar($buttonArray,"sarkappForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkappForm",false,true,true);
 	$this->myPanel->Heading($this->head,$this->message);
 	$this->myPanel->responsiveSetup(2);
 //	$this->myPanel->subjectBar($pkey);

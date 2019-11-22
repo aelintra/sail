@@ -100,7 +100,7 @@
 		   cfbs: "Call forward must be blank (default) or a numeric integer",
 		   ringdelay: "ringdelay must be blank (default) or a numeric integer between 1 and 999"
 	   }					
-	}); 
+	});
 
 	var scrollPosition;
 
