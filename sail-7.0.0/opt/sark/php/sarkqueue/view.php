@@ -64,10 +64,8 @@ public function showForm() {
 	
 	if (isset($_POST['update']) || isset($_POST['endupdate'])) {  
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}					
+		$this->showEdit();
+		return;					
 	}
 
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -265,7 +263,7 @@ private function showEdit($pkey=false) {
 	$clusterGreetings[] = 'None';	
 
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkqueueForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkqueueForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

@@ -63,13 +63,11 @@ public function showForm() {
 		}
 	}
 
-	if ( isset($_POST['update']) || isset($_POST['endupdate'])) { 
+	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}
-	}	
+		$this->showEdit();
+		return;				
+	}
 
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
 		$this->helper->sysCommit();
@@ -243,7 +241,7 @@ private function showEdit() {
 	$tuple = $this->dbh->query("SELECT * FROM meetme WHERE pkey='" . $pkey ."'")->fetch(PDO::FETCH_ASSOC);;
 	
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkconferenceForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkconferenceForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

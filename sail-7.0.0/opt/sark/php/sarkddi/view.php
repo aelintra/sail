@@ -63,10 +63,7 @@ public function showForm() {
 	
 	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}					
+		$this->showEdit();				
 	}
 
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -375,12 +372,12 @@ private function showEdit() {
  * General update page.  Jquery controls tabs
  */
   
-	$pkey = $_GET['pkey']; 
+	$pkey = $_REQUEST['pkey']; 
 	$tuple = $this->dbh->query("select li.*,ca.carriertype from lineio li inner join Carrier ca on li.carrier = ca.pkey where li.pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 	
 	
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkddiForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkddiForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

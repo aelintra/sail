@@ -1,0 +1,35 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc -b
+dpkg-buildpackage: warning: using a gain-root-command while being root
+dpkg-buildpackage: source package sail
+dpkg-buildpackage: source version 7.0.0-7
+dpkg-buildpackage: source distribution UNRELEASED
+dpkg-buildpackage: source changed by CoCoSoft <admin@aelintra.com>
+ dpkg-source --before-build sail-7.0.0
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh_testdir
+dh_testroot
+dh_clean -d
+ debian/rules build
+dh_testdir
+ fakeroot debian/rules binary
+dh_testdir
+dh_testdir
+dh_testroot
+dh_prep
+dh_installdirs
+dh_installdocs
+dh_installchangelogs
+find . -maxdepth 1 -mindepth 1 -not -name debian -print0 | \
+	xargs -0 -r -i cp -a {} debian/sail
+dh_compress
+dh_makeshlibs
+dh_installdeb
+dh_gencontrol
+dh_md5sums
+dh_builddeb
+dpkg-deb: building package `sail' in `../sail_7.0.0-7_all.deb'.
+ dpkg-genchanges -b >../sail_7.0.0-7_amd64.changes
+dpkg-genchanges: binary-only upload (no source code included)
+ dpkg-source --after-build sail-7.0.0
+dpkg-buildpackage: binary-only upload (no source included)

@@ -23,6 +23,21 @@ sv d srk-ua-helper
 [ -L /etc/fail2ban/filter.d/asterisk.conf ] && /etc/fail2ban/filter.d/asterisk.conf 
 
 [ -e /etc/sudoers.d/sarkrssh ] && rm -rf /etc/sudoers.d/sarkrssh 
-rm -rf /etc/sudoers.d/sail
-#rm -rf /etc/asterisk/sark_customer*
-insserv --remove debsetlan
+[ -e /etc/sudoers.d/sail ] && rm -rf /etc/sudoers.d/sail
+[ -e /etc/sudoers.d/sailsudoers ] && rm -rf /etc/sudoers.d/sailsudoers
+ 
+# stretch teardown
+grep -q '^9\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	systemctl disable  debsetlan
+fi	
+# jessie teardown
+grep -q '^8\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	[ -e /etc/init.d/debsetlan ] && rm -rf /etc/init.d/debsetlan
+fi
+# wheezy teardown
+grep -q '^7\.' /etc/debian_version 
+if [  "$?" -eq "0" ] ; then	
+	[ -e /etc/init.d/debsetlan ] && rm -rf /etc/init.d/debsetlan
+fi

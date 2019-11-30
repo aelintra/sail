@@ -1,3 +1,16 @@
+sail (5.0.0-63+deb9u1) UNRELEASED; urgency=low
+  * Tagged as 5.0.0-63
+  - converted split to preg_split in sarkholiday
+  - 5.0.0-59 thru 5.0.0-62 were not built for Deb9 changes were as follows
+  - fixed typo in *61* greeting playback
+  - added user recovery (S200) for the techs
+  - added more Yealink phone types
+  - positive apache2 set and start in postinst
+  - fixed minor bug in responder for Yealink phones
+  - added additional Yealink model definitions 
+  
+ -- CoCoSoft <admin@aelintra.com>  Tue, 20  Aug 2019 18:00:00 +0000
+
 sail (5.0.0-58+deb9u1) UNRELEASED; urgency=low
   * Tagged as 5.0.0-58
   - fixed minor bug in list.php when serving endpoints to non admin users

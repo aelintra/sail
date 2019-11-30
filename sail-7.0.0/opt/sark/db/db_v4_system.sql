@@ -86,6 +86,7 @@ INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('80:5E:C0','Yealink','yea
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:23:69','Linksys','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('00:80:F0','Panasonic','panasonic-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('08:00:23','Panasonic','panasonic-check-cfg');
+INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('BC:C3:42','Panasonic','panasonic-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('64:9E:F3','CiscoSPA','sipura-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('7C:2F:80','Gigaset','gigaset-check-cfg');
 INSERT OR IGNORE INTO mfgmac(pkey,name,notify) values ('14:B3:70','Gigaset','gigaset-check-cfg');
@@ -118,6 +119,7 @@ INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('236','sarkthreathist/main.php','Threat History','50','view');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('240','sarkbackup/main.php','Backup/Restore','50','create');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('250','sarklog/main.php','Logs','50','view');
+INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('252','sarkpcap/main.php','SIP PCAP Logs','50','view');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('255','sarkshell/main.php','Console','50','view');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('260','sarkuser/main.php','Users','50','create');
 INSERT OR IGNORE INTO Panel(pkey,classname,displayname,weight,ability) values ('265','sarkldap/main.php','Directory','0','create');
@@ -172,6 +174,7 @@ INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500',
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','236');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','240');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','250');
+INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','252');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','255');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','260');
 INSERT OR IGNORE INTO PanelGroupPanel(PanelGroup_pkey,Panel_pkey) values ('500','265');

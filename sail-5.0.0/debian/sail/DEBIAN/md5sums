@@ -430,7 +430,7 @@ d0a0e7b6e4ebcb6cd9b9f19e58e692a9  opt/sark/php/sarkgreeting/view.php
 76dac9466d0e84829c6b4f3c5933e246  opt/sark/php/sarkholiday/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkholiday/main.php
 d844513c39d13b48d915d1aa174ca8f5  opt/sark/php/sarkholiday/update.php
-2156ec2351fe0c50b47febf6923c415f  opt/sark/php/sarkholiday/view.php
+973e2c197794707faa49897c0f91dfb3  opt/sark/php/sarkholiday/view.php
 047eb59bbcf15a59c4e9e69e7eedaba8  opt/sark/php/sarkipblacklist/delete.php
 6b5e98fde6ffd43b2988a76547b02982  opt/sark/php/sarkipblacklist/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkipblacklist/main.php
@@ -1395,5 +1395,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-81dfe244500aafac0db99ff6b9aa846a  usr/share/doc/sail/changelog.Debian.gz
+c9ffca7466aa023418f9d83e26d85fdc  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright

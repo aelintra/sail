@@ -1,4 +1,0 @@
-#!/bin/sh
-
-exec 2>&1
-exec /usr/sbin/tcpdump -nqt -s 0 -A port 5060 -w  /var/log/siplog

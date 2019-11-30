@@ -1,3 +1,71 @@
+sail (6.0.1-51+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - pre-stabilization cleanup
+  - lots of minor usability changes to make the panel behaviour consistent across the board
+  - modules affected are listed below
+  - appl
+  - extensions
+  - trunks
+  - routes in and out
+  - timers recurring and holiday
+  - users
+  - IVR
+  - callgroups
+  - conferences
+  - agents
+  - queues
+  - templates
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 22  Nov 2019 18:00:00 +0000
+ 
+sail (6.0.1-50+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - aelhdlon cleaned up
+  - minor javascript changes to extensions  
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 20  Nov 2019 18:00:00 +0000
+ 
+sail (6.0.1-49+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - Panasonic template modified to force unreg/reg on dynamic sync
+  - fix to bad symlink in postinst 
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 19  Nov 2019 18:00:00 +0000
+
+sail (6.0.1-48+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - provisioning modified to release DB earlier to avoid occasional locks
+  - sip notify and extensions updated to do inflight resync for Yealink
+  - VXT experimental feature integrated   
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 18  Nov 2019 18:00:00 +0000
+
+sail (6.0.1-47+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - helper->logit now advertises module name
+  - srktimer log msgs given lower priority
+  - srkV4reloader now uses sudo to invoke shorewall check so it can run under www-data
+  - srk-ua-siplog now uses dumpcap and creates carousel for continuous SIP logging
+  - new page sarkpcap to view/download the siplog carousel segments
+  - new controls in globals to manage the siplog carousel (number of segments and size)
+  - dialler modified to send real CLID  
+
+ -- CoCoSoft <admin@aelintra.com>  Mon, 11  Nov 2019 18:00:00 +0000
+
+sail (6.0.1-46+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - extensions/view.php regressed to 44.   It had been partly updated in error.
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 10  Oct 2019 18:00:00 +0000
+
+sail (6.0.1-45+ubuntu18) UNRELEASED; urgency=low
+  * untagged
+  - Fix to fail2ban jail.conf
+  - Fix for data corruption/loss when non admin users update an extension definition 
+  - Added general prefix 141 for cli number withhold
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 31  July 2019 18:00:00 +0000
+
 sail (6.0.1-44+ubuntu18) UNRELEASED; urgency=low
   * untagged
   - Fix to disk space calculation algorithm in srkPageClass

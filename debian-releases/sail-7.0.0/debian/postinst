@@ -84,6 +84,11 @@ if [  "$?" -ne "0" ] ; then
         echo "enable=no" > /etc/asterisk/sark_cdr.conf
 fi
 
+grep -q '#include sark_moh.conf' /etc/asterisk/musiconhold.conf
+if [  "$?" -ne "0" ] ; then
+        echo "#include sark_cdr.conf" >> /etc/asterisk/musiconhold.conf
+fi
+
 if [ -e /etc/asterisk/meetme.conf ] ; then
 	grep -q '#include sark_meetme.conf' /etc/asterisk/meetme.conf
 	if [  "$?" -ne "0" ] ; then
@@ -249,10 +254,10 @@ fi
 # jessie setup
 grep -q '^8\.' /etc/debian_version 
 if [  "$?" -eq "0" ] ; then	
-	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
-	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+	ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
+	ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
-    ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/sark_includes
+    ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/
 	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php5/apache2/php.ini
 	cp -f /opt/sark/cache/debsetlan /etc/init.d
 	update-rc.d debsetlan defaults > /dev/null 2>&1	
@@ -264,8 +269,8 @@ fi
 # wheezy setup
 grep -q '^7\.' /etc/debian_version 
 if [  "$?" -eq "0" ] ; then	
-	[ ! -e /etc/fail2ban/filter.d/asterisk.conf ] && [ -e  /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf ] && ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
-	[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-wheezy.local ] && ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
+	ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
+	ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
 	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf /etc/apache2/sites-available/sark-ssl.conf
 	cp -f /opt/sark/cache/debsetlan /etc/init.d
 	update-rc.d debsetlan defaults > /dev/null 2>&1

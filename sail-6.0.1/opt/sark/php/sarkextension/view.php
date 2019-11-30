@@ -1178,23 +1178,21 @@ private function showEdit() {
  *   TAB Provisioning
  */
 
-    if ($extension['technology'] == 'SIP') {
+	if ($extension['technology'] == 'SIP') {
 		if ( $_SESSION['user']['pkey'] != 'admin' ) {
 			echo '<div style="display:none">';
 		}
-		if (isset($extension['macaddr'])) {
+		if (isset($extension['macaddr']) || preg_match(' /VXT/ ', $extension['device'])) {
 			echo '<div class="w3-margin-bottom">';
 			$this->myPanel->aLabelFor("Provisioning Rules");
 			echo '</div>';
 			echo '<div id="provisioning" >';
 			$this->myPanel->displayFile(htmlspecialchars($extension['provision']),"provision");
-			if (!empty($extension['macaddr'])) {
-				echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-				echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
-				echo '</div>' . PHP_EOL;
-				$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
-				$expand_prov = `$cmd`;
-			}
+			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
+			echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
+			echo '</div>' . PHP_EOL;
+			$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
+			$expand_prov = `$cmd`;
 			echo '</div>' . PHP_EOL;
 			if ( $_SESSION['user']['pkey'] != 'admin' ) {
 				echo '</div>';

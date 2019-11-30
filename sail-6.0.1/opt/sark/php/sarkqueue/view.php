@@ -56,12 +56,10 @@ public function showForm() {
 		}					
 	}
 	
-	if (isset($_POST['update']) || isset($_POST['endupdate'])) {  
+	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}					
+		$this->showEdit();
+		return;				
 	}
 
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -223,12 +221,12 @@ private function saveNew() {
 private function showEdit($pkey=false) {
 	
 	if (!$pkey) {
-		$pkey = $_GET['pkey']; 
+		$pkey = $_REQUEST['pkey']; 
 	}
 	$res = $this->dbh->query("SELECT * FROM queue WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkqueueForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkqueueForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -252,7 +250,7 @@ private function showEdit($pkey=false) {
 
 
 	$this->myPanel->displayInputFor('queueoptions','text',$res['options'],'options');
-	$this->myPanel->radioSlide('devicerec',$res['devicerec'],array('OTR','OTRR','Inbound'));
+	$this->myPanel->radioSlide('devicerec',$res['devicerec'],array('None','OTR','OTRR','Inbound'));
 	$this->myPanel->displayInputFor('preannounce','text',$res['greetnum'],'greetnum');
 
 	echo '<div class="w3-margin-bottom">';	

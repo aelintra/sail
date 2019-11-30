@@ -51,13 +51,29 @@ Class sarkextension {
 		'Choose extension type',
 		'Provisioned',
 		'Unprovisioned',
-		'MAILBOX'	
-	); 
+		'VXT',
+		'MAILBOX'		
+	);
+	
+	protected $createNoVxtOptions = array(
+		'Choose extension type',
+		'Provisioned',
+		'Unprovisioned',
+		'Provisioned batch',		
+		'Unprovisioned batch',	
+		'MAILBOX'		
+	);	 
 
 	protected $adoptOptions = array(
 		'Choose extension type',
 		'Provisioned',
 		'Unprovisioned'
+	); 
+	
+	protected $vxtlist = array(
+		'Panasonic VXT',
+		'Snom VXT',
+		'Yealink VXT'
 	); 
 
 public function showForm() {
@@ -135,11 +151,20 @@ public function showForm() {
 		return;			
 	}
 	
+	if (isset($_POST['rlse'])) { 	
+		$this->sipRelease();
+		$this->dbh = DB::getInstance();	
+	}	
+		
 	if (isset($_POST['save']) || isset($_POST['endsave'])) { 
 		$this->saveNew();
 		if ($this->invalidForm) {
 			$this->showNew();
-		}			
+		}
+		else {
+			$this->showEdit();
+		}
+		return;					
 	}
 	
 	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
@@ -301,7 +326,12 @@ private function showMain() {
 		if (isset($sip_peers [$row['pkey']]['Status'])) {
 			$latency = $sip_peers [$row['pkey']]['Status'];	
 		}
-		
+		if ($row['stolen']) {
+			if (!preg_match(" /VXT/i ", $row['device'])) {
+				$latency = "Stolen(" . $row['stolen'] . ")";
+			} 
+		}
+				
 		echo '<td class="icons" title = "Device State">' . $latency . '</td>' . PHP_EOL;
 		echo '<td class="w3-hide-small" >' . $row['active'] . '</td>' . PHP_EOL;				
 
@@ -309,7 +339,6 @@ private function showMain() {
 		$get .= $row['pkey'];	
 		$this->myPanel->editClick($_SERVER['PHP_SELF'],$get);
 		$this->myPanel->deleteClick($_SERVER['PHP_SELF'],$row['pkey']);
-
 	}
 	
 
@@ -364,13 +393,21 @@ private function showNew() {
 	echo '</div>';
 	
 	$this->myPanel->displayInputFor('Extension','text',null,'pkey');
+	
+	$res = $this->dbh->query("SELECT VXT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$vxt = $res['VXT'];
 
 	echo '<div id="divchooser">' . PHP_EOL;
 	if (isset($_GET['new'])) {
 		$this->myPanel->displayPopupFor('extchooser','Choose extension type',$this->adoptOptions); 
 	}
 	else {
-		$this->myPanel->displayPopupFor('extchooser','Choose extension type',$this->createOptions); 
+		if ($vxt) {
+			$this->myPanel->displayPopupFor('extchooser','Choose extension type',$this->createOptions); 
+		}
+		else {
+			$this->myPanel->displayPopupFor('extchooser','Choose extension type',$this->createNoVxtOptions);
+		}
 	}
 	echo '</div>' . PHP_EOL;
 
@@ -404,7 +441,9 @@ private function showNew() {
 	$this->myPanel->displayPopupFor('device','General SIP',$devices);
 	echo '</div>' . PHP_EOL;
 */
-
+	echo '<div id="divdevicevxt">' . PHP_EOL;
+	$this->myPanel->displayPopupFor('vxtdevice','Snom VXT',$this->vxtlist);
+	echo '</div>' . PHP_EOL;
 
 	echo '</div>';
 	$endButtonArray['cancel'] = true;
@@ -564,6 +603,23 @@ private function saveNew() {
 
 			break;
 			
+		case 'VXT':	
+			if ($this->checkHeadRoom($_POST['blksize'],$pkey)) {
+				$this->error_hash['blksize'] = "Insufficient extension slots for block operation";
+				$this->invalidForm = True;
+				return;					
+			}
+			$tuple['device'] = strip_tags($_POST['vxtdevice']);
+			$blksize = strip_tags($_POST['blksize']);						
+			while ($blksize) {
+				$tuple['desc'] = 'Ext' . $tuple['pkey'];
+				$this->addNewExtension($tuple);
+				$tuple['pkey'] ++;
+				$blksize--;
+			}
+			return;
+			break;
+						
 		case 'MAILBOX':
 			$tuple['device'] = 'MAILBOX';
 			$tuple['desc'] = $this->helper->displaykey($tuple['pkey']);;
@@ -828,9 +884,10 @@ private function showEdit() {
 		}
 	}
 
-	$res = $this->dbh->query("SELECT FQDN,PROXY FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$res = $this->dbh->query("SELECT FQDN,PROXY,VXT FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$proxy = $res['PROXY'];
 	$fqdn = $res['FQDN'];
+	$vxt = $res['VXT'];
 
 	$sql = $this->dbh->prepare("SELECT ip.*, de.noproxy FROM ipphone ip INNER JOIN device de on ip.device=de.pkey WHERE ip.pkey=?");
 	$sql->execute(array($pkey));
@@ -873,11 +930,16 @@ private function showEdit() {
 	if (preg_match(' /^OK/ ', $latency) && $extension['device'] != 'General SIP') {
 //		$buttonArray['redo'] = true;
 		$buttonArray['notify'] = true;
-		if (preg_match('/^[S|s]nom|Panasonic/',$extension['device'])) {
+		if (preg_match('/^snom|Panasonic|yealink/i',$extension['device'])) {
 			$buttonArray['sync'] = true;
 		}
 	}
 	$buttonArray['delete'] = true;
+	if ($vxt) {
+		if (preg_match('/VXT/',$extension['device']) && $extension['macaddr']) {
+			$buttonArray['rlse'] = true;
+		}
+	}
 
 	$this->myPanel->actionBar($buttonArray,"sarkextensionForm",false,true,true,$pkey);
 
@@ -1129,19 +1191,17 @@ private function showEdit() {
 		if ( $_SESSION['user']['pkey'] != 'admin' ) {
 			echo '<div style="display:none">';
 		}
-		if (isset($extension['macaddr'])) {
+		if (isset($extension['macaddr']) || preg_match(' /VXT/ ', $extension['device'])) {
 			echo '<div class="w3-margin-bottom">';	
 			$this->myPanel->aLabelFor("Provisioning Rules");
 			echo '</div>';	
 			echo '<div id="provisioning" >';
 			$this->myPanel->displayFile(htmlspecialchars($extension['provision']),"provision");
-			if (!empty($extension['macaddr'])) {
-				echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-				echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
-				echo '</div>' . PHP_EOL;
-				$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
-				$expand_prov = `$cmd`; 
-			}		
+			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
+			echo '<span onclick="document.getElementById(\'provExpand\').style.display=\'inherit\'" class="w3-blue w3-small w3-round-xxlarge w3-padding w3-right">Expand</span>';
+			echo '</div>' . PHP_EOL;
+			$cmd = 'php /opt/sark/provisioning/device.php '. $extension['macaddr'];
+			$expand_prov = `$cmd`; 	
 			echo '</div>' . PHP_EOL;
 			if ( $_SESSION['user']['pkey'] != 'admin' ) {
 				echo '</div>';
@@ -1658,8 +1718,10 @@ private function sipNotifyPush () {
 			return;
 		}
 #
-#	Only for Snoms....   and Panasonics 
+#	Only for Snoms....   and Panasonics... and Yealinks!
 #
+		$this->dbh = NULL; 		
+
 		$chk = false;
 	
 		if (preg_match ( " /[S|s]nom/ ", $res['device'])) {
@@ -1679,6 +1741,22 @@ private function sipNotifyPush () {
 			$this->helper->request_syscmd ("/usr/sbin/asterisk -rx 'sip notify $chk $pkey' ");
     	}
     	$this->message = "Issued SIP Notify" ;
+}
+
+private function sipRelease() {
+	
+		$pkey = $_REQUEST['pkey'];
+		$sql = $this->dbh->prepare("SELECT * FROM ipphone WHERE pkey=?");
+		$sql->execute(array($pkey));
+		$extension = $sql->fetch();
+		$sql = $this->dbh->prepare("UPDATE ipphone SET macaddr=basemacaddr,stolen=NULL,stealtime=NULL WHERE pkey=?");
+		$sql->execute(array($extension['stolen']));
+		$sql = $this->dbh->prepare("UPDATE ipphone SET macaddr=NULL,devicemodel=NULL,stolen=NULL,stealtime=NULL WHERE pkey=?");
+		$sql->execute(array($pkey));
+		$this->sipNotifyPush();
+		$this->message = "VXT Host Extension $pkey Released";
+    	return;
+
 }
 
 private function chkMailbox(&$mailbox,&$friend,$cluster)
@@ -1705,7 +1783,12 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
 #
 #   prints info Box
 #
-
+	$virtExt = false; 
+    echo '<span style="color: #696969;" >';
+    echo 'Vendor: <strong>' . $extension['device'] . '</strong><br/>' . PHP_EOL;
+    if (preg_match("/VXT/", $extension['device'])) {
+    	$virtExt = true;
+    }
     echo '<span style="color: #696969;" >';
     if ($extension['device'] == 'MAILBOX') {
     	echo 'Type: <strong>MAILBOX</strong><br/>' . PHP_EOL;
@@ -1717,13 +1800,33 @@ private function printEditNotes ($pkey,$extension,$sip_peers) {
     }
     if (!empty ($extension['macaddr'])) {
 			echo 'MAC: <strong>' . $extension['macaddr'] . '</strong><br/>' . PHP_EOL;
-	}
-	if (isset($sip_peers [$pkey]['Status'])) {
-		echo 'State: <strong>' . $sip_peers [$pkey]['Status'] . '</strong><br/>' . PHP_EOL; 
+			if ($virtExt) {
+				echo '(Stolen From: <strong>' . $extension['stolen'] . ')</strong><br/>' . PHP_EOL;
+			}
 	}
 	else {
-		echo 'State: <strong>UNKNOWN</strong><br/>' . PHP_EOL; 
+		if (!empty($extension['stolen'])) {
+			echo 'MAC: <strong>' . $extension['basemacaddr'] . '</strong><br/>' . PHP_EOL;
+			echo '(Stolen By: <strong>' . $extension['stolen'] . ')</strong><br/>' . PHP_EOL;
+			return;
+		}
 	}
+	
+	
+	if (isset($sip_peers [$pkey]['Status'])) {
+		if ($sip_peers [$pkey]['Status'] == "UNKNOWN") {
+			if ($virtExt) {
+				echo 'State: <strong>Idle(VXT)</strong><br/>' . PHP_EOL;
+				return; 
+			}
+			else {
+				echo 'State: <strong>' . $sip_peers [$pkey]['Status'] . '</strong><br/>' . PHP_EOL;
+			}
+		}	 
+	}
+	else  {
+		echo 'State: <strong>UNKNOWN</strong><br/>' . PHP_EOL; 
+	}	
 	
 	if (preg_match(' /^OK/ ', $sip_peers [$pkey]['Status'])) {
 		if (isset ($sip_peers [$pkey]['IPport'])) {

@@ -7,8 +7,13 @@
 /*
  * hide/reveal logic for create
  */         
-
+        $('#divmacaddr').hide();	
+        $('#divrule').hide();
+        $('#divpassword').hide();
+        $('#divcalleridname').hide();
+        $('#divdevice').hide();
         $('#divmacblock').hide();
+        $('#divdevicevxt').hide();
         $('#divblksize').hide();
         $('#endsave').hide();
         $('#save').hide();
@@ -17,23 +22,28 @@
 			$('#divchooser').hide();
 			$('#endsave').show();
         	$('#save').show();
-		
-
-			if(this.value=='MAILBOX') {
+			if(this.value=='Provisioned') {
 				$('#divmacaddr').show();			
 				$('#divrule').show();
 				$('#divcalleridname').show();
-									
 			}
-
-			if(this.value=='Provisioned') {
+			if(this.value=='Provisioned batch') {
 				$('#divrule').show();
 				$('#divmacblock').show();																	
 			}
 			if(this.value=='Unprovisioned') {
+				$('#divrule').show();
+				$('#divcalleridname').show();
+			}
+			if(this.value=='Unprovisioned batch') {
+				$('#divrule').show();
 				$('#divblksize').show();					
-			}			
-					
+			}
+			if(~this.value.indexOf("VXT")) {
+				$('#divrule').show();
+				$('#divdevicevxt').show();
+				$('#divblksize').show();								
+			}											
 		}); 	
 	
 
@@ -67,16 +77,7 @@
 		return this.optional(element) || /^[A-Fa-f0-9]{12}$/i.test(value); 
 	},"Invalid MAC address (hint - don't include colons or spaces)");
 	
-	$("#sarkextensionForm").change(function() {		  
-	  $("#update").attr("src", "/sark-common/buttons/save-red.png");
-	  $("#commit").attr("src", "/sark-common/buttons/commitClick.png");
-	}); 
-/*	
-	$("#blftable").change(function() {		  
-	  $("#upload").attr("src", "/sark-common/buttons/upload-red.png");
-	  $("#notify").attr("src", "/sark-common/buttons/redo-red.png");
-	}); 	
-*/	
+	
 	$("#sarkextensionForm").validate ( {
 	   rules: {
 // edit-panel rules
@@ -111,6 +112,20 @@
 			"bSortable" : false,
 			"aTargets" : [2,5,6,7,8,10,11]
 		}],
+		"createdRow": function( row, data, dataIndex ) {
+            if ( ~data[3].indexOf("VXT") &&  ~data[8].indexOf("OK") ) {        
+         			$(row).find('td:eq(0)').css('background-color', 'lightgreen');
+     
+       		}
+       		else if ( ~data[3].indexOf("VXT")) {        
+         			$(row).find('td:eq(0)').css('background-color', 'lightyellow');
+     
+       		}
+        	else if( ~data[8].indexOf("Stolen")) {        
+         			$(row).find('td:eq(0)').css('background-color', 'pink');
+         			$(row).find('td:eq(7)').css('color', 'mediumblue');
+         	}      		
+       	},		
 		"oLanguage": {
 			"sSearch": "Filter:"
 		},		

@@ -43,12 +43,10 @@ public function showForm() {
 		return;
 	}	
 
-	if (isset($_POST['save']) || isset($_POST['endsave'])) {  
+	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}					
+		$this->showEdit();
+		return;				
 	}
 	
 	if (isset($_POST['commit']) ) { 
@@ -132,8 +130,8 @@ private function showEdit() {
         "cdr_mysql.conf"  					=> null,
 	);
 	
-	if (isset ($_GET['pkey'])) {
-		$pkey = $_GET['pkey']; 
+	if (isset ($_REQUEST['pkey'])) {
+		$pkey = $_REQUEST['pkey']; 
 	}
 	$file = file("/etc/asterisk/$pkey") or die("Could not read file $pkey !");
 	$astfile='';
@@ -145,7 +143,7 @@ private function showEdit() {
 	$printline = "File " . $pkey;
 	$buttonArray['cancel'] = true;
 	if (!array_key_exists($pkey,$readOnlyFiles)) {
-		$this->myPanel->actionBar($buttonArray,"sarkeditForm",false,true);
+		$this->myPanel->actionBar($buttonArray,"sarkeditForm",false,true,true);
 	}
 	else {
 		$this->myPanel->actionBar($buttonArray,"sarkeditForm",false,false);
@@ -171,7 +169,7 @@ private function showEdit() {
 
 	$endButtonArray['cancel'] = true;
 	if (!array_key_exists($pkey,$readOnlyFiles)) {
-		$endButtonArray['update'] = "endsave";
+		$endButtonArray['update'] = "endupdate";
 	}
 	$this->myPanel->endBar($endButtonArray);
 		

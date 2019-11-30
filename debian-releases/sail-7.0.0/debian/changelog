@@ -1,3 +1,45 @@
+sail (7.0.0-9) UNRELEASED; urgency=low
+  * tagged
+
+  - Modified user login to support multi-tennant - requires 5 digit login
+  - Fixed Xref in Extensions
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 7  Nov 2019 18:00:00 +0000
+
+sail (7.0.0-8) UNRELEASED; urgency=low
+  * tagged
+
+  - fourth alpha release V7
+  - fixed mailbox addressing issue in extensions and the generator
+  - updated the panasonic template for V7 style short extension numbers 
+
+ -- CoCoSoft <admin@aelintra.com>  Wed, 31  July 2019 18:00:00 +0000
+
+sail (7.0.0-7) UNRELEASED; urgency=low
+  * tagged
+
+  - third alpha release V7
+  - added MAILBOX option in extension create
+  - fixed data loss bug in sarkextension and sarkphone
+  - extended edit box depth
+  - fix to fail2ban config for Stretch/ubuntu18
+
+ -- CoCoSoft <admin@aelintra.com>  Tue, 30  July 2019 18:00:00 +0000
+
+sail (7.0.0-6) UNRELEASED; urgency=low
+  * tagged
+
+  - second alpha release V7
+  - changes to srkGenClass to changes for queues and IVR
+  - changes to helperClass collision finder
+  - changes to globals to remove agentstart
+  - changes to IVR to support numeric keys
+  - changes to Queues to support numeric keys
+  - added new validation to conference add
+  - requires sarkhpe 7.0.0-6+
+
+ -- CoCoSoft <admin@aelintra.com>  Sun, 28  Apr 2019 18:00:00 +0000
+
 sail (7.0.0-5) UNRELEASED; urgency=low
   * tagged
 

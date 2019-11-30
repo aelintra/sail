@@ -114,8 +114,6 @@ chmod +x /opt/sark/service/srk-ua-siplog/run
 # disable defaults
 # Jessie
 [ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
-# Wheezy
-[ -L /etc/apache2/sites-enabled/000-default ] && a2dissite 000-default > /dev/null 2>&1
 
 # remove any previous sark references
 
@@ -236,12 +234,10 @@ if [ -d /etc/shorewall6 ]; then
 #    chown www-data:www-data /etc/shorewall6/sark_blrules
 fi
 
-#deal with the different debian releases. wheezy, jessie, stretch
+
 # disable apache2 defaults
 # jessie/stretch
 [ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
-# Wheezy
-[ -L /etc/apache2/sites-enabled/000-default ] && a2dissite 000-default > /dev/null 2>&1
 
 #enable listening on IPV6 for apache
 sed -i 's/Listen 80/Listen [::]:80/' /etc/apache2/ports.conf
@@ -249,12 +245,13 @@ sed -i 's/Listen 443/Listen [::]:443/' /etc/apache2/ports.conf
 
 
 # F2b setup
-[ ! -e /etc/fail2ban/jail.local ] && [ -e /opt/sark/etc/fail2ban/jail-jessie.local ] && ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
+[ -e /etc/fail2ban/jail.local ] && rm -rf /etc/fail2ban/jail.local && echo "replacing F2B jail.local" 
+ln -s /opt/sark/etc/fail2ban/jail-stretch.local /etc/fail2ban/jail.local
 [ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 
 # apache setup
 ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
-ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/sark_includes
+ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/
 
 # Asterisk 11+ call parks
 [ ! -e /etc/asterisk/res_parking.conf ] && touch /etc/asterisk/res_parking.conf
@@ -267,8 +264,10 @@ fi
 dmidecode -s bios-version | grep amazon
 if [ "$?" -eq "0" ] ; then
 # turn on VCL in Globals
-    sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
+	echo "AWS instance detected, setting cloud flags"
+    /usr/bin/sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
 # open 80,443 and 22 in the firewall (otherwise we'll be locked out)
+	echo "WARNING!!!  Ports 80, 443 and 22 have been opened to prevent AWS lockout - you should review these and set sensible values"
     sed -i 's/ACCEPT net:$LAN $FW tcp 80/ACCEPT net $FW tcp 80/' /etc/shorewall/sark_rules
     sed -i 's/ACCEPT net:$LAN $FW tcp 443/ACCEPT net $FW tcp 443/' /etc/shorewall/sark_rules
     sed -i 's/ACCEPT net:$LAN $FW tcp 22/ACCEPT net $FW tcp 22/' /etc/shorewall/sark_rules

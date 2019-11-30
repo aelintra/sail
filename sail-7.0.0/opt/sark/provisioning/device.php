@@ -160,8 +160,8 @@ else { // else search the template by MAC
 	$macSearch->execute(array($mac));
 }
 
-
 $rowCount = $macSearch->fetchColumn();
+$macSearch = NULL;
   
 if ($rowCount == 1) {
 //  logIt("$mac found once so sending config");
@@ -188,12 +188,13 @@ try {
 	$configs = $db->prepare('select pkey,provision from Device where pkey = ?'); 
 	$configs->execute(array($frequest));
 	$thisConfig = $configs->fetchObject();
+	$configs = NULL;
   }
   else {
 	$configs = $db->prepare('select pkey,provision,device,protocol,provisionwith,transport,devicemodel,desc,firstseen,lastseen,location,passwd,sndcreds from IPphone where lower(macaddr) = ? COLLATE NOCASE limit 1');
 	$configs->execute(array($mac));
-
 	$thisConfig = $configs->fetchObject();
+	$configs = NULL;
 // update the phone model (it may have changed or it may not be present yet)
   	$model = logUA();
   	if (!empty($model)) {
@@ -202,6 +203,7 @@ try {
  			logIt("Device model differs between UA and DB.  UA = $model, DB = " . $thisConfig->devicemodel);
   	  		$sql = $db->prepare('UPDATE ipphone SET devicemodel=? WHERE pkey = ?');
 			$sql->execute(array($model,$thisConfig->pkey));
+			$sql = NULL;
 		}
 	}
 
@@ -219,7 +221,7 @@ try {
 			$sql->execute(array($mac,$model));
 		}
 */
-	}	
+  }	
    
 //  $masterkey = $thisConfig->pkey;
 } catch (Exception $e) {
@@ -277,27 +279,6 @@ if (preg_match('/\$fkey/',$retstring) ) {
 else {
 	$retstring .= getBlf();
 }
-
-// try to update lasteen
-try {
-	$time = time();
-	if (isset($_SERVER["REMOTE_ADDR"])) {
-    	if (empty($thisConfig->firstseen)) {
-      		$sql = $db->prepare('UPDATE ipphone SET firstseen=?,lastseen=? WHERE pkey = ?');
-			$sql->execute(array($time,$time,$thisConfig->pkey));
-		}
-		else {
-    		$sql = $db->prepare('UPDATE ipphone SET lastseen=? WHERE pkey = ?');
-			$sql->execute(array($time,$thisConfig->pkey));
-		}
-	}	
-
-} catch (Exception $e) {
-		$errorMsg = $e->getMessage();
-  		logIt("Unable to update lastseen/firstseen - DB error $errorMsg");
-  		send404();
-  		exit(1);
-	}
 	
 // and, if we got this far,  finally ship it out
 
@@ -318,7 +299,27 @@ logit ("====================End of stream======================>",4);
 // send it
 echo $retstring; 
 
+// try to update lasteen
+try {
+	$time = time();
+	if (isset($_SERVER["REMOTE_ADDR"])) {
+    	if (empty($thisConfig->firstseen)) {
+      		$sql = $db->prepare('UPDATE ipphone SET firstseen=?,lastseen=? WHERE pkey = ?');
+			$sql->execute(array($time,$time,$thisConfig->pkey));
+		}
+		else {
+    		$sql = $db->prepare('UPDATE ipphone SET lastseen=? WHERE pkey = ?');
+			$sql->execute(array($time,$thisConfig->pkey));
+		}
+		$sql = NULL;
+	}	
 
+} catch (Exception $e) {
+		$errorMsg = $e->getMessage();
+  		logIt("Unable to update lastseen/firstseen - DB error $errorMsg");
+  		send404();
+  		exit(1);
+}
 
 // disable auth send for next time
 if (!$descriptor) {
@@ -326,6 +327,7 @@ if (!$descriptor) {
 		try {
 			$update = $db->prepare("update ipphone set sndcreds='No' where  pkey = '" . $thisConfig->pkey . "'");
 			$update->execute();
+			$update = NULL;
 		} catch (Exception $e) {
 			$errorMsg = $e->getMessage();
   			logIt("Unable to update extension sndcreds  - DB error $errorMsg");
@@ -333,6 +335,7 @@ if (!$descriptor) {
 		}
 	}
 }
+$db=NULL;
 /*
  * MAINLINE ENDS
  */

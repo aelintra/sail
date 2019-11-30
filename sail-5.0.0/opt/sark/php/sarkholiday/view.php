@@ -263,12 +263,12 @@ private function saveNew() {
 	}
 
 // convert the inputs to Epoch time	
-	$hmsplit = split(':',$shm);
+	$hmsplit = preg_split('/:/',$shm);
 	$tm = new DateTime();
 	$tm-> setDate($syy, $smm, $sdd);
 	$tm-> setTime($hmsplit[0], $hmsplit[1], 00);
 	$sepoch = $tm->getTimestamp();	
-	$hmsplit = split(':',$ehm);
+	$hmsplit = preg_split('/:/',$ehm);
 	$tm-> setDate($eyy, $emm, $edd);
 	$tm-> setTime($hmsplit[0], $hmsplit[1], 00);
 	$eepoch = $tm->getTimestamp();

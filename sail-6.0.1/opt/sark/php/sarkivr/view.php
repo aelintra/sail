@@ -298,7 +298,7 @@ private function showEdit($pkey=false) {
 	$ivrmenu = $this->dbh->query("SELECT * FROM ivrmenu WHERE pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkivrForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkivrForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

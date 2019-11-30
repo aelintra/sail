@@ -352,7 +352,6 @@ class ami
         if ($action_id) {
             $command .= "ActionID: $action_id\r\n";
         }
-        syslog(LOG_WARNING, "AMIcommand IS : " . $command);
         $this->_sendCommand($command."\r\n");
         return true;
     }

@@ -61,12 +61,10 @@ public function showForm() {
 		}
 	}
 
-	if (isset($_POST['update']) || isset($_POST['endupdate']) ) { 
+	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}					
+		$this->showEdit();
+		return;				
 	}	
 	
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -155,14 +153,14 @@ private function showMain() {
 /*** table rows ****/
 	$sql = "select * from agent";
 	$class = null;
-	$state = '<i class="fas fa-thumbs-down"></i>';
+	$state = 'Idle';
 	$locked = false;
  	foreach ($this->dbh->query($sql) as $row) {
 		$agent = 'Agent\/' . $row['pkey'] ;
 		if (preg_match ("/ $agent /", $amiQrets)) {
 			preg_match ("/$agent.*Local\/(\d+)/", $amiQrets, $matches);
 			$class = 'class="read_only"';
-			$state = '<i class="fas fa-thumbs-up"></i>';
+			$state = 'Active';
 			if (!empty($matches[1])) {
 				$state .= '(' . $matches[1] . ')';
 			}
@@ -311,12 +309,12 @@ private function saveNew() {
 
 private function showEdit() {
 
-	$pkey = $_GET['pkey']; 
+	$pkey = $_REQUEST['pkey']; 
 	
 	$res = $this->dbh->query("SELECT * FROM agent where pkey = '" . $pkey . "'")->fetch(PDO::FETCH_ASSOC);
 
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkagentForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkagentForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

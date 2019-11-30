@@ -1,3 +1,0 @@
-ACCEPT net:+fqdntrust $FW udp 5060 # remove hash to limit - - 3/sec:5
-ACCEPT net:+fqdntrust $FW tcp 5060 # remove hash to limit - - 3/sec:5
-ACCEPT net:+fqdntrust $FW tcp 5061 # remove hash to limit - - 3/sec:5

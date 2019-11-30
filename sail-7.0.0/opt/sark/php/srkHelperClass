@@ -1019,7 +1019,7 @@ public function logIt($someText, $userloglevel=0) {
 	$res = $dbh->query("SELECT LOGLEVEL FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$dbloglevel = $res['LOGLEVEL'];
 	if ($userloglevel <= $dbloglevel) {
-		syslog(LOG_WARNING, $someText . "\n");	
+		syslog(LOG_WARNING, $_SERVER['PHP_SELF'] . ' ' . $someText . "\n");
 	}
 }
 

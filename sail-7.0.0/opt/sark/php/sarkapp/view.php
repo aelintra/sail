@@ -140,17 +140,12 @@ private function showEdit() {
 		$pkey = $this->keychange;		
 	}
 	else {	
-		if (isset($_POST['pkey'])) {
-			$pkey = $_POST['pkey'];
-		}
-		else {
-			$pkey = $_GET['pkey'];
-		}
+		$pkey = $_REQUEST['pkey'];
 	}
 
 	$buttonArray['cancel'] = true;
 
-	$this->myPanel->actionBar($buttonArray,"sarkappForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkappForm",false,true,true);
 	$this->myPanel->Heading($this->head,$this->message);
 	$this->myPanel->responsiveSetup(2);
 //	$this->myPanel->subjectBar($pkey);

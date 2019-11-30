@@ -61,10 +61,8 @@ public function showForm() {
 	
 	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit($_POST['pkey']);
-			return;
-		}					
+		$this->showEdit($_POST['pkey']);
+		return;					
 	}	
 
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -264,7 +262,7 @@ private function showEdit($key=False) {
 	}
 
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkrouteForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkrouteForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

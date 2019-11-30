@@ -282,6 +282,7 @@ ATTEMPTRESTART TEXT,                -- not used in 4.x
 BINDADDR TEXT,                      -- Asterisk SIP bindaddr
 BLINDBUSY TEXT,                     -- blind transfer busy bounce
 BOUNCEALERT TEXT,                   -- alertinfo string for blind transfer bounce
+CALLPARKING TEXT DEFAULT 'YES',		-- turn call parking on/off
 CALLRECORD1 TEXT,					-- call recording defaults
 CAMPONQONOFF TEXT,                  -- camp-on miniqueue enable
 CAMPONQOPT TEXT,                    -- camp-on miniqueue options
@@ -331,12 +332,15 @@ LDAPBASE text,                      -- LDAP base
 LDAPOU text,                        -- LDAP OU
 LDAPUSER text,                      -- LDAP user
 LDAPPASS text,                      -- LDAP password
-LEASEHDTIME TEXT,                   -- Hot desk lease time
+LEASEHDTIME INT DEFAULT 43200,      -- Hot desk lease time
 LKEY TEXT,							-- not used
 LOCALAREA TEXT,                     -- not used (See Cluster)
 LOCALDLEN TEXT,                     -- not used (See Cluster)
 LOCALIP TEXT,                       -- local ip address
 LOGLEVEL TEXT DEFAULT 0,            -- internal log level
+LOGSIPDISPSIZE INT DEFAULT 2000,	-- number of SIP pcap lines to display
+LOGSIPNUMFILES INT DEFAULT 10,		-- number of SIP pcap spins to keep
+LOGSIPFILESIZE INT DEFAULT 20000,  	-- SIP pcap max filesize (bytes)
 LOGOPTS TEXT,                       -- not used
 LTERM TEXT,                         -- late termination flag
 MAXIN TEXT,                         -- maximum inbound calls
@@ -397,6 +401,7 @@ VLIBS TEXT,                         -- not used in 4.x
 VMAILAGE TEXT,                      -- oldest age of vmail
 VOICEINSTR TEXT,                    -- play long or short Vmail instructions
 VOIPMAX TEXT,                       -- MAX outbound up calls
+VXT	TEXT DEFAULT 0,					-- Enable/disable VXT
 XMPP TEXT,                          -- not used in 4.x 
 XMPPSERV TEXT,                      -- not used in 4.x 
 ZTP TEXT,                           -- Zero touch provisioning on/off

@@ -219,7 +219,11 @@ Class page {
 //                                'src' => 'cancel.png',
                                 'alt' => 'Return',
                                 'title' => 'Return'
-                                ),                                                
+                                ),  
+                'rlse' => array (
+                                'alt' => 'Rlse',
+                                'title' => 'Rlse'
+                                ),                                                                                     
  				'save' => array (
 // 								'faclass' => 'save',
 								'class' => 'buttonUpdate',
@@ -231,17 +235,24 @@ Class page {
   				'sipcapIsOff' => array (
 //  							'faclass' => 'camera',
 								'src' => 'screenshot.png',
-                                'alt' => 'Siplog Start',
+                                'alt' => 'PCAPstart',
 
-                                'title' => 'Turn on SIP logging',
+                                'title' => 'Start SIP PCAP logging',
                                 ), 
  				'sipcapIsOn' => array (
 //								'faclass' => 'camera',
 								'src' => 'screenshot-red.png',
 								'colour' => ' w3-text-red',
-                                'alt' => 'Siplog Stop',
-                                'title' => 'Turn off SIP logging',
+                                'alt' => 'PCAPstop',
+                                'title' => 'Stop SIP PCAP logging',
                                 ), 
+ 				'sipcapFilter' => array (
+//								'faclass' => 'camera',
+								'src' => 'screenshot-red.png',
+								'colour' => ' w3-text-yellow',
+                                'alt' => 'Filter',
+                                'title' => 'Search the SIP PCAP log',
+                                ),                                    
                 'snap' => array (
 //                                'faclass' => 'database',
                                 'src' => 'spin.png',
@@ -683,7 +694,7 @@ Class page {
 	public $selected;
 	public $opSys;
 	public $tableClass = 'w3-table w3-card-4 w3-text-gray w3-striped w3-hoverable';
-    public $tableHeaderClass = 'w3-red w3-text-white';
+    public $tableHeaderClass = 'w3-deep-orange w3-text-white';
     public $bgColorClass = 'w3-light-gray';
 	
 	
@@ -891,7 +902,7 @@ Class page {
 				$commitColour = "w3-text-red";
 		}
 		else {
-				$commitColour = "w3-text-green";
+				$commitColour = "w3-text-light-blue";
 		} 
 		echo '<div class="w3-bar w3-black" >' . PHP_EOL;
 
@@ -924,10 +935,10 @@ Class page {
         echo '<a href="/php/srksessions/logout.php" target="_parent" class="w3-button w3-text-light-blue w3-hide-small w3-hide-medium">Logout</a>' . PHP_EOL;
         
         if ($showSave) {
-		  echo '<button class="buttonUpdate w3-button w3-text-green" form="' . $form . '" type="submit" name="save" value="save" id="save" title="Save">Save</button>' . PHP_EOL;
+		  echo '<button class="buttonUpdate w3-button w3-text-light-blue" form="' . $form . '" type="submit" name="save" value="save" id="save" title="Save">Save</button>' . PHP_EOL;
         }
         if ($showUpdate) {
-          echo '<button class="buttonUpdate w3-button w3-text-green" form="' . $form . '" type="submit" name="update" value="update" id="update" title="Update">Update</button>' . PHP_EOL;
+          echo '<button class="buttonUpdate w3-button w3-text-light-blue" form="' . $form . '" type="submit" name="update" value="update" id="update" title="Update">Update</button>' . PHP_EOL;
         }        
         if ($showCommit) {
 		  echo '<button class="buttonUpdate w3-button ' . $commitColour . '" form="' . $form . '" type="submit" name="commit" value="commit" id="commit" title="Commit">Commit</button>' . PHP_EOL;
@@ -1900,15 +1911,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
         $updays = $matches[1];
     }
     
-    $arch = `uname -m`;
-    $disk = array();
-    
-    if (preg_match( ' /^arm/ ', $arch)) {
-        $disk = `/bin/df -h`;
-    }
-    else {
-        $disk = `/bin/df -h`;
-    }
+	$disk = `/bin/df -k .`;
+	
     if ($disk) {
         $diskusage = preg_match ( '/(\d{1,2}\%)/', $disk,$matches);
         $diskusage = $matches[1];

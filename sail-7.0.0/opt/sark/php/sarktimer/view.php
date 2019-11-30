@@ -59,10 +59,8 @@ public function showForm() {
 
 	if ( isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}
+		$this->showEdit();
+		return;
 	}		
 	
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
@@ -90,7 +88,7 @@ private function showMain() {
  */
   
 	$buttonArray['new'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false);
+	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -245,7 +243,7 @@ private function showEdit() {
 	}
 	
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -265,9 +263,6 @@ private function showEdit() {
 	echo '<div id="clustershow">';
 	$this->myPanel->displayInputFor('cluster','text',$tuple['cluster'],'cluster');
 	echo '</div>';
-
-	
-	
 
 	echo '<div class="allday" ' . $alldayStyle . '>';
 	$this->myPanel->internalEditBoxStart();

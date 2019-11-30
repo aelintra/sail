@@ -326,7 +326,7 @@ private function showEdit() {
 	echo '<br/><br/>';
 //	echo '</div>'; 
 	$this->myPanel->selected = $ivrmenu['timeout'];
-	$this->myPanel->sysSelect('timeout',false,false,true,$ivrmenu['cluster']) . PHP_EOL;
+	$this->myPanel->sysSelect('timeout',false,true,true,$ivrmenu['cluster']) . PHP_EOL;
 	echo '<br/><br/>';
 
 	$this->myPanel->displayBooleanFor('listenforext',$ivrmenu['listenforext']);

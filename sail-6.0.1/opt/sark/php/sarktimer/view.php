@@ -57,13 +57,11 @@ public function showForm() {
 		}
 	}
 
-	if ( isset($_POST['update']) || isset($_POST['endupdate'])) { 
+	if (isset($_POST['update']) || isset($_POST['endupdate'])) { 
 		$this->saveEdit();
-		if ($this->invalidForm) {
-			$this->showEdit();
-			return;
-		}
-	}		
+		$this->showEdit();
+		return;				
+	}
 	
 	if (isset($_POST['commit']) || isset($_POST['commitClick'])) { 
   		$helper = new helper;
@@ -90,7 +88,7 @@ private function showMain() {
  */
   
 	$buttonArray['new'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false);
+	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
@@ -245,7 +243,7 @@ private function showEdit() {
 	}
 	
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarktimerForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
