@@ -1,3 +1,9 @@
+sail (6.0.1-52+deb10u1) UNRELEASED; urgency=low
+  * untagged
+  - minor release to fix cURL link follow for wireshark vendor list
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 06  Feb 2020 18:00:00 +0000
+
 sail (6.0.1-51+deb10u1) UNRELEASED; urgency=low
   * untagged
   - pre-stabilization cleanup
