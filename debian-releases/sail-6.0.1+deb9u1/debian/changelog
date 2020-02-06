@@ -16,7 +16,7 @@ sail (6.0.1-51+deb9u1) UNRELEASED; urgency=low
   - queues
   - templates
 
- -- CoCoSoft <admin@aelintra.com>  Fri, 22  Nov 2019 18:00:00 +0000
+ -- CoCoSoft <admin@aelintra.com>  Fri, 22  Nov 2019 18:00:00 +0000q
  
 sail (6.0.1-50+deb9u1) UNRELEASED; urgency=low
   * untagged

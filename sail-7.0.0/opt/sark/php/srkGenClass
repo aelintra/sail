@@ -980,6 +980,7 @@ LOCAL;
 		$this->confBridge($OUT,$row['pkey']);
 		
         $OUT .= "\texten => *50*,1,VoiceMailMain(\${CALLERID(num)}@" . $row['pkey'] . ")\t;Voicemail Retrieve\n"; 
+        $OUT .= "\texten => *51*,1,VoiceMailMain(@" . $row['pkey'] . ")\t;General Voicemail Retrieve\n";
 		$OUT .= "\texten => _*61*XXXX,1,Playback(/usr/share/asterisk/sarksounds/" . $row['pkey'] . "/usergreeting\${EXTEN:4})\n";  
 	}
 
@@ -1205,7 +1206,7 @@ THERE;
         exten => _*26[*]XX,1,agi(sarkhpe,\${EXTEN},,)		; RingDelay
         
         exten => _*3[012345][*],1,agi(sarkhpe,\${EXTEN},,)	; TIMERS
-        exten => *51*,1,VoiceMailMain()  					; VMAIL
+;        exten => *51*,1,VoiceMailMain()  					; VMAIL
         exten => *52*,1,PlayBack(demo-echotest)        		; Echotest
         exten => *52*,n,Echo
         exten => *52*,n,PlayBack(demo-echodone)
