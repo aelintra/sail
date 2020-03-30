@@ -63,7 +63,7 @@
                 $amisiprets = $ami->originateCall($extension, 
                            'Local/' . $pkey . '@internal',
                            'internal', 
-                           'click2dial');       
+                           $pkey);       
                 $amirets = $ami->logout();
                 syslog(LOG_WARNING, "amiret=" . $amirets);
                 $msg='Good Connect';

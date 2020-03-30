@@ -1,6 +1,6 @@
 #!/bin/sh
 # get a list of macs amd manufacturers
-curl —-max-time 60 -s "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf;hb=HEAD" > /tmp/manuf.txt
+curl —-max-time 60 -L -s "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf;hb=HEAD" > /tmp/manuf.txt
 if [ -e /tmp/manuf.txt ]; then
         diff /opt/sark/www/sark-common/manuf.txt /tmp/manuf.txt
         if [  "$?" -ne "0" ] ; then

@@ -1,5 +1,8 @@
 
   $(document).ready(function() {
+  
+	$('#clustershow :input').prop('readonly', true);
+	$('#clustershow :input').css('background-color','#f1f1f1');  
 
 /*
  * hide/reveal logic for create
@@ -74,10 +77,6 @@
 		return this.optional(element) || /^[A-Fa-f0-9]{12}$/i.test(value); 
 	},"Invalid MAC address (hint - don't include colons or spaces)");
 	
-	$("#sarkextensionForm").change(function() {		  
-	  $("#update").attr("src", "/sark-common/buttons/save-red.png");
-	  $("#commit").attr("src", "/sark-common/buttons/commitClick.png");
-	}); 
 	
 	$("#sarkextensionForm").validate ( {
 	   rules: {
@@ -105,12 +104,10 @@
 	var scrollPosition;
 
 	$('#extensionstable').dataTable ( {
-//		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"bStateSave": true,
 		"bstateDuration": 360,		
-//		"bStateSave": true,
 		"sDom": 'fti',
 		"aoColumnDefs" : [{
 			"bSortable" : false,

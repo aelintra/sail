@@ -253,7 +253,7 @@ Class page {
 								'src' => 'screenshot-red.png',
 								'colour' => ' w3-text-yellow',
                                 'alt' => 'Filter',
-                                'title' => 'Erase the SIP PCAP logs',
+                                'title' => 'Search the SIP PCAP log',
                                 ),                                                                 
                 'snap' => array (
 //                                'faclass' => 'database',

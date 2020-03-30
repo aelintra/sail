@@ -1470,7 +1470,7 @@ allow=ulaw
 nat=$nat
 transport=$transport
 encryption=$encryption','SIP');
-INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.Common','Snom common config','system','setting_server: http://$localip/provisioning?mac={mac}
+INSERT OR IGNORE INTO Device(pkey,desc,owner,provision,technology) values ('snom.Common','Snom common config','system','setting_server$: http://$localip/provisioning?mac={mac}
 update_policy$: 
 
 ;set TLS initially off
