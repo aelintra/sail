@@ -1,5 +1,0 @@
-[DEFAULT]
-banaction = shorewall
-
-[asterisk]
-enabled  = true

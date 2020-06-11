@@ -1,7 +1,0 @@
-dhcp-option=aastra,option:tftp-server,http://192.168.1.117/provisioning
-dhcp-option=ciscospa,option:tftp-server,http://192.168.1.117/provisioning/$MAU
-dhcp-option=gigaset,option:tftp-server,http://192.168.1.117/provisioning
-dhcp-option=panasonic,option:tftp-server,http://192.168.1.117/provisioning?mac={mac}
-dhcp-option=polycom,option:tftp-server,http://192.168.1.117/provisioning
-dhcp-option=snom,option:tftp-server,http://192.168.1.117/provisioning?mac={mac}
-dhcp-option=yealink,option:tftp-server,http://192.168.1.117/provisioning

@@ -1,3 +1,0 @@
-USER=guest
-PEM=/opt/sark/service/rssh/rssh.pem
-HOST=aelintra.com

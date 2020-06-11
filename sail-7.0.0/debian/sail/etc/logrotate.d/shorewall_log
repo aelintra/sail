@@ -1,8 +1,0 @@
-/var/log/shorewall.log {
-    weekly
-    rotate 52
-    compress
-    compressext .gz
-    missingok
-    create 0640 root adm
-}

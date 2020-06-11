@@ -1,8 +1,0 @@
-/var/log/siplog {
-        size 50M
-        missingok
-        rotate 7
-        sharedscripts
-        notifempty
-        copytruncate
-}
