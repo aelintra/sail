@@ -1,3 +1,24 @@
+sail (6.0.1-54) UNRELEASED; urgency=low
+  * tagged
+
+  - Allow tenant name change on trunks
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 15  Oct 2020 18:00:00 +0000
+
+sail (6.0.1-53) UNRELEASED; urgency=low
+  * tagged
+
+  - Fixed bug ig PageClass for early media
+  - Fixed bug in Trunk/view for IAX sibling privilege
+
+ -- CoCoSoft <admin@aelintra.com>  Fri, 12  June 2020 18:00:00 +0000
+
+sail (6.0.1-52) UNRELEASED; urgency=low
+  * untagged
+  - minor release to fix cURL link follow for wireshark vendor list
+
+ -- CoCoSoft <admin@aelintra.com>  Thu, 06  Feb 2020 18:00:00 +0000
+
 sail (6.0.1-51) UNRELEASED; urgency=low
   * untagged
   - pre-stabilization cleanup

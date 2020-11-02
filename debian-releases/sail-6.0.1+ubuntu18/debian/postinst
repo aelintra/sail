@@ -38,7 +38,7 @@ usermod -a -G www-data asterisk
 
 
 [ -e /etc/dahdi ] && chown -R asterisk:asterisk /etc/dahdi
-[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf
+[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf && chmod +rx
 
 chown -R www-data:www-data /opt/sark/www
 chown -R www-data:www-data /opt/sark/db

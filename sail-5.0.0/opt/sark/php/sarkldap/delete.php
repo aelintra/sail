@@ -13,8 +13,7 @@
   }
   else { 
 	echo  "LDAP ERROR - " . ldap_error($ldap->ds);
+  $ldap->Close();
   }
   
-  $ldap->Close();
-
 ?>
