@@ -282,7 +282,7 @@ private function showNew() {
 	echo '</div>' . PHP_EOL;
 
 	echo '<div id="divregister">' . PHP_EOL;	
-	$this->myPanel->displayBooleanFor('regthistrunk','YES');
+	$this->myPanel->displayBooleanFor('regthistrunk','NO');
 	echo '</div>' . PHP_EOL;
 
 /*
@@ -567,10 +567,10 @@ private function showEdit() {
     echo '</div>';
 	$this->myPanel->selected = $tuple['cluster'];
 	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
-	echo '</div>';
+	$this->myPanel->aHelpBoxFor('cluster'); 
+	echo '</div>';    
 
-    if ($tuple['technology'] == 'SIP' ||  $tuple['technology'] == 'IAX2') {
+     if ($tuple['technology'] == 'SIP' ||  $tuple['technology'] == 'IAX2') {
     	echo '<div id="peer">';
     	$this->myPanel->displayInputFor('peername','text',$tuple['peername']);
 		$this->myPanel->aLabelFor('sipiaxpeer');
@@ -720,7 +720,7 @@ private function copyTemplates (&$tuple) {
  
         if (isset( $template['sipiaxpeer'] )) {
       		$template['sipiaxpeer'] = preg_replace ('/username=/',"username=" . $tuple['username'], $template['sipiaxpeer']);
-      		$template['sipiaxpeer'] = preg_replace ('/fromuser=/',"fromuser=" . $tuple['username'], $template['sipiaxpeer']);
+      		$template['sipiaxpeer'] = preg_replace ('/fromuser=/',";fromuser=" . $tuple['username'], $template['sipiaxpeer']);
       		$template['sipiaxpeer'] = preg_replace ('/secret=/',"secret=" . $tuple['password'], $template['sipiaxpeer']);
       		$template['sipiaxpeer'] = preg_replace ('/host=/',"host=" . $tuple['host'], $template['sipiaxpeer']);
       		$template['sipiaxpeer'] = preg_replace ('/^\s+/',"", $template['sipiaxpeer']);

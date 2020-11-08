@@ -1,3 +1,12 @@
+sail (6.0.1-56+deb9u1) UNRELEASED; urgency=low
+  * tagged
+
+  - fix to callgroup edit to cure blank data after update
+  - set default registration=NO on trunk create
+  - remove fromuser on trunk create
+  
+ -- CoCoSoft <admin@aelintra.com>  Sun, 8  Nov 2020 18:00:00 +0000
+
 sail (6.0.1-55+deb9u1) UNRELEASED; urgency=low
   * tagged
 
