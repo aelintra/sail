@@ -24,17 +24,5 @@ sv d /etc/service/srk-ua-rssh
 
 # stretch teardown
 
-grep -q '^9\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-	systemctl disable  debsetlan
-fi	
-# jessie teardown
-grep -q '^8\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-	[ -e /etc/init.d/debsetlan ] && rm -rf /etc/init.d/debsetlan
-fi
-# wheezy teardown
-grep -q '^7\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-	[ -e /etc/init.d/debsetlan ] && rm -rf /etc/init.d/debsetlan
-fi
+
+systemctl disable  debsetlan

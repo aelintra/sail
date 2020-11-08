@@ -282,7 +282,7 @@ private function showNew() {
 	echo '</div>' . PHP_EOL;
 
 	echo '<div id="divregister">' . PHP_EOL;	
-	$this->myPanel->displayBooleanFor('regthistrunk','YES');
+	$this->myPanel->displayBooleanFor('regthistrunk','NO');
 	echo '</div>' . PHP_EOL;
 
 /*
@@ -558,7 +558,19 @@ private function showEdit() {
 
     $this->myPanel->displayBooleanFor('active',$tuple['active']);
 
-    if ($tuple['technology'] == 'SIP' ||  $tuple['technology'] == 'IAX2') {
+// removed Jan 2019 - trunks are shared common
+// re-instated Oct 2020 - some downstream trunks occasionally need cluster info for accounting    
+
+	echo '<div class="cluster">';
+	echo '<div class="cluster w3-margin-bottom">';
+    $this->myPanel->aLabelFor('cluster','cluster');
+    echo '</div>';
+	$this->myPanel->selected = $tuple['cluster'];
+	$this->myPanel->displayCluster();
+	$this->myPanel->aHelpBoxFor('cluster'); 
+	echo '</div>';    
+
+     if ($tuple['technology'] == 'SIP' ||  $tuple['technology'] == 'IAX2') {
     	echo '<div id="peer">';
     	$this->myPanel->displayInputFor('peername','text',$tuple['peername']);
 		$this->myPanel->aLabelFor('sipiaxpeer');
@@ -587,17 +599,6 @@ private function showEdit() {
 		$this->myPanel->displayInputFor('description','text',$tuple['trunkname']); 
 	}
 
-// removed Jan 2019 - trunks are shared common    
-/*
-	echo '<div class="cluster">';
-	echo '<div class="cluster w3-margin-bottom">';
-    $this->myPanel->aLabelFor('cluster','cluster');
-    echo '</div>';
-	$this->myPanel->selected = $tuple['cluster'];
-	$this->myPanel->displayCluster();
-	$this->myPanel->aHelpBoxFor('cluster');
-	echo '</div>';
-*/
 	$this->myPanel->subjectBar('Line Settings');
 	
 	if ( $tuple['technology'] != 'DiD' && $tuple['technology'] != 'Class' )  {
@@ -637,6 +638,10 @@ private function showEdit() {
 	
 	if ( $tuple['technology'] != 'DiD' && $tuple['technology'] != 'CLID' && $tuple['technology'] != 'Class' )  {	
 		$this->myPanel->displayBooleanFor('callprogress',$tuple['callprogress']);
+	}
+
+	if ($tuple['carrier'] == "InterSARK"  || $tuple['carrier'] == "SailToSail") {
+		$this->myPanel->displayBooleanFor('privileged',$tuple['privileged']);
 	}
 
 	if ( $tuple['carriertype'] == 'group' )  {
@@ -715,7 +720,7 @@ private function copyTemplates (&$tuple) {
  
         if (isset( $template['sipiaxpeer'] )) {
       		$template['sipiaxpeer'] = preg_replace ('/username=/',"username=" . $tuple['username'], $template['sipiaxpeer']);
-      		$template['sipiaxpeer'] = preg_replace ('/fromuser=/',"fromuser=" . $tuple['username'], $template['sipiaxpeer']);
+      		$template['sipiaxpeer'] = preg_replace ('/fromuser=/',";fromuser=" . $tuple['username'], $template['sipiaxpeer']);
       		$template['sipiaxpeer'] = preg_replace ('/secret=/',"secret=" . $tuple['password'], $template['sipiaxpeer']);
       		$template['sipiaxpeer'] = preg_replace ('/host=/',"host=" . $tuple['host'], $template['sipiaxpeer']);
       		$template['sipiaxpeer'] = preg_replace ('/^\s+/',"", $template['sipiaxpeer']);

@@ -52,7 +52,8 @@ if ($_POST) {
     <body>
 <?php if (isset($message)) echo "{$message}\n"; ?>
         <div id="container">
-<!--            
+
+<!--  These comments remove external logging in/out.  Remove them for standalone    
             <div id="header">
                 <div class="inner">
                     <div id="sark">

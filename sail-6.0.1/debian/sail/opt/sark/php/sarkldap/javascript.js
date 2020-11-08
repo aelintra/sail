@@ -31,23 +31,23 @@
 	}
 
 	var scrollPosition;
-/*
+
 	$('#ldaptable').dataTable ( {
-//		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"bStateSave": true,
 		"sDom": 'fti',
-		"bSort" : false,
+		"bSort" : true,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [5]
+		}],
 		"aoColumns": [ 
 			{ "sName": "sn" },
 			{ "sName": "givenname" },
 			{ "sName": "telephonenumber" },
-			{ "sName": null},
 			{ "sName": "mobile" },
-			{ "sName": null},
 			{ "sName": "homephone" },
-			{ "sName": null},
 			{ "sName": "del" }
 		],
         "drawCallback": function() {
@@ -61,59 +61,45 @@
 				{
 					type: 'text',
 					event: 'click',
-//					submit:'Save',
-//					tooltip: 'Click to set phone number',
 					onblur: 'submit'			
-				}, 		// surname								
+				}, 		// surname	
 				{
 					type: 'text',
 					event: 'click',
-//					submit:'Save',
-//					tooltip: 'Click to set phone number',
+					onblur: 'submit'			
+				}, 		// givenname													
+				{
+					type: 'text',
+					event: 'click',
 					onblur: 'submit',	
 					placeholder: ' '				
 				}, 		// forename				
 				{
 					type: 'text',
 					event: 'click',
-//					submit:'Save',
-//					tooltip: 'Click to set phone number',
 					onblur: 'submit',	
 					placeholder: 'None',				
 				}, 		// phone
-				null, //dial								
 				{
 					type: 'text',
 					event: 'click',
-//					submit:'Save',
-//					tooltip: 'Click to set cell phone number',
 					onblur: 'submit',	
 					placeholder: 'None'				
 				}, 		// mobile	
-				null,   //dial			
-				{
-					type: 'text',
-					event: 'click',
-//					submit:'Save',
-//					tooltip: 'Click to set home number',
-					onblur: 'submit',	
-					placeholder: 'None'				
-				}, 		// home 
-				null,   //dial																						
 				null	// delete col
             ]
     }); 
-*/
 
-		
 
     	$('#readldaptable').dataTable ( {
-//		"sScrollY": ($(window).height() - 300),
 		"bPaginate": false,
 		"bAutoWidth": true,
 		"bStateSave": true,
 		"sDom": 'fti',
-		"bSort" : false,
+		"aoColumnDefs" : [{
+			"bSortable" : false,
+			"aTargets" : [5]
+		}],
         "drawCallback": function() {
 			$(".dataTables_scrollBody").scrollTop(scrollPosition);
 		}  

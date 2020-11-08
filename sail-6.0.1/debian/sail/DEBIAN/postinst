@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 
 #Copy Asterisk file fragments
 [ ! -e /etc/asterisk/sark_customer_agents_main.conf ] && cp -f /opt/sark/cache/template_cust.conf /etc/asterisk/sark_customer_agents_main.conf 
@@ -39,7 +38,7 @@ usermod -a -G www-data asterisk
 
 
 [ -e /etc/dahdi ] && chown -R asterisk:asterisk /etc/dahdi
-[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf
+[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf && chmod +rx
 
 chown -R www-data:www-data /opt/sark/www
 chown -R www-data:www-data /opt/sark/db
@@ -115,8 +114,6 @@ chmod +x /opt/sark/service/srk-ua-siplog/run
 # disable defaults
 # Jessie
 [ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
-# Wheezy
-[ -L /etc/apache2/sites-enabled/000-default ] && a2dissite 000-default > /dev/null 2>&1
 
 # remove any previous sark references
 
@@ -207,13 +204,14 @@ if [ -d /etc/shorewall ]; then
     sed -i "/^SAVE_IPSETS/c\SAVE_IPSETS=Yes" /etc/shorewall/shorewall.conf
     echo 'INCLUDE local.lan' > /etc/shorewall/params
     echo 'INCLUDE local.if1' >> /etc/shorewall/params
+
+    cp -f /opt/sark/etc/shorewall/rules /etc/shorewall
     [ ! -e /etc/shorewall/sark_rules ] && cp /opt/sark/etc/shorewall/sark_rules /etc/shorewall
     #for pre 5.x upgrades check that 443 is open (otherwise they won't be able to login)
     grep  -q "tcp\s*443\s*" /etc/shorewall/sark_rules
 	if [  "$?" -ne "0" ] ; then
         echo ACCEPT net:\$LAN \$FW tcp 443 - - >> /etc/shorewall/sark_rules 
 	fi
-#    touch /etc/shorewall/sark_blrules
     touch /etc/shorewall/sark_inline_fqdn
     touch /etc/shorewall/sark_inline_limit
     chown www-data:www-data /etc/shorewall/sark_rules
@@ -236,49 +234,37 @@ if [ -d /etc/shorewall6 ]; then
 #    chown www-data:www-data /etc/shorewall6/sark_blrules
 fi
 
-#deal with the different debian releases. wheezy, jessie, stretch
+
 # disable apache2 defaults
 # jessie/stretch
 [ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
-# Wheezy
-[ -L /etc/apache2/sites-enabled/000-default ] && a2dissite 000-default > /dev/null 2>&1
 
-# jessie setup
-grep -q '^8\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-	ln -s /opt/sark/etc/fail2ban/jail-jessie.local /etc/fail2ban/jail.local
-	[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
-	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
-    ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/
-	sed -i "/^short_open_tag/c\short_open_tag = On" /etc/php5/apache2/php.ini
-	cp -f /opt/sark/cache/debsetlan /etc/init.d
-	update-rc.d debsetlan defaults > /dev/null 2>&1	
-	service debsetlan start
-    update-rc.d apache2 defaults > /dev/null 2>&1 
-    update-rc.d apache2 enable > /dev/null 2>&1
-    service apache2 start
-fi
+#enable listening on IPV6 for apache
+sed -i 's/Listen 80/Listen [::]:80/' /etc/apache2/ports.conf
+sed -i 's/Listen 443/Listen [::]:443/' /etc/apache2/ports.conf
 
-# wheezy setup
-grep -q '^7\.' /etc/debian_version 
-if [  "$?" -eq "0" ] ; then	
-	ln -s /opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf /etc/fail2ban/filter.d/asterisk.conf 
-	ln -s /opt/sark/etc/fail2ban/jail-wheezy.local /etc/fail2ban/jail.local	
-	ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-wheezy.conf /etc/apache2/sites-available/sark-ssl.conf
-	cp -f /opt/sark/cache/debsetlan /etc/init.d
-	update-rc.d debsetlan defaults > /dev/null 2>&1
-	service debsetlan start
-# we enable asterisk in case this is an upgrade from a pre 3.1.1-98 release
-# pre -98 we used runit to manage asterisk.  Post 98 we use init.d
-# we don't enable asterisk if ASHA is installed because Pacemaker will handle	
-	[ ! -e /opt/asha/asha.conf ] && update-rc.d asterisk defaults 
+
+# F2b setup
+[ -e /etc/fail2ban/jail.local ] && rm -rf /etc/fail2ban/jail.local && echo "replacing F2B jail.local" 
+ln -s /opt/sark/etc/fail2ban/jail-stretch.local /etc/fail2ban/jail.local
+[ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
+
+# apache setup
+ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
+ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/
+
+# Asterisk 11+ call parks
+[ ! -e /etc/asterisk/res_parking.conf ] && touch /etc/asterisk/res_parking.conf
+grep -q '#include sark_res_parking.conf' /etc/asterisk/res_parking.conf
+if [  "$?" -ne "0" ] ; then
+    echo "#include sark_res_parking.conf" >> /etc/asterisk/res_parking.conf
 fi
 
 #Check if I am an AWS instance and set defaults accordingly
 dmidecode -s bios-version | grep amazon
 if [ "$?" -eq "0" ] ; then
-    echo setting defaults for AWS
 # turn on VCL in Globals
+	echo "AWS instance detected, setting cloud flags"
     /usr/bin/sqlite3 /opt/sark/db/sark.db "update globals set VCL=1"
 # open 80,443 and 22 in the firewall (otherwise we'll be locked out)
 	echo "WARNING!!!  Ports 80, 443 and 22 have been opened to prevent AWS lockout - you should review these and set sensible values"
@@ -287,8 +273,24 @@ if [ "$?" -eq "0" ] ; then
     sed -i 's/ACCEPT net:$LAN $FW tcp 22/ACCEPT net $FW tcp 22/' /etc/shorewall/sark_rules
 fi
 
-a2ensite sark-ssl.conf > /dev/null 2>&1
-service apache2 reload > /dev/null 2>&1
+# enable setlan
+systemctl enable debsetlan.service
+systemctl start debsetlan.service
+
+# enable shorewall
+[ -e  /etc/shorewall/routestopped ] && mv /etc/shorewall/routestopped /etc/shorewall/routestopped.bak
+systemctl enable shorewall.service
+systemctl enable shorewall6.service
+systemctl enable apache2.service
+systemctl stop apache2.service
+systemctl start apache2.service
+
+# suppress CDR menu generation for Deb 9 and ubuntu	
+[ -e /opt/sark/cache/1520813339.db_v4_admin_perms2 ] && mv /opt/sark/cache/1520813339.db_v4_admin_perms2 /opt/sark/always/
+	
+
+a2ensite sark-ssl.conf 
+systemctl restart apache2 
 
 #Rebuild the SARK database
 /bin/sh /opt/sark/scripts/srkV4reloader.sh
@@ -305,10 +307,11 @@ chmod 664 /opt/sark/db/sark.db
 [ ! -d /opt/sark/public/vtech ] && mkdir /opt/sark/public/vtech && chown www-data:www-data /opt/sark/public/vtech
 [ ! -d /opt/sark/public/yealink ] && mkdir /opt/sark/public/yealink && chown www-data:www-data /opt/sark/public/yealink
 
-#set up shellinabox to our liking
+#set up shellinabox to our likin
 sed -i "/^SHELLINABOX_PORT/c\SHELLINABOX_PORT=63005" /etc/default/shellinabox
-sed -i '/^SHELLINABOX_ARGS/c\SHELLINABOX_ARGS="--no-beep --localhost-only"' /etc/default/shellinabox
+sed -i '/^SHELLINABOX_ARGS/c\SHELLINABOX_ARGS="--no-beep --localhost-only --disable-peer-check --disable-ssl"' /etc/default/shellinabox
 [ -e /etc/shellinabox/options-enabled/00_White\ On\ Black.css ] && rm -rf /etc/shellinabox/options-enabled/00_White\ On\ Black.css
+systemctl restart shellinabox
 
 #create a shellinabox user group
 grep -q console /etc/group
@@ -337,7 +340,13 @@ sv d srk-ua-helper
 sleep 1
 sv u srk-ua-helper
 
+#add definitions to MySQL
+mysql -u root < /opt/sark/stat/asterisk-stat-v2/cdr-mysql-setup.sql
 
+#stop systemd.resolved - it interferes with dnsmasq
+systemctl disable systemd-resolved
+#restart dnsmasq
+systemctl restart dnsmasq
 
 #Install date
 date --iso-8601=minutes > /opt/sark/db/.sail-install-date

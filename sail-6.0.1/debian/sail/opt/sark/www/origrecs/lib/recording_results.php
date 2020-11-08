@@ -51,7 +51,8 @@ if (is_dir($folder))
 
     // If there's a tenant name then we expect an extra field in the file name
     $offset = strlen($TENANT)>0 ? 1 : 0;
-
+    syslog(LOG_WARNING, "Tenant is  $TENANT, offset is $offset");
+    
     if (defined('OLD_FORMAT_CUTOFF_DATE'))
     {
         if (strtotime($_POST['date']) <= strtotime(OLD_FORMAT_CUTOFF_DATE))
@@ -69,7 +70,7 @@ if (is_dir($folder))
         if ($file == '.' || $file == '..' || is_dir($file))
         {
             
-            syslog(LOG_WARNING, "Drop reason 1 file $file");
+            syslog(LOG_WARNING, "ignoring .{.} file $file");
             continue;
         }
 // replace with preg_split for php7
@@ -96,7 +97,7 @@ if (is_dir($folder))
                 array_slice($file_list, 4)
             );
         }
-        syslog(LOG_WARNING, "Time series $from_time_search $to_time_search");
+        syslog(LOG_WARNING, "Time series (epoch) $from_time_search $to_time_search");
         if ($queue_prefix || count($file_list) == 5+$offset)
         {
             # (epoch, queuename, agent/ext, CLID)
