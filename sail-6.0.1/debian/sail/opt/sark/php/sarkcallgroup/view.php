@@ -253,12 +253,7 @@ private function saveNew() {
 
 private function showEdit($key=False) {
 	
-	if ($key != False) {
-		$pkey=$key;
-	}
-	else {
-		$pkey = $_GET['pkey']; 
-	}
+	$pkey = $_REQUEST['pkey'];
 	
 	$buttonArray['cancel'] = true;
 	$this->myPanel->actionBar($buttonArray,"sarkcallgroupForm",false,false,true);

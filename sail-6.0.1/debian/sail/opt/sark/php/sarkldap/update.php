@@ -8,6 +8,7 @@
   $ldap = new ldaphelper;
   
   $helper->removeLrCr($value); 
+
   
   $id = $_REQUEST['id'] ;
   $value = strip_tags($_REQUEST['value']) ;
