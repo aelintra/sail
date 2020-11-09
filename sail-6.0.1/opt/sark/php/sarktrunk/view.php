@@ -496,7 +496,7 @@ private function showEdit() {
 	}
 
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarktrunkForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarktrunkForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);
