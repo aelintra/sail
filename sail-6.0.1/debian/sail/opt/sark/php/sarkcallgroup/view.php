@@ -256,7 +256,7 @@ private function showEdit($key=False) {
 	$pkey = $_REQUEST['pkey'];
 	
 	$buttonArray['cancel'] = true;
-	$this->myPanel->actionBar($buttonArray,"sarkcallgroupForm",false,false,true);
+	$this->myPanel->actionBar($buttonArray,"sarkcallgroupForm",false,true,true);
 
 	if ($this->invalidForm) {
 		$this->myPanel->showErrors($this->error_hash);

@@ -396,7 +396,7 @@ ebf5a59c2de695606680c714dfb15982  opt/sark/php/sarkcallgroup/delete.php
 5b6ed9f254adffcb23380614737555a5  opt/sark/php/sarkcallgroup/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkcallgroup/main.php
 7d7601db6c585027711500a008c061d2  opt/sark/php/sarkcallgroup/update.php
-ab5557cc16588203389e99a242f5579d  opt/sark/php/sarkcallgroup/view.php
+59fc119388b82a0a14428633087ffa7b  opt/sark/php/sarkcallgroup/view.php
 7eec9aee146408e4ef06719491cc46dd  opt/sark/php/sarkcluster/delete.php
 4aff11e71068b5fb8f57f32c2657202f  opt/sark/php/sarkcluster/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarkcluster/main.php
@@ -553,7 +553,7 @@ b2196132a59964fbe35b16e13bdea324  opt/sark/php/sarktimer/delete.php
 6d60aa2f998eb75e9300863ffadb73c3  opt/sark/php/sarktrunk/javascript.js
 3c43d01c817392b8d1a8311d75d3be0c  opt/sark/php/sarktrunk/main.php
 e00aa6f8e51e7637242ea5182ee96fcf  opt/sark/php/sarktrunk/update.php
-a009c97405bcaad980219c76efa4bd3e  opt/sark/php/sarktrunk/view.php
+3afa5d4760b12cf7f64b9ec85705e796  opt/sark/php/sarktrunk/view.php
 ec00670675dea3518ac757cf795fff02  opt/sark/php/sarkuser/delete.php
 6983b50d410f992d9f38001793fdab67  opt/sark/php/sarkuser/extlist.php
 4a5d5e211694e8e943dda7cde44590c3  opt/sark/php/sarkuser/javascript.js
@@ -1376,5 +1376,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-16ca48249f91e60158cc4a2d9415bd12  usr/share/doc/sail/changelog.Debian.gz
+724915fc82092c0e457eb106ab718e0f  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
