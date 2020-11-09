@@ -1,3 +1,11 @@
+sail (6.0.1-57+deb9u1) UNRELEASED; urgency=low
+  * tagged
+
+  - Add commit button to trunk edit panel
+  - Add commit button to trunk edit panel  
+  
+ -- CoCoSoft <admin@aelintra.com>  Mon, 9  Nov 2020 18:00:00 +0000
+
 sail (6.0.1-56+deb9u1) UNRELEASED; urgency=low
   * tagged
 
