@@ -373,13 +373,24 @@ private function copyFirewallTemplates() {
 	$rc = $this->helper->request_syscmd ("ipset -N fqdndrop iphash");
 */
 	$this->dbh = DB::getInstance();
-	$res = $this->dbh->query("SELECT EXTBLKLST,FQDN,FQDNINSPECT,FQDNTRUST,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
+	$res = $this->dbh->query("SELECT BINDPORT,EXTBLKLST,FQDN,FQDNINSPECT,FQDNTRUST,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	
 	$file = '/opt/sark/templates/shorewall/sark_inline_fqdn';
 	if (file_exists($file) && $res['FQDNINSPECT'] == 'YES') {
 		$rc = $this->helper->request_syscmd ("cp $file /etc/shorewall");
-		$fqdn = $res['FQDN'];
-		$rc = $this->helper->request_syscmd ("/bin/sed -i 's/\$FQDN/" . $res['FQDN'] . "/g' /etc/shorewall/sark_inline_fqdn");
+		$rule = 'INLINE(ACCEPT) net $FW tcp ';
+		$rule .= $res['FQDNINSPECT'];
+		$rule .= '; -m string --algo bm --to 100 --string "'
+		$rule .= $res['FQDN'];
+		$rule .= '"';
+		$rc = $this->helper->request_syscmd ("echo $rule > /etc/shorewall/sark_inline_fqdn");
+
+		$rule = 'INLINE(ACCEPT) net $FW udp ';
+		$rule .= $res['FQDNINSPECT'];
+		$rule .= '; -m string --algo bm --to 100 --string "'
+		$rule .= $res['FQDN'];
+		$rule .= '"';
+		$rc = $this->helper->request_syscmd ("echo $rule >> /etc/shorewall/sark_inline_fqdn");		
 	}
 	else {
 		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_inline_fqdn");	

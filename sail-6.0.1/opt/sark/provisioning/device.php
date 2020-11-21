@@ -48,6 +48,7 @@ if (empty($global)) {
 }
 $haclusterip = $global['HACLUSTERIP'];
 $hausecluster = $global['HAUSECLUSTER'];
+$bindport = $global['BINDPORT'];
 $externip = $global['EDOMAIN'];
 $fqdnprov = $global['FQDNPROV'];
 $fqdn = $global['FQDN'];
@@ -256,6 +257,7 @@ if (isset($thisConfig->location) && $thisConfig->location == 'remote') {
 if (preg_match('/\$localip/',$retstring)) {
 	$retstring = preg_replace ( '/\$localip/', ret_localip($thisConfig->provisionwith, $thisConfig->protocol), $retstring); 
 }
+$retstring = preg_replace ( '/\$bindport/', $bindport, $retstring);
 $retstring = preg_replace ( '/\$tlsport/', $tlsport, $retstring);
 $retstring = preg_replace ( '/\$ldapbase/', $ldapbase, $retstring);
 

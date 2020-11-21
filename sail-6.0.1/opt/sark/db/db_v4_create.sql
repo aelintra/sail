@@ -275,6 +275,7 @@ ALLOWHASHXFER TEXT,                 -- Allow asterisk non-SIP xfer
 ASTDLIM TEXT,                       -- Asterisk delimiter ','
 ATTEMPTRESTART TEXT,                -- not used in 4.x 
 BINDADDR TEXT,                      -- Asterisk SIP bindaddr
+BINDPORT TEXT DEFAULT 5060,			-- SIP BINDPORT
 BLINDBUSY TEXT,                     -- blind transfer busy bounce
 BOUNCEALERT TEXT,                   -- alertinfo string for blind transfer bounce
 CALLPARKING TEXT DEFAULT 'YES',	-- turn call parking on/off
@@ -372,6 +373,7 @@ SENDEDOMAIN TEXT DEFAULT YES,  		-- Send public IP in SIP header YES/NO
 SIPIAXSTART TEXT,                   -- lowest extension number
 SIPFLOOD TEXT DEFAULT NO,			-- detect SIP flood YES/NO
 SIPMULTICAST TEXT,                  -- listen for multicast provisioning requests
+SIPDRIVER TEXT DEFAULT chan_sip,	-- SIP backend chan_sip or pjsip
 SMSALERT TEXT,                      -- not used in 4.x 
 SMSC TEXT,                          -- not used in 4.x 
 SNO TEXT,                           -- not used in 4.x 

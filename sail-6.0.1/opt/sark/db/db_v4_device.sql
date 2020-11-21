@@ -985,7 +985,9 @@ account.1.auth_name = $ext
 account.1.password = $password  
 account.1.user_name =  $ext
 account.1.sip_server_host = $localip
+account.1.sip_server_port = $bindport
 account.1.outbound_host = $localip
+account.1.outbound_port = $bindport
 account.1.proxy_require = $localip
 
 ','type=peer
