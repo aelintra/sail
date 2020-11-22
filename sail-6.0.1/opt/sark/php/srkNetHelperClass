@@ -24,6 +24,7 @@ Class nethelper {
 	protected $networkCIDR;
 	protected $networkBrd;
 	protected $networkIPV4;
+	protected $helper;
 	
 
 function __construct() {
@@ -166,6 +167,8 @@ public function get_externip() {
 public function copyFirewallTemplates() {
 
 	$this->dbh = DB::getInstance();
+	$this->helper = new helper;
+	
 	$res = $this->dbh->query("SELECT BINDPORT,FQDN,FQDNINSPECT,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$file = '/opt/sark/templates/shorewall/sark_inline_fqdn';
 	if ($res['FQDNINSPECT'] == 'YES') {
