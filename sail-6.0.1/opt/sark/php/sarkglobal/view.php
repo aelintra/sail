@@ -276,7 +276,6 @@ private function showMain() {
  	$this->myPanel->internalEditBoxStart();
  	$this->myPanel->subjectBar("Control");  
     $this->myPanel->displayBooleanFor('lterm',$global['LTERM']);
-    $this->myPanel->displayInputFor('bindport','number',$global['BINDPORT']); 
     $this->myPanel->displayBooleanFor('cfwdanswer',$global['CFWDANSWER']);
     $this->myPanel->displayBooleanFor('cfwdextrnrule',$global['CFWDEXTRNRULE']);
     $this->myPanel->displayBooleanFor('cfwdprogress',$global['CFWDPROGRESS']);
