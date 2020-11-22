@@ -122,7 +122,11 @@ private function addcert()
     		return "Both Cert and Key MUST be filled out!";
     	} 
 
-        `sudo mkdir -p $this->certDir`;
+    	if (! file_exists($this->certDir)) {
+        	`sudo mkdir -p $this->certDir`;
+        	`sudo chown www-data:www-data $this->certDir`;
+        }
+        
         $fh = fopen($this->certDir . $this->certFile, 'w') or die('Could not open cert file!');
         fwrite($fh, $_POST['cert'])
         or die('Could not write to file cert');
