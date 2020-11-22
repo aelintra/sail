@@ -267,7 +267,7 @@ private function showMain() {
     	echo '</div>';
     }
 
-    $this->myPanel->displayInputFor('bindport','number',$global['BINDPORT']);
+    $this->myPanel->displayInputFor('bindport','number',$global->BINDPORT);
    
     $this->myPanel->displayInputFor("edomain",'text',$global->EDOMAIN); 
     $this->myPanel->displayBooleanFor('edomainsend',$global->SENDEDOMAIN);
@@ -812,6 +812,7 @@ private function saveEdit() {
 				$this->message .= " - dnsmasq restarted"; 
 			}
 			if ($restartShorewall) {
+				$this->nethelper->copyFirewallTemplates(); 
 				$myret = $this->helper->request_syscmd ("shorewall restart");
 				$this->message .= " - shorewall restarted";
 			}
