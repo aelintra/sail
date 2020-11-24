@@ -51,15 +51,18 @@ public function showForm() {
         return;
 
 }
-
+ 
 private function showMain() {
 
         if (isset($this->message)) {
                 $this->myPanel->msg = $this->message;
         }
         $buttonArray=array();
-        if (!file_exists($this->certDir)) {
-            $buttonArray['Install'] = "w3-text-blue";
+        if (file_exists($this->certDir)) {
+            $buttonArray['remove'] = "w3-text-blue";
+        }
+        else {
+             $buttonArray['install'] = "w3-text-blue";
         }
 
         $this->myPanel->actionBar($buttonArray,"sarkcertForm",false);
