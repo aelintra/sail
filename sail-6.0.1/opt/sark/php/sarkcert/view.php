@@ -39,11 +39,11 @@ public function showForm() {
         $this->myPanel->pagename = 'Cert';
 
 
-        if (isset($_POST['remcert'])) {
+        if (isset($_POST['Remove']) || isset($_POST['endRemove'])) {
                 $this->message = $this->remCert();
         }
 
-        if (isset($_POST['addcert'])) {
+        if (isset($_POST['Install']) || isset($_POST['endInstall'])) {
                 $this->message = $this->addCert();
         }
 
@@ -59,6 +59,10 @@ private function showMain() {
                 $this->myPanel->msg = $this->message;
         }
         $buttonArray=array();
+        if (!file_exists($this->certDir)) {
+            $buttonArray['Install'] = "w3-text-blue";
+        }
+
         $this->myPanel->actionBar($buttonArray,"sarkcertForm",false);
         $this->myPanel->Heading($this->head,$this->message);
         $this->myPanel->responsiveSetup(2);
@@ -81,7 +85,7 @@ private function showMain() {
 			}
 
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="remcert" onclick="return confirmOK(\'Delete? - Confirm?\">Remove Certs</button>';
+			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="endRemove" onclick="return confirmOK(\'Delete? - Confirm?\">Remove Certs</button>';
 			echo '</div>' . PHP_EOL;
         }
         else {
@@ -113,7 +117,7 @@ private function showMain() {
 			echo '</div>';
 
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="addcert">Install</button>';
+			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="endInsert">Install</button>';
 			echo '</div>' . PHP_EOL;
         }
         echo '</div>' . PHP_EOL;        
@@ -126,6 +130,10 @@ private function addcert()
     	if (empty($_POST['cert']) || empty($_POST['csrkey'])) {
     		return "Both Cert and Key MUST be filled out!";
     	} 
+
+        if !openssl_x509_check_private_key ($_POST['cert']t , $_POST['csrkey'] ) {
+            return Key does not match Certificate!";
+        }
 
     	if (! file_exists($this->certDir)) {
         	`sudo mkdir -p $this->certDir`;
