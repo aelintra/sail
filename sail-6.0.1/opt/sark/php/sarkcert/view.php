@@ -90,7 +90,7 @@ private function showMain() {
             $this->myPanel->subjectBar("SSL Certificate State");
             echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
             echo "<p>";
-            echo "This system's browser application is currently running a self-signed Certificate.  You can load a commercial certificate below.";
+            echo "This system's browser application is currently running a self-signed certificate.  You can load a commercial certificate below.  Simply copy and paste the  contents of the .crt file you received from your vendor together with the contents of the CSR .key file you provided when you purchased your certificate.";
             echo '</p>';
             echo '</div>';
 
