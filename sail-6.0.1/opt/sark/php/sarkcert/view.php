@@ -131,7 +131,7 @@ private function addcert()
     		return "Both Cert and Key MUST be filled out!";
     	} 
 
-        if !openssl_x509_check_private_key ( $_POST['cert'], $_POST['csrkey'] ) {
+        if ( !openssl_x509_check_private_key ( $_POST['cert'], $_POST['csrkey'] )) {
             return "Key does not match Certificate!";
         }
 
