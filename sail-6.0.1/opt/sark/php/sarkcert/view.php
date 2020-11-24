@@ -132,7 +132,7 @@ private function addcert()
     	} 
 
         if !openssl_x509_check_private_key ($_POST['cert']t , $_POST['csrkey'] ) {
-            return Key does not match Certificate!";
+            return "Key does not match Certificate!";
         }
 
     	if (! file_exists($this->certDir)) {
