@@ -68,11 +68,10 @@ private function showMain() {
 /*
  *  Certificates
  */
-
         if (file_exists($this->certDir)) {
-
             $this->myPanel->internalEditBoxStart();
-            $this->myPanel->subjectBar("Certificate");            
+            $this->myPanel->subjectBar("SSL Certificate Status");
+
 			if (file_exists($this->certDir . $this->certFile)) {
 				echo '<p>Certificate loaded</p>' . PHP_EOL;
 			}
@@ -82,7 +81,7 @@ private function showMain() {
 			}
 
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="remcert" onclick="return confirmOK(\'Delete? - Confirm?\'>Remove Certs</button>';
+			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="remcert" onclick="return confirmOK(\'Delete? - Confirm?\">Remove Certs</button>';
 			echo '</div>' . PHP_EOL;
         }
         else {
@@ -143,6 +142,7 @@ private function addcert()
 
 
 private function remcert() {
+    
         `sudo rm -rf $this->certDir`;
 /*
         `a2dissite sark-certs.conf`;
