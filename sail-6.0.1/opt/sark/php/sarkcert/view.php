@@ -86,6 +86,14 @@ private function showMain() {
         }
         else {
 			$this->myPanel->internalEditBoxStart();
+
+            $this->myPanel->subjectBar("SSL Certificate State");
+            echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
+            echo "<p>";
+            echo "This system's browser application is currently running a self-signed Certificate.  You can load a commercial certificate below.";
+            echo '</p>';
+            echo '</div>';
+
 			$this->myPanel->subjectBar("Certificate");
 			echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
 			echo "<p>";
