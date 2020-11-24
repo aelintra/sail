@@ -120,6 +120,11 @@ Class page {
                                 'title' => 'Initialize & Regenerate the PCI card settings',
                                 'onClick' => "return confirmOK('Regenerate - Confirm?')",
                                 ),
+                'install' => array (
+                                'alt' => 'Install',
+                                'title' => 'Install Certificate and Key',
+                                'onClick' => "return confirmOK('Install? - Confirm?')",
+                                ),                
  				'list' => array (
  								'faclass' => 'list',
 								'src' => 'list.png',
@@ -162,7 +167,12 @@ Class page {
 								'src' => 'print.png',
                                 'alt' => 'Print',
                                 'title' => 'Print',
-                                ),                                                                                           
+                                ),   
+                'remove' => array (
+                                'alt' => 'Remove',
+                                'title' => 'Remove Certificate and Key',
+                                'onClick' => "return confirmOK('Remove? - Confirm?')",
+                                ),                                                                                                                            
  				'resolve' => array (
  								'faclass' => 'redo',
 								'src' => 'redo.png',

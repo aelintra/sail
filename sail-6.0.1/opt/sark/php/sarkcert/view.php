@@ -38,12 +38,11 @@ public function showForm() {
 
         $this->myPanel->pagename = 'Cert';
 
-
-        if (isset($_POST['Remove']) || isset($_POST['endRemove'])) {
+        if (isset($_POST['remove']) || isset($_POST['endRemove'])) {
                 $this->message = $this->remCert();
         }
 
-        if (isset($_POST['Install']) || isset($_POST['endInstall'])) {
+        if (isset($_POST['install']) || isset($_POST['endInstall'])) {
                 $this->message = $this->addCert();
         }
 
