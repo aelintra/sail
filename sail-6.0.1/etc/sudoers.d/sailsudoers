@@ -1,7 +1,9 @@
 asterisk ALL=NOPASSWD: /usr/bin/sv
 www-data ALL=NOPASSWD: /etc/init.d/asterisk
 www-data ALL=NOPASSWD: /usr/sbin/asterisk
+www-data ALL=NOPASSWD: /bin/mkdir
+www-data ALL=NOPASSWD: /bin/chown
+www-data ALL=NOPASSWD: /bin/rm
 www-data ALL=NOPASSWD: /sbin/shorewall
 www-data ALL=NOPASSWD: /sbin/shorewall6
 www-data ALL=NOPASSWD: /usr/bin/nmap
-

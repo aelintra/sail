@@ -55,8 +55,6 @@ public function showForm() {
 
 private function showMain() {
 
-        print_r($_POST);
-        echo $this->message;
         if (isset($this->message)) {
                 $this->myPanel->msg = $this->message;
         }
@@ -71,12 +69,12 @@ private function showMain() {
  *  Certificates
  */
 
-        if (file_exists('/etc/ssl/customertest')) {
-			if (file_exists('/etc/ssl/customertest/cert')) {
+        if (file_exists($this->certDir)) {
+			if (file_exists($this->certDir . $this->certFile)) {
 				echo '<p>Certificate loaded</p>' . PHP_EOL;
 			}
 
-			if (file_exists('/etc/ssl/customertest/key')) {
+			if (file_exists($this->certDir . $this->certKey)) {
 				echo '<p>Private Key loaded</p>' . PHP_EOL;
 			}
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
@@ -93,7 +91,7 @@ private function showMain() {
 			echo "<label> Copy and paste your .crt file contents into the box below </label>";
 			echo '</p>';
 			echo '</div>';
-			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:200px"';
+			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px"';
 			echo ' name="cert" id="cert" ></textarea></p>' . PHP_EOL;
 
 			$this->myPanel->internalEditBoxStart();
@@ -102,7 +100,7 @@ private function showMain() {
 			echo "<p>";
 			echo "<label> Copy and paste your CSR .key file contents into the box below </label>";
 			echo '</div>';
-			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:200px"';
+			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px"';
 			echo ' name="csrkey" id="csrkey" ></textarea></p>' . PHP_EOL;
 			echo '</div>';
 
@@ -124,10 +122,12 @@ private function addcert()
 
     	if (! file_exists($this->certDir)) {
         	`sudo mkdir -p $this->certDir`;
-        	`sudo chown www-data:www-data $this->certDir`;
-        }
+            $certDir = $this->certDir;
+        	`sudo chown www-data:www-data $certDir`;
+        }:
         
         $fh = fopen($this->certDir . $this->certFile, 'w') or die('Could not open cert file!');
+
         fwrite($fh, $_POST['cert'])
         or die('Could not write to file cert');
         fclose($fh);
@@ -137,7 +137,7 @@ private function addcert()
         or die('Could not write to file key');
         fclose($fh);
 
-        return("Added Certificates");
+        return("Added Certificates - reboot to action");
 }
 
 
