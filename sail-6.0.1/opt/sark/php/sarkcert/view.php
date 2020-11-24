@@ -59,10 +59,10 @@ private function showMain() {
         }
         $buttonArray=array();
         if (file_exists($this->certDir)) {
-            $buttonArray['remove'] = "w3-text-blue";
+            $buttonArray['remove'] = "w3-text-white";
         }
         else {
-             $buttonArray['install'] = "w3-text-blue";
+             $buttonArray['install'] = "w3-text-white";
         }
 
         $this->myPanel->actionBar($buttonArray,"sarkcertForm",false);

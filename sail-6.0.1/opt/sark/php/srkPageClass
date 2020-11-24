@@ -123,7 +123,6 @@ Class page {
                 'install' => array (
                                 'alt' => 'Install',
                                 'title' => 'Install Certificate and Key',
-                                'onClick' => "return confirmOK('Install? - Confirm?')",
                                 ),                
  				'list' => array (
  								'faclass' => 'list',
