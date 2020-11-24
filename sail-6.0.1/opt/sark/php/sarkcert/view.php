@@ -83,6 +83,7 @@ private function showMain() {
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
 			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="remcert" onclick="return confirmOK(\'Delete? - Confirm?\">Remove Certs</button>';
 			echo '</div>' . PHP_EOL;
+            echo '</div>' . PHP_EOL;
         }
         else {
 			$this->myPanel->internalEditBoxStart();
