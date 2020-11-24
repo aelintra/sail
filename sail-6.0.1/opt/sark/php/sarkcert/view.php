@@ -100,21 +100,21 @@ private function showMain() {
             echo '</p>';
             echo '</div>';
 
-			$this->myPanel->subjectBar("Certificate");
+			$this->myPanel->subjectBar("Load Certificate");
 			echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
 			echo "<p>";
 			echo "<label> Copy and paste your .crt file contents into the box below </label>";
 			echo '</p>';
 			echo '</div>';
-			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px; width:500px"';
+			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:120px; width:500px"';
 			echo ' name="cert" id="cert" ></textarea></p>' . PHP_EOL;
 
-			$this->myPanel->subjectBar("CSR Key");
+			$this->myPanel->subjectBar("Load CSR Key");
 			echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
 			echo "<p>";
 			echo "<label> Copy and paste your CSR .key file contents into the box below </label>";
 			echo '</div>';
-			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px; width:500px"';
+			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:120px; width:500px"';
 			echo ' name="csrkey" id="csrkey" ></textarea></p>' . PHP_EOL;
 			echo '</div>';
 
