@@ -92,7 +92,7 @@ private function showMain() {
 			echo "<label> Copy and paste your .crt file contents into the box below </label>";
 			echo '</p>';
 			echo '</div>';
-			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px"';
+			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px; width:200px"';
 			echo ' name="cert" id="cert" ></textarea></p>' . PHP_EOL;
 
 			$this->myPanel->internalEditBoxStart();
@@ -101,7 +101,7 @@ private function showMain() {
 			echo "<p>";
 			echo "<label> Copy and paste your CSR .key file contents into the box below </label>";
 			echo '</div>';
-			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px"';
+			echo '<p><textarea class="w3-padding w3-margin-bottom w3-tiny w3-card-4 longdatabox" style="height:150px; width:200px"';
 			echo ' name="csrkey" id="csrkey" ></textarea></p>' . PHP_EOL;
 			echo '</div>';
 
@@ -142,7 +142,7 @@ private function addcert()
 
 
 private function remcert() {
-    
+
         `sudo rm -rf $this->certDir`;
 /*
         `a2dissite sark-certs.conf`;
