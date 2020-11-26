@@ -82,7 +82,7 @@ private function showMain() {
 				echo '<p>Certificate loaded</p>' . PHP_EOL;
 			}
 
-			if (file_exists($this->certDir . $this->certKey)) {
+			if (file_exists($this->certDir . $this->keyFile)) {
 				echo '<p>Private Key loaded</p>' . PHP_EOL;
 			}
 
@@ -96,7 +96,7 @@ private function showMain() {
             $this->myPanel->subjectBar("SSL Certificate State - Self Signed");
             echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
             echo "<p>";
-            echo "This system's browser application is currently running a self-signed certificate.  You can load a commercial certificate below.  Simply copy and paste the  contents of the .crt file you received from your vendor together with the contents of the CSR private key file you provided when you purchased your certificate into the boces below. The CSR key will be checked against the certificate to ensure they match.  Once loaded you must restart your PBX to finalise the install.";
+            echo "Your system's browser application is currently running a self-signed certificate.  You can load a commercial certificate below.  Simply copy and paste the  contents of the .crt file you received from your vendor together with the contents of the CSR private key file you provided when you purchased your certificate into the boxes below. The CSR key will be checked against the certificate to ensure they match.  Once loaded you must restart your PBX to finalise the install.";
             echo '</p>';
             echo '</div>';
 
@@ -154,6 +154,9 @@ private function addcert()
         or die('Could not write to file key');
         fclose($fh);
 
+        `sudo a2dissite sark-default-ssl`;
+        `sudo a2ensite sark-certs.conf`;
+
         return("Added Certificates - reboot to action");
 }
 
@@ -161,10 +164,9 @@ private function addcert()
 private function remcert() {
 
         `sudo rm -rf $this->certDir`;
-/*
-        `a2dissite sark-certs.conf`;
-        `a2ensite default-ssl.conf`;
-*/
+        `sudo a2dissite sark-certs.conf`;
+        `sudo a2ensite sark-default-ssl`;        
         return("Deleted Certificate - reboot required");
+
 }
 }
