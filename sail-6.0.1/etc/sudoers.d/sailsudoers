@@ -9,3 +9,4 @@ www-data ALL=NOPASSWD: /sbin/shorewall6
 www-data ALL=NOPASSWD: /usr/bin/nmap
 www-data ALL=NOPASSWD: /usr/sbin/a2dissite
 www-data ALL=NOPASSWD: /usr/sbin/a2ensite
+www-data ALL=NOPASSWD: /usr/bin/openssl

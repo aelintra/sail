@@ -75,8 +75,11 @@ private function showMain() {
  *  Certificates
  */
         if (file_exists($this->certDir)) {
+            $cnString = `sudo openssl x509 -noout -subject -in /opt/sark/etc/ssl/customer/cert`;
+            $cnArray = explode('=',$cnString);
+            $CN = $cnArray[2];
             $this->myPanel->internalEditBoxStart();
-            $this->myPanel->subjectBar("SSL Certificate Status - Vendor Signed");
+            $this->myPanel->subjectBar($DN);
 
 			if (file_exists($this->certDir . $this->certFile)) {
 				echo '<p>Certificate loaded</p>' . PHP_EOL;
@@ -87,13 +90,13 @@ private function showMain() {
 			}
 
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
-			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="endRemove" onclick="return confirmOK(\'Delete? - Confirm?\'">Remove Certs</button>';
+			echo '<button class="w3-button w3-blue w3-small w3-round-xxlarge w3-padding w3-right" type="submit" name="endRemove" onclick="return confirmOK(\'Delete? - Confirm?\'">Remove Certificate</button>';
 			echo '</div>' . PHP_EOL;
         }
         else {
 			$this->myPanel->internalEditBoxStart();
 
-            $this->myPanel->subjectBar("SSL Certificate State - Self Signed");
+            $this->myPanel->subjectBar("SSL Certificate is self signed");
             echo '<div class="w3-margin-bottom w3-text-blue-grey w3-small">';
             echo "<p>";
             echo "Your system's browser application is currently running a self-signed certificate.  You can load a commercial certificate below.  Simply copy and paste the  contents of the .crt file you received from your vendor together with the contents of the CSR private key file you provided when you purchased your certificate into the boxes below. The CSR key will be checked against the certificate to ensure they match.  Once loaded you must restart your PBX to finalise the install.";
@@ -154,7 +157,7 @@ private function addcert()
         or die('Could not write to file key');
         fclose($fh);
 
-        `sudo a2dissite sark-default-ssl`;
+        `sudo a2dissite sark-default-ssl.conf`;
         `sudo a2ensite sark-certs.conf`;
 
         return("Added Certificates - reboot to action");
@@ -165,7 +168,7 @@ private function remcert() {
 
         `sudo rm -rf $this->certDir`;
         `sudo a2dissite sark-certs.conf`;
-        `sudo a2ensite sark-default-ssl`;        
+        `sudo a2ensite sark-default-ssl.conf`;        
         return("Deleted Certificate - reboot required");
 
 }
