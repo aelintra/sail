@@ -22,9 +22,8 @@ Class sarkcert {
 
         protected $message;
         protected $head = "Certificates";
-        protected $certDir = "/opt/sark/etc/ssl/customer/";
-        protected $certFile = "cert";
-        protected $keyFile = "key";
+        protected $certFile = "/etc/ssl/certs/ssl-cert-sark-customer.pem";
+        protected $keyFile = "/etc/ssl/private/ssl-cert-sark-customer.key";
         protected $myPanel;
         protected $helper;
         protected $validator;
@@ -74,19 +73,19 @@ private function showMain() {
 /*
  *  Certificates
  */
-        if (file_exists($this->certDir)) {
-            $cnString = `sudo openssl x509 -noout -subject -in /opt/sark/etc/ssl/customer/cert`;
+        if (file_exists($this->certFile)) {
+            $cnString = `sudo openssl x509 -noout -subject -in $this->certFile`;
             $cnArray = explode('=',$cnString);
             $CN = $cnArray[2];
             $this->myPanel->internalEditBoxStart();
-            $this->myPanel->subjectBar($DN);
+            $this->myPanel->subjectBar($CN);
 
-			if (file_exists($this->certDir . $this->certFile)) {
+			if (file_exists($this->certFile)) {
 				echo '<p>Certificate loaded</p>' . PHP_EOL;
 			}
 
-			if (file_exists($this->certDir . $this->keyFile)) {
-				echo '<p>Private Key loaded</p>' . PHP_EOL;
+			if (file_exists($this->keyFile)) {
+				echo '<p>CSR Key loaded</p>' . PHP_EOL;
 			}
 
 			echo '<div class="w3-container w3-padding w3-margin-top">' . PHP_EOL;
@@ -134,20 +133,32 @@ private function addcert()
 {
     	if (empty($_POST['cert']) || empty($_POST['csrkey'])) {
     		return "Both Cert and Key MUST be filled out!";
-    	} 
+    	}
 
         if ( !openssl_x509_check_private_key ( $_POST['cert'], $_POST['csrkey'] )) {
             return "Key does not match Certificate!";
         }
-
+/*
     	if (! file_exists($this->certDir)) {
         	`sudo mkdir -p $this->certDir`;
             $certDir = $this->certDir;
         	`sudo chown www-data:www-data $certDir`;
         }
-        
-        $fh = fopen($this->certDir . $this->certFile, 'w') or die('Could not open cert file!');
+*/
 
+        $cert =  $_POST['cert'];
+        $key = $_POST['csrkey'];
+
+        `sudo echo $cert > $this->certFile`;
+        `sudo chown root:root $this->certFile`;
+        `sudo chmod 644 $this->certFile`;
+        
+        `sudo echo $key > $this->keyFile`;
+        `sudo chown root:root ssl-cert $this->keyFile`;
+        `sudo chmod 640 $this->keyFile`;
+
+/*        
+        $fh = fopen($this->certDir . $this->certFile, 'w') or die('Could not open cert file!');
         fwrite($fh, $_POST['cert'])
         or die('Could not write to file cert');
         fclose($fh);
@@ -156,7 +167,7 @@ private function addcert()
         fwrite($fh, $_POST['csrkey'])
         or die('Could not write to file key');
         fclose($fh);
-
+*/
         `sudo a2dissite sark-default-ssl.conf`;
         `sudo a2ensite sark-certs.conf`;
 
@@ -166,9 +177,11 @@ private function addcert()
 
 private function remcert() {
 
-        `sudo rm -rf $this->certDir`;
+        `sudo rm -rf $this->certFile`;
+        `sudo rm -rf $this->keyFile`;
         `sudo a2dissite sark-certs.conf`;
-        `sudo a2ensite sark-default-ssl.conf`;        
+        `sudo a2ensite sark-default-ssl.conf`;
+                
         return("Deleted Certificate - reboot required");
 
 }
