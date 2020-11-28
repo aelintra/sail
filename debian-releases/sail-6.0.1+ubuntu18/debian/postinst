@@ -108,19 +108,29 @@ chmod +x /opt/sark/service/srk-ua-siplog/run
 [ ! -L /etc/service/srk-ua-siplog ] && ln -s /opt/sark/service/srk-ua-siplog /etc/service
 
 # 
-# deal with the new apache 2.4 auth rules and jessie
+# deal with Apache
 # 
 
 # disable defaults
-# Jessie
-[ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
+a2dissite 000-default
+a2dissite default-ssl.conf
 
 # remove any previous sark references
-
 rm -rf /etc/apache2/sites-enabled/sark*
 rm -rf /etc/apache2/sites-available/sark*
 
-# set links to the correct Vhost
+# enable sark always fragments
+a2ensite sark-http
+a2endite sark-eel
+a2ensite sark-name
+
+# enabke sark opional fragments
+if [ -e /etc/ssl/certs/ssl-cert-sark-customer.pem ]; then
+    a2dissite sark-certs
+    a2ensite sark-default-ssl
+else 
+    a2ensite sark-default-ssl
+fi
 
 #HTTPD
 a2enmod rewrite > /dev/null 2>&1
@@ -129,19 +139,19 @@ a2enmod proxy_http > /dev/null 2>&1
 
 #HTTPS
 a2enmod ssl
-if [ ! -e /etc/apache2/ssl ]; then
-    mkdir /etc/apache2/ssl
-    openssl req \
-        -new \
-        -x509 \
-        -days 3650 \
-        -keyout /etc/apache2/ssl/vhost1.key \
-        -out /etc/apache2/ssl/vhost1.crt \
-        -nodes \
-        -subj "/O=Aelintra/OU=PBX/CN=sark.local" > /dev/null 2>&1
-fi
 
-#SIP/TLS
+#enable listening on IPV6 for apache
+sed -i 's/Listen 80/Listen [::]:80/' /etc/apache2/ports.conf
+sed -i 's/Listen 443/Listen [::]:443/' /etc/apache2/ports.conf
+
+systemctl enable apache2.service
+systemctl stop apache2.service
+systemctl start apache2.service
+
+
+
+# Generate and sign SIP/TLS certificates
+#
 if [ ! -e /etc/asterisk/ssl ]; then
     mkdir /etc/asterisk/ssl
     echo 00 > /etc/asterisk/ssl/file.srl
@@ -234,24 +244,11 @@ if [ -d /etc/shorewall6 ]; then
 #    chown www-data:www-data /etc/shorewall6/sark_blrules
 fi
 
-
-# disable apache2 defaults
-# jessie/stretch
-[ -L /etc/apache2/sites-enabled/000-default.conf ] && a2dissite 000-default.conf > /dev/null 2>&1
-
-#enable listening on IPV6 for apache
-sed -i 's/Listen 80/Listen [::]:80/' /etc/apache2/ports.conf
-sed -i 's/Listen 443/Listen [::]:443/' /etc/apache2/ports.conf
-
-
 # F2b setup
 [ -e /etc/fail2ban/jail.local ] && rm -rf /etc/fail2ban/jail.local && echo "replacing F2B jail.local" 
 ln -s /opt/sark/etc/fail2ban/jail-stretch.local /etc/fail2ban/jail.local
 [ ! -e /etc/fail2ban/action.d/shorewall.local ] && [ -e /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local ] && ln -s /opt/sark/etc/fail2ban/action.d/shorewall-jessie.local /etc/fail2ban/action.d/shorewall.local
 
-# apache setup
-ln -s /opt/sark/etc/apache2/sites-available/sark-ssl-jessie.conf /etc/apache2/sites-available/sark-ssl.conf
-ln -s /opt/sark/etc/apache2/sark_includes /etc/apache2/
 
 # Asterisk 11+ call parks
 [ ! -e /etc/asterisk/res_parking.conf ] && touch /etc/asterisk/res_parking.conf
@@ -281,16 +278,11 @@ systemctl start debsetlan.service
 [ -e  /etc/shorewall/routestopped ] && mv /etc/shorewall/routestopped /etc/shorewall/routestopped.bak
 systemctl enable shorewall.service
 systemctl enable shorewall6.service
-systemctl enable apache2.service
-systemctl stop apache2.service
-systemctl start apache2.service
+
 
 # suppress CDR menu generation for Deb 9 and ubuntu	
 [ -e /opt/sark/cache/1520813339.db_v4_admin_perms2 ] && mv /opt/sark/cache/1520813339.db_v4_admin_perms2 /opt/sark/always/
-	
 
-a2ensite sark-ssl.conf 
-systemctl restart apache2 
 
 #Rebuild the SARK database
 /bin/sh /opt/sark/scripts/srkV4reloader.sh

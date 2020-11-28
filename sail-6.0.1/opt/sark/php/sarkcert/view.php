@@ -57,7 +57,7 @@ private function showMain() {
                 $this->myPanel->msg = $this->message;
         }
         $buttonArray=array();
-        if (file_exists($this->certDir)) {
+        if (file_exists($this->certFile)) {
             $buttonArray['remove'] = "w3-text-white";
         }
         else {
@@ -138,36 +138,20 @@ private function addcert()
         if ( !openssl_x509_check_private_key ( $_POST['cert'], $_POST['csrkey'] )) {
             return "Key does not match Certificate!";
         }
-/*
-    	if (! file_exists($this->certDir)) {
-        	`sudo mkdir -p $this->certDir`;
-            $certDir = $this->certDir;
-        	`sudo chown www-data:www-data $certDir`;
-        }
-*/
 
         $cert =  $_POST['cert'];
         $key = $_POST['csrkey'];
 
-        `sudo echo $cert > $this->certFile`;
+        `echo "$cert" > /tmp/certFile`;
+        `sudo mv /tmp/certFile $this->certFile`;
         `sudo chown root:root $this->certFile`;
         `sudo chmod 644 $this->certFile`;
-        
-        `sudo echo $key > $this->keyFile`;
-        `sudo chown root:root ssl-cert $this->keyFile`;
+
+        `echo "$key" > /tmp/keyFile`;
+        `sudo mv /tmp/keyFile $this->keyFile`;
+        `sudo chown root:ssl-cert $this->keyFile`;
         `sudo chmod 640 $this->keyFile`;
 
-/*        
-        $fh = fopen($this->certDir . $this->certFile, 'w') or die('Could not open cert file!');
-        fwrite($fh, $_POST['cert'])
-        or die('Could not write to file cert');
-        fclose($fh);
-
-        $fh = fopen($this->certDir . $this->keyFile, 'w') or die('Could not open key file!');
-        fwrite($fh, $_POST['csrkey'])
-        or die('Could not write to file key');
-        fclose($fh);
-*/
         `sudo a2dissite sark-default-ssl.conf`;
         `sudo a2ensite sark-certs.conf`;
 
@@ -181,7 +165,7 @@ private function remcert() {
         `sudo rm -rf $this->keyFile`;
         `sudo a2dissite sark-certs.conf`;
         `sudo a2ensite sark-default-ssl.conf`;
-                
+
         return("Deleted Certificate - reboot required");
 
 }
