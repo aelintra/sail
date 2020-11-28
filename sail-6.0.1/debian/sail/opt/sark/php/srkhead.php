@@ -44,7 +44,7 @@ else {
 
 $(document).ready(function() {
 
-  $('.message').delay(500).fadeOut(1200);
+  $('.message').delay(1000).fadeOut(1200);
 //  $('.emessage').delay(10000).fadeOut(600);
 
 });

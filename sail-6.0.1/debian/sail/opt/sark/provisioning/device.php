@@ -33,7 +33,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // get the global env settings we need
 try {	  
-  	$global = $db->query("select EDOMAIN,FQDN,FQDNPROV,HACLUSTERIP,HAUSECLUSTER,LDAPBASE,LOGLEVEL,TLSPORT from globals")->fetch();
+  	$global = $db->query("select EDOMAIN,FQDN,FQDNPROV,HACLUSTERIP,HAUSECLUSTER,LDAPBASE,LOGLEVEL,BINDPORT,TLSPORT from globals")->fetch();
 
 } catch (Exception $e) {
   $errorMsg = $e->getMessage();
@@ -48,12 +48,14 @@ if (empty($global)) {
 }
 $haclusterip = $global['HACLUSTERIP'];
 $hausecluster = $global['HAUSECLUSTER'];
+$bindport = $global['BINDPORT'];
 $externip = $global['EDOMAIN'];
 $fqdnprov = $global['FQDNPROV'];
 $fqdn = $global['FQDN'];
 $ldapbase = $global['LDAPBASE'];
 $loglevel = $global['LOGLEVEL'];
 $tlsport = $global['TLSPORT'];
+$bindport = $global['BINDPORT'];
 
 
 // ignore polycom logging requests
@@ -256,6 +258,7 @@ if (isset($thisConfig->location) && $thisConfig->location == 'remote') {
 if (preg_match('/\$localip/',$retstring)) {
 	$retstring = preg_replace ( '/\$localip/', ret_localip($thisConfig->provisionwith, $thisConfig->protocol), $retstring); 
 }
+$retstring = preg_replace ( '/\$bindport/', $bindport, $retstring);
 $retstring = preg_replace ( '/\$tlsport/', $tlsport, $retstring);
 $retstring = preg_replace ( '/\$ldapbase/', $ldapbase, $retstring);
 

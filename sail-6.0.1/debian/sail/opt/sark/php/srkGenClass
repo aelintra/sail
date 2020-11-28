@@ -229,6 +229,9 @@ private function genSip() {
 			$OUT .= 'bindaddr=' . $this->globals['HACLUSTERIP'] . "\n";
 		}	   
 	}
+	$OUT .= 'bindport=' . $this->globals['BINDPORT'] . "\n";
+
+	`/bin/echo $tlsport > /etc/asterisk/sark_sip_tlsbindaddr.conf`;
 	
 //  deal with TLS
 	$tlsport = 'tlsbindaddr=0.0.0.0';

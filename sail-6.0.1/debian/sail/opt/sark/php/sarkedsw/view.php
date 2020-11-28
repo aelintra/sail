@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "../php/srkNetHelperClass";
 
 Class sarkedsw {
 	
@@ -24,6 +25,7 @@ Class sarkedsw {
 	protected $myPanel;
 	protected $dbh;
 	protected $helper;
+	protected $nethelper;
 	protected $validator;
 	protected $invalidForm;
 	protected $error_hash = array();
@@ -33,6 +35,7 @@ public function showForm() {
 //print_r($_REQUEST);		
 	$this->myPanel = new page;
 	$this->helper = new helper;
+	$this->nethelper = new netHelper;
 	$this->dbh = DB::getInstance();
 	
 	if (isset($_POST['new'])) { 
@@ -315,7 +318,7 @@ private function restartFirewall() {
  * 	call the tuple builder to create a table row array 
  */  
 
-	$this->copyFirewallTemplates(); # N.B. ToDo!
+	$this->nethelper->copyFirewallTemplates(); 
  
  
 	$tuple = array();
@@ -365,27 +368,33 @@ private function restartFirewall() {
 	$this->myPanel->responsiveClose();
     			
 }
-
+/*
 private function copyFirewallTemplates() {
 
-// check the rulesets exist 
-/*
-  	$rc = $this->helper->request_syscmd ("ipset -N voipbl iphash");
-	$rc = $this->helper->request_syscmd ("ipset -N fqdntrust iphash");
-	$rc = $this->helper->request_syscmd ("ipset -N fqdndrop iphash");
-*/
 	$this->dbh = DB::getInstance();
-	$res = $this->dbh->query("SELECT EXTBLKLST,FQDN,FQDNINSPECT,FQDNTRUST,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
-	
+	$res = $this->dbh->query("SELECT BINDPORT,FQDN,FQDNINSPECT,SIPFLOOD FROM globals where pkey = 'global'")->fetch(PDO::FETCH_ASSOC);
 	$file = '/opt/sark/templates/shorewall/sark_inline_fqdn';
-	if (file_exists($file) && $res['FQDNINSPECT'] == 'YES') {
-		$rc = $this->helper->request_syscmd ("cp $file /etc/shorewall");
-		$fqdn = $res['FQDN'];
-		$rc = $this->helper->request_syscmd ("/bin/sed -i 's/\$FQDN/" . $res['FQDN'] . "/g' /etc/shorewall/sark_inline_fqdn");
+	if ($res['FQDNINSPECT'] == 'YES') {
+		$rule = "'INLINE(ACCEPT) net \$FW tcp ";
+		$rule .= $res['BINDPORT'];
+		$rule .= '; -m string --algo bm --to 100 --string "';
+		$rule .= $res['FQDN'];
+		$rule .= '"';
+		$rule .= "'";
+		$rc = $this->helper->request_syscmd ("echo $rule > /etc/shorewall/sark_inline_fqdn");
+
+		$rule = "'INLINE(ACCEPT) net \$FW udp ";
+		$rule .= $res['BINDPORT'];
+		$rule .= '; -m string --algo bm --to 100 --string "';
+		$rule .= $res['FQDN'];
+		$rule .= '"';
+		$rule .= "'";q
+		$rc = $this->helper->request_syscmd ("echo $rule >> /etc/shorewall/sark_inline_fqdn");
 	}
 	else {
-		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_inline_fqdn");	
+		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_inline_fqdn");
 	}
+
 
 	$file = '/opt/sark/templates/shorewall/sark_inline_limit';
 	if (file_exists($file) && $res['SIPFLOOD'] == 'YES') {
@@ -394,32 +403,9 @@ private function copyFirewallTemplates() {
 	else {
 		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_inline_limit");
 	}		
-
-/*
- *  Tested and working but never used 
-
-	$file = '/opt/sark/templates/shorewall/sark_ipset_blist';
-	if (file_exists($file) && $res['EXTBLKLST'] == 'YES') {
-		$rc = $this->helper->request_syscmd ("cp $file /etc/shorewall");
-	}
-	else {
-		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_ipset_blist");
-	}
-				
-	if (file_exists("/opt/sark/templates/shorewall/sark_ipset_fqdn") && $res['FQDNTRUST'] == 'YES') {
-		$rc = $this->helper->request_syscmd ("cp /opt/sark/templates/shorewall/sark_ipset_fqdn /etc/shorewall/");
-	}
-	else {
-		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_ipset_fqdn");
-	}
-	if (file_exists("/opt/sark/templates/shorewall/sark_ipset_fqdndrop")) {
-		$rc = $this->helper->request_syscmd ("cp /opt/sark/templates/shorewall/sark_ipset_fqdndrop /etc/shorewall/");
-	}
-	else {
-		$rc = $this->helper->request_syscmd ("echo '#' > /etc/shorewall/sark_ipset_fqdndrop");
-	}	
- */	 			
+		
 }
+*/
 
 private function valid_ip_cidr($cidr, $must_cidr = false) {
 

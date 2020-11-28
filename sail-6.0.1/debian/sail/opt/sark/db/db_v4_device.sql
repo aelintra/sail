@@ -261,9 +261,9 @@ SIP_PRSNC_ADDR_1="$localip"
 SIP_DNSSRV_ENA_1="Y"
 
 # Set TLS initially OFF
-SIP_RGSTR_PORT_1=“5060"
-SIP_PRXY_PORT_1=“5060"
-SIP_PRSNC_PORT_1="5060"
+SIP_RGSTR_PORT_1="$bindport"
+SIP_PRXY_PORT_1="$bindport"
+SIP_PRSNC_PORT_1="$bindport"
 SIP_SRC_PORT_1=“5060"
 SIP_TRANSPORT_1=“0"
 SIP_TLS_MODE_1=“0"
@@ -985,8 +985,11 @@ account.1.auth_name = $ext
 account.1.password = $password  
 account.1.user_name =  $ext
 account.1.sip_server_host = $localip
+account.1.sip_server_port = $bindport
 account.1.outbound_host = $localip
+account.1.outbound_port = $bindport
 account.1.proxy_require = $localip
+account.1.outbound_proxy_enable = 0
 
 ','type=peer
 defaultuser=$desc
@@ -1451,7 +1454,8 @@ INSERT OR IGNORE INTO Device(pkey,blfkeyname,desc,owner,provision,sipiaxfriend,t
 user_name1$: $ext
 user_pname1$: $ext
 user_pass1$: $password
-user_host1$: $localip','type=peer
+user_host1$: $localip:$bindport
+user_idle_text1$: $ext($desc)','type=peer
 defaultuser=$desc
 secret=$password
 mailbox=$ext
