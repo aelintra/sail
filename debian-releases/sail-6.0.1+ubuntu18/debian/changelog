@@ -1,4 +1,4 @@
-sail (6.0.1-58+buntu18) UNRELEASED; urgency=low
+sail (6.0.1-58+ubuntu18) UNRELEASED; urgency=low
   * tagged
 
   - Add panel for Certificate upload
