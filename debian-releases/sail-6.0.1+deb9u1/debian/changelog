@@ -1,3 +1,11 @@
+sail (6.0.1-58+deb9u1) UNRELEASED; urgency=low
+  * tagged
+
+  - Add panel for Certificate upload
+  - Add non-standard local SIP port option  
+  
+ -- CoCoSoft <admin@aelintra.com>  Sat, 28  Nov 2020 18:00:00 +0000
+
 sail (6.0.1-57+deb9u1) UNRELEASED; urgency=low
   * tagged
 
