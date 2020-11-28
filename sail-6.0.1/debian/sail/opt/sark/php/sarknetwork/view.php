@@ -88,7 +88,7 @@ private function showMain() {
 	if (isset($this->message)) {
 		$this->myPanel->msg = $this->message;
 	} 
-	$sql = $this->dbh->prepare("SELECT fqdn,fqdnhttp,fqdninspect,fqdnprov,bindaddr,edomain,sendedomain,vcl FROM globals where pkey = ?");
+	$sql = $this->dbh->prepare("SELECT fqdn,fqdnhttp,fqdninspect,fqdnprov,bindaddr,bindport,edomain,sendedomain,vcl FROM globals where pkey = ?");
 	$sql->execute(array('global'));
 	$global = $sql->fetchObject();
 		
@@ -266,6 +266,8 @@ private function showMain() {
     	$this->myPanel->displayInputFor("edomaindig",'text',$edomaindig); 
     	echo '</div>';
     }
+
+    $this->myPanel->displayInputFor('bindport','number',$global->BINDPORT);
    
     $this->myPanel->displayInputFor("edomain",'text',$global->EDOMAIN); 
     $this->myPanel->displayBooleanFor('edomainsend',$global->SENDEDOMAIN);
@@ -275,6 +277,7 @@ private function showMain() {
     	$this->myPanel->displayBooleanFor('fqdninspect',$global->FQDNINSPECT);
     	$this->myPanel->displayBooleanFor('fqdnhttp',$global->FQDNHTTP);
     }
+
 	echo '</div>';
 
 
@@ -462,6 +465,7 @@ private function saveEdit() {
 		$fqdnhttp 		= strip_tags($_POST['fqdnhttp']);
 		$fqdninspect 	= strip_tags($_POST['fqdninspect']);
 		$fqdnprov 		= strip_tags($_POST['fqdnprov']);
+		$bindport 		= strip_tags($_POST['bindport']);
 		$sshport		= strip_tags($_POST['sshport']);
 		$smtpuser		= strip_tags($_POST['smtpuser']);
 		$smtppwd		= strip_tags($_POST['smtppwd']);
@@ -475,6 +479,8 @@ private function saveEdit() {
 		$oldtz 			= strip_tags($_POST['oldtz']);
 		$icmp 			= strip_tags($_POST['icmp']);
 
+		$restartShorewall=false;
+
 		$tuple = array();
 		$tuple['pkey'] = "global";
 		$tuple['edomain'] = null;
@@ -485,6 +491,7 @@ private function saveEdit() {
 		$tuple['fqdnprov'] = 'NO';
 		$tuple['fqdninspect'] = 'NO';
 		$tuple['fqdnhttp'] = 'NO';
+
 		if (!empty($fqdn)) {		
 			$tuple['fqdn'] = $fqdn;
 			$sname = 'ServerName ' . $fqdn;
@@ -504,6 +511,12 @@ private function saveEdit() {
 		else {
 			`echo 'ServerName sark.local' > /opt/sark/etc/apache2/sark_includes/sarkServerName.conf`;
 		}
+		
+
+		if (isset($bindport)) {
+			$tuple['bindport'] = $bindport;
+			$restartShorewall=true;
+		}		
 
 		$ret = $this->helper->setTuple("globals",$tuple);
 		
@@ -544,7 +557,7 @@ private function saveEdit() {
 		$ret='OK';
 		$reboot=false;
 		$restartDnsmasq=false;
-		$restartShorewall=false;
+
 /*
  * deal with hosts & domains
  */
@@ -799,6 +812,7 @@ private function saveEdit() {
 				$this->message .= " - dnsmasq restarted"; 
 			}
 			if ($restartShorewall) {
+				$this->nethelper->copyFirewallTemplates(); 
 				$myret = $this->helper->request_syscmd ("shorewall restart");
 				$this->message .= " - shorewall restarted";
 			}

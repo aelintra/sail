@@ -1,5 +1,6 @@
 BEGIN TRANSACTION;
 
+DELETE FROM UserPanel WHERE User_pkey='admin';
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','100','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','110','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','115','create');
@@ -22,6 +23,7 @@ INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','232
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','235','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','236','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','240','create');
+INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','242','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','250','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','252','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','255','create');
@@ -41,7 +43,5 @@ INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','350
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','370','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','390','create');
 INSERT OR IGNORE INTO UserPanel(User_pkey,Panel_pkey,perms) values ('admin','400','create');
-
-
 
 COMMIT;

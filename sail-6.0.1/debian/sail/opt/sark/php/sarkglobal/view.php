@@ -269,11 +269,12 @@ private function showMain() {
 //    echo '</div>' . PHP_EOL;
 
 	$this->myPanel->responsiveTwoColRight();
+
 /*
  *       TAB Control
  */
  	$this->myPanel->internalEditBoxStart();
- 	$this->myPanel->subjectBar("Control");   
+ 	$this->myPanel->subjectBar("Control");  
     $this->myPanel->displayBooleanFor('lterm',$global['LTERM']);
     $this->myPanel->displayBooleanFor('cfwdanswer',$global['CFWDANSWER']);
     $this->myPanel->displayBooleanFor('cfwdextrnrule',$global['CFWDEXTRNRULE']);
@@ -306,6 +307,11 @@ private function showMain() {
 		$this->myPanel->displayInputFor('ldappass','password',$global['LDAPPASS']);
 		echo '</div>';
 	}
+
+	$this->myPanel->internalEditBoxStart();
+ 	$this->myPanel->subjectBar("SIP Channel Driver");   
+    $this->myPanel->radioSlide('sipdriver',$global['SIPDRIVER'],array('chan_sip','pjsip'));
+    echo '</div>';	
 
 
 	$this->myPanel->internalEditBoxStart();
