@@ -38,13 +38,12 @@ usermod -a -G www-data asterisk
 
 
 [ -e /etc/dahdi ] && chown -R asterisk:asterisk /etc/dahdi
-[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf && chmod +rx
+[ -e /etc/ssmtp/ssmtp.conf ] && chown www-data:www-data /etc/ssmtp/ssmtp.conf && chmod 660 /etc/ssmtp/ssmtp.conf
 
 chown -R www-data:www-data /opt/sark/www
 chown -R www-data:www-data /opt/sark/db
 chown -R www-data:www-data /opt/sark/passwd
 chown -R www-data:www-data /opt/sark/cache
-chown www-data:www-data /opt/sark/etc/apache2/sark_includes/*
 
 chown -R asterisk:asterisk /opt/sark/otrr/var/spool/asterisk/monitor 
 chown -R asterisk:asterisk /opt/sark/mixmon/var/spool/asterisk/monitor 
