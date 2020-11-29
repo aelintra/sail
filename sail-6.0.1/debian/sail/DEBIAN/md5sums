@@ -269,9 +269,9 @@ fc6ff2307a71a374b7148da57410afcf  opt/sark/db/ldap_create.ldif
 d41d8cd98f00b204e9800998ecf8427e  opt/sark/db/srkaudit.log
 2db165ca2cdcfe9216fa751ee72117a3  opt/sark/etc/apache2/sites-available/sark-certs.conf
 282b0d42c4050287c0d996a296895bef  opt/sark/etc/apache2/sites-available/sark-default-ssl.conf
-9a9ac867739f7467fc023d8321b13c0b  opt/sark/etc/apache2/sites-available/sark-http.conf
+4c9db0713227a0eadeb9e699c47c8526  opt/sark/etc/apache2/sites-available/sark-http.conf
 374b9effcbf20b2ea65c2b0415b639b8  opt/sark/etc/apache2/sites-available/sark-name.conf
-cc0bfdc6d054cf55536e16b4c9bfb50b  opt/sark/etc/apache2/sites-available/sark-ssl.conf
+beeb9b1d2814ac1eb46738c881f76519  opt/sark/etc/apache2/sites-available/sark-ssl.conf
 378e7d9876709df2d59f06c9af6ba355  opt/sark/etc/dnsmasq.d/sarkdns
 fbcc6fac637e8ed6a065a8fa48c04924  opt/sark/etc/fail2ban/action.d/shorewall-jessie.local
 010d585cb1cad5055faf948c2c58c445  opt/sark/etc/fail2ban/filter.d/asterisk-wheezy.conf
@@ -1381,5 +1381,5 @@ da362eff5f073b336d4f0b861cd8e652  opt/sark/www/sark-common/smeserver_logo.jpg
 95b8921fd7326e8a6971f6436e8d6135  opt/sark/www/support.htm
 751d17d6f9c5aecd2a264c673af4577b  usr/share/asterisk/agi-bin/kwakeup
 0af8c3e30ef06285d251c45681703e6c  usr/share/doc/sail-4.0.0/COPYING.gz
-aad7df6010d071c32e927d759b81a8b4  usr/share/doc/sail/changelog.Debian.gz
+810d8d75bd703dfea28942a9e9de254e  usr/share/doc/sail/changelog.Debian.gz
 c007f37c8e4cfb4dfae4575723a0d6c1  usr/share/doc/sail/copyright
