@@ -1,28 +1,19 @@
 #!/bin/bash
 
-sv d /etc/service/srk-ua-responder
-sv d /etc/service/srk-ua-helper
-sv d /etc/service/srk-ua-rssh
+sv d srk-ua-responder
+sv d srk-ua-helper
 
-[ -L /etc/service/srk-ua-responder ] && rm -rf /etc/service/srk-ua-responder
-[ -L /etc/service/srk-ua-responder ] && rm -rf /etc/service/srk-ua-helper
-[ -L /etc/service/srk-ua-responder ] && rm -rf /etc/service/srk-ua-rssh
+rm -rf /etc/apache2/sites-enabled/sark*
+rm -rf /etc/apache2/sites-available/sark*
 
-[ -L /etc/apache2/sites-enabled/sark  ] && a2dissite sark.conf
-[ -L /etc/apache2/sites-available/sark  ] && rm -rf /etc/apache2/sites-available/sark
+[ -L /etc/cron.d/sark ] && rm -rf /etc/cron.d/sark
 
-[ -L /etc/apache2/sites-enabled/sark.conf  ] && a2dissite sark.conf
-[ -L /etc/apache2/sites-available/sark.conf  ] && rm -rf /etc/apache2/sites-available/sark.conf
-[ -L /etc/apache2/sites-enabled/sark-ssl.conf  ] && a2dissite sark-ssl.conf
-[ -L /etc/apache2/sites-available/sark-ssl.conf  ] && rm -rf /etc/apache2/sites-available/sark-ssl.conf
+rm -rf /etc/service/srk*
 
 [ -L /etc/fail2ban/jail.local ] && rm -rf /etc/fail2ban/jail.local
 [ -L /etc/fail2ban/action.d/shorewall.local ] && rm -rf /etc/fail2ban/action.d/shorewall.local
-[ -L /etc/fail2ban/filter.d/asterisk.conf ] && rm -rf /etc/fail2ban/filter.d/asterisk.conf 
+[ -L /etc/fail2ban/filter.d/asterisk.conf ] && /etc/fail2ban/filter.d/asterisk.conf 
 
 [ -e /etc/sudoers.d/sarkrssh ] && rm -rf /etc/sudoers.d/sarkrssh 
-
-# stretch teardown
-
 
 systemctl disable  debsetlan
