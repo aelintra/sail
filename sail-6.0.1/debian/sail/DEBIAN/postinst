@@ -128,7 +128,7 @@ rm -rf /etc/apache2/sites-available/sark*
 
 # enable sark always fragments
 a2ensite sark-http
-a2endite sark-eel
+a2ensite sark-ssl
 a2ensite sark-name
 
 # enabke sark opional fragments
