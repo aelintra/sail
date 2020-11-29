@@ -114,6 +114,13 @@ chmod +x /opt/sark/service/srk-ua-siplog/run
 a2dissite 000-default
 a2dissite default-ssl.conf
 
+# link our sites
+[ ! -L /etc/apache2/sites-available/sark-certs.conf ] && ln -s /opt/sark/etc/apache2/sites-available/sark-certs.conf /etc/apache2/sites-available
+[ ! -L /etc/apache2/sites-available/sark-default-ssl.conf ] && ln -s /opt/sark/etc/apache2/sites-available/sark-default-ssl.conf /etc/apache2/sites-available
+[ ! -L /etc/apache2/sites-available/sark-http.conf ] && ln -s /opt/sark/etc/apache2/sites-available/sark-http.conf /etc/apache2/sites-available
+[ ! -L /etc/apache2/sites-available/sark-name.conf ] && ln -s /opt/sark/etc/apache2/sites-available/sark-name.conf /etc/apache2/sites-available
+[ ! -L /etc/apache2/sites-available/sark-ssl.conf ] && ln -s /opt/sark/etc/apache2/sites-available/sark-ssl.conf /etc/apache2/sites-available
+
 # remove any previous sark references
 rm -rf /etc/apache2/sites-enabled/sark*
 rm -rf /etc/apache2/sites-available/sark*
