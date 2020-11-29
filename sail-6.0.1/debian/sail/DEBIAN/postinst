@@ -114,6 +114,10 @@ chmod +x /opt/sark/service/srk-ua-siplog/run
 a2dissite 000-default
 a2dissite default-ssl.conf
 
+# set the snakeoil permissions so Apache can read the key
+chmod 750 /etc/ssl/private
+usermod -a -G ssl-cert www-data
+
 # remove any previous sark references
 rm -rf /etc/apache2/sites-enabled/sark*
 rm -rf /etc/apache2/sites-available/sark*
